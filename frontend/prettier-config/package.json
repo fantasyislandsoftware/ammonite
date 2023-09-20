@@ -1,0 +1,24 @@
+{
+  "name": "prettier-config",
+  "version": "0.0.1",
+  "license": "Apache-2.0",
+  "description": "WISEflow's base Prettier config",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/UNIwise/prettier-config.git"
+  },
+  "main": "index.js",
+  "scripts": {},
+  "devDependencies": {
+    "prettier": "^2.2.1"
+  },
+  "peerDependencies": {
+    "prettier": "2.x"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=12.0.0"
+  }
+}
