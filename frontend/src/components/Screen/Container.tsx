@@ -2,13 +2,10 @@ import { FC, useEffect, useRef, useState } from 'react';
 import { IScreen } from './interface';
 import Main from './canvas/Main';
 import TitleBar from './canvas/TitleBar';
-import {
-  EnumOSEventObjectType,
-  EnumOSEventType,
-  IOSEvent,
-  osEventHandler,
-} from '../../handlers/events';
-import { getMouse } from '../../handlers/mouse';
+import { app } from './constants';
+import React from 'react';
+import { processObjectEvents } from 'handlers/events';
+import { EnumOSEventType } from 'handlers/events/interface';
 
 interface IProps {
   screen: IScreen;
@@ -26,82 +23,49 @@ const Container: FC<IProps> = ({ screen }) => {
       if (screen.canvasBuffers.titleBarContext) {
         ctx.drawImage(screen.canvasBuffers.titleBarContext.canvas, 0, 0);
       }
+      ctx.fillStyle = 'blue';
+      ctx.fillRect(0 + 20, 0 + 20, 100 + 20, 100 + 20);
     }
   }, [ref, ctx]);
 
-  const processEvent = (
-    event: any,
-    osEventHandler: (osEvent: IOSEvent) => void,
-    eventType: EnumOSEventType,
-    screen: IScreen,
-  ) => {
-    const mouse = getMouse(event, screen);
-    /* Screen */
-    osEventHandler({
-      object: EnumOSEventObjectType.Screen,
-      id: screen.id,
-      type: eventType,
-      mouse: mouse,
-    });
-    /* Titlebar or Client */
-    if (screen.titleBar?.height) {
-      /* Titlebar */
-      if (mouse.screen.y <= screen.titleBar.height - 1) {
-        osEventHandler({
-          object: EnumOSEventObjectType.Titlebar,
-          type: eventType,
-          mouse: mouse,
-          parent: {
-            object: EnumOSEventObjectType.Screen,
-            id: screen.id,
-          },
-        });
-        /* Client */
-      } else {
-        osEventHandler({
-          object: EnumOSEventObjectType.Client,
-          type: eventType,
-          mouse: mouse,
-          parent: {
-            object: EnumOSEventObjectType.Screen,
-            id: screen.id,
-          },
-        });
-      }
-    }
-  };
+  const height = (screen.height / screen.mode.maxHeight) * 100;
 
   return (
     <div
       style={{
-        background: '#404040',
+        width: `${100 - app.margin * 2}%`,
+        height: `${screen.mode.maxWidth / screen.mode.verticalStretchRatio}vw`,
+        background: 'darkgray',
         position: 'fixed',
         top: `${screen.position.y}px`,
         zIndex: `${screen.position.z}`,
       }}
     >
-      <Main
-        _ref={ref}
-        screen={screen}
-        onMouseDown={(event) => {
-          processEvent(
-            event,
-            osEventHandler,
-            EnumOSEventType.MouseDown,
-            screen,
-          );
+      <div
+        style={{
+          width: '100%',
+          height: `${height}%`,
+          backgroundColor: 'black',
         }}
-        onMouseUp={(event) =>
-          processEvent(event, osEventHandler, EnumOSEventType.MouseUp, screen)
-        }
-        onMouseMove={(event) =>
-          processEvent(event, osEventHandler, EnumOSEventType.MouseMove, screen)
-        }
-        onMouseLeave={(event) =>
-          processEvent(event, osEventHandler, EnumOSEventType.MouseMove, screen)
-        }
-      />
-      <TitleBar screen={screen} />
+      >
+        <Main
+          _ref={ref}
+          screen={screen}
+          onMouseDown={(event) => {
+            processObjectEvents(event, EnumOSEventType.MouseDown, screen);
+          }}
+          onMouseUp={(event) =>
+            processObjectEvents(event, EnumOSEventType.MouseUp, screen)
+          }
+          onMouseMove={(event) =>
+            processObjectEvents(event, EnumOSEventType.MouseMove, screen)
+          }
+          onMouseLeave={(event) =>
+            processObjectEvents(event, EnumOSEventType.MouseLeave, screen)
+          }
+        />
+        <TitleBar screen={screen} />
+      </div>
     </div>
   );
 };

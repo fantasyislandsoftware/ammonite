@@ -1,9 +1,9 @@
+import React from 'react';
 import { type FC, useEffect, useRef } from 'react';
 import { IScreen } from '../interface';
 import { useScreenStore } from '../useScreenStore';
 import { canvasRenderStyle } from '../styles';
-import { ScreenDefault } from '../constants';
-
+import { screenDefault } from '../constants';
 interface IProps {
   screen: IScreen;
 }
@@ -11,38 +11,41 @@ interface IProps {
 const TitleBar: FC<IProps> = ({ screen }) => {
   const ref = useRef<HTMLCanvasElement>(null);
   const { screens, setScreens } = useScreenStore((state) => state);
-  const style = { display: 'none' };
 
   useEffect(() => {
-    const { titleBar, palette, mode } = screen;
+    const { width, titleBar, palette } = screen;
 
     if (ref.current) {
       const ctx = ref.current.getContext('2d');
+
       if (!ctx || !titleBar) return;
 
       /* Set font and get metrics */
-      ctx.font = `${titleBar.font.size}px ${titleBar.font.name}`;
       const metrics = ctx.measureText(
-        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdfghijklmnopqrstuvwxyz',
+        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdfghijklmnopqrstuvwxyz'
       );
       const height =
         Math.floor(
-          metrics.actualBoundingBoxAscent +
-            metrics.actualBoundingBoxDescent * 2,
+          metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent * 2
         ) + 1;
 
       /* Set canvas dimensions dependant on font size and text */
-      //ctx.canvas.width = screen.mode.width;
-      //ctx.canvas.height = height;
-      ctx.fillStyle = palette[ScreenDefault.titleBar.backgroundColor];
-      ctx.fillRect(0, 0, mode.width, height);
+      ctx.canvas.width = width;
+      ctx.canvas.height = height;
+      ctx.fillStyle = palette[screenDefault.titleBar.backgroundColor];
+      ctx.fillRect(0, 0, screen.width, height - 1);
+
+      /* TitleBar border */
+      ctx.fillStyle = palette[screenDefault.titleBar.borderColor];
+      ctx.fillRect(0, height - 1, screen.width, 1);
 
       /* Draw text */
-      ctx.fillStyle = palette[ScreenDefault.titleBar.fontColor];
+      ctx.font = `${titleBar.font.size}px ${titleBar.font.name}`;
+      ctx.fillStyle = palette[screenDefault.titleBar.fontColor];
       ctx.fillText(
         titleBar.title,
         0,
-        metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent,
+        metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent
       );
 
       /* Update screen store */
@@ -59,9 +62,10 @@ const TitleBar: FC<IProps> = ({ screen }) => {
   return (
     <canvas
       ref={ref}
-      width={screen.mode.width}
-      height={screen.mode.height}
-      style={{ ...style, ...canvasRenderStyle }}
+      style={{
+        display: 'none',
+        ...canvasRenderStyle,
+      }}
     ></canvas>
   );
 };

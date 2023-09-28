@@ -1,3 +1,4 @@
+import React from 'react';
 import { FC } from 'react';
 import { IScreen } from '../interface';
 import { canvasRenderStyle } from '../styles';
@@ -19,13 +20,16 @@ const Main: FC<IProps> = ({
   onMouseMove,
   onMouseLeave,
 }) => {
-  const style = { width: '100%', height: `${screen.mode.height / 3}vw` };
   return (
     <canvas
       ref={_ref}
-      width={screen.mode.width}
-      height={screen.mode.height}
-      style={{ ...style, ...canvasRenderStyle }}
+      width={screen.width}
+      height={screen.height}
+      style={{
+        width: '100%',
+        height: '100%',
+        ...canvasRenderStyle,
+      }}
       onMouseDown={onMouseDown}
       onMouseUp={onMouseUp}
       onMouseMove={onMouseMove}

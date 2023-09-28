@@ -1,9 +1,9 @@
 html,
 body,
 #root {
-  margin: 0;
-  background-color: grey;
+  background-color: #301934;
   color: white;
   height: 100%;
   font-family: 'Helvetica Neue', 'Lucida Grande', Arial, sans-serif;
+  margin: 0;
 }

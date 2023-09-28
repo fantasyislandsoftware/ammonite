@@ -1,6 +1,11 @@
-export const ScreenDefault = {
+export const screenDefault = {
   titleBar: {
-    backgroundColor: 0,
-    fontColor: 1,
+    backgroundColor: 1,
+    fontColor: 0,
+    borderColor: 0,
   },
+};
+
+export const app = {
+  margin: 0,
 };

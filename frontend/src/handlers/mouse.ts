@@ -27,11 +27,11 @@ export const getMouse = (e: any, screen: IScreen): IMouse => {
       y: clientY,
     },
     screen: {
-      x: Math.round(clientX / (e.target.clientWidth / screen.mode.width)) - 1,
+      x: Math.round(clientX / (e.target.clientWidth / screen.width)) - 1,
       y:
         Math.round(
           (clientY - screen.position.y) /
-            (e.target.clientHeight / screen.mode.height),
+            (e.target.clientHeight / screen.height)
         ) - 1,
     },
     button: e.button,
