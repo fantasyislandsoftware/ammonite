@@ -1,10 +1,11 @@
 import { IScreen } from '../components/Screen/interface';
 
-export interface IMouse {
-  client: {
-    x: number;
-    y: number;
-  };
+export interface IClientMouse {
+  x: number;
+  y: number;
+}
+
+export interface IScreenMouse {
   screen: {
     x: number;
     y: number;
@@ -18,14 +19,17 @@ export enum EnumMouseButton {
   Right = 2,
 }
 
-export const getMouse = (e: any, screen: IScreen): IMouse => {
+export const getClientMouse = (e: any): IClientMouse => {
+  return {
+    x: e.clientX,
+    y: e.clientY,
+  };
+};
+
+export const getScreenMouse = (e: any, screen: IScreen): IScreenMouse => {
   const clientX = e.clientX;
   const clientY = e.clientY;
   return {
-    client: {
-      x: clientX,
-      y: clientY,
-    },
     screen: {
       x: Math.round(clientX / (e.target.clientWidth / screen.width)) - 1,
       y:

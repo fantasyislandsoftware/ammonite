@@ -17,7 +17,7 @@ export interface ScreenStore {
 }
 
 export const useScreenStore = create<ScreenStore>((set) => ({
-  screens: [backdropScreen, defaultScreen],
+  screens: [defaultScreen],
   setScreens: (screens: IScreen[]) => {
     set({ screens });
   },

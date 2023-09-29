@@ -1,8 +1,13 @@
-import { IMouse } from 'handlers/mouse';
+import { IClientMouse, IScreenMouse } from 'handlers/mouse';
 
 export interface IOSEvent {
-  object: OSEventScreen | OSEventScreenClient | OSEventScreenTitlebar;
+  object:
+    | OSEventBackdrop
+    | OSEventScreen
+    | OSEventScreenClient
+    | OSEventScreenTitlebar;
   parent:
+    | OSEventBackdrop
     | OSEventScreen
     | OSEventScreenClient
     | OSEventScreenTitlebar
@@ -25,6 +30,7 @@ export enum EnumMouseButton {
 }
 
 export enum EnumOSEventObjectType {
+  Backdrop = 'backdrop',
   Screen = 'screen',
   Window = 'window',
   ScreenTitlebar = 'screenTitlebar',
@@ -33,20 +39,29 @@ export enum EnumOSEventObjectType {
   Icon = 'icon',
 }
 
+export interface OSEventBackdrop {
+  type: EnumOSEventObjectType;
+  id?: number;
+  clientMouse: IClientMouse;
+}
+
 export interface OSEventScreen {
   type: EnumOSEventObjectType;
   id: number;
-  mouse: IMouse;
+  screenMouse: IScreenMouse;
+  clientMouse: IClientMouse;
 }
 
 export interface OSEventScreenClient {
   id?: number;
   type: EnumOSEventObjectType;
-  mouse: IMouse;
+  screenMouse: IScreenMouse;
+  clientMouse: IClientMouse;
 }
 
 export interface OSEventScreenTitlebar {
   id?: number;
   type: EnumOSEventObjectType;
-  mouse: IMouse;
+  screenMouse: IScreenMouse;
+  clientMouse: IClientMouse;
 }

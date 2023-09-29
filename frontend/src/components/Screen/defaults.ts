@@ -21,7 +21,7 @@ export const backdropScreen: IScreen = {
 };
 
 export const defaultScreen: IScreen = {
-  id: 1,
+  id: 0,
   position: {
     y: 0,
     z: 0,

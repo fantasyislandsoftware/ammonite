@@ -1,5 +1,10 @@
 import { IScreen } from 'components/Screen/interface';
-import { IMouse, getMouse } from '../mouse';
+import {
+  IClientMouse,
+  IScreenMouse,
+  getClientMouse,
+  getScreenMouse,
+} from '../mouse';
 import {
   OSEventScreen,
   EnumOSEventObjectType,
@@ -7,67 +12,134 @@ import {
   EnumOSEventType,
   IOSEvent,
   OSEventScreenClient,
+  OSEventBackdrop,
 } from './interface';
 import { useScreenStore } from 'components/Screen/useScreenStore';
 import { screenIdToIndex } from 'handlers/screen';
 
+const createBackdropEventObject = (
+  clientMouse: IClientMouse
+): OSEventBackdrop => {
+  return {
+    type: EnumOSEventObjectType.Backdrop,
+    clientMouse: clientMouse,
+  };
+};
+
 const createScreenEventObject = (
-  mouse: IMouse,
+  screenMouse: IScreenMouse,
+  clientMouse: IClientMouse,
   screen: IScreen
 ): OSEventScreen => {
   return {
     type: EnumOSEventObjectType.Screen,
     id: screen.id,
-    mouse: mouse,
+    screenMouse: screenMouse,
+    clientMouse: clientMouse,
   };
 };
 
 const createScreenTitlebarEventObject = (
-  mouse: IMouse
+  screenMouse: IScreenMouse,
+  clientMouse: IClientMouse
 ): OSEventScreenTitlebar => {
   return {
     type: EnumOSEventObjectType.ScreenTitlebar,
-    mouse: mouse,
+    screenMouse: screenMouse,
+    clientMouse: clientMouse,
   };
 };
 
-const createScreenClientEventObject = (mouse: IMouse): OSEventScreenClient => {
+const createScreenClientEventObject = (
+  screenMouse: IScreenMouse,
+  clientMouse: IClientMouse
+): OSEventScreenClient => {
   return {
     type: EnumOSEventObjectType.ScreenClient,
-    mouse: mouse,
+    screenMouse: screenMouse,
+    clientMouse: clientMouse,
   };
 };
 
 export const processObjectEvents = (
   event: any,
   eventType: EnumOSEventType,
-  screen: IScreen
+  screen?: IScreen
 ) => {
-  const mouse = getMouse(event, screen);
-  const { titleBar } = screen;
-  /* Screen */
-  osEventHandler({
-    object: createScreenEventObject(mouse, screen),
-    parent: undefined,
-    eventType: eventType,
-  });
-  /* Screen Titlebar or Screen Client */
-  osEventHandler({
-    object:
-      titleBar && mouse.screen.y < titleBar.height
-        ? createScreenTitlebarEventObject(mouse)
-        : createScreenClientEventObject(mouse),
-    parent: createScreenEventObject(mouse, screen),
-    eventType: eventType,
-  });
+  const clientMouse = getClientMouse(event);
+
+  if (screen) {
+    const screenMouse = getScreenMouse(event, screen);
+
+    const { titleBar } = screen;
+
+    /* Backdrop */
+    osEventHandler({
+      object: {
+        type: EnumOSEventObjectType.Backdrop,
+        screenMouse: screenMouse,
+        clientMouse: clientMouse,
+      },
+      parent: undefined,
+      eventType: eventType,
+    });
+
+    /* Screen */
+    osEventHandler({
+      object: createScreenEventObject(screenMouse, clientMouse, screen),
+      parent: undefined,
+      eventType: eventType,
+    });
+    /* Screen Titlebar or Screen Client */
+    if (titleBar && screenMouse.screen.y < titleBar.height) {
+      osEventHandler({
+        object: createScreenTitlebarEventObject(screenMouse, clientMouse),
+        parent: createScreenEventObject(screenMouse, clientMouse, screen),
+        eventType: eventType,
+      });
+    } else {
+      osEventHandler({
+        object: createScreenClientEventObject(screenMouse, clientMouse),
+        parent: createScreenEventObject(screenMouse, clientMouse, screen),
+        eventType: eventType,
+      });
+    }
+  } else {
+    osEventHandler({
+      object: createBackdropEventObject(clientMouse),
+      parent: undefined,
+      eventType: eventType,
+    });
+  }
 };
 
 export const osEventHandler = (osEvent: IOSEvent) => {
   const { object, parent, eventType } = osEvent;
-  const { mouse } = object;
+  const { clientMouse } = object;
 
   const { screens, setScreens, setSelectedScreen, selectedScreen } =
     useScreenStore.getState();
+
+  /* Backdrop */
+  if (object.type === EnumOSEventObjectType.Backdrop) {
+    /* Mouse Down */
+    if (eventType === EnumOSEventType.MouseMove) {
+      if (selectedScreen !== undefined) {
+        const newState = screens.map((screen: IScreen) => {
+          if (screen.id === selectedScreen.id) {
+            let newPos = clientMouse.y - selectedScreen.offset.y;
+            if (newPos < 0) newPos = 0;
+            return {
+              ...screen,
+              position: { y: newPos, z: 0 },
+            };
+          }
+          return screen;
+        });
+        setScreens(newState);
+      }
+    }
+  }
 
   /* Screen */
   if (object.type === EnumOSEventObjectType.Screen) {
@@ -76,7 +148,7 @@ export const osEventHandler = (osEvent: IOSEvent) => {
       if (selectedScreen) {
         const newState = screens.map((screen: IScreen) => {
           if (screen.id === selectedScreen.id) {
-            let newPos = mouse.client.y - selectedScreen.offset.y;
+            let newPos = clientMouse.y - selectedScreen.offset.y;
             if (newPos < 0) newPos = 0;
             return {
               ...screen,
@@ -99,7 +171,7 @@ export const osEventHandler = (osEvent: IOSEvent) => {
         setSelectedScreen({
           id: parent.id,
           offset: {
-            y: parent.mouse.client.y - screens[screenIndex!].position.y,
+            y: parent.clientMouse.y - screens[screenIndex!].position.y,
           },
         });
       }
@@ -107,22 +179,6 @@ export const osEventHandler = (osEvent: IOSEvent) => {
     /* Mouse Up */
     if (eventType === EnumOSEventType.MouseUp) {
       setSelectedScreen(undefined);
-    }
-
-    /* Mouse Move */
-    if (eventType === EnumOSEventType.MouseMove) {
-      /*if (selectedScreen) {
-        const newState = screens.map((screen: IScreen) => {
-          if (screen.id === selectedScreen.id) {
-            return {
-              ...screen,
-              position: { y: mouse.client.y - selectedScreen.offset.y, z: 0 },
-            };
-          }
-          return screen;
-        });
-        setScreens(newState);
-      }*/
     }
   }
 };
