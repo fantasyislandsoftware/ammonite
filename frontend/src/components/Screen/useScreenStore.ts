@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { IScreen } from './interface';
-import { backdropScreen, defaultScreen } from './defaults';
+import { testScreenFull, testScreenLoRes, testScreenMedRes } from './mock';
 
 interface SelectedScreen {
   id: number;
@@ -17,7 +17,7 @@ export interface ScreenStore {
 }
 
 export const useScreenStore = create<ScreenStore>((set) => ({
-  screens: [defaultScreen],
+  screens: [testScreenLoRes, testScreenMedRes, testScreenFull],
   setScreens: (screens: IScreen[]) => {
     set({ screens });
   },

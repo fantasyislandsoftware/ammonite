@@ -1,6 +1,5 @@
 import React from 'react';
 import { Screen } from './components/Screen';
-import { app } from './components/Screen/constants';
 import { useScreenStore } from './components/Screen/useScreenStore';
 import { processObjectEvents } from 'handlers/events';
 import { EnumOSEventType } from 'handlers/events/interface';
@@ -19,11 +18,9 @@ const App = () => {
           processObjectEvents(event, EnumOSEventType.MouseMove)
         }
       ></div>
-      <div style={{ padding: `${app.margin}%` }}>
-        {screens.map((screen, index) => (
-          <Screen key={index} screen={screen} />
-        ))}
-      </div>
+      {screens.map((screen, index) => (
+        <Screen key={index} screen={screen} />
+      ))}
     </>
   );
 };

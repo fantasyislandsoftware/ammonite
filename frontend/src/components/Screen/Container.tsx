@@ -30,43 +30,58 @@ const Container: FC<IProps> = ({ screen }) => {
 
   const height = (screen.height / screen.mode.maxHeight) * 100;
 
+  const margin = 30;
+
   return (
-    <div
-      style={{
-        width: `${100 - app.margin * 2}%`,
-        height: `${screen.mode.maxWidth / screen.mode.verticalStretchRatio}vw`,
-        background: 'darkgray',
-        position: 'fixed',
-        top: `${screen.position.y}px`,
-        zIndex: `${screen.position.z}`,
-      }}
-    >
+    <>
       <div
         style={{
-          width: '100%',
-          height: `${height}%`,
-          backgroundColor: 'black',
+          left: `${margin / 2}vw`,
+          width: `${100 - margin}vw`,
+          height: `${
+            screen.mode.maxWidth / screen.mode.verticalStretchRatio - margin
+          }vw`,
+          background: 'darkgray',
+          position: 'fixed',
+          top: `${screen.position.y}px`,
+          zIndex: `${screen.position.z}`,
         }}
       >
-        <Main
-          _ref={ref}
-          screen={screen}
-          onMouseDown={(event) => {
-            processObjectEvents(event, EnumOSEventType.MouseDown, screen);
+        <div
+          style={{
+            width: '100%',
+            height: `${height}%`,
+            backgroundColor: 'black',
           }}
-          onMouseUp={(event) =>
-            processObjectEvents(event, EnumOSEventType.MouseUp, screen)
-          }
-          onMouseMove={(event) =>
-            processObjectEvents(event, EnumOSEventType.MouseMove, screen)
-          }
-          onMouseLeave={(event) =>
-            processObjectEvents(event, EnumOSEventType.MouseLeave, screen)
-          }
-        />
-        <TitleBar screen={screen} />
+        >
+          <Main
+            _ref={ref}
+            screen={screen}
+            onMouseDown={(event) => {
+              processObjectEvents(event, EnumOSEventType.MouseDown, screen);
+            }}
+            onMouseUp={(event) =>
+              processObjectEvents(event, EnumOSEventType.MouseUp, screen)
+            }
+            onMouseMove={(event) =>
+              processObjectEvents(event, EnumOSEventType.MouseMove, screen)
+            }
+            onMouseLeave={(event) =>
+              processObjectEvents(event, EnumOSEventType.MouseLeave, screen)
+            }
+          />
+          <TitleBar screen={screen} />
+        </div>
+        <div
+          style={{
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+            backgroundColor: 'black',
+          }}
+        ></div>
       </div>
-    </div>
+    </>
   );
 };
 
