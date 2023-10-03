@@ -18,7 +18,12 @@ export interface IScreenPosition {
   z: number;
 }
 
+export enum EnumScreenModeType {
+  CLASSIC = 'classic',
+  CLIENT = 'client',
+}
 export interface IScreenMode {
+  type: EnumScreenModeType;
   maxWidth: number;
   maxHeight: number;
   verticalStretchRatio: number;

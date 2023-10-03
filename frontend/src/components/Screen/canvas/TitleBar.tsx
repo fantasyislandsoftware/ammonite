@@ -57,7 +57,7 @@ const TitleBar: FC<IProps> = ({ screen }) => {
       });
       setScreens([...screens]);
     }
-  }, []);
+  }, [screen.width]);
 
   return (
     <canvas

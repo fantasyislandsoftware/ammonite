@@ -1,6 +1,6 @@
 import { IScreen } from './interface';
 import { generateDefaultColorPalette } from './palettes';
-import { low, med } from './screenModes';
+import { full, low, med } from './screenModes';
 
 export const testScreenLoRes: IScreen = {
   id: 0,
@@ -60,7 +60,7 @@ export const testScreenFull: IScreen = {
     y: 100,
     z: 0,
   },
-  mode: low,
+  mode: full,
   width: 320,
   height: 256,
   titleBar: {

@@ -1,8 +1,7 @@
 import { FC, useEffect, useRef, useState } from 'react';
-import { IScreen } from './interface';
+import { EnumScreenModeType, IScreen } from './interface';
 import Main from './canvas/Main';
 import TitleBar from './canvas/TitleBar';
-import { app } from './constants';
 import React from 'react';
 import { processObjectEvents } from 'handlers/events';
 import { EnumOSEventType } from 'handlers/events/interface';
@@ -26,21 +25,38 @@ const Container: FC<IProps> = ({ screen }) => {
       ctx.fillStyle = 'blue';
       ctx.fillRect(0 + 20, 0 + 20, 100 + 20, 100 + 20);
     }
-  }, [ref, ctx]);
-
-  const height = (screen.height / screen.mode.maxHeight) * 100;
+  }, [ref, ctx, screen.width]);
 
   const margin = 30;
+
+  if (screen.mode.type === EnumScreenModeType.CLIENT) {
+    screen.width = document.body.clientWidth;
+    screen.height = document.body.clientHeight;
+  }
+
+  const height =
+    screen.mode.type === EnumScreenModeType.CLASSIC
+      ? (screen.height / screen.mode.maxHeight) * 100
+      : '100%';
+
+  const left =
+    screen.mode.type === EnumScreenModeType.CLASSIC ? `${margin / 2}vw` : '';
+  const width =
+    screen.mode.type === EnumScreenModeType.CLASSIC
+      ? `${100 - margin}vw`
+      : '100%';
+  const height2 =
+    screen.mode.type === EnumScreenModeType.CLASSIC
+      ? `${screen.mode.maxWidth / screen.mode.verticalStretchRatio - margin}vw`
+      : '100%';
 
   return (
     <>
       <div
         style={{
-          left: `${margin / 2}vw`,
-          width: `${100 - margin}vw`,
-          height: `${
-            screen.mode.maxWidth / screen.mode.verticalStretchRatio - margin
-          }vw`,
+          left: left,
+          width: width,
+          height: height2,
           background: 'darkgray',
           position: 'fixed',
           top: `${screen.position.y}px`,

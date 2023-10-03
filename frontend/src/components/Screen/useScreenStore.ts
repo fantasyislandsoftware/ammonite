@@ -17,7 +17,7 @@ export interface ScreenStore {
 }
 
 export const useScreenStore = create<ScreenStore>((set) => ({
-  screens: [testScreenLoRes, testScreenMedRes, testScreenFull],
+  screens: [testScreenLoRes],
   setScreens: (screens: IScreen[]) => {
     set({ screens });
   },

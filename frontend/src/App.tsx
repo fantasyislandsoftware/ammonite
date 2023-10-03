@@ -3,9 +3,15 @@ import { Screen } from './components/Screen';
 import { useScreenStore } from './components/Screen/useScreenStore';
 import { processObjectEvents } from 'handlers/events';
 import { EnumOSEventType } from 'handlers/events/interface';
+import { EnumScreenModeType } from 'components/Screen/interface';
+import { set } from 'lodash';
 
 const App = () => {
-  const { screens } = useScreenStore();
+  const { screens, setScreens } = useScreenStore();
+
+  window.onresize = () => {
+    setScreens(screens);
+  };
 
   return (
     <>
