@@ -1,17 +1,30 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Screen } from './components/Screen';
-import { useScreenStore } from './components/Screen/useScreenStore';
 import { processObjectEvents } from 'handlers/events';
 import { EnumOSEventType } from 'handlers/events/interface';
-import { EnumScreenModeType } from 'components/Screen/interface';
-import { set } from 'lodash';
+import { renderScreen } from 'handlers/screen';
+import { useScreenStore } from 'stores/useScreenStore';
+import ShadowBuffer from 'ShadowBuffer';
 
 const App = () => {
+  const [init, setInit] = useState(false);
   const { screens, setScreens } = useScreenStore();
 
   window.onresize = () => {
     setScreens(screens);
   };
+
+  /*useEffect(() => {
+    if (!init) {
+      setInit(true);
+      setInterval(() => {
+        screens.map((screen) => {
+          renderScreen(screen);
+        });
+        console.log('render');
+      }, 1000);
+    }
+  }, [init]);*/
 
   return (
     <>
@@ -27,6 +40,7 @@ const App = () => {
       {screens.map((screen, index) => (
         <Screen key={index} screen={screen} />
       ))}
+      <ShadowBuffer />
     </>
   );
 };

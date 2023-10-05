@@ -1,4 +1,4 @@
-import { IScreen } from 'components/Screen/interface';
+import { IScreen } from 'interface/screen';
 import {
   IClientMouse,
   IScreenMouse,
@@ -14,8 +14,8 @@ import {
   OSEventScreenClient,
   OSEventBackdrop,
 } from './interface';
-import { useScreenStore } from 'components/Screen/useScreenStore';
 import { screenIdToIndex } from 'handlers/screen';
+import { useScreenStore } from 'stores/useScreenStore';
 
 const createBackdropEventObject = (
   clientMouse: IClientMouse

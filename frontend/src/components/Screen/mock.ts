@@ -1,4 +1,5 @@
-import { IScreen } from './interface';
+import { initPixelArray } from 'handlers/screen';
+import { IScreen } from '../../interface/screen';
 import { generateDefaultColorPalette } from './palettes';
 import { full, low, med } from './screenModes';
 
@@ -22,10 +23,8 @@ export const testScreenLoRes: IScreen = {
   },
   numberOfColours: 16,
   palette: generateDefaultColorPalette(16),
-  canvasBuffers: {
-    titleBarContext: null,
-    clientContext: null,
-  },
+  ctx: null,
+  pixels: [],
 };
 
 export const testScreenMedRes: IScreen = {
@@ -48,10 +47,8 @@ export const testScreenMedRes: IScreen = {
   },
   numberOfColours: 16,
   palette: generateDefaultColorPalette(16),
-  canvasBuffers: {
-    titleBarContext: null,
-    clientContext: null,
-  },
+  ctx: null,
+  pixels: [],
 };
 
 export const testScreenFull: IScreen = {
@@ -61,8 +58,8 @@ export const testScreenFull: IScreen = {
     z: 0,
   },
   mode: full,
-  width: 320,
-  height: 256,
+  width: 1000,
+  height: 1000,
   titleBar: {
     title: 'Untitled3',
     height: 16,
@@ -74,8 +71,6 @@ export const testScreenFull: IScreen = {
   },
   numberOfColours: 16,
   palette: generateDefaultColorPalette(16),
-  canvasBuffers: {
-    titleBarContext: null,
-    clientContext: null,
-  },
+  ctx: null,
+  pixels: [],
 };

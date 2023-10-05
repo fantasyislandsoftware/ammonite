@@ -7,13 +7,13 @@ const defaultBase4Colors = [
 ];
 
 export const generateDefaultColorPalette = (numberOfColors: number) => {
-  const colors = [];
+  /*const colors = [];
   for (let i = 0; i < numberOfColors; i++) {
     if (defaultBase4Colors[i]) {
       colors.push(defaultBase4Colors[i]);
     } else {
       colors.push(_12BitColour(0, 0, 0));
     }
-  }
-  return colors;
+  }*/
+  return defaultBase4Colors;
 };

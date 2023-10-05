@@ -1,4 +1,4 @@
-import { IScreen } from '../components/Screen/interface';
+import { IScreen } from '../interface/screen';
 
 export interface IClientMouse {
   x: number;

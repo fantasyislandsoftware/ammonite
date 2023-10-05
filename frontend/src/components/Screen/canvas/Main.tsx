@@ -1,6 +1,6 @@
 import React from 'react';
 import { FC } from 'react';
-import { IScreen } from '../interface';
+import { IScreen } from '../../../interface/screen';
 import { canvasRenderStyle } from '../styles';
 
 interface IProps {

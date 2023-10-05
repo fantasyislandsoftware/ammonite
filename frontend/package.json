@@ -27,6 +27,7 @@
         "camelcase": "^6.2.0",
         "enzyme": "^3.11.0",
         "enzyme-adapter-react-16": "^1.15.6",
+        "get-system-fonts": "^2.0.2",
         "http-status-codes": "^2.1.4",
         "i18next": "^20.2.2",
         "i18next-chained-backend": "^3.0.2",

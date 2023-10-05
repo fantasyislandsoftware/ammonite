@@ -1,4 +1,4 @@
-import { EnumScreenModeType, IScreenMode } from './interface';
+import { EnumScreenModeType, IScreenMode } from '../../interface/screen';
 
 export const low: IScreenMode = {
   type: EnumScreenModeType.CLASSIC,

@@ -1,10 +1,11 @@
 import { FC, useEffect, useRef, useState } from 'react';
-import { EnumScreenModeType, IScreen } from './interface';
+import { EnumScreenModeType, IScreen } from '../../interface/screen';
 import Main from './canvas/Main';
-import TitleBar from './canvas/TitleBar';
 import React from 'react';
 import { processObjectEvents } from 'handlers/events';
 import { EnumOSEventType } from 'handlers/events/interface';
+import { getTextInfo, renderScreen } from 'handlers/screen';
+import { useScreenStore } from 'stores/useScreenStore';
 
 interface IProps {
   screen: IScreen;
@@ -13,17 +14,27 @@ interface IProps {
 const Container: FC<IProps> = ({ screen }) => {
   const ref = useRef<HTMLCanvasElement>(null);
   const [ctx, setCtx] = useState<CanvasRenderingContext2D | null>(null);
+  const { screens, setScreens } = useScreenStore((state) => state);
 
   useEffect(() => {
     if (ref.current) {
       setCtx(ref.current.getContext('2d'));
     }
     if (ctx) {
-      if (screen.canvasBuffers.titleBarContext) {
-        ctx.drawImage(screen.canvasBuffers.titleBarContext.canvas, 0, 0);
-      }
-      ctx.fillStyle = 'blue';
-      ctx.fillRect(0 + 20, 0 + 20, 100 + 20, 100 + 20);
+      screens.map((_screen) => {
+        if (_screen.id === screen.id) {
+          _screen.ctx = ctx;
+          if (_screen.titleBar) {
+            const { height } = getTextInfo(
+              _screen.titleBar.title,
+              `${_screen.titleBar.font.size}px ${_screen.titleBar.font.name}`
+            );
+            _screen.titleBar.height = height;
+          }
+        }
+      });
+
+      renderScreen(screen);
     }
   }, [ref, ctx, screen.width]);
 
@@ -86,7 +97,6 @@ const Container: FC<IProps> = ({ screen }) => {
               processObjectEvents(event, EnumOSEventType.MouseLeave, screen)
             }
           />
-          <TitleBar screen={screen} />
         </div>
         <div
           style={{

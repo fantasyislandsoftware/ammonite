@@ -6,11 +6,9 @@ export interface IScreen {
   height: number;
   titleBar: IScreenTitleBar | null;
   numberOfColours: number;
-  palette: string[];
-  canvasBuffers: {
-    titleBarContext: CanvasRenderingContext2D | null;
-    clientContext: CanvasRenderingContext2D | null;
-  };
+  palette: number[][];
+  ctx: CanvasRenderingContext2D | null;
+  pixels: number[];
 }
 
 export interface IScreenPosition {
