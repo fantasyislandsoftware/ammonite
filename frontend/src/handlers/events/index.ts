@@ -90,6 +90,7 @@ export const processObjectEvents = (
       parent: undefined,
       eventType: eventType,
     });
+    //console.log(screenMouse.screen.y, titleBar?.height);
     /* Screen Titlebar or Screen Client */
     if (titleBar && screenMouse.screen.y < titleBar.height) {
       osEventHandler({

@@ -1,5 +1,6 @@
 import { ICanvasTextInfo } from 'interface/canvas';
 import { IScreen } from 'interface/screen';
+import { fill } from 'lodash';
 import { useBufferStore } from 'stores/useBufferStore';
 import { useScreenStore } from 'stores/useScreenStore';
 
@@ -103,6 +104,8 @@ export const renderScreen = (screen: IScreen): void => {
       1,
       0
     );
+    /* temp */
+    fillRect(screen, 0, screen.height - 1, screen.width, 1, 1);
   }
 
   const imgData: ImageData = ctx.createImageData(screen.width, screen.height);

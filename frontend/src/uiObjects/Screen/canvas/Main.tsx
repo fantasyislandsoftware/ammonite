@@ -23,8 +23,8 @@ const Main: FC<IProps> = ({
   return (
     <canvas
       ref={_ref}
-      width={screen.width}
-      height={screen.height}
+      width={screen.mode.viewPort.width}
+      height={screen.mode.viewPort.height}
       style={{
         width: '100%',
         height: '100%',

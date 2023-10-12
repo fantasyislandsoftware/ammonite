@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { canvasRenderStyle } from './components/Screen/styles';
+import { canvasRenderStyle } from './uiObjects/Screen/styles';
 import { useBufferStore } from 'stores/useBufferStore';
 
 const ShadowBuffer = () => {

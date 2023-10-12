@@ -1,4 +1,3 @@
-import { testScreenLoRes, testScreenMedRes } from 'components/Screen/mock';
 import { IScreen } from 'interface/screen';
 import { create } from 'zustand';
 
@@ -17,9 +16,10 @@ export interface ScreenStore {
 }
 
 export const useScreenStore = create<ScreenStore>((set) => ({
-  screens: [testScreenMedRes, testScreenLoRes],
+  screens: [],
   setScreens: (screens: IScreen[]) => {
     set({ screens });
+    set({ nextAvailableScreenId: screens.length });
   },
   nextAvailableScreenId: 0,
   incAvailableScreenId: () => {

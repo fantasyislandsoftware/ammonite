@@ -35,7 +35,7 @@ export const getScreenMouse = (e: any, screen: IScreen): IScreenMouse => {
       y:
         Math.round(
           (clientY - screen.position.y) /
-            (e.target.clientHeight / screen.height)
+            (e.target.clientHeight / screen.mode.viewPort.height)
         ) - 1,
     },
     button: e.button,
