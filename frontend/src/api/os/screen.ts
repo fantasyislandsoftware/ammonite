@@ -2,6 +2,7 @@ import { initPixelArray } from 'handlers/screen';
 import { IScreen, IScreenMode, IScreenTitleBar } from 'interface/screen';
 import { useScreenStore } from 'stores/useScreenStore';
 import { generateDefaultColorPalette } from 'uiObjects/Screen/palettes';
+import { full } from 'uiObjects/Screen/screenModes';
 
 export const openScreen = (
   width: number,
@@ -42,4 +43,5 @@ export const openScreen = (
   };
   screens.push(newScreen);
   setScreens(screens);
+  incAvailableScreenId();
 };

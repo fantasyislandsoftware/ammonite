@@ -1,6 +1,6 @@
 import React from 'react';
 import { FC } from 'react';
-import { IScreen } from '../../../interface/screen';
+import { EnumScreenModeType, IScreen } from '../../../interface/screen';
 import { canvasRenderStyle } from '../styles';
 
 interface IProps {
@@ -20,11 +20,21 @@ const Main: FC<IProps> = ({
   onMouseMove,
   onMouseLeave,
 }) => {
+  let width = 0;
+  let height = 0;
+  if (screen.mode.type === EnumScreenModeType.CLASSIC) {
+    width = screen.mode.viewPort.width;
+    height = screen.mode.viewPort.height;
+  } else {
+    width = screen.width;
+    height = screen.height;
+  }
+
   return (
     <canvas
       ref={_ref}
-      width={screen.mode.viewPort.width}
-      height={screen.mode.viewPort.height}
+      width={width}
+      height={height}
       style={{
         width: '100%',
         height: '100%',

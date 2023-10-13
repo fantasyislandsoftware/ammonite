@@ -5,7 +5,7 @@ import { EnumOSEventType } from 'handlers/events/interface';
 import { useScreenStore } from 'stores/useScreenStore';
 import ShadowBuffer from 'ShadowBuffer';
 import { openScreen } from 'api/os/screen';
-import { full, hi, low, med } from 'uiObjects/Screen/screenModes';
+import { full, hi, interlaced, low, med } from 'uiObjects/Screen/screenModes';
 
 const App = () => {
   const [init, setInit] = useState(false);
@@ -17,7 +17,6 @@ const App = () => {
 
   window.onload = () => {
     setScreens(screens);
-    //setInit(true);
   };
 
   useEffect(() => {
@@ -25,13 +24,9 @@ const App = () => {
       setInit(true);
       openScreen(window.innerWidth, window.innerHeight, full, 'Full Screen');
       openScreen(640, 512, hi, 'Hi Res');
+      openScreen(320, 512, interlaced, 'Interlaced');
       openScreen(640, 256, med, 'Med Res');
       openScreen(320, 256, low, 'Low Res');
-
-      /*screens.map((screen) => {
-        screen.pixels = initPixelArray(screen.width, screen.height);
-      });
-      setScreens(screens);*/
 
       /*setInterval(() => {
         screens.map((screen) => {

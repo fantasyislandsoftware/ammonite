@@ -23,7 +23,7 @@ const AspectRatio: FC<IProps> = ({ screen, children }) => {
   } else {
     width = screen.width;
     height = screen.height;
-    //margin = innerWidth - screen.width;
+    margin = innerWidth - screen.width;
   }
 
   return (

@@ -25,7 +25,7 @@ export const med: IScreenMode = {
 export const interlaced: IScreenMode = {
   type: EnumScreenModeType.CLASSIC,
   viewPort: {
-    width: 640,
+    width: 320,
     height: 512,
   },
   verticalStretchRatio: 4,

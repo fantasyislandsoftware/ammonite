@@ -10,7 +10,8 @@ const DragScreen: FC<IProps> = ({ screen, children }) => {
   return (
     <div
       style={{
-        backgroundColor: 'green',
+        borderTop: '1px solid black',
+        backgroundColor: 'black',
         position: 'fixed',
         top: `${screen.position.y}px`,
         width: '100%',

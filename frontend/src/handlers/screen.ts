@@ -104,8 +104,6 @@ export const renderScreen = (screen: IScreen): void => {
       1,
       0
     );
-    /* temp */
-    fillRect(screen, 0, screen.height - 1, screen.width, 1, 1);
   }
 
   const imgData: ImageData = ctx.createImageData(screen.width, screen.height);
