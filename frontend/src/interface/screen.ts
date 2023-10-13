@@ -4,6 +4,10 @@ export interface IScreen {
   mode: IScreenMode;
   width: number;
   height: number;
+  offset: {
+    x: number;
+    y: number;
+  };
   titleBar: IScreenTitleBar | null;
   numberOfColours: number;
   palette: number[][];

@@ -16,7 +16,7 @@ const AspectRatio: FC<IProps> = ({ screen, children }) => {
 
   if (screen.mode.type === EnumScreenModeType.CLASSIC) {
     if (ref.current) {
-      width = innerHeight * 1.2;
+      width = innerHeight * 1.25;
       height = innerHeight;
       margin = innerWidth - ref.current.clientWidth;
     }

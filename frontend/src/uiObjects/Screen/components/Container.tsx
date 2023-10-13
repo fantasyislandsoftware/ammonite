@@ -1,13 +1,13 @@
 import { FC, useEffect, useRef, useState } from 'react';
-import { EnumScreenModeType, IScreen } from '../../../interface/screen';
+import { IScreen } from '../../../interface/screen';
 import Main from '../canvas/Main';
 import React from 'react';
-import { processObjectEvents } from 'handlers/events';
-import { EnumOSEventType } from 'handlers/events/interface';
+import { processObjectEvents } from 'handlers/event';
 import { getTextInfo, renderScreen } from 'handlers/screen';
 import { useScreenStore } from 'stores/useScreenStore';
 import DragScreen from './DragScreen';
 import AspectRatio from './AspectRatio';
+import { EnumOSEventType } from 'interface/event';
 
 interface IProps {
   screen: IScreen;

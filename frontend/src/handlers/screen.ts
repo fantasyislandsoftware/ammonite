@@ -115,5 +115,5 @@ export const renderScreen = (screen: IScreen): void => {
       //imgData.data[n * 4 + i] = Math.floor(Math.random() * 255);
     }
   }
-  ctx.putImageData(imgData, 0, 0);
+  ctx.putImageData(imgData, screen.offset.x, screen.offset.y);
 };

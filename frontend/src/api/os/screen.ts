@@ -10,7 +10,7 @@ export const openScreen = (
   mode: IScreenMode,
   title: string | null
 ) => {
-  const { screens, setScreens, nextAvailableScreenId, incAvailableScreenId } =
+  const { screens, setScreens, nextAvailableScreenId } =
     useScreenStore.getState();
 
   const titleBar = title
@@ -34,6 +34,10 @@ export const openScreen = (
     mode: mode,
     width: width,
     height: height,
+    offset: {
+      x: 0,
+      y: 0,
+    },
     titleBar: titleBar,
     numberOfColours: 16,
     palette: generateDefaultColorPalette(16),
@@ -43,5 +47,4 @@ export const openScreen = (
   };
   screens.push(newScreen);
   setScreens(screens);
-  incAvailableScreenId();
 };

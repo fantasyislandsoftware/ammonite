@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Screen } from './uiObjects/Screen';
-import { processObjectEvents } from 'handlers/events';
-import { EnumOSEventType } from 'handlers/events/interface';
+import { processObjectEvents } from 'handlers/event';
 import { useScreenStore } from 'stores/useScreenStore';
 import ShadowBuffer from 'ShadowBuffer';
 import { openScreen } from 'api/os/screen';
 import { full, hi, interlaced, low, med } from 'uiObjects/Screen/screenModes';
+import { EnumOSEventType } from 'interface/event';
+import { renderScreen } from 'handlers/screen';
 
 const App = () => {
   const [init, setInit] = useState(false);
@@ -33,7 +34,7 @@ const App = () => {
           renderScreen(screen);
         });
         console.log('render');
-      }, 1000);*/
+      }, 1);*/
     }
   }, [init]);
 

@@ -4,18 +4,18 @@ import {
   IScreenMouse,
   getClientMouse,
   getScreenMouse,
-} from '../mouse';
-import {
-  OSEventScreen,
-  EnumOSEventObjectType,
-  OSEventScreenTitlebar,
-  EnumOSEventType,
-  IOSEvent,
-  OSEventScreenClient,
-  OSEventBackdrop,
-} from './interface';
+} from './mouse';
 import { screenIdToIndex } from 'handlers/screen';
 import { useScreenStore } from 'stores/useScreenStore';
+import {
+  OSEventBackdrop,
+  EnumOSEventObjectType,
+  OSEventScreen,
+  OSEventScreenTitlebar,
+  OSEventScreenClient,
+  EnumOSEventType,
+  IOSEvent,
+} from 'interface/event';
 
 const createBackdropEventObject = (
   clientMouse: IClientMouse

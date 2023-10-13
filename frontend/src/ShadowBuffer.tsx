@@ -7,7 +7,7 @@ const ShadowBuffer = () => {
   const { setBuffer } = useBufferStore((state) => state);
   useEffect(() => {
     if (ref.current) {
-      const ctx = ref.current.getContext('2d');
+      const ctx = ref.current.getContext('2d', { willReadFrequently: true });
       if (!ctx) return;
       setBuffer(ctx);
     }
