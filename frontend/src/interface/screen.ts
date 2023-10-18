@@ -12,8 +12,9 @@ export interface IScreen {
   numberOfColours: number;
   palette: number[][];
   ctx: CanvasRenderingContext2D | null;
-  pixels: number[];
+  pixels: number[][];
   margin: number;
+  zIndex: number;
 }
 
 export interface IScreenPosition {

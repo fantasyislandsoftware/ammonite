@@ -16,6 +16,7 @@ const DragScreen: FC<IProps> = ({ screen, children }) => {
         top: `${screen.position.y}px`,
         width: '100%',
         height: '100%',
+        zIndex: screen.zIndex,
       }}
     >
       {children}

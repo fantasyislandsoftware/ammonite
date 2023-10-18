@@ -1,8 +1,8 @@
-import { initPixelArray } from 'handlers/screen';
-import { IScreen, IScreenMode, IScreenTitleBar } from 'interface/screen';
+import { initPixelArray } from 'functions/graphics';
+import { getHighestScreenZIndex } from 'functions/screen';
+import { IScreen, IScreenMode } from 'interface/screen';
 import { useScreenStore } from 'stores/useScreenStore';
 import { generateDefaultColorPalette } from 'uiObjects/Screen/palettes';
-import { full } from 'uiObjects/Screen/screenModes';
 
 export const openScreen = (
   width: number,
@@ -44,7 +44,16 @@ export const openScreen = (
     ctx: null,
     pixels: initPixelArray(width, height),
     margin: 0,
+    zIndex: getHighestScreenZIndex() + 1,
   };
   screens.push(newScreen);
+  setScreens(screens);
+};
+
+export const screenBringToFront = (index: number) => {
+  const { screens, setScreens } = useScreenStore.getState();
+  const screen = screens[index];
+  screen.zIndex = getHighestScreenZIndex() + 1;
+  screens[index] = screen;
   setScreens(screens);
 };

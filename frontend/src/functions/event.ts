@@ -1,11 +1,12 @@
 import { IScreen } from 'interface/screen';
 import {
+  EnumMouseButton,
   IClientMouse,
   IScreenMouse,
   getClientMouse,
   getScreenMouse,
 } from './mouse';
-import { screenIdToIndex } from 'handlers/screen';
+import { screenIdToIndex } from 'functions/screen';
 import { useScreenStore } from 'stores/useScreenStore';
 import {
   OSEventBackdrop,
@@ -16,6 +17,7 @@ import {
   EnumOSEventType,
   IOSEvent,
 } from 'interface/event';
+import { screenBringToFront } from 'api/os/screen';
 
 const createBackdropEventObject = (
   clientMouse: IClientMouse
@@ -115,7 +117,8 @@ export const processObjectEvents = (
 
 export const osEventHandler = (osEvent: IOSEvent) => {
   const { object, parent, eventType } = osEvent;
-  const { clientMouse } = object;
+  const clientMouse = object.clientMouse;
+  const screenMouse = object.screenMouse ? object.screenMouse : undefined;
 
   const { screens, setScreens, setSelectedScreen, selectedScreen } =
     useScreenStore.getState();
@@ -165,13 +168,18 @@ export const osEventHandler = (osEvent: IOSEvent) => {
   /* Screen Titlebar */
   if (object.type === EnumOSEventObjectType.ScreenTitlebar) {
     /* Mouse Down */
-    if (eventType === EnumOSEventType.MouseDown) {
+    if (
+      eventType === EnumOSEventType.MouseDown &&
+      screenMouse?.button === EnumMouseButton.Left
+    ) {
       if (parent !== undefined && parent?.id !== undefined) {
         const screenIndex = screenIdToIndex(parent.id);
+        if (screenIndex === undefined) return;
+        screenBringToFront(screenIndex);
         setSelectedScreen({
           id: parent.id,
           offset: {
-            y: parent.clientMouse.y - screens[screenIndex!].position.y,
+            y: parent.clientMouse.y - screens[screenIndex].position.y,
           },
         });
       }

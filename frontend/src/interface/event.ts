@@ -1,4 +1,4 @@
-import { IClientMouse, IScreenMouse } from 'handlers/mouse';
+import { IClientMouse, IScreenMouse } from 'functions/mouse';
 
 export interface IOSEvent {
   object:
@@ -42,6 +42,7 @@ export enum EnumOSEventObjectType {
 export interface OSEventBackdrop {
   type: EnumOSEventObjectType;
   id?: number;
+  screenMouse?: IScreenMouse;
   clientMouse: IClientMouse;
 }
 

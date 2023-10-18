@@ -1,27 +1,28 @@
 import { ICanvasTextInfo } from 'interface/canvas';
 import { IScreen } from 'interface/screen';
-import { fill } from 'lodash';
 import { useBufferStore } from 'stores/useBufferStore';
-import { useScreenStore } from 'stores/useScreenStore';
+import guiIconsPath from '../assets/gfx/gui.iff';
+import BinaryStream from 'api/lib/binarystream';
+import { detect, parse } from 'api/lib/iff';
+import { IBrush } from 'interface/graphics';
 
-export const screenIdToIndex = (id: number): number | undefined => {
-  const { screens } = useScreenStore.getState();
-  let result;
-  screens.map((screen: IScreen, index: number) => {
-    if (screen.id === id) result = index;
-  });
-  return result;
-};
-
-export const initPixelArray = (width: number, height: number): number[] => {
-  const pixelArray = [];
-  for (let n = 0; n < width * height; n++) {
-    pixelArray.push(2);
+export const initPixelArray = (width: number, height: number): number[][] => {
+  const array: number[][] = [];
+  for (let y = 0; y < height; y++) {
+    const row = [];
+    for (let x = 0; x < width; x++) {
+      row.push(2);
+    }
+    array.push(row);
   }
-  return pixelArray;
+  return array;
 };
 
-const fillRect = (
+export const drawPixel = (screen: IScreen, x: number, y: number, c: number) => {
+  screen.pixels[y][x] = c;
+};
+
+export const fillRect = (
   screen: IScreen,
   x: number,
   y: number,
@@ -31,12 +32,26 @@ const fillRect = (
 ) => {
   for (let _y = y; _y < y + h; _y++) {
     for (let _x = x; _x < x + w; _x++) {
-      screen.pixels[_y * screen.width + _x] = c;
+      screen.pixels[_y + x][_x + x] = c;
     }
   }
 };
 
-const drawText = (
+export const drawImage = (
+  screen: IScreen,
+  image: any,
+  x: number,
+  y: number
+) => {
+  for (let _y = 0; _y < image.height; _y++) {
+    for (let _x = 0; _x < image.width; _x++) {
+      const c = image.pixels[_y][_x];
+      screen.pixels[_y + y][_x + x] = c;
+    }
+  }
+};
+
+export const drawText = (
   screen: IScreen,
   str: string,
   x: number,
@@ -67,7 +82,7 @@ const drawText = (
       const c =
         imgData.data[n * 4] === 255 ? textColorIndex : backgroundColorIndex;
       n++;
-      screen.pixels[_y * screen.width + _x] = c;
+      screen.pixels[_y + y][_x + x] = c;
     }
   }
 };
@@ -87,33 +102,23 @@ export const getTextInfo = (str: string, font: string): ICanvasTextInfo => {
   };
 };
 
-export const renderScreen = (screen: IScreen): void => {
-  const { ctx } = screen;
-
-  if (ctx === null) return;
-
-  if (screen.titleBar) {
-    fillRect(screen, 0, 0, screen.width, screen.titleBar.height, 1);
-    fillRect(screen, 0, screen.titleBar.height, screen.width, 1, 0);
-    drawText(
-      screen,
-      screen.titleBar.title,
-      0,
-      0,
-      `${screen.titleBar.font.size}px ${screen.titleBar.font.name}`,
-      1,
-      0
-    );
-  }
-
-  const imgData: ImageData = ctx.createImageData(screen.width, screen.height);
-  for (let n = 0; n < screen.pixels.length; n++) {
-    const pixelIndex = screen.pixels[n];
-    const color = screen.palette[pixelIndex];
-    for (let i = 0; i < 4; i++) {
-      imgData.data[n * 4 + i] = color[i];
-      //imgData.data[n * 4 + i] = Math.floor(Math.random() * 255);
+export const loadGuiIcons = async () => {
+  const file = await fetch(guiIconsPath);
+  const data = await file.arrayBuffer();
+  const stream = BinaryStream(data.slice(0, data.byteLength), true);
+  const fileType = detect(stream);
+  const iff: any = parse(stream, true, fileType);
+  const image: IBrush = {
+    width: 64,
+    height: 64,
+    pixels: initPixelArray(64, 64),
+  };
+  for (let y = 0; y < 64; y++) {
+    for (let x = 0; x < 64; x++) {
+      const c = iff.pixels[y][x];
+      image.pixels[y][x] = c;
     }
   }
-  ctx.putImageData(imgData, screen.offset.x, screen.offset.y);
+  console.log(image);
+  return image;
 };

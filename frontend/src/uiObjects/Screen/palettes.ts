@@ -1,4 +1,4 @@
-import { _12BitColour } from '../../handlers/colour';
+import { _12BitColour } from '../../functions/colour';
 
 const defaultBase4Colors = [
   _12BitColour(0, 0, 0),
