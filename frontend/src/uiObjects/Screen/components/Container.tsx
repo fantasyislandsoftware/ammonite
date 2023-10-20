@@ -36,7 +36,6 @@ const Container: FC<IProps> = ({ screen }) => {
           }
         }
       });
-
       renderScreen(screen);
     }
   }, [ref, ctx]);

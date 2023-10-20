@@ -1,9 +1,22 @@
 import { _12BitColour } from '../../functions/colour';
 
-const defaultBase4Colors = [
+const defaultBase16Colors = [
   _12BitColour(0, 0, 0),
   _12BitColour(15, 15, 15),
   _12BitColour(9, 9, 9),
+  _12BitColour(6, 6, 6),
+  _12BitColour(12, 12, 12),
+  _12BitColour(3, 3, 3),
+  _12BitColour(8, 8, 8),
+  _12BitColour(4, 4, 4),
+  _12BitColour(14, 14, 14),
+  _12BitColour(2, 2, 2),
+  _12BitColour(10, 10, 10),
+  _12BitColour(1, 1, 1),
+  _12BitColour(13, 13, 13),
+  _12BitColour(5, 5, 5),
+  _12BitColour(11, 11, 11),
+  _12BitColour(0, 15, 0),
 ];
 
 export const generateDefaultColorPalette = (numberOfColors: number) => {
@@ -15,5 +28,5 @@ export const generateDefaultColorPalette = (numberOfColors: number) => {
       colors.push(_12BitColour(0, 0, 0));
     }
   }*/
-  return defaultBase4Colors;
+  return defaultBase16Colors;
 };

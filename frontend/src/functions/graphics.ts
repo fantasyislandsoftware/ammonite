@@ -5,6 +5,7 @@ import guiIconsPath from '../assets/gfx/gui.iff';
 import BinaryStream from 'api/lib/binarystream';
 import { detect, parse } from 'api/lib/iff';
 import { IBrush } from 'interface/graphics';
+import { off } from 'process';
 
 export const initPixelArray = (width: number, height: number): number[][] => {
   const array: number[][] = [];
@@ -41,11 +42,20 @@ export const drawImage = (
   screen: IScreen,
   image: any,
   x: number,
-  y: number
+  y: number,
+  w?: number,
+  h?: number,
+  t?: number
 ) => {
-  for (let _y = 0; _y < image.height; _y++) {
-    for (let _x = 0; _x < image.width; _x++) {
-      const c = image.pixels[_y][_x];
+  const width = w || image.width;
+  const height = h || image.height;
+
+  for (let _y = 0; _y < height; _y++) {
+    for (let _x = 0; _x < width; _x++) {
+      const xx = Math.floor((_x * image.width) / width);
+      const yy = Math.floor((_y * image.height) / height);
+      const c = image.pixels[yy][xx];
+      if (c === t) continue;
       screen.pixels[_y + y][_x + x] = c;
     }
   }
@@ -108,17 +118,30 @@ export const loadGuiIcons = async () => {
   const stream = BinaryStream(data.slice(0, data.byteLength), true);
   const fileType = detect(stream);
   const iff: any = parse(stream, true, fileType);
-  const image: IBrush = {
-    width: 64,
-    height: 64,
-    pixels: initPixelArray(64, 64),
-  };
-  for (let y = 0; y < 64; y++) {
-    for (let x = 0; x < 64; x++) {
-      const c = iff.pixels[y][x];
-      image.pixels[y][x] = c;
+  const w = 32;
+  const h = 32;
+  const o = 1;
+  const images: IBrush[] = [];
+  let ox = o;
+  let oy = o;
+  for (let cy = 0; cy < 6; cy++) {
+    for (let cx = 0; cx < 6; cx++) {
+      const image: IBrush = {
+        width: w,
+        height: h,
+        pixels: initPixelArray(32, 32),
+      };
+      for (let y = 0; y < h; y++) {
+        for (let x = 0; x < w; x++) {
+          const c = iff.pixels[oy + y][ox + x];
+          image.pixels[y][x] = c;
+        }
+      }
+      images.push(image);
+      ox += w + 3;
     }
+    ox = o;
+    oy += h + 3;
   }
-  console.log(image);
-  return image;
+  return images;
 };

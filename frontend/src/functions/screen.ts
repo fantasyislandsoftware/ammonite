@@ -27,14 +27,16 @@ export const getHighestScreenZIndex = () => {
 };
 
 export const renderScreen = (screen: IScreen) => {
+  const { screens, setScreens } = useScreenStore.getState();
   const { ctx } = screen;
 
   if (ctx === null) return;
 
-  loadGuiIcons().then((icon) => {
+  loadGuiIcons().then((icons) => {
     if (screen.titleBar) {
-      fillRect(screen, 0, 0, screen.width, screen.titleBar.height, 1);
-      fillRect(screen, 0, screen.titleBar.height, screen.width, 1, 0);
+      const barHeight = screen.titleBar.height;
+      fillRect(screen, 0, 0, screen.width, barHeight, 1);
+      fillRect(screen, 0, barHeight, screen.width, 1, 0);
       drawText(
         screen,
         screen.titleBar.title,
@@ -44,7 +46,25 @@ export const renderScreen = (screen: IScreen) => {
         1,
         0
       );
-      drawImage(screen, icon, 40, 40);
+      screen.titleBar.icons.map((icon, index) => {
+        const imageIndex = icon.imageIndex[icon.currentImageIndex];
+
+        icon.boundBox = {
+          x: screen.width - index * barHeight - barHeight,
+          y: 0,
+          width: barHeight,
+          height: barHeight,
+        };
+
+        drawImage(
+          screen,
+          icons[screen.titleBar ? imageIndex : 0],
+          icon.boundBox.x,
+          icon.boundBox.y,
+          icon.boundBox.width,
+          icon.boundBox.height
+        );
+      });
     }
 
     const imgData: ImageData = ctx.createImageData(screen.width, screen.height);
@@ -59,14 +79,13 @@ export const renderScreen = (screen: IScreen) => {
         n++;
       }
     }
-    /*for (let n = 0; n < screen.pixels.length; n++) {
-      const pixelIndex = screen.pixels[n];
-      const color = screen.palette[pixelIndex];
-      for (let i = 0; i < 4; i++) {
-        imgData.data[n * 4 + i] = color[i];
-        //imgData.data[n * 4 + i] = Math.floor(Math.random() * 255);
-      }
-    }*/
     ctx.putImageData(imgData, screen.offset.x, screen.offset.y);
   });
+
+  screens.map((screen, index) => {
+    if (screen.id === screen.id) {
+      screens[index] = screen;
+    }
+  });
+  setScreens(screens);
 };

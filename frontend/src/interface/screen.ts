@@ -48,5 +48,13 @@ export interface IScreenTitleBar {
 }
 
 export interface IScreenTitleBarIcon {
-  id: number;
+  id: string;
+  imageIndex: number[];
+  currentImageIndex: number;
+  boundBox: {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  };
 }

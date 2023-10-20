@@ -21,7 +21,30 @@ export const openScreen = (
           name: 'Arial',
           size: 12,
         },
-        icons: [],
+        icons: [
+          {
+            id: 'close',
+            imageIndex: [0, 1],
+            currentImageIndex: 0,
+            boundBox: {
+              x: 0,
+              y: 0,
+              width: 0,
+              height: 0,
+            },
+          },
+          {
+            id: 'test',
+            imageIndex: [0, 1],
+            currentImageIndex: 0,
+            boundBox: {
+              x: 0,
+              y: 0,
+              width: 0,
+              height: 0,
+            },
+          },
+        ],
       }
     : null;
 
