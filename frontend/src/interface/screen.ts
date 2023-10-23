@@ -15,6 +15,13 @@ export interface IScreen {
   pixels: number[][];
   margin: number;
   zIndex: number;
+  aspectCalc:
+    | {
+        width: number;
+        height: number;
+        margin: number;
+      }
+    | undefined;
 }
 
 export interface IScreenPosition {
@@ -57,4 +64,10 @@ export interface IScreenTitleBarIcon {
     width: number;
     height: number;
   };
+}
+
+export interface IScreenAspect {
+  width: number;
+  height: number;
+  margin: number;
 }

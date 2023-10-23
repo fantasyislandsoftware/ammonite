@@ -1,4 +1,4 @@
-import { IScreen } from 'interface/screen';
+import { IScreen, IScreenAspect } from 'interface/screen';
 import {
   EnumMouseButton,
   IClientMouse,
@@ -66,12 +66,13 @@ const createScreenClientEventObject = (
 export const processObjectEvents = (
   event: any,
   eventType: EnumOSEventType,
-  screen?: IScreen
+  screen?: IScreen,
+  aspect?: IScreenAspect
 ) => {
   const clientMouse = getClientMouse(event);
 
   if (screen) {
-    const screenMouse = getScreenMouse(event, screen);
+    const screenMouse = getScreenMouse(event, screen, aspect);
 
     const { titleBar } = screen;
 
@@ -98,6 +99,17 @@ export const processObjectEvents = (
         object: createScreenTitlebarEventObject(screenMouse, clientMouse),
         parent: createScreenEventObject(screenMouse, clientMouse, screen),
         eventType: eventType,
+      });
+      /* Titlebar Icons */
+      titleBar.icons.map((icon) => {
+        if (
+          screenMouse.screen.x > icon.boundBox.x &&
+          screenMouse.screen.y > icon.boundBox.y &&
+          screenMouse.screen.x < icon.boundBox.x + icon.boundBox.width &&
+          screenMouse.screen.y < icon.boundBox.y + icon.boundBox.height
+        ) {
+          //console.log(icon.id);
+        }
       });
     } else {
       osEventHandler({

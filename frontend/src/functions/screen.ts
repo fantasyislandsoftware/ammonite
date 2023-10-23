@@ -48,14 +48,12 @@ export const renderScreen = (screen: IScreen) => {
       );
       screen.titleBar.icons.map((icon, index) => {
         const imageIndex = icon.imageIndex[icon.currentImageIndex];
-
         icon.boundBox = {
           x: screen.width - index * barHeight - barHeight,
           y: 0,
           width: barHeight,
           height: barHeight,
         };
-
         drawImage(
           screen,
           icons[screen.titleBar ? imageIndex : 0],
@@ -81,10 +79,14 @@ export const renderScreen = (screen: IScreen) => {
     }
     ctx.putImageData(imgData, screen.offset.x, screen.offset.y);
   });
+  setScreen(screen);
+};
 
+export const setScreen = (_screen: IScreen) => {
+  const { screens, setScreens } = useScreenStore.getState();
   screens.map((screen, index) => {
-    if (screen.id === screen.id) {
-      screens[index] = screen;
+    if (screen.id === _screen.id) {
+      screens[index] = _screen;
     }
   });
   setScreens(screens);

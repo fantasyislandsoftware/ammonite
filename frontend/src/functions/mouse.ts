@@ -1,4 +1,4 @@
-import { IScreen } from '../interface/screen';
+import { IScreen, IScreenAspect } from '../interface/screen';
 
 export interface IClientMouse {
   x: number;
@@ -26,22 +26,31 @@ export const getClientMouse = (e: any): IClientMouse => {
   };
 };
 
-export const getScreenMouse = (e: any, screen: IScreen): IScreenMouse => {
-  const clientX = e.clientX;
+export const getScreenMouse = (
+  e: any,
+  screen: IScreen,
+  aspect?: IScreenAspect
+): IScreenMouse => {
+  const m = aspect ? aspect.margin : 0;
+  const clientX = e.clientX - Math.round(m / 2);
   const clientY = e.clientY;
+
+  let x =
+    Math.floor(clientX / (e.target.clientWidth / screen.mode.viewPort.width)) -
+    screen.offset.x;
+  if (x < 0) x = 0;
+
+  let y =
+    Math.floor(
+      (clientY - screen.position.y) /
+        (e.target.clientHeight / screen.mode.viewPort.height)
+    ) - screen.offset.y;
+  if (y < 0) y = 0;
+
   return {
     screen: {
-      x:
-        Math.round(clientX / (e.target.clientWidth / screen.width)) -
-        1 -
-        screen.offset.x,
-      y:
-        Math.round(
-          (clientY - screen.position.y) /
-            (e.target.clientHeight / screen.mode.viewPort.height)
-        ) -
-        1 -
-        screen.offset.y,
+      x: x,
+      y: y,
     },
     button: e.button,
   };
