@@ -68,7 +68,11 @@ export const openScreen = (
     pixels: initPixelArray(width, height),
     margin: 0,
     zIndex: getHighestScreenZIndex() + 1,
-    aspectCalc: undefined,
+    aspect: {
+      width: 0,
+      height: 0,
+      margin: 0,
+    },
   };
   screens.push(newScreen);
   setScreens(screens);

@@ -15,13 +15,11 @@ export interface IScreen {
   pixels: number[][];
   margin: number;
   zIndex: number;
-  aspectCalc:
-    | {
-        width: number;
-        height: number;
-        margin: number;
-      }
-    | undefined;
+  aspect: {
+    width: number;
+    height: number;
+    margin: number;
+  };
 }
 
 export interface IScreenPosition {

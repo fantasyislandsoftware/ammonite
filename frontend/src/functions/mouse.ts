@@ -28,10 +28,11 @@ export const getClientMouse = (e: any): IClientMouse => {
 
 export const getScreenMouse = (
   e: any,
-  screen: IScreen,
-  aspect?: IScreenAspect
+  screen: IScreen
+  //aspect: IScreenAspect
 ): IScreenMouse => {
-  const m = aspect ? aspect.margin : 0;
+  //const m = aspect ? aspect.margin : 0;
+  const m = screen.aspect.margin;
   const clientX = e.clientX - Math.round(m / 2);
   const clientY = e.clientY;
 
@@ -39,6 +40,7 @@ export const getScreenMouse = (
     Math.floor(clientX / (e.target.clientWidth / screen.mode.viewPort.width)) -
     screen.offset.x;
   if (x < 0) x = 0;
+  //console.log(x);
 
   let y =
     Math.floor(

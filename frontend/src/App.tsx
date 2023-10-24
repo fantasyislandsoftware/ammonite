@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Screen } from './uiObjects/Screen';
-import { processObjectEvents } from 'functions/event';
+import { processObjectEvents } from 'functions/events/events';
 import { useScreenStore } from 'stores/useScreenStore';
 import ShadowBuffer from 'ShadowBuffer';
 import { openScreen } from 'api/os/screen';
@@ -51,10 +51,10 @@ const App = () => {
   useEffect(() => {
     if (!init) {
       setInit(true);
-      openScreen(window.innerWidth, window.innerHeight, full, 'Full Screen');
+      //openScreen(window.innerWidth, window.innerHeight, full, 'Full Screen');
       //openScreen(640, 512, hi, 'Hi Res');
       //openScreen(320, 512, interlaced, 'Interlaced');
-      openScreen(640, 256, med, 'Med Res');
+      //openScreen(640, 256, med, 'Med Res');
       openScreen(320, 256, low, 'Low Res');
 
       /*setInterval(() => {

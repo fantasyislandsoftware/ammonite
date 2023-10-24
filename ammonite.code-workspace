@@ -6,5 +6,8 @@
 		{
 			"path": "backend"
 		}
-	]
+	],
+	"settings": {
+		"git-blame.gitWebUrl": ""
+	}
 }

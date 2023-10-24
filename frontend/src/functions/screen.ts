@@ -26,11 +26,11 @@ export const getHighestScreenZIndex = () => {
   return result;
 };
 
-export const renderScreen = (screen: IScreen) => {
+export const renderScreen = (screen: IScreen): IScreen => {
   const { screens, setScreens } = useScreenStore.getState();
   const { ctx } = screen;
 
-  if (ctx === null) return;
+  if (ctx === null) return screen;
 
   loadGuiIcons().then((icons) => {
     if (screen.titleBar) {
@@ -78,8 +78,10 @@ export const renderScreen = (screen: IScreen) => {
       }
     }
     ctx.putImageData(imgData, screen.offset.x, screen.offset.y);
+    return screen;
   });
-  setScreen(screen);
+  //setScreen(screen);
+  return screen;
 };
 
 export const setScreen = (_screen: IScreen) => {

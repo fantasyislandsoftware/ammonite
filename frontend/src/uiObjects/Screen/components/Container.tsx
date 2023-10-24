@@ -2,7 +2,7 @@ import { FC, useEffect, useRef, useState } from 'react';
 import { EnumScreenModeType, IScreen } from '../../../interface/screen';
 import Main from '../canvas/Main';
 import React from 'react';
-import { processObjectEvents } from 'functions/event';
+import { processObjectEvents } from 'functions/events/events';
 import { renderScreen } from 'functions/screen';
 import { useScreenStore } from 'stores/useScreenStore';
 import DragScreen from './DragScreen';
@@ -19,7 +19,7 @@ const Container: FC<IProps> = ({ screen }) => {
   const [ctx, setCtx] = useState<CanvasRenderingContext2D | null>(null);
   const { innerWidth, innerHeight } = window;
 
-  const calculate = () => {
+  const calculateAspect = () => {
     let margin = 0;
     let width = 0;
     let height = 0;
@@ -54,41 +54,25 @@ const Container: FC<IProps> = ({ screen }) => {
     }
   }, [ref, ctx]);
 
-  const aspect = calculate();
-  screen.aspectCalc = aspect;
+  screen.aspect = calculateAspect();
 
   return (
     <DragScreen screen={screen}>
-      <AspectRatio aspect={calculate()}>
+      <AspectRatio aspect={screen.aspect}>
         <Main
           _ref={ref}
           screen={screen}
           onMouseDown={(event) => {
-            processObjectEvents(
-              event,
-              EnumOSEventType.MouseDown,
-              screen,
-              aspect
-            );
+            processObjectEvents(event, EnumOSEventType.MouseDown, screen);
           }}
           onMouseUp={(event) =>
-            processObjectEvents(event, EnumOSEventType.MouseUp, screen, aspect)
+            processObjectEvents(event, EnumOSEventType.MouseUp, screen)
           }
           onMouseMove={(event) =>
-            processObjectEvents(
-              event,
-              EnumOSEventType.MouseMove,
-              screen,
-              aspect
-            )
+            processObjectEvents(event, EnumOSEventType.MouseMove, screen)
           }
           onMouseLeave={(event) =>
-            processObjectEvents(
-              event,
-              EnumOSEventType.MouseLeave,
-              screen,
-              aspect
-            )
+            processObjectEvents(event, EnumOSEventType.MouseLeave, screen)
           }
         />
       </AspectRatio>

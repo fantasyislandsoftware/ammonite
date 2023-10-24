@@ -5,7 +5,7 @@ import {
   IScreenMouse,
   getClientMouse,
   getScreenMouse,
-} from './mouse';
+} from '../mouse';
 import { screenIdToIndex } from 'functions/screen';
 import { useScreenStore } from 'stores/useScreenStore';
 import {
@@ -18,6 +18,9 @@ import {
   IOSEvent,
 } from 'interface/event';
 import { screenBringToFront } from 'api/os/screen';
+import { backdropEventHandler } from './backdrop';
+import { screenEventHandler } from './screen';
+import { screenTitlebarEventHandler } from './screenTitlebar';
 
 const createBackdropEventObject = (
   clientMouse: IClientMouse
@@ -66,13 +69,12 @@ const createScreenClientEventObject = (
 export const processObjectEvents = (
   event: any,
   eventType: EnumOSEventType,
-  screen?: IScreen,
-  aspect?: IScreenAspect
+  screen?: IScreen
 ) => {
   const clientMouse = getClientMouse(event);
 
   if (screen) {
-    const screenMouse = getScreenMouse(event, screen, aspect);
+    const screenMouse = getScreenMouse(event, screen);
 
     const { titleBar } = screen;
 
@@ -128,77 +130,7 @@ export const processObjectEvents = (
 };
 
 export const osEventHandler = (osEvent: IOSEvent) => {
-  const { object, parent, eventType } = osEvent;
-  const clientMouse = object.clientMouse;
-  const screenMouse = object.screenMouse ? object.screenMouse : undefined;
-
-  const { screens, setScreens, setSelectedScreen, selectedScreen } =
-    useScreenStore.getState();
-
-  /* Backdrop */
-  if (object.type === EnumOSEventObjectType.Backdrop) {
-    /* Mouse Down */
-    if (eventType === EnumOSEventType.MouseMove) {
-      if (selectedScreen !== undefined) {
-        const newState = screens.map((screen: IScreen) => {
-          if (screen.id === selectedScreen.id) {
-            let newPos = clientMouse.y - selectedScreen.offset.y;
-            if (newPos < 0) newPos = 0;
-            return {
-              ...screen,
-              position: { y: newPos, z: 0 },
-            };
-          }
-          return screen;
-        });
-        setScreens(newState);
-      }
-    }
-  }
-
-  /* Screen */
-  if (object.type === EnumOSEventObjectType.Screen) {
-    /* Mouse Move */
-    if (eventType === EnumOSEventType.MouseMove) {
-      if (selectedScreen) {
-        const newState = screens.map((screen: IScreen) => {
-          if (screen.id === selectedScreen.id) {
-            let newPos = clientMouse.y - selectedScreen.offset.y;
-            if (newPos < 0) newPos = 0;
-            return {
-              ...screen,
-              position: { y: newPos, z: 0 },
-            };
-          }
-          return screen;
-        });
-        setScreens(newState);
-      }
-    }
-  }
-
-  /* Screen Titlebar */
-  if (object.type === EnumOSEventObjectType.ScreenTitlebar) {
-    /* Mouse Down */
-    if (
-      eventType === EnumOSEventType.MouseDown &&
-      screenMouse?.button === EnumMouseButton.Left
-    ) {
-      if (parent !== undefined && parent?.id !== undefined) {
-        const screenIndex = screenIdToIndex(parent.id);
-        if (screenIndex === undefined) return;
-        screenBringToFront(screenIndex);
-        setSelectedScreen({
-          id: parent.id,
-          offset: {
-            y: parent.clientMouse.y - screens[screenIndex].position.y,
-          },
-        });
-      }
-    }
-    /* Mouse Up */
-    if (eventType === EnumOSEventType.MouseUp) {
-      setSelectedScreen(undefined);
-    }
-  }
+  backdropEventHandler(osEvent);
+  screenEventHandler(osEvent);
+  screenTitlebarEventHandler(osEvent);
 };
