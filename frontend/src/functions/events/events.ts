@@ -17,10 +17,10 @@ import {
   EnumOSEventType,
   IOSEvent,
 } from 'interface/event';
-import { screenBringToFront } from 'api/os/screen';
 import { backdropEventHandler } from './backdrop';
 import { screenEventHandler } from './screen';
 import { screenTitlebarEventHandler } from './screenTitlebar';
+import { viewportEventHandler } from './viewport';
 
 const createBackdropEventObject = (
   clientMouse: IClientMouse
@@ -73,9 +73,19 @@ export const processObjectEvents = (
 ) => {
   const clientMouse = getClientMouse(event);
 
+  if (eventType === EnumOSEventType.MouseExit) {
+    osEventHandler({
+      object: {
+        type: EnumOSEventObjectType.Viewport,
+        clientMouse: clientMouse,
+      },
+      parent: undefined,
+      eventType: eventType,
+    });
+  }
+
   if (screen) {
     const screenMouse = getScreenMouse(event, screen);
-
     const { titleBar } = screen;
 
     /* Backdrop */
@@ -130,6 +140,7 @@ export const processObjectEvents = (
 };
 
 export const osEventHandler = (osEvent: IOSEvent) => {
+  viewportEventHandler(osEvent);
   backdropEventHandler(osEvent);
   screenEventHandler(osEvent);
   screenTitlebarEventHandler(osEvent);

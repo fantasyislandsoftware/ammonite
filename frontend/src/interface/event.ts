@@ -2,6 +2,7 @@ import { IClientMouse, IScreenMouse } from 'functions/mouse';
 
 export interface IOSEvent {
   object:
+    | OSEventViewport
     | OSEventBackdrop
     | OSEventScreen
     | OSEventScreenClient
@@ -21,6 +22,7 @@ export enum EnumOSEventType {
   MouseUp = 'mouseup',
   MouseMove = 'mousemove',
   MouseLeave = 'mouseleave',
+  MouseExit = 'mouseexit',
 }
 
 export enum EnumMouseButton {
@@ -30,6 +32,7 @@ export enum EnumMouseButton {
 }
 
 export enum EnumOSEventObjectType {
+  Viewport = 'viewport',
   Backdrop = 'backdrop',
   Screen = 'screen',
   Window = 'window',
@@ -37,6 +40,13 @@ export enum EnumOSEventObjectType {
   ScreenClient = 'screenClient',
   Client = 'client',
   Icon = 'icon',
+}
+
+export interface OSEventViewport {
+  type: EnumOSEventObjectType;
+  id?: number;
+  screenMouse?: IScreenMouse;
+  clientMouse: IClientMouse;
 }
 
 export interface OSEventBackdrop {

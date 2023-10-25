@@ -27,7 +27,6 @@ export const getHighestScreenZIndex = () => {
 };
 
 export const renderScreen = (screen: IScreen): IScreen => {
-  const { screens, setScreens } = useScreenStore.getState();
   const { ctx } = screen;
 
   if (ctx === null) return screen;

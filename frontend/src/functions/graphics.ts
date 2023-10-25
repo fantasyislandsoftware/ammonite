@@ -5,7 +5,6 @@ import guiIconsPath from '../assets/gfx/gui.iff';
 import BinaryStream from 'api/lib/binarystream';
 import { detect, parse } from 'api/lib/iff';
 import { IBrush } from 'interface/graphics';
-import { off } from 'process';
 
 export const initPixelArray = (width: number, height: number): number[][] => {
   const array: number[][] = [];

@@ -57,6 +57,10 @@ const App = () => {
       //openScreen(640, 256, med, 'Med Res');
       openScreen(320, 256, low, 'Low Res');
 
+      document.addEventListener('mouseleave', (e) => {
+        processObjectEvents(e, EnumOSEventType.MouseExit);
+      });
+
       /*setInterval(() => {
         screens.map((screen) => {
           renderScreen(screen);
