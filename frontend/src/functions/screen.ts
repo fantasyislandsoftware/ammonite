@@ -8,7 +8,7 @@ import {
   drawPixel,
 } from './graphics';
 
-export const screenIdToIndex = (id: number): number | undefined => {
+export const screenIdToIndex = (id: number | undefined): number | undefined => {
   const { screens } = useScreenStore.getState();
   let result;
   screens.map((screen: IScreen, index: number) => {
@@ -19,11 +19,18 @@ export const screenIdToIndex = (id: number): number | undefined => {
 
 export const getHighestScreenZIndex = () => {
   const { screens } = useScreenStore.getState();
-  let result = 0;
-  screens.map((screen) => {
-    if (screen.zIndex > result) result = screen.zIndex;
-  });
-  return result;
+  return Math.max.apply(
+    null,
+    screens.map((v) => v.zIndex)
+  );
+};
+
+export const getLowestScreenZIndex = () => {
+  const { screens } = useScreenStore.getState();
+  return Math.min.apply(
+    null,
+    screens.map((v) => v.zIndex)
+  );
 };
 
 export const renderScreen = (screen: IScreen): IScreen => {

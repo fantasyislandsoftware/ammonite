@@ -1,4 +1,4 @@
-import { IScreen, IScreenAspect } from 'interface/screen';
+import { IScreen, IScreenAspect, IScreenTitleBarIcon } from 'interface/screen';
 import {
   EnumMouseButton,
   IClientMouse,
@@ -16,11 +16,13 @@ import {
   OSEventScreenClient,
   EnumOSEventType,
   IOSEvent,
+  OSEventScreenTitlebarIcon,
 } from 'interface/event';
 import { backdropEventHandler } from './backdrop';
 import { screenEventHandler } from './screen';
 import { screenTitlebarEventHandler } from './screenTitlebar';
 import { viewportEventHandler } from './viewport';
+import { screenTitlebarIconEventHandler } from './screenTitlebarIcon';
 
 const createBackdropEventObject = (
   clientMouse: IClientMouse
@@ -52,6 +54,19 @@ const createScreenTitlebarEventObject = (
     type: EnumOSEventObjectType.ScreenTitlebar,
     screenMouse: screenMouse,
     clientMouse: clientMouse,
+  };
+};
+
+const createScreenTitlebarIconEventObject = (
+  screenMouse: IScreenMouse,
+  clientMouse: IClientMouse,
+  icon: IScreenTitleBarIcon
+): OSEventScreenTitlebarIcon => {
+  return {
+    type: EnumOSEventObjectType.ScreenTitlebarIcon,
+    screenMouse: screenMouse,
+    clientMouse: clientMouse,
+    icon: icon,
   };
 };
 
@@ -120,7 +135,15 @@ export const processObjectEvents = (
           screenMouse.screen.x < icon.boundBox.x + icon.boundBox.width &&
           screenMouse.screen.y < icon.boundBox.y + icon.boundBox.height
         ) {
-          //console.log(icon.id);
+          osEventHandler({
+            object: createScreenTitlebarIconEventObject(
+              screenMouse,
+              clientMouse,
+              icon
+            ),
+            parent: createScreenEventObject(screenMouse, clientMouse, screen),
+            eventType: eventType,
+          });
         }
       });
     } else {
@@ -144,4 +167,5 @@ export const osEventHandler = (osEvent: IOSEvent) => {
   backdropEventHandler(osEvent);
   screenEventHandler(osEvent);
   screenTitlebarEventHandler(osEvent);
+  screenTitlebarIconEventHandler(osEvent);
 };

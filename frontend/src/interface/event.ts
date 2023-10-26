@@ -1,4 +1,5 @@
 import { IClientMouse, IScreenMouse } from 'functions/mouse';
+import { IScreenTitleBarIcon } from './screen';
 
 export interface IOSEvent {
   object:
@@ -6,7 +7,9 @@ export interface IOSEvent {
     | OSEventBackdrop
     | OSEventScreen
     | OSEventScreenClient
-    | OSEventScreenTitlebar;
+    | OSEventScreenTitlebar
+    | OSEventScreenTitlebarIcon;
+
   parent:
     | OSEventBackdrop
     | OSEventScreen
@@ -37,6 +40,7 @@ export enum EnumOSEventObjectType {
   Screen = 'screen',
   Window = 'window',
   ScreenTitlebar = 'screenTitlebar',
+  ScreenTitlebarIcon = 'screenTitlebarIcon',
   ScreenClient = 'screenClient',
   Client = 'client',
   Icon = 'icon',
@@ -46,33 +50,46 @@ export interface OSEventViewport {
   type: EnumOSEventObjectType;
   id?: number;
   screenMouse?: IScreenMouse;
-  clientMouse: IClientMouse;
+  clientMouse?: IClientMouse;
+  icon?: IScreenTitleBarIcon;
 }
 
 export interface OSEventBackdrop {
   type: EnumOSEventObjectType;
   id?: number;
   screenMouse?: IScreenMouse;
-  clientMouse: IClientMouse;
+  clientMouse?: IClientMouse;
+  icon?: IScreenTitleBarIcon;
 }
 
 export interface OSEventScreen {
   type: EnumOSEventObjectType;
   id: number;
-  screenMouse: IScreenMouse;
-  clientMouse: IClientMouse;
+  screenMouse?: IScreenMouse;
+  clientMouse?: IClientMouse;
+  icon?: IScreenTitleBarIcon;
 }
 
 export interface OSEventScreenClient {
   id?: number;
   type: EnumOSEventObjectType;
-  screenMouse: IScreenMouse;
-  clientMouse: IClientMouse;
+  screenMouse?: IScreenMouse;
+  clientMouse?: IClientMouse;
+  icon?: IScreenTitleBarIcon;
 }
 
 export interface OSEventScreenTitlebar {
   id?: number;
   type: EnumOSEventObjectType;
-  screenMouse: IScreenMouse;
-  clientMouse: IClientMouse;
+  screenMouse?: IScreenMouse;
+  clientMouse?: IClientMouse;
+  icon?: IScreenTitleBarIcon;
+}
+
+export interface OSEventScreenTitlebarIcon {
+  id?: number;
+  type: EnumOSEventObjectType;
+  screenMouse?: IScreenMouse;
+  clientMouse?: IClientMouse;
+  icon?: IScreenTitleBarIcon;
 }

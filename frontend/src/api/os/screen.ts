@@ -1,5 +1,8 @@
 import { initPixelArray } from 'functions/graphics';
-import { getHighestScreenZIndex } from 'functions/screen';
+import {
+  getHighestScreenZIndex,
+  getLowestScreenZIndex,
+} from 'functions/screen';
 import { IScreen, IScreenMode } from 'interface/screen';
 import { useScreenStore } from 'stores/useScreenStore';
 import { generateDefaultColorPalette } from 'uiObjects/Screen/palettes';
@@ -12,6 +15,9 @@ export const openScreen = (
 ) => {
   const { screens, setScreens, nextAvailableScreenId } =
     useScreenStore.getState();
+
+  const nextScreenIndex = screens.length ? getHighestScreenZIndex() + 1 : 1000;
+  console.log(nextScreenIndex);
 
   const titleBar = title
     ? {
@@ -67,7 +73,7 @@ export const openScreen = (
     ctx: null,
     pixels: initPixelArray(width, height),
     margin: 0,
-    zIndex: getHighestScreenZIndex() + 1,
+    zIndex: nextScreenIndex,
     aspect: {
       width: 0,
       height: 0,
@@ -82,6 +88,14 @@ export const screenBringToFront = (index: number) => {
   const { screens, setScreens } = useScreenStore.getState();
   const screen = screens[index];
   screen.zIndex = getHighestScreenZIndex() + 1;
+  screens[index] = screen;
+  setScreens(screens);
+};
+
+export const screenSendToBack = (index: number) => {
+  const { screens, setScreens } = useScreenStore.getState();
+  const screen = screens[index];
+  screen.zIndex = getLowestScreenZIndex() - 1;
   screens[index] = screen;
   setScreens(screens);
 };

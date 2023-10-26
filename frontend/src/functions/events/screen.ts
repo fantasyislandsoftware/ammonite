@@ -11,7 +11,7 @@ const mouseMove = (osEvent: IOSEvent) => {
   const { screens, selectedScreen } = useScreenStore.getState();
   const clientMouse = object.clientMouse;
   if (eventType === EnumOSEventType.MouseMove) {
-    if (selectedScreen) {
+    if (selectedScreen && clientMouse) {
       const screen = screens[selectedScreen.id];
       let newPos = clientMouse.y - selectedScreen.offset.y;
       if (newPos < 0) newPos = 0;
