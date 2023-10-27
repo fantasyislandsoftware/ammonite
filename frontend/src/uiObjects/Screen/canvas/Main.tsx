@@ -2,6 +2,7 @@ import React from 'react';
 import { FC } from 'react';
 import { EnumScreenModeType, IScreen } from '../../../interface/screen';
 import { canvasRenderStyle } from '../styles';
+import { EnumOSEventObjectType } from 'interface/event';
 
 interface IProps {
   _ref: React.RefObject<HTMLCanvasElement>;
@@ -32,6 +33,7 @@ const Main: FC<IProps> = ({
 
   return (
     <canvas
+      data-id={EnumOSEventObjectType.Screen}
       ref={_ref}
       width={width}
       height={height}

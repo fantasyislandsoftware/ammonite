@@ -63,17 +63,11 @@ const Container: FC<IProps> = ({ screen }) => {
           _ref={ref}
           screen={screen}
           onMouseDown={(event) => {
-            processObjectEvents(event, EnumOSEventType.MouseDown, screen);
+            processObjectEvents(event, screen);
           }}
-          onMouseUp={(event) =>
-            processObjectEvents(event, EnumOSEventType.MouseUp, screen)
-          }
-          onMouseMove={(event) =>
-            processObjectEvents(event, EnumOSEventType.MouseMove, screen)
-          }
-          onMouseLeave={(event) =>
-            processObjectEvents(event, EnumOSEventType.MouseLeave, screen)
-          }
+          onMouseUp={(event) => processObjectEvents(event, screen)}
+          onMouseMove={(event) => processObjectEvents(event, screen)}
+          onMouseLeave={(event) => processObjectEvents(event, screen)}
         />
       </AspectRatio>
     </DragScreen>

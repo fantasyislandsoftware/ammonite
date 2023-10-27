@@ -1,6 +1,8 @@
 import { IClientMouse, IScreenMouse } from 'functions/mouse';
 import { IScreenTitleBarIcon } from './screen';
 
+export type OSEvent = any;
+
 export interface IOSEvent {
   object:
     | OSEventViewport

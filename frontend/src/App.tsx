@@ -5,7 +5,7 @@ import { useScreenStore } from 'stores/useScreenStore';
 import ShadowBuffer from 'ShadowBuffer';
 import { openScreen } from 'api/os/screen';
 import { full, hi, interlaced, low, med } from 'uiObjects/Screen/screenModes';
-import { EnumOSEventType } from 'interface/event';
+import { EnumOSEventObjectType, EnumOSEventType } from 'interface/event';
 import { renderScreen } from 'functions/screen';
 import { getDirList, getFile } from 'api/os/fileIO';
 import { detect, parse } from 'api/lib/iff';
@@ -58,7 +58,7 @@ const App = () => {
       openScreen(320, 256, low, 'Low Res');
 
       document.addEventListener('mouseleave', (e) => {
-        processObjectEvents(e, EnumOSEventType.MouseExit);
+        processObjectEvents(e);
       });
 
       /*setInterval(() => {
@@ -73,14 +73,13 @@ const App = () => {
   return (
     <>
       <div
+        data-id={EnumOSEventObjectType.Backdrop}
         style={{
           width: '100%',
           height: '100%',
           zIndex: -1000,
         }}
-        onMouseMove={(event) =>
-          processObjectEvents(event, EnumOSEventType.MouseMove)
-        }
+        onMouseMove={(event) => processObjectEvents(event)}
       ></div>
       {screens.map((screen, index) => (
         <Screen key={index} screen={screen} />

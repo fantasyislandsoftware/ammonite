@@ -17,148 +17,63 @@ import {
   EnumOSEventType,
   IOSEvent,
   OSEventScreenTitlebarIcon,
+  OSEvent,
 } from 'interface/event';
 import { backdropEventHandler } from './backdrop';
 import { screenEventHandler } from './screen';
 import { screenTitlebarEventHandler } from './screenTitlebar';
 import { viewportEventHandler } from './viewport';
 import { screenTitlebarIconEventHandler } from './screenTitlebarIcon';
+import { handleViewportEvents } from './eventHandlers/viewport';
+import { handleScreenTitleBarEvents } from './eventHandlers/screen/titleBar';
+import { handleScreenClientEvents } from './eventHandlers/screen/client';
+import { handleBackdropEvents } from './eventHandlers/backdrop';
+import { handleScreenTitleBarIconEvents } from './eventHandlers/screen/titleBar/icon';
 
-const createBackdropEventObject = (
-  clientMouse: IClientMouse
-): OSEventBackdrop => {
-  return {
-    type: EnumOSEventObjectType.Backdrop,
-    clientMouse: clientMouse,
-  };
-};
-
-const createScreenEventObject = (
-  screenMouse: IScreenMouse,
-  clientMouse: IClientMouse,
-  screen: IScreen
-): OSEventScreen => {
-  return {
-    type: EnumOSEventObjectType.Screen,
-    id: screen.id,
-    screenMouse: screenMouse,
-    clientMouse: clientMouse,
-  };
-};
-
-const createScreenTitlebarEventObject = (
-  screenMouse: IScreenMouse,
-  clientMouse: IClientMouse
-): OSEventScreenTitlebar => {
-  return {
-    type: EnumOSEventObjectType.ScreenTitlebar,
-    screenMouse: screenMouse,
-    clientMouse: clientMouse,
-  };
-};
-
-const createScreenTitlebarIconEventObject = (
-  screenMouse: IScreenMouse,
-  clientMouse: IClientMouse,
-  icon: IScreenTitleBarIcon
-): OSEventScreenTitlebarIcon => {
-  return {
-    type: EnumOSEventObjectType.ScreenTitlebarIcon,
-    screenMouse: screenMouse,
-    clientMouse: clientMouse,
-    icon: icon,
-  };
-};
-
-const createScreenClientEventObject = (
-  screenMouse: IScreenMouse,
-  clientMouse: IClientMouse
-): OSEventScreenClient => {
-  return {
-    type: EnumOSEventObjectType.ScreenClient,
-    screenMouse: screenMouse,
-    clientMouse: clientMouse,
-  };
-};
-
-export const processObjectEvents = (
-  event: any,
-  eventType: EnumOSEventType,
-  screen?: IScreen
-) => {
+export const processObjectEvents = (event: OSEvent, screen?: IScreen) => {
   const clientMouse = getClientMouse(event);
 
-  if (eventType === EnumOSEventType.MouseExit) {
-    osEventHandler({
-      object: {
-        type: EnumOSEventObjectType.Viewport,
-        clientMouse: clientMouse,
-      },
-      parent: undefined,
-      eventType: eventType,
-    });
-  }
-
-  if (screen) {
-    const screenMouse = getScreenMouse(event, screen);
-    const { titleBar } = screen;
+  if (event.target.dataset !== undefined) {
+    const { id } = event.target.dataset;
 
     /* Backdrop */
-    osEventHandler({
-      object: {
-        type: EnumOSEventObjectType.Backdrop,
-        screenMouse: screenMouse,
-        clientMouse: clientMouse,
-      },
-      parent: undefined,
-      eventType: eventType,
-    });
+    if (id === EnumOSEventObjectType.Backdrop) {
+      handleBackdropEvents(event, clientMouse);
+    }
+
+    if (!screen) return;
+    const { titleBar } = screen;
+    if (!titleBar) return;
+    const screenMouse = getScreenMouse(event, screen);
 
     /* Screen */
-    osEventHandler({
-      object: createScreenEventObject(screenMouse, clientMouse, screen),
-      parent: undefined,
-      eventType: eventType,
-    });
-    /* Screen Titlebar or Screen Client */
-    if (titleBar && screenMouse.screen.y < titleBar.height) {
-      osEventHandler({
-        object: createScreenTitlebarEventObject(screenMouse, clientMouse),
-        parent: createScreenEventObject(screenMouse, clientMouse, screen),
-        eventType: eventType,
-      });
-      /* Titlebar Icons */
-      titleBar.icons.map((icon) => {
-        if (
-          screenMouse.screen.x > icon.boundBox.x &&
-          screenMouse.screen.y > icon.boundBox.y &&
-          screenMouse.screen.x < icon.boundBox.x + icon.boundBox.width &&
-          screenMouse.screen.y < icon.boundBox.y + icon.boundBox.height
-        ) {
-          osEventHandler({
-            object: createScreenTitlebarIconEventObject(
-              screenMouse,
-              clientMouse,
-              icon
-            ),
-            parent: createScreenEventObject(screenMouse, clientMouse, screen),
-            eventType: eventType,
-          });
-        }
-      });
-    } else {
-      osEventHandler({
-        object: createScreenClientEventObject(screenMouse, clientMouse),
-        parent: createScreenEventObject(screenMouse, clientMouse, screen),
-        eventType: eventType,
-      });
+    if (id === EnumOSEventObjectType.Screen) {
+      if (screenMouse.screen.y < titleBar.height) {
+        /* Titlebar Icons */
+        let foundIcon = false;
+        titleBar.icons.map((icon) => {
+          if (
+            screenMouse.screen.x > icon.boundBox.x - 1 &&
+            screenMouse.screen.y > icon.boundBox.y - 1 &&
+            screenMouse.screen.x < icon.boundBox.x + icon.boundBox.width &&
+            screenMouse.screen.y < icon.boundBox.y + icon.boundBox.height
+          ) {
+            handleScreenTitleBarIconEvents(event, screen, icon);
+            foundIcon = true;
+          }
+        });
+        if (foundIcon) return;
+        /* Titlebar */
+        handleScreenTitleBarEvents(event, screen, clientMouse);
+      } else {
+        /* Screen Client */
+        handleScreenClientEvents(event, screen, clientMouse);
+      }
     }
-  } else {
-    osEventHandler({
-      object: createBackdropEventObject(clientMouse),
-      parent: undefined,
-      eventType: eventType,
-    });
+  }
+
+  if (event.target.dataset === undefined) {
+    handleViewportEvents(event);
   }
 };
 

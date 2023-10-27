@@ -57,7 +57,7 @@ export const openScreen = (
   const newScreen: IScreen = {
     id: nextAvailableScreenId,
     position: {
-      y: 0,
+      y: 200,
       z: 0,
     },
     mode: mode,
