@@ -33,7 +33,13 @@ import {
   resetScreenTitleBarIconEvents,
 } from './eventHandlers/screen/titleBar/icon';
 
-export const processObjectEvents = (event: OSEvent, screen?: IScreen) => {
+export const processObjectEvents = (_event: OSEvent, screen?: IScreen) => {
+  const event = _event;
+
+  if (event.detail === 2) {
+    event.type = EnumOSEventType.MouseDoubleClick;
+  }
+
   const clientMouse = getClientMouse(event);
 
   if (event.type === EnumOSEventType.MouseUp) {

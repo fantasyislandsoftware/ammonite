@@ -28,6 +28,7 @@ export enum EnumOSEventType {
   MouseMove = 'mousemove',
   MouseLeave = 'mouseleave',
   MouseExit = 'mouseexit',
+  MouseDoubleClick = 'mousedoubleclick',
 }
 
 export enum EnumMouseButton {

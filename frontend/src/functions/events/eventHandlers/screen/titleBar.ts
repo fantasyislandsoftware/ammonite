@@ -1,12 +1,7 @@
 import { screenBringToFront } from 'api/os/screen';
-import { ENV } from 'constants/env';
 import { eventLog } from 'functions/events/debug';
 import { EnumMouseButton, IClientMouse } from 'functions/mouse';
-import {
-  getHighestScreenZIndex,
-  screenIdToIndex,
-  setScreen,
-} from 'functions/screen';
+import { screenIdToIndex, setScreen } from 'functions/screen';
 import { EnumOSEventType, OSEvent } from 'interface/event';
 import { IScreen } from 'interface/screen';
 import { useScreenStore } from 'stores/useScreenStore';
@@ -51,6 +46,11 @@ export const handleScreenTitleBarEvents = (
     setScreen(selected);
   };
 
+  const mouseDoubleClick = () => {
+    screen.position.y = 0;
+    setScreen(screen);
+  };
+
   switch (event.type) {
     case EnumOSEventType.MouseDown:
       mouseDown();
@@ -60,6 +60,9 @@ export const handleScreenTitleBarEvents = (
       break;
     case EnumOSEventType.MouseMove:
       mouseMove();
+      break;
+    case EnumOSEventType.MouseDoubleClick:
+      mouseDoubleClick();
       break;
   }
 };
