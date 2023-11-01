@@ -1,3 +1,5 @@
+import { IIcon } from './intuition';
+
 export interface IScreen {
   id: number;
   position: IScreenPosition;
@@ -49,19 +51,7 @@ export interface IScreenTitleBar {
     name: string;
     size: number;
   };
-  icons: IScreenTitleBarIcon[];
-}
-
-export interface IScreenTitleBarIcon {
-  id: string;
-  imageIndex: number[];
-  currentImageIndex: number;
-  boundBox: {
-    x: number;
-    y: number;
-    width: number;
-    height: number;
-  };
+  icons: IIcon[];
 }
 
 export interface IScreenAspect {

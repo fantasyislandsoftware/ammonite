@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import { IScreen } from 'interface/screen';
+import { processObjectEvents } from 'functions/events/events';
 
 interface IProps {
   screen: IScreen;
@@ -18,6 +19,7 @@ const DragScreen: FC<IProps> = ({ screen, children }) => {
         height: '100%',
         zIndex: screen.zIndex,
       }}
+      onMouseUp={(event) => processObjectEvents(event)}
     >
       {children}
     </div>

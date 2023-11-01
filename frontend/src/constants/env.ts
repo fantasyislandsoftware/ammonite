@@ -3,5 +3,5 @@ interface Environment {
 }
 
 export const ENV: Environment = {
-  eventDebug: true,
+  eventDebug: false,
 };

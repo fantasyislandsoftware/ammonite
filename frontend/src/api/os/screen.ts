@@ -4,6 +4,7 @@ import {
   getLowestScreenZIndex,
 } from 'functions/screen';
 import { IScreen, IScreenMode } from 'interface/screen';
+import { set } from 'lodash';
 import { useScreenStore } from 'stores/useScreenStore';
 import { generateDefaultColorPalette } from 'uiObjects/Screen/palettes';
 
@@ -16,8 +17,7 @@ export const openScreen = (
   const { screens, setScreens, nextAvailableScreenId } =
     useScreenStore.getState();
 
-  const nextScreenIndex = screens.length ? getHighestScreenZIndex() + 1 : 1000;
-  console.log(nextScreenIndex);
+  const nextScreenIndex = screens.length ? getHighestScreenZIndex() + 1 : 100;
 
   const titleBar = title
     ? {
@@ -29,7 +29,7 @@ export const openScreen = (
         },
         icons: [
           {
-            id: 'close',
+            id: 'sendToBack',
             imageIndex: [0, 1],
             currentImageIndex: 0,
             boundBox: {
@@ -84,18 +84,30 @@ export const openScreen = (
   setScreens(screens);
 };
 
-export const screenBringToFront = (index: number) => {
+export const screenBringToFront = (screen: IScreen) => {
   const { screens, setScreens } = useScreenStore.getState();
-  const screen = screens[index];
-  screen.zIndex = getHighestScreenZIndex() + 1;
-  screens[index] = screen;
+  const screenIndex = screens.findIndex((s) => s.id === screen.id);
+  let pos = 100;
+  screens.map((_screen) => {
+    if (_screen.id !== screen?.id) {
+      _screen.zIndex = pos;
+      pos++;
+    }
+  });
+  screens[screenIndex].zIndex = pos;
   setScreens(screens);
 };
 
-export const screenSendToBack = (index: number) => {
+export const screenSendToBack = (screen: IScreen) => {
   const { screens, setScreens } = useScreenStore.getState();
-  const screen = screens[index];
-  screen.zIndex = getLowestScreenZIndex() - 1;
-  screens[index] = screen;
+  const screenIndex = screens.findIndex((s) => s.id === screen.id);
+  let pos = getHighestScreenZIndex();
+  screens.map((_screen) => {
+    if (_screen.id !== screen?.id) {
+      _screen.zIndex = pos;
+      pos--;
+    }
+  });
+  screens[screenIndex].zIndex = pos;
   setScreens(screens);
 };

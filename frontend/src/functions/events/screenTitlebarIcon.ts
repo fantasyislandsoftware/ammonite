@@ -16,7 +16,7 @@ const leftMouseButton = (osEvent: IOSEvent) => {
     //getLowestScreenZIndex();
     //console.log(screenIndex);
     //screenSendToBack(screenIndex);
-    screenBringToFront(screenIndex);
+    //screenBringToFront(screenIndex);
   }
 };
 

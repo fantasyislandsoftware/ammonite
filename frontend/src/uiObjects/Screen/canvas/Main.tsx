@@ -46,6 +46,7 @@ const Main: FC<IProps> = ({
       onMouseUp={onMouseUp}
       onMouseMove={onMouseMove}
       onMouseLeave={onMouseLeave}
+      onContextMenu={(e) => e.preventDefault()}
     />
   );
 };

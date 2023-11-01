@@ -1,4 +1,4 @@
-import { IScreen, IScreenAspect, IScreenTitleBarIcon } from 'interface/screen';
+import { IScreen, IScreenAspect } from 'interface/screen';
 import {
   EnumMouseButton,
   IClientMouse,
@@ -28,10 +28,17 @@ import { handleViewportEvents } from './eventHandlers/viewport';
 import { handleScreenTitleBarEvents } from './eventHandlers/screen/titleBar';
 import { handleScreenClientEvents } from './eventHandlers/screen/client';
 import { handleBackdropEvents } from './eventHandlers/backdrop';
-import { handleScreenTitleBarIconEvents } from './eventHandlers/screen/titleBar/icon';
+import {
+  handleScreenTitleBarIconEvents,
+  resetScreenTitleBarIconEvents,
+} from './eventHandlers/screen/titleBar/icon';
 
 export const processObjectEvents = (event: OSEvent, screen?: IScreen) => {
   const clientMouse = getClientMouse(event);
+
+  if (event.type === EnumOSEventType.MouseUp) {
+    resetScreenTitleBarIconEvents();
+  }
 
   if (event.target.dataset !== undefined) {
     const { id } = event.target.dataset;
@@ -74,13 +81,7 @@ export const processObjectEvents = (event: OSEvent, screen?: IScreen) => {
 
   if (event.target.dataset === undefined) {
     handleViewportEvents(event);
+    //console.log(event.type);
+    //resetScreenTitleBarIconEvents();
   }
-};
-
-export const osEventHandler = (osEvent: IOSEvent) => {
-  viewportEventHandler(osEvent);
-  backdropEventHandler(osEvent);
-  screenEventHandler(osEvent);
-  screenTitlebarEventHandler(osEvent);
-  screenTitlebarIconEventHandler(osEvent);
 };

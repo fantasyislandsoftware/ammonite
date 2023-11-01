@@ -1,7 +1,12 @@
+import { screenBringToFront } from 'api/os/screen';
 import { ENV } from 'constants/env';
 import { eventLog } from 'functions/events/debug';
 import { EnumMouseButton, IClientMouse } from 'functions/mouse';
-import { screenIdToIndex, setScreen } from 'functions/screen';
+import {
+  getHighestScreenZIndex,
+  screenIdToIndex,
+  setScreen,
+} from 'functions/screen';
 import { EnumOSEventType, OSEvent } from 'interface/event';
 import { IScreen } from 'interface/screen';
 import { useScreenStore } from 'stores/useScreenStore';
@@ -20,12 +25,16 @@ export const handleScreenTitleBarEvents = (
 
   const mouseDown = () => {
     if (event.button === EnumMouseButton.Left) {
+      /* Select selected screen */
       setSelectedScreen({
         id: screen.id,
         offset: {
           y: clientMouse.y - screens[screenIndex].position.y,
         },
       });
+
+      /* Set highest z-index */
+      screenBringToFront(screen);
     }
   };
 
