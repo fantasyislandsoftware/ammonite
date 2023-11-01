@@ -3,6 +3,7 @@ import {
   getHighestScreenZIndex,
   getLowestScreenZIndex,
 } from 'functions/screen';
+import { EnumIconFunction } from 'interface/icon';
 import { IScreen, IScreenMode } from 'interface/screen';
 import { set } from 'lodash';
 import { useScreenStore } from 'stores/useScreenStore';
@@ -29,7 +30,7 @@ export const openScreen = (
         },
         icons: [
           {
-            id: 'sendToBack',
+            id: EnumIconFunction.order,
             imageIndex: [0, 1],
             currentImageIndex: 0,
             boundBox: {
@@ -40,8 +41,8 @@ export const openScreen = (
             },
           },
           {
-            id: 'test',
-            imageIndex: [0, 1],
+            id: EnumIconFunction.maximize,
+            imageIndex: [2, 3],
             currentImageIndex: 0,
             boundBox: {
               x: 0,
