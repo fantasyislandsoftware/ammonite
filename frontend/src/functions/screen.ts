@@ -53,9 +53,9 @@ export const renderScreen = (screen: IScreen): IScreen => {
       1,
       0
     );
-    screen.titleBar.icons.map((icon, index) => {
-      const imageIndex = icon.imageIndex[icon.currentImageIndex];
-      icon.boundBox = {
+    screen.titleBar.buttons.map((button, index) => {
+      const imageIndex = button.imageIndex[button.currentImageIndex];
+      button.boundBox = {
         x: screen.width - index * barHeight - barHeight,
         y: 0,
         width: barHeight,
@@ -64,10 +64,10 @@ export const renderScreen = (screen: IScreen): IScreen => {
       drawImage(
         screen,
         guiIcons[screen.titleBar ? imageIndex : 0],
-        icon.boundBox.x,
-        icon.boundBox.y,
-        icon.boundBox.width,
-        icon.boundBox.height
+        button.boundBox.x,
+        button.boundBox.y,
+        button.boundBox.width,
+        button.boundBox.height
       );
     });
   }

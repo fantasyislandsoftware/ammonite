@@ -1,4 +1,4 @@
-import { IIcon } from './intuition';
+import { IButton } from './intuition';
 
 export interface IScreen {
   id: number;
@@ -51,7 +51,7 @@ export interface IScreenTitleBar {
     name: string;
     size: number;
   };
-  icons: IIcon[];
+  buttons: IButton[];
 }
 
 export interface IScreenAspect {

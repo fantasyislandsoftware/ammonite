@@ -1,5 +1,5 @@
 import { IClientMouse, IScreenMouse } from 'functions/mouse';
-import { IIcon } from './intuition';
+import { IButton } from './intuition';
 
 export type OSEvent = any;
 
@@ -54,7 +54,7 @@ export interface OSEventViewport {
   id?: number;
   screenMouse?: IScreenMouse;
   clientMouse?: IClientMouse;
-  icon?: IIcon;
+  icon?: IButton;
 }
 
 export interface OSEventBackdrop {
@@ -62,7 +62,7 @@ export interface OSEventBackdrop {
   id?: number;
   screenMouse?: IScreenMouse;
   clientMouse?: IClientMouse;
-  icon?: IIcon;
+  icon?: IButton;
 }
 
 export interface OSEventScreen {
@@ -70,7 +70,7 @@ export interface OSEventScreen {
   id: number;
   screenMouse?: IScreenMouse;
   clientMouse?: IClientMouse;
-  icon?: IIcon;
+  icon?: IButton;
 }
 
 export interface OSEventScreenClient {
@@ -78,7 +78,7 @@ export interface OSEventScreenClient {
   type: EnumOSEventObjectType;
   screenMouse?: IScreenMouse;
   clientMouse?: IClientMouse;
-  icon?: IIcon;
+  icon?: IButton;
 }
 
 export interface OSEventScreenTitlebar {
@@ -86,7 +86,7 @@ export interface OSEventScreenTitlebar {
   type: EnumOSEventObjectType;
   screenMouse?: IScreenMouse;
   clientMouse?: IClientMouse;
-  icon?: IIcon;
+  icon?: IButton;
 }
 
 export interface OSEventScreenTitlebarIcon {
@@ -94,5 +94,5 @@ export interface OSEventScreenTitlebarIcon {
   type: EnumOSEventObjectType;
   screenMouse?: IScreenMouse;
   clientMouse?: IClientMouse;
-  icon?: IIcon;
+  icon?: IButton;
 }

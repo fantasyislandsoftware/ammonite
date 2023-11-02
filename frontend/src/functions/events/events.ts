@@ -9,29 +9,18 @@ import {
 import { screenIdToIndex } from 'functions/screen';
 import { useScreenStore } from 'stores/useScreenStore';
 import {
-  OSEventBackdrop,
   EnumOSEventObjectType,
-  OSEventScreen,
-  OSEventScreenTitlebar,
-  OSEventScreenClient,
   EnumOSEventType,
-  IOSEvent,
-  OSEventScreenTitlebarIcon,
   OSEvent,
 } from 'interface/event';
-import { backdropEventHandler } from './backdrop';
-import { screenEventHandler } from './screen';
-import { screenTitlebarEventHandler } from './screenTitlebar';
-import { viewportEventHandler } from './viewport';
-import { screenTitlebarIconEventHandler } from './screenTitlebarIcon';
 import { handleViewportEvents } from './eventHandlers/viewport';
 import { handleScreenTitleBarEvents } from './eventHandlers/screen/titleBar';
 import { handleScreenClientEvents } from './eventHandlers/screen/client';
 import { handleBackdropEvents } from './eventHandlers/backdrop';
 import {
-  handleScreenTitleBarIconEvents,
-  resetScreenTitleBarIconEvents,
-} from './eventHandlers/screen/titleBar/icon';
+  handleScreenTitleBarButtonEvents,
+  resetScreenTitleBarButtonEvents,
+} from './eventHandlers/screen/titleBar/button';
 
 export const processObjectEvents = (_event: OSEvent, screen?: IScreen) => {
   const event = _event;
@@ -43,7 +32,7 @@ export const processObjectEvents = (_event: OSEvent, screen?: IScreen) => {
   const clientMouse = getClientMouse(event);
 
   if (event.type === EnumOSEventType.MouseUp) {
-    resetScreenTitleBarIconEvents();
+    resetScreenTitleBarButtonEvents();
   }
 
   if (event.target.dataset !== undefined) {
@@ -63,19 +52,19 @@ export const processObjectEvents = (_event: OSEvent, screen?: IScreen) => {
     if (id === EnumOSEventObjectType.Screen) {
       if (screenMouse.screen.y < titleBar.height) {
         /* Titlebar Icons */
-        let foundIcon = false;
-        titleBar.icons.map((icon) => {
+        let foundButton = false;
+        titleBar.buttons.map((button) => {
           if (
-            screenMouse.screen.x > icon.boundBox.x - 1 &&
-            screenMouse.screen.y > icon.boundBox.y - 1 &&
-            screenMouse.screen.x < icon.boundBox.x + icon.boundBox.width &&
-            screenMouse.screen.y < icon.boundBox.y + icon.boundBox.height
+            screenMouse.screen.x > button.boundBox.x - 1 &&
+            screenMouse.screen.y > button.boundBox.y - 1 &&
+            screenMouse.screen.x < button.boundBox.x + button.boundBox.width &&
+            screenMouse.screen.y < button.boundBox.y + button.boundBox.height
           ) {
-            handleScreenTitleBarIconEvents(event, screen, icon);
-            foundIcon = true;
+            handleScreenTitleBarButtonEvents(event, screen, button);
+            foundButton = true;
           }
         });
-        if (foundIcon) return;
+        if (foundButton) return;
         /* Titlebar */
         handleScreenTitleBarEvents(event, screen, clientMouse);
       } else {

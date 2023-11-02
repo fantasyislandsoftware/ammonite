@@ -3,11 +3,11 @@ import {
   getHighestScreenZIndex,
   getLowestScreenZIndex,
 } from 'functions/screen';
-import { EnumIconFunction } from 'interface/icon';
+import { EnumButtonFunction } from 'interface/icon';
 import { IScreen, IScreenMode } from 'interface/screen';
-import { set } from 'lodash';
 import { useScreenStore } from 'stores/useScreenStore';
 import { generateDefaultColorPalette } from 'uiObjects/Screen/palettes';
+import { v4 as uuidv4 } from 'uuid';
 
 export const openScreen = (
   width: number,
@@ -28,9 +28,22 @@ export const openScreen = (
           name: 'Arial',
           size: 12,
         },
-        icons: [
+        buttons: [
           {
-            id: EnumIconFunction.order,
+            id: uuidv4(),
+            name: EnumButtonFunction.close,
+            imageIndex: [4, 5],
+            currentImageIndex: 0,
+            boundBox: {
+              x: 0,
+              y: 0,
+              width: 0,
+              height: 0,
+            },
+          },
+          {
+            id: uuidv4(),
+            name: EnumButtonFunction.order,
             imageIndex: [0, 1],
             currentImageIndex: 0,
             boundBox: {
@@ -41,7 +54,8 @@ export const openScreen = (
             },
           },
           {
-            id: EnumIconFunction.maximize,
+            id: uuidv4(),
+            name: EnumButtonFunction.maximize,
             imageIndex: [2, 3],
             currentImageIndex: 0,
             boundBox: {
