@@ -1,6 +1,6 @@
-import { screenSendToBack } from 'api/os/screen';
+import { screenBringToFront, screenSendToBack } from 'api/os/screen';
 import { eventLog } from 'functions/events/debug';
-import { setScreen } from 'functions/screen';
+import { getLowestScreenZIndex, setScreen } from 'functions/screen';
 import { EnumMouseButton, EnumOSEventType, OSEvent } from 'interface/event';
 import { EnumButtonFunction } from 'interface/icon';
 import { IButton } from 'interface/intuition';
@@ -46,7 +46,12 @@ export const handleScreenTitleBarButtonEvents = (
     if (selectedButtonId === button.id) {
       switch (button.name) {
         case EnumButtonFunction.order:
-          screenSendToBack(screen);
+          if (screen.zIndex === getLowestScreenZIndex()) {
+            screenBringToFront(screen);
+          } else {
+            screenSendToBack(screen);
+          }
+
           break;
         case EnumButtonFunction.maximize:
           if (selectedButtonId === button.id) {

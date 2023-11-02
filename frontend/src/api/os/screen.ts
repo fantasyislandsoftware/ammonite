@@ -20,6 +20,45 @@ export const openScreen = (
 
   const nextScreenIndex = screens.length ? getHighestScreenZIndex() + 1 : 100;
 
+  const closeButton = {
+    id: uuidv4(),
+    name: EnumButtonFunction.close,
+    imageIndex: [4, 5],
+    currentImageIndex: 0,
+    boundBox: {
+      x: 0,
+      y: 0,
+      width: 0,
+      height: 0,
+    },
+  };
+
+  const orderButton = {
+    id: uuidv4(),
+    name: EnumButtonFunction.order,
+    imageIndex: [0, 1],
+    currentImageIndex: 0,
+    boundBox: {
+      x: 0,
+      y: 0,
+      width: 0,
+      height: 0,
+    },
+  };
+
+  const maximizeButton = {
+    id: uuidv4(),
+    name: EnumButtonFunction.maximize,
+    imageIndex: [2, 3],
+    currentImageIndex: 0,
+    boundBox: {
+      x: 0,
+      y: 0,
+      width: 0,
+      height: 0,
+    },
+  };
+
   const titleBar = title
     ? {
         title: title,
@@ -28,44 +67,7 @@ export const openScreen = (
           name: 'Arial',
           size: 12,
         },
-        buttons: [
-          {
-            id: uuidv4(),
-            name: EnumButtonFunction.close,
-            imageIndex: [4, 5],
-            currentImageIndex: 0,
-            boundBox: {
-              x: 0,
-              y: 0,
-              width: 0,
-              height: 0,
-            },
-          },
-          {
-            id: uuidv4(),
-            name: EnumButtonFunction.order,
-            imageIndex: [0, 1],
-            currentImageIndex: 0,
-            boundBox: {
-              x: 0,
-              y: 0,
-              width: 0,
-              height: 0,
-            },
-          },
-          {
-            id: uuidv4(),
-            name: EnumButtonFunction.maximize,
-            imageIndex: [2, 3],
-            currentImageIndex: 0,
-            boundBox: {
-              x: 0,
-              y: 0,
-              width: 0,
-              height: 0,
-            },
-          },
-        ],
+        buttons: [orderButton, maximizeButton],
       }
     : null;
 
