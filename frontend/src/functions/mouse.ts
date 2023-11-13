@@ -1,4 +1,8 @@
-import { IScreen, IScreenAspect } from '../interface/screen';
+import {
+  EnumScreenModeType,
+  IScreen,
+  IScreenAspect,
+} from '../interface/screen';
 
 export interface IClientMouse {
   x: number;
@@ -36,18 +40,24 @@ export const getScreenMouse = (
   const clientX = e.clientX - Math.round(m / 2);
   const clientY = e.clientY;
 
-  let x =
-    Math.floor(clientX / (e.target.clientWidth / screen.mode.viewPort.width)) -
-    screen.offset.x;
-  if (x < 0) x = 0;
-  //console.log(x);
-
-  let y =
-    Math.floor(
-      (clientY - screen.position.y) /
-        (e.target.clientHeight / screen.mode.viewPort.height)
-    ) - screen.offset.y;
-  if (y < 0) y = 0;
+  let x = 0;
+  let y = 0;
+  if (screen.mode.type === EnumScreenModeType.CLIENT) {
+    x = clientX;
+    y = clientY - screen.position.y;
+  } else {
+    x =
+      Math.floor(
+        clientX / (e.target.clientWidth / screen.mode.viewPort.width)
+      ) - screen.offset.x;
+    if (x < 0) x = 0;
+    y =
+      Math.floor(
+        (clientY - screen.position.y) /
+          (e.target.clientHeight / screen.mode.viewPort.height)
+      ) - screen.offset.y;
+    if (y < 0) y = 0;
+  }
 
   return {
     screen: {
