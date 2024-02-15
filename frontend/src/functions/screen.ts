@@ -6,8 +6,14 @@ import {
   loadGuiIcons,
   drawImage,
   drawPixel,
+  initPixelArray,
+  createPixelBuffer,
+  drawPixelBuffer,
+  drawLine,
+  drawImage2,
 } from './graphics';
 import { useIntuitionStore } from 'stores/useIntuitionStore';
+import { renderWindow } from './window';
 
 export const screenIdToIndex = (id: number | undefined): number | undefined => {
   const { screens } = useScreenStore.getState();
@@ -40,19 +46,24 @@ export const renderScreen = (screen: IScreen): IScreen => {
 
   if (ctx === null) return screen;
 
+  /* Title Bar */
   if (screen.titleBar) {
     const barHeight = screen.titleBar.height;
-    fillRect(screen, 0, 0, screen.width, barHeight, 1);
-    fillRect(screen, 0, barHeight, screen.width, 1, 0);
+
+    const bar = createPixelBuffer(screen.width, barHeight);
+    fillRect(bar, 0, 0, screen.width, barHeight, 1);
     drawText(
-      screen,
+      bar,
       screen.titleBar.title,
-      0,
-      0,
       `${screen.titleBar.font.size}px ${screen.titleBar.font.name}`,
+      0,
+      20,
       1,
       0
     );
+    drawLine(bar, 0, barHeight - 1, screen.width, barHeight - 1, 0);
+
+    /* Buttons */
     screen.titleBar.buttons.map((button, index) => {
       const imageIndex = button.imageIndex[button.currentImageIndex];
       button.boundBox = {
@@ -61,8 +72,8 @@ export const renderScreen = (screen: IScreen): IScreen => {
         width: barHeight,
         height: barHeight,
       };
-      drawImage(
-        screen,
+      drawImage2(
+        bar,
         guiIcons[screen.titleBar ? imageIndex : 0],
         button.boundBox.x,
         button.boundBox.y,
@@ -70,7 +81,14 @@ export const renderScreen = (screen: IScreen): IScreen => {
         button.boundBox.height
       );
     });
+
+    drawPixelBuffer(screen.pixels, bar, 0, 0);
   }
+
+  /* Windows */
+  screen.windows.map((window) => {
+    renderWindow(screen, window);
+  });
 
   const imgData: ImageData = ctx.createImageData(screen.width, screen.height);
   let n = 0;
@@ -85,8 +103,6 @@ export const renderScreen = (screen: IScreen): IScreen => {
     }
   }
   ctx.putImageData(imgData, screen.offset.x, screen.offset.y);
-  return screen;
-  //setScreen(screen);
   return screen;
 };
 

@@ -1,4 +1,5 @@
 import { IButton } from './intuition';
+import { IWindow } from './window';
 
 export interface IScreen {
   id: number;
@@ -22,6 +23,7 @@ export interface IScreen {
     height: number;
     margin: number;
   };
+  windows: IWindow[];
 }
 
 export interface IScreenPosition {

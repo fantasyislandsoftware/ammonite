@@ -71,10 +71,19 @@ export const openScreen = (
       }
     : null;
 
+  const testWindow = {
+    position: {
+      x: 50,
+      y: 50,
+    },
+    width: 100,
+    height: 50,
+  };
+
   const newScreen: IScreen = {
     id: nextAvailableScreenId,
     position: {
-      y: 200,
+      y: 0,
       z: 0,
     },
     mode: mode,
@@ -96,6 +105,7 @@ export const openScreen = (
       height: 0,
       margin: 0,
     },
+    windows: [testWindow],
   };
   screens.push(newScreen);
   setScreens(screens);
