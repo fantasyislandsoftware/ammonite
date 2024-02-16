@@ -4,13 +4,12 @@ import {
   fillRect,
   drawText,
   loadGuiIcons,
-  drawImage,
   drawPixel,
   initPixelArray,
   createPixelBuffer,
   drawPixelBuffer,
   drawLine,
-  drawImage2,
+  drawImage,
 } from './graphics';
 import { useIntuitionStore } from 'stores/useIntuitionStore';
 import { renderWindow } from './window';
@@ -57,7 +56,7 @@ export const renderScreen = (screen: IScreen): IScreen => {
       screen.titleBar.title,
       `${screen.titleBar.font.size}px ${screen.titleBar.font.name}`,
       0,
-      20,
+      0,
       1,
       0
     );
@@ -72,7 +71,7 @@ export const renderScreen = (screen: IScreen): IScreen => {
         width: barHeight,
         height: barHeight,
       };
-      drawImage2(
+      drawImage(
         bar,
         guiIcons[screen.titleBar ? imageIndex : 0],
         button.boundBox.x,

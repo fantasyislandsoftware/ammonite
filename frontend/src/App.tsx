@@ -18,7 +18,7 @@ const App = () => {
     //openScreen(window.innerWidth, window.innerHeight, full, 'Full Screen');
     //openScreen(640, 512, hi, 'Hi Res');
     //openScreen(320, 512, interlaced, 'Interlaced');
-    openScreen(640, 256, med, 'Med Res');
+    //openScreen(640, 256, med, 'Med Res');
     openScreen(320, 256, low, 'Low Res');
   };
 

@@ -1,3 +1,5 @@
+import { IButton } from './intuition';
+
 export interface IWindow {
   position: {
     x: number;
@@ -5,4 +7,15 @@ export interface IWindow {
   };
   width: number;
   height: number;
+  titleBar: IWindowTitleBar;
+}
+
+export interface IWindowTitleBar {
+  title: string;
+  height: number;
+  font: {
+    name: string;
+    size: number;
+  };
+  buttons: IButton[];
 }

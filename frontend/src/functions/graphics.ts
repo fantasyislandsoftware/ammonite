@@ -139,7 +139,7 @@ export const drawRect = (
   h: number
 ) => {};
 
-export const drawImage2 = (
+export const drawImage = (
   dst: any,
   image: any,
   x: number,
@@ -157,30 +157,11 @@ export const drawImage2 = (
       const yy = Math.floor((_y * image.height) / height);
       const c = image.pixels[yy][xx];
       if (c === t) continue;
-      dst.pixels[_y + y][_x + x] = c;
-    }
-  }
-};
-
-export const drawImage = (
-  screen: IScreen,
-  image: any,
-  x: number,
-  y: number,
-  w?: number,
-  h?: number,
-  t?: number
-) => {
-  const width = w || image.width;
-  const height = h || image.height;
-
-  for (let _y = 0; _y < height; _y++) {
-    for (let _x = 0; _x < width; _x++) {
-      const xx = Math.floor((_x * image.width) / width);
-      const yy = Math.floor((_y * image.height) / height);
-      const c = image.pixels[yy][xx];
-      if (c === t) continue;
-      screen.pixels[_y + y][_x + x] = c;
+      try {
+        dst.pixels[_y + y][_x + x] = c;
+      } catch (error) {
+        () => {};
+      }
     }
   }
 };
@@ -205,9 +186,11 @@ export const drawText = (
   buffer.fillStyle = 'black';
   buffer.fillRect(0, 0, width, height);
   buffer.fillStyle = 'white';
-  buffer.fillText(text, x, 10);
+  buffer.fillText(text, 0, 10);
 
   const imgData: ImageData = buffer.getImageData(0, 0, width, height);
+
+  const clip = () => {};
 
   const c = 0;
   let n = 0;
@@ -216,7 +199,11 @@ export const drawText = (
       const c =
         imgData.data[n * 4] === 255 ? textColorIndex : backgroundColorIndex;
       n++;
-      dst.pixels[_y][_x] = c;
+      try {
+        dst.pixels[_y + y][_x + x] = c;
+      } catch (error) {
+        clip();
+      }
     }
   }
 };
@@ -276,10 +263,15 @@ export const drawPixelBuffer = (
   x: number,
   y: number
 ) => {
+  const clip = () => {};
   for (let _y = 0; _y < pixelBuffer.height; _y++) {
     for (let _x = 0; _x < pixelBuffer.width; _x++) {
       const c = pixelBuffer.pixels[_y][_x];
-      canvas[_y + y][_x + x] = c;
+      try {
+        canvas[_y + y][_x + x] = c;
+      } catch (error) {
+        clip();
+      }
     }
   }
 };

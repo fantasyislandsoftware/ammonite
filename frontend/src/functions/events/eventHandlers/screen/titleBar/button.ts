@@ -27,6 +27,8 @@ export const handleScreenTitleBarButtonEvents = (
   const { selectedButtonId, setSelectedButtonId } =
     useIntuitionStore.getState();
 
+  console.log(selectedButtonId);
+
   const mouseDown = () => {
     if (event.button === EnumMouseButton.Left) {
       switch (button.name) {

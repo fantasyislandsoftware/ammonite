@@ -25,7 +25,7 @@ const Container: FC<IProps> = ({ screen }) => {
     let height = 0;
     if (screen.mode.type === EnumScreenModeType.CLASSIC) {
       if (ref.current) {
-        width = innerHeight * 1.25;
+        width = innerHeight * 1.27;
         height = innerHeight;
         margin = innerWidth - ref.current.clientWidth;
       }
