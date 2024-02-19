@@ -73,7 +73,7 @@ export const openScreen = (
           name: 'Arial',
           size: 12,
         },
-        buttons: [orderButton(), orderButton(), maximizeButton()],
+        buttons: [orderButton(), maximizeButton()],
       }
     : null;
 
