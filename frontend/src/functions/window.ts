@@ -9,7 +9,6 @@ import {
   fillRect,
   getTextInfo,
 } from './graphics';
-import { get } from 'lodash';
 import { useIntuitionStore } from 'stores/useIntuitionStore';
 
 export const renderWindow = (screen: IScreen, window: IWindow) => {

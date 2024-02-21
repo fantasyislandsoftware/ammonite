@@ -40,7 +40,6 @@ const Main: FC<IProps> = ({
       style={{
         width: '100%',
         height: '100%',
-        imageRendering: 'pixelated',
         ...canvasRenderStyle,
       }}
       onMouseDown={onMouseDown}

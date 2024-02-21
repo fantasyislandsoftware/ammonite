@@ -4,7 +4,6 @@ import {
   fillRect,
   drawText,
   loadGuiIcons,
-  drawPixel,
   initPixelArray,
   createPixelBuffer,
   drawPixelBuffer,

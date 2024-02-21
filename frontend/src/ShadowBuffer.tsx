@@ -17,7 +17,6 @@ const ShadowBuffer = () => {
       ref={ref}
       style={{
         display: 'none',
-        imageRendering: 'pixelated',
         ...canvasRenderStyle,
       }}
     ></canvas>

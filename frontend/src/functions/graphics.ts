@@ -29,10 +29,6 @@ export const createPixelBuffer = (
   };
 };
 
-export const drawPixel = (screen: IScreen, x: number, y: number, c: number) => {
-  screen.pixels[y][x] = c;
-};
-
 export const fillRect = (
   buffer: IPixelBuffer,
   x: number,
@@ -49,8 +45,10 @@ export const fillRect = (
 };
 
 export const plot = (buffer: IPixelBuffer, x: number, y: number, c: number) => {
-  if (buffer.pixels[y] !== undefined) {
-    if (buffer.pixels[y][x] !== undefined) buffer.pixels[y][x] = c;
+  try {
+    buffer.pixels[y][x] = c;
+  } catch (error) {
+    () => {};
   }
 };
 
@@ -263,14 +261,13 @@ export const drawPixelBuffer = (
   x: number,
   y: number
 ) => {
-  const clip = () => {};
   for (let _y = 0; _y < pixelBuffer.height; _y++) {
     for (let _x = 0; _x < pixelBuffer.width; _x++) {
       const c = pixelBuffer.pixels[_y][_x];
       try {
         canvas[_y + y][_x + x] = c;
       } catch (error) {
-        clip();
+        () => {};
       }
     }
   }
