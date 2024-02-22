@@ -3,6 +3,7 @@ import { FC } from 'react';
 import { EnumScreenModeType, IScreen } from '../../../interface/screen';
 import { canvasRenderStyle } from '../styles';
 import { EnumOSEventObjectType } from 'interface/event';
+import { getHighestScreenZIndex } from 'functions/screen';
 
 interface IProps {
   _ref: React.RefObject<HTMLCanvasElement>;
@@ -31,6 +32,8 @@ const Main: FC<IProps> = ({
     height = screen.height;
   }
 
+  const highestZorder = getHighestScreenZIndex();
+
   return (
     <canvas
       data-id={EnumOSEventObjectType.Screen}
@@ -40,6 +43,7 @@ const Main: FC<IProps> = ({
       style={{
         width: '100%',
         height: '100%',
+        opacity: screen.zIndex === highestZorder ? 1 : 0.5,
         ...canvasRenderStyle,
       }}
       onMouseDown={onMouseDown}

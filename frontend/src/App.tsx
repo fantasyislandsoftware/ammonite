@@ -6,30 +6,31 @@ import ShadowBuffer from 'ShadowBuffer';
 import { openScreen } from 'api/os/screen';
 import { full, hi, interlaced, low, med } from 'uiObjects/Screen/screenModes';
 import { EnumOSEventObjectType } from 'interface/event';
-import { renderScreen } from 'functions/screen';
+import { getHighestScreenZIndex, renderScreen } from 'functions/screen';
 import useGetGuiIcons from 'api/query/useGetGuiIcons';
+import { get } from 'lodash';
 
 const App = () => {
   const [ready, setReady] = useState(false);
-  const { screens, setScreens } = useScreenStore();
+  const { screens, setScreens, selectedScreen } = useScreenStore();
   let loaded = false;
 
   const mockScreens = () => {
     //openScreen(window.innerWidth, window.innerHeight, full, 'Full Screen');
     //openScreen(640, 512, hi, 'Hi Res');
     //openScreen(320, 512, interlaced, 'Interlaced');
-    //openScreen(640, 256, med, 'Med Res');
+    openScreen(640, 256, med, 'Med Res');
     openScreen(320, 256, low, 'Low Res');
   };
 
   const addEventListeners = () => {
     /* Debug */
     document.body.addEventListener('keydown', function (e) {
-      if (e.keyCode === 32) {
+      /*if (e.keyCode === 32) {
         screens.map((screen) => {
           console.log(screen.zIndex);
         });
-      }
+      }*/
     });
     /* */
     window.addEventListener('resize', (e) => {
@@ -46,12 +47,14 @@ const App = () => {
     loaded = true;
   }
 
-  const startRenderLoop = () => {
-    setInterval(() => {
-      screens.map((screen) => {
+  const renderLoop = () => {
+    const topScreen = getHighestScreenZIndex();
+    screens.map((screen) => {
+      if (screen.zIndex === topScreen) {
         renderScreen(screen);
-      });
-    }, 1);
+      }
+    });
+    window.requestAnimationFrame(renderLoop);
   };
 
   useEffect(() => {
@@ -61,7 +64,7 @@ const App = () => {
       setTimeout(() => {
         setScreens(screens);
       });
-      startRenderLoop();
+      renderLoop();
     }
   }, [loaded]);
 
