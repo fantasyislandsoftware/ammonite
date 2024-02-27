@@ -21,8 +21,9 @@ import {
   handleScreenTitleBarButtonEvents,
   resetScreenTitleBarButtonEvents,
 } from './eventHandlers/screen/titleBar/button';
+import { windowEvents } from './eventHandlers/window/windowEvents';
 
-export const processObjectEvents = (_event: OSEvent, screen?: IScreen) => {
+export const delegateEvents = (_event: OSEvent, screen?: IScreen) => {
   const event = _event;
 
   if (event.detail === 2) {
@@ -50,6 +51,18 @@ export const processObjectEvents = (_event: OSEvent, screen?: IScreen) => {
 
     /* Screen */
     if (id === EnumOSEventObjectType.Screen) {
+      /* Windows */
+      screen.windows.map((window) => {
+        if (
+          screenMouse.screen.x >= window.position.x &&
+          screenMouse.screen.y >= window.position.y &&
+          screenMouse.screen.x <= window.position.x + window.width &&
+          screenMouse.screen.y <= window.position.y + window.height
+        ) {
+          windowEvents(event, screen, window, screenMouse);
+        }
+      });
+
       if (screenMouse.screen.y < titleBar.height) {
         /* Titlebar Icons */
         let foundButton = false;

@@ -8,6 +8,7 @@ export interface IWindow {
   width: number;
   height: number;
   titleBar: IWindowTitleBar;
+  borderThickness: number;
 }
 
 export interface IWindowTitleBar {

@@ -93,6 +93,7 @@ export const openScreen = (
       },
       buttons: [orderButton()],
     },
+    borderThickness: 1,
   };
 
   const newScreen: IScreen = {

@@ -8,6 +8,7 @@ import { getHighestScreenZIndex } from 'functions/screen';
 interface IProps {
   _ref: React.RefObject<HTMLCanvasElement>;
   screen: IScreen;
+  children?: React.ReactNode;
   onMouseDown: (e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => void;
   onMouseUp: (e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => void;
   onMouseMove: (e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => void;

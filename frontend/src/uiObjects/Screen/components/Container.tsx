@@ -1,8 +1,8 @@
 import { FC, useEffect, useRef, useState } from 'react';
 import { EnumScreenModeType, IScreen } from '../../../interface/screen';
-import Main from '../canvas/Main';
+import Main from './Main';
 import React from 'react';
-import { processObjectEvents } from 'functions/events/events';
+import { delegateEvents } from 'functions/events/eventDelegator';
 import { renderScreen } from 'functions/screen';
 import { useScreenStore } from 'stores/useScreenStore';
 import DragScreen from './DragScreen';
@@ -12,9 +12,10 @@ import { getTextInfo } from 'functions/graphics';
 
 interface IProps {
   screen: IScreen;
+  children?: React.ReactNode;
 }
 
-const Container: FC<IProps> = ({ screen }) => {
+const Container: FC<IProps> = ({ screen, children }) => {
   const ref = useRef<HTMLCanvasElement>(null);
   const [ctx, setCtx] = useState<CanvasRenderingContext2D | null>(null);
   const { innerWidth, innerHeight } = window;
@@ -62,13 +63,13 @@ const Container: FC<IProps> = ({ screen }) => {
         <Main
           _ref={ref}
           screen={screen}
-          onMouseDown={(event) => {
-            processObjectEvents(event, screen);
-          }}
-          onMouseUp={(event) => processObjectEvents(event, screen)}
-          onMouseMove={(event) => processObjectEvents(event, screen)}
-          onMouseLeave={(event) => processObjectEvents(event, screen)}
-        />
+          onMouseDown={(event) => delegateEvents(event, screen)}
+          onMouseUp={(event) => delegateEvents(event, screen)}
+          onMouseMove={(event) => delegateEvents(event, screen)}
+          onMouseLeave={(event) => delegateEvents(event, screen)}
+        >
+          {children}
+        </Main>
       </AspectRatio>
     </DragScreen>
   );

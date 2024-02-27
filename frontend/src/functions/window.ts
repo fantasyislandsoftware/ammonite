@@ -13,21 +13,17 @@ import { useIntuitionStore } from 'stores/useIntuitionStore';
 
 export const renderWindow = (screen: IScreen, window: IWindow) => {
   const { guiIcons } = useIntuitionStore.getState();
-  const { width, height, titleBar, position } = window;
+  const { width, height, titleBar, position, borderThickness } = window;
   const { x, y } = position;
   const { title, font } = titleBar;
 
   const win = createPixelBuffer(width, height);
 
   /* Border */
-  fillRect(win, 0, 0, width, height, 1);
-  drawLine(win, 0, 0, width, 0, 0);
-  drawLine(win, 0, 0, 0, height, 0);
-  drawLine(win, 0, height - 1, width, height - 1, 0);
-  drawLine(win, width - 1, 0, width - 1, height - 1, 0);
+  fillRect(win, 0, 0, width, height, 0);
 
   /* Bar */
-  const barWidth = width - 2;
+  const barWidth = width - borderThickness * 2;
   const textInfo = getTextInfo(
     titleBar.title,
     `${titleBar.font.size}px ${titleBar.font.name}`
@@ -41,23 +37,33 @@ export const renderWindow = (screen: IScreen, window: IWindow) => {
   /* Buttons */
   titleBar.buttons.map((button, index) => {
     const imageIndex = button.imageIndex[button.currentImageIndex];
-    /*button.boundBox = {
-      x: x,
-      y: y,
+    button.boundBox = {
+      x: barWidth - index * barHeight - barHeight,
+      y: 0,
       width: barHeight,
       height: barHeight,
-    };*/
-    /*drawImage(
+    };
+    drawImage(
       bar,
       guiIcons[titleBar ? imageIndex : 0],
       button.boundBox.x,
       button.boundBox.y,
       button.boundBox.width,
       button.boundBox.height
-    );*/
+    );
   });
 
-  drawPixelBuffer(win.pixels, bar, 1, 1);
+  const canvas = createPixelBuffer(
+    width - borderThickness * 2,
+    height - barHeight - borderThickness * 2
+  );
 
+  drawPixelBuffer(win.pixels, bar, borderThickness, borderThickness);
+  drawPixelBuffer(
+    win.pixels,
+    canvas,
+    borderThickness,
+    barHeight + borderThickness
+  );
   drawPixelBuffer(screen.pixels, win, x, y);
 };

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Screen } from './uiObjects/Screen';
-import { processObjectEvents } from 'functions/events/events';
+import { delegateEvents } from 'functions/events/eventDelegator';
 import { useScreenStore } from 'stores/useScreenStore';
 import ShadowBuffer from 'ShadowBuffer';
 import { openScreen } from 'api/os/screen';
@@ -9,6 +9,7 @@ import { EnumOSEventObjectType } from 'interface/event';
 import { getHighestScreenZIndex, renderScreen } from 'functions/screen';
 import useGetGuiIcons from 'api/query/useGetGuiIcons';
 import { get } from 'lodash';
+import { UIWindow } from 'uiObjects/UIWindow';
 
 const App = () => {
   const [ready, setReady] = useState(false);
@@ -38,7 +39,7 @@ const App = () => {
     });
     /* */
     document.addEventListener('mouseleave', (e) => {
-      processObjectEvents(e);
+      delegateEvents(e);
     });
   };
 
@@ -84,12 +85,16 @@ const App = () => {
             height: '100%',
             zIndex: -1000,
           }}
-          onMouseUp={(event) => processObjectEvents(event)}
-          onMouseMove={(event) => processObjectEvents(event)}
+          onMouseUp={(event) => delegateEvents(event)}
+          onMouseMove={(event) => delegateEvents(event)}
           onContextMenu={(e) => e.preventDefault()}
         ></div>
         {screens.map((screen, index) => (
-          <Screen key={index} screen={screen} />
+          <Screen key={index} screen={screen}>
+            {screen.windows.map((window, index) => (
+              <UIWindow key={index} window={window} />
+            ))}
+          </Screen>
         ))}
         <ShadowBuffer />
       </>

@@ -17,6 +17,12 @@ export interface IScreenMouse {
   button: EnumMouseButton;
 }
 
+export interface IWindowMouse {
+  x: number;
+  y: number;
+  button: EnumMouseButton;
+}
+
 export enum EnumMouseButton {
   Left = 0,
   Middle = 1,
