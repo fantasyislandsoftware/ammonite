@@ -9,7 +9,7 @@ import {
 } from 'functions/graphics';
 import { IScreen } from 'interface/screen';
 import { useIntuitionStore } from 'stores/useIntuitionStore';
-import { IWindow } from './windowInterface';
+import { IWindow } from '../../windowInterface';
 
 export const uiWindowRender = (screen: IScreen, window: IWindow) => {
   const { guiIcons } = useIntuitionStore.getState();

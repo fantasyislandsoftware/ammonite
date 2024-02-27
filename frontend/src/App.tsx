@@ -8,8 +8,6 @@ import { full, hi, interlaced, low, med } from 'uiObjects/UIScreen/screenModes';
 import { EnumOSEventObjectType } from 'interface/event';
 import { getHighestScreenZIndex, renderScreen } from 'functions/screen';
 import useGetGuiIcons from 'api/query/useGetGuiIcons';
-import { get } from 'lodash';
-import { UIWindow } from 'uiObjects/UIWindow';
 
 const App = () => {
   const [ready, setReady] = useState(false);
@@ -90,11 +88,7 @@ const App = () => {
           onContextMenu={(e) => e.preventDefault()}
         ></div>
         {screens.map((screen, index) => (
-          <UIScreen key={index} screen={screen}>
-            {screen.windows.map((window, index) => (
-              <UIWindow key={index} window={window} />
-            ))}
-          </UIScreen>
+          <UIScreen key={index} screen={screen} />
         ))}
         <ShadowBuffer />
       </>

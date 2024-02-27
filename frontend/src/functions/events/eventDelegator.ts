@@ -13,7 +13,7 @@ import {
   handleScreenTitleBarButtonEvents,
   resetScreenTitleBarButtonEvents,
 } from './eventHandlers/screen/titleBar/button';
-import { windowEvents } from 'uiObjects/UIWindow/windowEvents';
+import { windowContainerEvents } from 'uiObjects/UIWindow/components/container/windowContainerEvents';
 
 export const delegateEvents = (_event: OSEvent, screen?: IScreen) => {
   const event = _event;
@@ -51,7 +51,7 @@ export const delegateEvents = (_event: OSEvent, screen?: IScreen) => {
           screenMouse.screen.x <= window.position.x + window.width &&
           screenMouse.screen.y <= window.position.y + window.height
         ) {
-          windowEvents(event, screen, window, screenMouse);
+          windowContainerEvents(event, screen, window, screenMouse);
         }
       });
 

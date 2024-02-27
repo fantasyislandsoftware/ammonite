@@ -11,7 +11,7 @@ import {
   drawImage,
 } from './graphics';
 import { useIntuitionStore } from 'stores/useIntuitionStore';
-import { uiWindowRender } from 'uiObjects/UIWindow/windowRender';
+import { uiWindowRender } from 'uiObjects/UIWindow/components/container/windowContainerRender';
 
 export const screenIdToIndex = (id: number | undefined): number | undefined => {
   const { screens } = useScreenStore.getState();
