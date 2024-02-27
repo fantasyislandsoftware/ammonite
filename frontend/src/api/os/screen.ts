@@ -7,7 +7,7 @@ import { EnumButtonFunction } from 'interface/icon';
 import { IButton } from 'interface/intuition';
 import { IScreen, IScreenMode } from 'interface/screen';
 import { useScreenStore } from 'stores/useScreenStore';
-import { generateDefaultColorPalette } from 'uiObjects/Screen/palettes';
+import { generateDefaultColorPalette } from 'uiObjects/UIScreen/palettes';
 import { v4 as uuidv4 } from 'uuid';
 
 export const openScreen = (

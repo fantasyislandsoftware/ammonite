@@ -1,13 +1,5 @@
-import { IScreen, IScreenAspect } from 'interface/screen';
-import {
-  EnumMouseButton,
-  IClientMouse,
-  IScreenMouse,
-  getClientMouse,
-  getScreenMouse,
-} from '../mouse';
-import { screenIdToIndex } from 'functions/screen';
-import { useScreenStore } from 'stores/useScreenStore';
+import { IScreen } from 'interface/screen';
+import { getClientMouse, getScreenMouse } from '../mouse';
 import {
   EnumOSEventObjectType,
   EnumOSEventType,
@@ -21,7 +13,7 @@ import {
   handleScreenTitleBarButtonEvents,
   resetScreenTitleBarButtonEvents,
 } from './eventHandlers/screen/titleBar/button';
-import { windowEvents } from './eventHandlers/window/windowEvents';
+import { windowEvents } from 'uiObjects/UIWindow/windowEvents';
 
 export const delegateEvents = (_event: OSEvent, screen?: IScreen) => {
   const event = _event;

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Screen } from './uiObjects/Screen';
+import { UIScreen } from './uiObjects/UIScreen';
 import { delegateEvents } from 'functions/events/eventDelegator';
 import { useScreenStore } from 'stores/useScreenStore';
 import ShadowBuffer from 'ShadowBuffer';
 import { openScreen } from 'api/os/screen';
-import { full, hi, interlaced, low, med } from 'uiObjects/Screen/screenModes';
+import { full, hi, interlaced, low, med } from 'uiObjects/UIScreen/screenModes';
 import { EnumOSEventObjectType } from 'interface/event';
 import { getHighestScreenZIndex, renderScreen } from 'functions/screen';
 import useGetGuiIcons from 'api/query/useGetGuiIcons';
@@ -90,11 +90,11 @@ const App = () => {
           onContextMenu={(e) => e.preventDefault()}
         ></div>
         {screens.map((screen, index) => (
-          <Screen key={index} screen={screen}>
+          <UIScreen key={index} screen={screen}>
             {screen.windows.map((window, index) => (
               <UIWindow key={index} window={window} />
             ))}
-          </Screen>
+          </UIScreen>
         ))}
         <ShadowBuffer />
       </>

@@ -15,7 +15,7 @@ interface IProps {
   children?: React.ReactNode;
 }
 
-const Container: FC<IProps> = ({ screen, children }) => {
+const UIScreen: FC<IProps> = ({ screen, children }) => {
   const ref = useRef<HTMLCanvasElement>(null);
   const [ctx, setCtx] = useState<CanvasRenderingContext2D | null>(null);
   const { innerWidth, innerHeight } = window;
@@ -60,14 +60,7 @@ const Container: FC<IProps> = ({ screen, children }) => {
   return (
     <DragScreen screen={screen}>
       <AspectRatio aspect={screen.aspect}>
-        <Main
-          _ref={ref}
-          screen={screen}
-          onMouseDown={(event) => delegateEvents(event, screen)}
-          onMouseUp={(event) => delegateEvents(event, screen)}
-          onMouseMove={(event) => delegateEvents(event, screen)}
-          onMouseLeave={(event) => delegateEvents(event, screen)}
-        >
+        <Main _ref={ref} screen={screen}>
           {children}
         </Main>
       </AspectRatio>
@@ -75,4 +68,4 @@ const Container: FC<IProps> = ({ screen, children }) => {
   );
 };
 
-export default Container;
+export default UIScreen;

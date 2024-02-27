@@ -4,25 +4,15 @@ import { EnumScreenModeType, IScreen } from '../../../interface/screen';
 import { canvasRenderStyle } from '../styles';
 import { EnumOSEventObjectType } from 'interface/event';
 import { getHighestScreenZIndex } from 'functions/screen';
+import { delegateEvents } from 'functions/events/eventDelegator';
 
 interface IProps {
   _ref: React.RefObject<HTMLCanvasElement>;
   screen: IScreen;
   children?: React.ReactNode;
-  onMouseDown: (e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => void;
-  onMouseUp: (e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => void;
-  onMouseMove: (e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => void;
-  onMouseLeave: (e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => void;
 }
 
-const Main: FC<IProps> = ({
-  _ref,
-  screen,
-  onMouseDown,
-  onMouseUp,
-  onMouseMove,
-  onMouseLeave,
-}) => {
+const Main: FC<IProps> = ({ _ref, screen, children }) => {
   let width = 0;
   let height = 0;
   if (screen.mode.type === EnumScreenModeType.CLASSIC) {
@@ -47,10 +37,10 @@ const Main: FC<IProps> = ({
         opacity: screen.zIndex === highestZorder ? 1 : 0.5,
         ...canvasRenderStyle,
       }}
-      onMouseDown={onMouseDown}
-      onMouseUp={onMouseUp}
-      onMouseMove={onMouseMove}
-      onMouseLeave={onMouseLeave}
+      onMouseDown={(event) => delegateEvents(event, screen)}
+      onMouseUp={(event) => delegateEvents(event, screen)}
+      onMouseMove={(event) => delegateEvents(event, screen)}
+      onMouseLeave={(event) => delegateEvents(event, screen)}
       onContextMenu={(e) => e.preventDefault()}
     />
   );

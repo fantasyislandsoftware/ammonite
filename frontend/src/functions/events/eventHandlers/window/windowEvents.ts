@@ -1,9 +1,9 @@
 import { IScreenMouse } from 'functions/mouse';
 import { EnumOSEventType } from 'interface/event';
 import { IScreen } from 'interface/screen';
-import { IWindow } from 'interface/window';
+import { IWindow } from 'uiObjects/UIWindow/windowInterface';
 
-export const windowEvents = (
+export const _windowEvents = (
   event: any,
   screen: IScreen,
   window: IWindow,

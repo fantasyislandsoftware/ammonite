@@ -1,5 +1,3 @@
-import { IScreen } from 'interface/screen';
-import { IWindow } from 'interface/window';
 import {
   createPixelBuffer,
   drawImage,
@@ -8,10 +6,12 @@ import {
   drawText,
   fillRect,
   getTextInfo,
-} from './graphics';
+} from 'functions/graphics';
+import { IScreen } from 'interface/screen';
 import { useIntuitionStore } from 'stores/useIntuitionStore';
+import { IWindow } from './windowInterface';
 
-export const renderWindow = (screen: IScreen, window: IWindow) => {
+export const uiWindowRender = (screen: IScreen, window: IWindow) => {
   const { guiIcons } = useIntuitionStore.getState();
   const { width, height, titleBar, position, borderThickness } = window;
   const { x, y } = position;
@@ -66,4 +66,8 @@ export const renderWindow = (screen: IScreen, window: IWindow) => {
     barHeight + borderThickness
   );
   drawPixelBuffer(screen.pixels, win, x, y);
+
+  screen.windows.map((window) => {
+    window.titleBar.height = barHeight;
+  });
 };

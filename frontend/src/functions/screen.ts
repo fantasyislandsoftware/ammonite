@@ -11,7 +11,7 @@ import {
   drawImage,
 } from './graphics';
 import { useIntuitionStore } from 'stores/useIntuitionStore';
-import { renderWindow } from './window';
+import { uiWindowRender } from 'uiObjects/UIWindow/windowRender';
 
 export const screenIdToIndex = (id: number | undefined): number | undefined => {
   const { screens } = useScreenStore.getState();
@@ -85,7 +85,7 @@ export const renderScreen = (screen: IScreen): IScreen => {
 
   /* Windows */
   screen.windows.map((window) => {
-    renderWindow(screen, window);
+    uiWindowRender(screen, window);
   });
 
   const imgData: ImageData = ctx.createImageData(screen.width, screen.height);
