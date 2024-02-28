@@ -15,11 +15,11 @@ export interface IWindow {
   };
   width: number;
   height: number;
-  titleBar: IWindowTitleBar;
+  titleBar: IWindowtitleBar;
   borderThickness: number;
 }
 
-export interface IWindowTitleBar {
+export interface IWindowtitleBar {
   title: string;
   height: number;
   font: {

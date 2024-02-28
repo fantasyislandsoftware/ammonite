@@ -1,2 +1,0 @@
-import { IButton } from './intuition';
-

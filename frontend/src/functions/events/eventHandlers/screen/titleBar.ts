@@ -6,12 +6,12 @@ import { EnumOSEventType, OSEvent } from 'interface/event';
 import { IScreen } from 'interface/screen';
 import { useScreenStore } from 'stores/useScreenStore';
 
-export const handleScreenTitleBarEvents = (
+export const handleScreentitleBarEvents = (
   event: OSEvent,
   screen: IScreen,
   clientMouse: IClientMouse
 ) => {
-  eventLog(event, 'Screen Titlebar');
+  eventLog(event, 'Screen titleBar');
 
   const { selectedScreen, setSelectedScreen, screens } =
     useScreenStore.getState();

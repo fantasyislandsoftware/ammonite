@@ -8,7 +8,7 @@ import { IScreen } from 'interface/screen';
 import { useIntuitionStore } from 'stores/useIntuitionStore';
 import { useScreenStore } from 'stores/useScreenStore';
 
-export const resetScreenTitleBarButtonEvents = () => {
+export const resetScreentitleBarButtonEvents = () => {
   const { screens } = useScreenStore.getState();
   screens.map((screen: IScreen) => {
     screen.titleBar?.buttons.map((button) => {
@@ -17,12 +17,12 @@ export const resetScreenTitleBarButtonEvents = () => {
   });
 };
 
-export const handleScreenTitleBarButtonEvents = (
+export const handleScreentitleBarButtonEvents = (
   event: OSEvent,
   screen: IScreen,
   button: IButton
 ) => {
-  eventLog(event, 'Screen Titlebar button');
+  eventLog(event, 'Screen titleBar button');
 
   const { selectedButtonId, setSelectedButtonId } =
     useIntuitionStore.getState();

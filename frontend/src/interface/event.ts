@@ -9,14 +9,14 @@ export interface IOSEvent {
     | OSEventBackdrop
     | OSEventScreen
     | OSEventScreenClient
-    | OSEventScreenTitlebar
-    | OSEventScreenTitlebarIcon;
+    | OSEventScreentitleBar
+    | OSEventScreentitleBarIcon;
 
   parent:
     | OSEventBackdrop
     | OSEventScreen
     | OSEventScreenClient
-    | OSEventScreenTitlebar
+    | OSEventScreentitleBar
     | undefined;
   eventType: EnumOSEventType;
 }
@@ -42,8 +42,8 @@ export enum EnumOSEventObjectType {
   Backdrop = 'backdrop',
   Screen = 'screen',
   Window = 'window',
-  ScreenTitlebar = 'screenTitlebar',
-  ScreenTitlebarIcon = 'screenTitlebarIcon',
+  ScreentitleBar = 'screentitleBar',
+  ScreentitleBarIcon = 'screentitleBarIcon',
   ScreenClient = 'screenClient',
   Client = 'client',
   Icon = 'icon',
@@ -81,7 +81,7 @@ export interface OSEventScreenClient {
   icon?: IButton;
 }
 
-export interface OSEventScreenTitlebar {
+export interface OSEventScreentitleBar {
   id?: number;
   type: EnumOSEventObjectType;
   screenMouse?: IScreenMouse;
@@ -89,7 +89,7 @@ export interface OSEventScreenTitlebar {
   icon?: IButton;
 }
 
-export interface OSEventScreenTitlebarIcon {
+export interface OSEventScreentitleBarIcon {
   id?: number;
   type: EnumOSEventObjectType;
   screenMouse?: IScreenMouse;

@@ -1,3 +1,4 @@
+import { ScreenColour } from 'constants/colours';
 import { initPixelArray } from 'functions/graphics';
 import {
   getHighestScreenZIndex,
@@ -7,7 +8,7 @@ import { EnumButtonFunction } from 'interface/icon';
 import { IButton } from 'interface/intuition';
 import { IScreen, IScreenMode } from 'interface/screen';
 import { useScreenStore } from 'stores/useScreenStore';
-import { generateDefaultColorPalette } from 'uiObjects/UIScreen/palettes';
+import { generateDefaultColorPalette } from 'UIObjects/UIScreen/palettes';
 import { v4 as uuidv4 } from 'uuid';
 
 export const openScreen = (
@@ -113,7 +114,7 @@ export const openScreen = (
     numberOfColours: 16,
     palette: generateDefaultColorPalette(16),
     ctx: null,
-    pixels: initPixelArray(width, height),
+    pixels: initPixelArray(width, height, ScreenColour.CLIENT),
     margin: 0,
     zIndex: nextScreenIndex,
     aspect: {

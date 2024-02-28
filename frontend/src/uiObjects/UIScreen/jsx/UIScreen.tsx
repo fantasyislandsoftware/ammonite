@@ -3,12 +3,12 @@ import { EnumScreenModeType, IScreen } from '../../../interface/screen';
 import Main from './Main';
 import React from 'react';
 import { delegateEvents } from 'functions/events/eventDelegator';
-import { renderScreen } from 'functions/screen';
 import { useScreenStore } from 'stores/useScreenStore';
 import DragScreen from './DragScreen';
 import AspectRatio from './AspectRatio';
 import { EnumOSEventType } from 'interface/event';
 import { getTextInfo } from 'functions/graphics';
+import { screenContainerRender } from '../container/screenContainerRender';
 
 interface IProps {
   screen: IScreen;
@@ -51,7 +51,7 @@ const UIScreen: FC<IProps> = ({ screen, children }) => {
         );
         screen.titleBar.height = height;
       }
-      renderScreen(screen);
+      screenContainerRender(screen);
     }
   }, [ref, ctx]);
 

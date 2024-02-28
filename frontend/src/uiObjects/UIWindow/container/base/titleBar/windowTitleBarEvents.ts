@@ -3,9 +3,9 @@ import { EnumOSEventType } from 'interface/event';
 import { IScreen } from 'interface/screen';
 import { useIntuitionStore } from 'stores/useIntuitionStore';
 import { useScreenStore } from 'stores/useScreenStore';
-import { IWindow, IWindowEvent } from 'uiObjects/UIWindow/windowInterface';
+import { IWindow, IWindowEvent } from 'UIObjects/UIWindow/windowInterface';
 
-export const windowTitlebarEvent = (
+export const windowTitleBarEvents = (
   screen: IScreen,
   window: IWindow,
   event: IWindowEvent
@@ -14,7 +14,7 @@ export const windowTitlebarEvent = (
 
   switch (type) {
     case EnumOSEventType.MouseDown:
-      console.log('titlebar mouse down');
+      console.log('titleBar mouse down');
 
       const test = screen;
       test.windows[0].titleBar.title = 'test';

@@ -6,12 +6,16 @@ import BinaryStream from 'api/lib/binarystream';
 import { detect, parse } from 'api/lib/iff';
 import { IBrush, IPixelArray, IPixelBuffer } from 'interface/graphics';
 
-export const initPixelArray = (width: number, height: number): number[][] => {
+export const initPixelArray = (
+  width: number,
+  height: number,
+  colourIndex: number
+): number[][] => {
   const array: number[][] = [];
   for (let y = 0; y < height; y++) {
     const row = [];
     for (let x = 0; x < width; x++) {
-      row.push(2);
+      row.push(colourIndex);
     }
     array.push(row);
   }
@@ -20,12 +24,13 @@ export const initPixelArray = (width: number, height: number): number[][] => {
 
 export const createPixelBuffer = (
   width: number,
-  height: number
+  height: number,
+  colourIndex: number
 ): IPixelBuffer => {
   return {
     width,
     height,
-    pixels: initPixelArray(width, height),
+    pixels: initPixelArray(width, height, colourIndex),
   };
 };
 
@@ -238,7 +243,7 @@ export const loadGuiIcons = async () => {
       const image: IBrush = {
         width: w,
         height: h,
-        pixels: initPixelArray(32, 32),
+        pixels: initPixelArray(32, 32, 0),
       };
       for (let y = 0; y < h; y++) {
         for (let x = 0; x < w; x++) {

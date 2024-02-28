@@ -31,7 +31,7 @@ const getGuiIcons = async () => {
       const image: IBrush = {
         width: w,
         height: h,
-        pixels: initPixelArray(32, 32),
+        pixels: initPixelArray(32, 32, 0),
       };
       for (let y = 0; y < h; y++) {
         for (let x = 0; x < w; x++) {

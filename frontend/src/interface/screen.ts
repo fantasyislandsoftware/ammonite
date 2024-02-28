@@ -1,4 +1,4 @@
-import { IWindow } from 'uiObjects/UIWindow/windowInterface';
+import { IWindow } from 'UIObjects/UIWindow/windowInterface';
 import { IButton } from './intuition';
 
 export interface IScreen {
@@ -11,7 +11,7 @@ export interface IScreen {
     x: number;
     y: number;
   };
-  titleBar: IScreenTitleBar | null;
+  titleBar: IScreentitleBar | null;
   numberOfColours: number;
   palette: number[][];
   ctx: CanvasRenderingContext2D | null;
@@ -46,7 +46,7 @@ export interface IScreenMode {
   maxColors: 2 | 4 | 16 | 32 | 64 | 256 | 4096 | 65536 | 16777216;
 }
 
-export interface IScreenTitleBar {
+export interface IScreentitleBar {
   title: string;
   height: number;
   font: {

@@ -6,14 +6,14 @@ import {
   OSEvent,
 } from 'interface/event';
 import { handleViewportEvents } from './eventHandlers/viewport';
-import { handleScreenTitleBarEvents } from './eventHandlers/screen/titleBar';
+import { handleScreentitleBarEvents } from './eventHandlers/screen/titleBar';
 import { handleScreenClientEvents } from './eventHandlers/screen/client';
 import { handleBackdropEvents } from './eventHandlers/backdrop';
 import {
-  handleScreenTitleBarButtonEvents,
-  resetScreenTitleBarButtonEvents,
+  handleScreentitleBarButtonEvents,
+  resetScreentitleBarButtonEvents,
 } from './eventHandlers/screen/titleBar/button';
-import { windowContainerEvents } from 'uiObjects/UIWindow/components/container/windowContainerEvents';
+import { windowContainerEvents } from 'UIObjects/UIWindow/container/windowContainerEvents';
 
 export const delegateEvents = (_event: OSEvent, screen?: IScreen) => {
   const event = _event;
@@ -25,7 +25,7 @@ export const delegateEvents = (_event: OSEvent, screen?: IScreen) => {
   const clientMouse = getClientMouse(event);
 
   if (event.type === EnumOSEventType.MouseUp) {
-    resetScreenTitleBarButtonEvents();
+    resetScreentitleBarButtonEvents();
   }
 
   if (event.target.dataset !== undefined) {
@@ -56,7 +56,7 @@ export const delegateEvents = (_event: OSEvent, screen?: IScreen) => {
       });
 
       if (screenMouse.screen.y < titleBar.height) {
-        /* Titlebar Icons */
+        /* titleBar Icons */
         let foundButton = false;
         titleBar.buttons.map((button) => {
           if (
@@ -65,13 +65,13 @@ export const delegateEvents = (_event: OSEvent, screen?: IScreen) => {
             screenMouse.screen.x < button.boundBox.x + button.boundBox.width &&
             screenMouse.screen.y < button.boundBox.y + button.boundBox.height
           ) {
-            handleScreenTitleBarButtonEvents(event, screen, button);
+            handleScreentitleBarButtonEvents(event, screen, button);
             foundButton = true;
           }
         });
         if (foundButton) return;
-        /* Titlebar */
-        handleScreenTitleBarEvents(event, screen, clientMouse);
+        /* titleBar */
+        handleScreentitleBarEvents(event, screen, clientMouse);
       } else {
         /* Screen Client */
         handleScreenClientEvents(event, screen, clientMouse);
@@ -82,6 +82,6 @@ export const delegateEvents = (_event: OSEvent, screen?: IScreen) => {
   if (event.target.dataset === undefined) {
     handleViewportEvents(event);
     //console.log(event.type);
-    //resetScreenTitleBarIconEvents();
+    //resetScreentitleBarIconEvents();
   }
 };

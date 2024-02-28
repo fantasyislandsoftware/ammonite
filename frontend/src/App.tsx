@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { UIScreen } from './uiObjects/UIScreen';
+import { UIScreen } from './UIObjects/UIScreen';
 import { delegateEvents } from 'functions/events/eventDelegator';
 import { useScreenStore } from 'stores/useScreenStore';
 import ShadowBuffer from 'ShadowBuffer';
 import { openScreen } from 'api/os/screen';
-import { full, hi, interlaced, low, med } from 'uiObjects/UIScreen/screenModes';
+import { full, hi, interlaced, low, med } from 'UIObjects/UIScreen/screenModes';
 import { EnumOSEventObjectType } from 'interface/event';
-import { getHighestScreenZIndex, renderScreen } from 'functions/screen';
+import { getHighestScreenZIndex } from 'functions/screen';
 import useGetGuiIcons from 'api/query/useGetGuiIcons';
+import { screenContainerRender } from 'UIObjects/UIScreen/container/screenContainerRender';
 
 const App = () => {
   const [ready, setReady] = useState(false);
@@ -50,7 +51,7 @@ const App = () => {
     const topScreen = getHighestScreenZIndex();
     screens.map((screen) => {
       if (screen.zIndex === topScreen) {
-        renderScreen(screen);
+        screenContainerRender(screen);
       }
     });
     window.requestAnimationFrame(renderLoop);
