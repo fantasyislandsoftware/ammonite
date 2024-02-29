@@ -12,6 +12,7 @@ import { IScreen } from 'interface/screen';
 import { useIntuitionStore } from 'stores/useIntuitionStore';
 import { screenContainerCalc } from './screenContainerCalc';
 import { screenTitleBarRender } from './titleBar/screenTitleBarRender';
+import { screenClientRender } from './client/screenClientRender';
 
 export const screenContainerRender = (screen: IScreen): IScreen => {
   const { guiIcons } = useIntuitionStore.getState();
@@ -22,14 +23,15 @@ export const screenContainerRender = (screen: IScreen): IScreen => {
   const calc = screenContainerCalc(screen);
 
   const titleBarObj = screenTitleBarRender(screen, calc);
+  const clientObj = screenClientRender(screen, calc);
 
-  /* Title Bar */
+  /* Add components */
   titleBarObj && drawPixelBuffer(screen.pixels, titleBarObj, 0, 0);
-
-  /* Windows */
   screen.windows.map((window) => {
-    windowContainerRender(screen, window);
+    clientObj && windowContainerRender(clientObj, screen, window);
   });
+  clientObj &&
+    drawPixelBuffer(screen.pixels, clientObj, 0, calc!.titleBar.height);
 
   /* Draw the screen */
   const imgData: ImageData = ctx.createImageData(screen.width, screen.height);

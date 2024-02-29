@@ -87,7 +87,7 @@ export const openScreen = (
     height: 50,
     titleBar: {
       title: 'Test Window',
-      height: 20,
+      height: 10,
       font: {
         name: 'Arial',
         size: 12,

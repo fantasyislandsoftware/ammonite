@@ -1,18 +1,16 @@
 import { screenBringToFront } from 'api/os/screen';
-import { eventLog } from 'functions/events/debug';
-import { EnumMouseButton, IClientMouse } from 'functions/mouse';
+import { EnumMouseButton, IClientMouse, IScreenMouse } from 'functions/mouse';
 import { screenIdToIndex, setScreen } from 'functions/screen';
 import { EnumOSEventType, OSEvent } from 'interface/event';
 import { IScreen } from 'interface/screen';
 import { useScreenStore } from 'stores/useScreenStore';
 
-export const handleScreentitleBarEvents = (
+export const screenTitleBarEvents = (
   event: OSEvent,
-  screen: IScreen,
-  clientMouse: IClientMouse
+  screenMouse: IScreenMouse,
+  clientMouse: IClientMouse,
+  screen: IScreen
 ) => {
-  eventLog(event, 'Screen titleBar');
-
   const { selectedScreen, setSelectedScreen, screens } =
     useScreenStore.getState();
   const screenIndex = screenIdToIndex(screen.id);

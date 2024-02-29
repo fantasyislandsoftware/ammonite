@@ -1,3 +1,3 @@
 export const windowBorderEvents = () => {
-  console.log('border');
+  //console.log('border');
 };

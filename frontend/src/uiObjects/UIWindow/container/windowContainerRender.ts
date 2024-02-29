@@ -5,8 +5,13 @@ import { windowContainerCalc } from './windowContainerCalc';
 import { windowClientRender } from './base/client/windowClientRender';
 import { IWindow } from 'UIObjects/UIWindow/windowInterface';
 import { windowTitleBarRender } from './base/titleBar/windowTitleBarRender';
+import { IPixelArray, IPixelBuffer } from 'interface/graphics';
 
-export const windowContainerRender = (screen: IScreen, window: IWindow) => {
+export const windowContainerRender = (
+  target: IPixelBuffer,
+  screen: IScreen,
+  window: IWindow
+) => {
   const { guiIcons } = useIntuitionStore.getState();
   const { width, height, titleBar, position, borderThickness } = window;
   const { x, y } = position;
@@ -32,7 +37,7 @@ export const windowContainerRender = (screen: IScreen, window: IWindow) => {
   );
 
   /* Draw window on screen */
-  drawPixelBuffer(screen.pixels, win, x, y);
+  drawPixelBuffer(target.pixels, win, x, y);
 
   /* Adjust window properties */
   window.titleBar.height = barHeight;

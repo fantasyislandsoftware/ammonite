@@ -1,16 +1,5 @@
 import { IScreen } from 'interface/screen';
 import { useScreenStore } from 'stores/useScreenStore';
-import {
-  fillRect,
-  drawText,
-  createPixelBuffer,
-  drawPixelBuffer,
-  drawLine,
-  drawImage,
-} from './graphics';
-import { useIntuitionStore } from 'stores/useIntuitionStore';
-import { ScreenColour } from 'constants/colours';
-import { windowContainerRender } from 'UIObjects/UIWindow/container/windowContainerRender';
 
 export const screenIdToIndex = (id: number | undefined): number | undefined => {
   const { screens } = useScreenStore.getState();

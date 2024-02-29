@@ -1,17 +1,15 @@
-import { ENV } from 'constants/env';
-import { IClientMouse } from 'functions/mouse';
-import { screenIdToIndex, setScreen } from 'functions/screen';
-import { EnumOSEventType, OSEvent } from 'interface/event';
-import { set } from 'lodash';
+import { IClientMouse, IScreenMouse } from 'functions/mouse';
+import { setScreen } from 'functions/screen';
+import { EnumOSEventType, IOSEvent } from 'interface/event';
+import { IScreen } from 'interface/screen';
 import { useScreenStore } from 'stores/useScreenStore';
-import { eventLog } from '../debug';
 
-export const handleBackdropEvents = (
-  event: OSEvent,
-  clientMouse: IClientMouse
+export const screenClientEvents = (
+  event: any,
+  screenMouse: IScreenMouse,
+  clientMouse: IClientMouse,
+  screen: IScreen
 ) => {
-  eventLog(event, 'Backdrop');
-
   const { selectedScreen, screens } = useScreenStore.getState();
 
   const mouseMove = () => {

@@ -18,6 +18,7 @@ export const windowTitleBarEvents = (
 
       const test = screen;
       test.windows[0].titleBar.title = 'test';
+      test.windows[0].position.y = 10;
       setScreen(test);
 
       break;
