@@ -2,11 +2,8 @@ import { FC, useEffect, useRef, useState } from 'react';
 import { EnumScreenModeType, IScreen } from '../../../interface/screen';
 import Main from './Main';
 import React from 'react';
-import { delegateEvents } from 'functions/events/eventDelegator';
-import { useScreenStore } from 'stores/useScreenStore';
 import DragScreen from './DragScreen';
 import AspectRatio from './AspectRatio';
-import { EnumOSEventType } from 'interface/event';
 import { getTextInfo } from 'functions/graphics';
 import { screenContainerRender } from '../container/screenContainerRender';
 

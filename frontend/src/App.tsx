@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { UIScreen } from './UIObjects/UIScreen';
-import { delegateEvents } from 'functions/events/eventDelegator';
 import { useScreenStore } from 'stores/useScreenStore';
-import ShadowBuffer from 'ShadowBuffer';
+import ShadowBuffer from 'UIObjects/UIScreen/jsx/ShadowBuffer';
 import { openScreen } from 'api/os/screen';
 import { full, hi, interlaced, low, med } from 'UIObjects/UIScreen/screenModes';
 import { EnumOSEventObjectType } from 'interface/event';
 import { getHighestScreenZIndex } from 'functions/screen';
 import useGetGuiIcons from 'api/query/useGetGuiIcons';
 import { screenContainerRender } from 'UIObjects/UIScreen/container/screenContainerRender';
+import { baseContainerEvents } from 'UIObjects/UIBase/container/baseContainerEvents';
 
 const App = () => {
   const [ready, setReady] = useState(false);
@@ -38,7 +38,7 @@ const App = () => {
     });
     /* */
     document.addEventListener('mouseleave', (e) => {
-      delegateEvents(e);
+      baseContainerEvents(e);
     });
   };
 
@@ -84,8 +84,8 @@ const App = () => {
             height: '100%',
             zIndex: -1000,
           }}
-          onMouseUp={(event) => delegateEvents(event)}
-          onMouseMove={(event) => delegateEvents(event)}
+          onMouseUp={(event) => baseContainerEvents(event)}
+          onMouseMove={(event) => baseContainerEvents(event)}
           onContextMenu={(e) => e.preventDefault()}
         ></div>
         {screens.map((screen, index) => (
