@@ -1,11 +1,11 @@
 import { createPixelBuffer, drawPixelBuffer } from 'functions/graphics';
-import { IScreen } from 'interface/screen';
 import { useIntuitionStore } from 'stores/useIntuitionStore';
 import { windowContainerCalc } from './windowContainerCalc';
 import { windowClientRender } from './base/client/windowClientRender';
 import { IWindow } from 'UIObjects/UIWindow/windowInterface';
 import { windowTitleBarRender } from './base/titleBar/windowTitleBarRender';
 import { IPixelArray, IPixelBuffer } from 'interface/graphics';
+import { IScreen } from 'UIObjects/UIScreen/screenInterface';
 
 export const windowContainerRender = (
   target: IPixelBuffer,

@@ -1,5 +1,5 @@
 import { IWindow } from 'UIObjects/UIWindow/windowInterface';
-import { IButton } from './intuition';
+import { IButton } from 'interface/intuition';
 
 export interface IScreen {
   id: number;

@@ -1,7 +1,7 @@
 import { IClientMouse, IScreenMouse } from 'functions/mouse';
 import { IButton } from './intuition';
 
-export type OSEvent = any;
+export type IBaseEvent = any;
 
 export interface IOSEvent {
   object:

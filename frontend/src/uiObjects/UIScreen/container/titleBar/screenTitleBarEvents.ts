@@ -1,12 +1,16 @@
 import { screenBringToFront } from 'api/os/screen';
 import { EnumMouseButton, IClientMouse, IScreenMouse } from 'functions/mouse';
-import { screenIdToIndex, setScreen } from 'functions/screen';
-import { EnumOSEventType, OSEvent } from 'interface/event';
-import { IScreen } from 'interface/screen';
+import { screenIdToIndex } from 'functions/screen';
+import { EnumOSEventType, IBaseEvent } from 'interface/event';
 import { useScreenStore } from 'stores/useScreenStore';
+import {
+  screenContainerDrag,
+  screenContainerSetYToTop,
+} from '../screenContainerFunc';
+import { IScreen } from 'UIObjects/UIScreen/screenInterface';
 
 export const screenTitleBarEvents = (
-  event: OSEvent,
+  event: IBaseEvent,
   screenMouse: IScreenMouse,
   clientMouse: IClientMouse,
   screen: IScreen
@@ -36,17 +40,11 @@ export const screenTitleBarEvents = (
   };
 
   const mouseMove = () => {
-    if (!selectedScreen) return;
-    const selected = screens[selectedScreen.id];
-    let newPos = clientMouse.y - selectedScreen.offset.y;
-    if (newPos < 0) newPos = 0;
-    selected.position = { y: newPos, z: 0 };
-    setScreen(selected);
+    screenContainerDrag(clientMouse);
   };
 
   const mouseDoubleClick = () => {
-    screen.position.y = 0;
-    setScreen(screen);
+    screenContainerSetYToTop(screen);
   };
 
   switch (event.type) {

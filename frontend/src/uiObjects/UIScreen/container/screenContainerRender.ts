@@ -8,11 +8,11 @@ import {
   drawText,
   fillRect,
 } from 'functions/graphics';
-import { IScreen } from 'interface/screen';
 import { useIntuitionStore } from 'stores/useIntuitionStore';
 import { screenContainerCalc } from './screenContainerCalc';
 import { screenTitleBarRender } from './titleBar/screenTitleBarRender';
 import { screenClientRender } from './client/screenClientRender';
+import { IScreen } from '../screenInterface';
 
 export const screenContainerRender = (screen: IScreen): IScreen => {
   const { guiIcons } = useIntuitionStore.getState();

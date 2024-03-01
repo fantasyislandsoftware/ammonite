@@ -1,15 +1,15 @@
 import { backdropContainerEvents } from 'UIObjects/UIBackdrop/container/backdropContainerEvents';
 import { screenContainerEvents } from 'UIObjects/UIScreen/container/screenContainerEvents';
+import { IScreen } from 'UIObjects/UIScreen/screenInterface';
 import { viewportContainerEvents } from 'UIObjects/UIViewport/container/viewportContainerEvents';
 import { getClientMouse, getScreenMouse } from 'functions/mouse';
 import {
   EnumOSEventObjectType,
   EnumOSEventType,
-  OSEvent,
+  IBaseEvent,
 } from 'interface/event';
-import { IScreen } from 'interface/screen';
 
-export const baseContainerEvents = (_event: OSEvent, screen?: IScreen) => {
+export const baseContainerEvents = (_event: IBaseEvent, screen?: IScreen) => {
   const event = _event;
 
   if (event.detail === 2) {

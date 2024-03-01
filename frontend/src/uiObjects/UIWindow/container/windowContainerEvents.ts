@@ -1,8 +1,8 @@
 import { IScreenMouse } from 'functions/mouse';
-import { IScreen } from 'interface/screen';
 import { IWindow, IWindowEvent } from '../windowInterface';
 import { windowBorderEvents } from './border/windowBorderEvents';
 import { windowBaseEvents } from './base/windowBaseEvents';
+import { IScreen } from 'UIObjects/UIScreen/screenInterface';
 
 export const windowContainerEvents = (
   event: IWindowEvent,

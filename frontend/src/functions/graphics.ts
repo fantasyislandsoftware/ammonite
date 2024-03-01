@@ -1,10 +1,10 @@
 import { ICanvasTextInfo } from 'interface/canvas';
-import { IScreen } from 'interface/screen';
 import { useBufferStore } from 'stores/useBufferStore';
 import guiIconsPath from '../assets/gfx/gui.iff';
 import BinaryStream from 'api/lib/binarystream';
 import { detect, parse } from 'api/lib/iff';
 import { IBrush, IPixelArray, IPixelBuffer } from 'interface/graphics';
+import { IScreen } from 'UIObjects/UIScreen/screenInterface';
 
 export const initPixelArray = (
   width: number,

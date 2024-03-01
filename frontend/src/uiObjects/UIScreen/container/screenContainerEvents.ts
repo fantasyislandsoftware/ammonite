@@ -1,8 +1,8 @@
 import { IClientMouse, IScreenMouse } from 'functions/mouse';
 import { IOSEvent } from 'interface/event';
-import { IScreen } from 'interface/screen';
 import { screenClientEvents } from './client/screenClientEvents';
 import { screenTitleBarEvents } from './titleBar/screenTitleBarEvents';
+import { IScreen } from '../screenInterface';
 
 export const screenContainerEvents = (
   event: IOSEvent,

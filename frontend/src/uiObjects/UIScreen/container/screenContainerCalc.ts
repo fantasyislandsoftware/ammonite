@@ -1,5 +1,5 @@
 import { getTextInfo } from 'functions/graphics';
-import { IScreen } from 'interface/screen';
+import { IScreen } from '../screenInterface';
 
 export interface IScreenContainerCalc {
   titleBar: {

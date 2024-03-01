@@ -1,11 +1,11 @@
 import { FC, useEffect, useRef, useState } from 'react';
-import { EnumScreenModeType, IScreen } from '../../../interface/screen';
 import Main from './Main';
 import React from 'react';
 import DragScreen from './DragScreen';
 import AspectRatio from './AspectRatio';
 import { getTextInfo } from 'functions/graphics';
 import { screenContainerRender } from '../container/screenContainerRender';
+import { EnumScreenModeType, IScreen } from '../screenInterface';
 
 interface IProps {
   screen: IScreen;

@@ -1,8 +1,6 @@
 import { setScreen } from 'functions/screen';
 import { EnumOSEventType } from 'interface/event';
-import { IScreen } from 'interface/screen';
-import { useIntuitionStore } from 'stores/useIntuitionStore';
-import { useScreenStore } from 'stores/useScreenStore';
+import { IScreen } from 'UIObjects/UIScreen/screenInterface';
 import { IWindow, IWindowEvent } from 'UIObjects/UIWindow/windowInterface';
 
 export const windowTitleBarEvents = (
