@@ -2,7 +2,7 @@ import { IWindow } from 'UIObjects/UIWindow/windowInterface';
 import { IButton } from 'interface/intuition';
 
 export interface IScreen {
-  id: number;
+  id: string;
   position: IScreenPosition;
   mode: IScreenMode;
   width: number;

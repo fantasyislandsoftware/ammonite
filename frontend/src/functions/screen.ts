@@ -1,7 +1,7 @@
 import { IScreen } from 'UIObjects/UIScreen/screenInterface';
 import { useScreenStore } from 'stores/useScreenStore';
 
-export const screenIdToIndex = (id: number | undefined): number | undefined => {
+export const screenIdToIndex = (id: string | undefined): number | undefined => {
   const { screens } = useScreenStore.getState();
   let result;
   screens.map((screen: IScreen, index: number) => {

@@ -14,8 +14,7 @@ export const openScreen = (
   mode: IScreenMode,
   title: string | null
 ) => {
-  const { screens, setScreens, nextAvailableScreenId } =
-    useScreenStore.getState();
+  const { screens, setScreens } = useScreenStore.getState();
 
   const nextScreenIndex = screens.length ? getHighestScreenZIndex() + 1 : 100;
 
@@ -94,8 +93,10 @@ export const openScreen = (
     borderThickness: 1,
   };
 
-  const newScreen: IScreen = {
-    id: nextAvailableScreenId,
+  const id = uuidv4();
+
+  const data: IScreen = {
+    id: id,
     position: {
       y: 0,
       z: 0,
@@ -119,10 +120,11 @@ export const openScreen = (
       height: 0,
       margin: 0,
     },
-    windows: [testWindow],
+    windows: [],
   };
-  screens.push(newScreen);
+  screens.push(data);
   setScreens(screens);
+  return id;
 };
 
 export const screenBringToFront = (screen: IScreen) => {
@@ -151,4 +153,9 @@ export const screenSendToBack = (screen: IScreen) => {
   });
   screens[screenIndex].zIndex = pos;
   setScreens(screens);
+};
+
+export const findScreenIndex = (id: string) => {
+  const { screens } = useScreenStore.getState();
+  return screens.findIndex((s) => s.id === id);
 };

@@ -9,18 +9,24 @@ import { getHighestScreenZIndex } from 'functions/screen';
 import useGetGuiIcons from 'api/query/useGetGuiIcons';
 import { screenContainerRender } from 'UIObjects/UIScreen/container/screenContainerRender';
 import { baseContainerEvents } from 'UIObjects/UIBase/container/baseContainerEvents';
+import { openWindow } from 'api/os/window';
 
 const App = () => {
   const [ready, setReady] = useState(false);
-  const { screens, setScreens, selectedScreen } = useScreenStore();
+  const { screens, setScreens, setSelectedScreen } = useScreenStore();
   let loaded = false;
 
   const mockScreens = () => {
     //openScreen(window.innerWidth, window.innerHeight, full, 'Full Screen');
     //openScreen(640, 512, hi, 'Hi Res');
     //openScreen(320, 512, interlaced, 'Interlaced');
-    openScreen(640, 256, med, 'Med Res');
-    openScreen(320, 256, low, 'Low Res');
+    const medId = openScreen(640, 256, med, 'Med Res');
+    //
+    const lowId = openScreen(320, 256, low, 'Low Res');
+    setTimeout(() => {
+      openWindow(lowId, 20, 20, 100, 50, 'Test Window');
+      openWindow(medId, 20, 20, 100, 50, 'Test Window');
+    }, 10);
   };
 
   const addEventListeners = () => {
@@ -63,6 +69,7 @@ const App = () => {
       setReady(true);
       setTimeout(() => {
         setScreens(screens);
+        setSelectedScreen(undefined);
       });
       renderLoop();
     }

@@ -9,6 +9,8 @@ export interface IWindowEvent {
 }
 
 export interface IWindow {
+  id: string;
+  parentId: string;
   position: {
     x: number;
     y: number;
