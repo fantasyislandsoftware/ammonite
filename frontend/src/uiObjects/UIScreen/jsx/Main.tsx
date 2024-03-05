@@ -1,9 +1,9 @@
 import React from 'react';
 import { FC } from 'react';
 import { canvasRenderStyle } from '../styles';
-import { EnumOSEventObjectType } from 'interface/event';
-import { getHighestScreenZIndex } from 'functions/screen';
-import { baseContainerEvents } from 'UIObjects/UIBase/container/baseContainerEvents';
+import { EnumOSEventObjectType } from 'src/interface/event';
+import { getHighestScreenZIndex } from 'src/functions/screen';
+import { baseContainerEvents } from 'src/UIObjects/UIBase/container/baseContainerEvents';
 import { EnumScreenModeType, IScreen } from '../screenInterface';
 
 interface IProps {

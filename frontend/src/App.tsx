@@ -1,15 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { UIScreen } from './UIObjects/UIScreen';
-import { useScreenStore } from 'stores/useScreenStore';
-import ShadowBuffer from 'UIObjects/UIScreen/jsx/ShadowBuffer';
-import { openScreen } from 'api/os/screen';
-import { full, hi, interlaced, low, med } from 'UIObjects/UIScreen/screenModes';
-import { EnumOSEventObjectType } from 'interface/event';
-import { getHighestScreenZIndex } from 'functions/screen';
-import useGetGuiIcons from 'api/query/useGetGuiIcons';
-import { screenContainerRender } from 'UIObjects/UIScreen/container/screenContainerRender';
-import { baseContainerEvents } from 'UIObjects/UIBase/container/baseContainerEvents';
-import { openWindow } from 'api/os/window';
+import { UIScreen } from 'src/UIObjects/UIScreen';
+import { useScreenStore } from 'src/stores/useScreenStore';
+import ShadowBuffer from './UIObjects/UIScreen/jsx/ShadowBuffer';
+import { openScreen } from 'src/api/os/screen';
+import {
+  full,
+  hi,
+  interlaced,
+  low,
+  med,
+} from './UIObjects/UIScreen/screenModes';
+import { EnumOSEventObjectType } from 'src/interface/event';
+import { getHighestScreenZIndex } from 'src/functions/screen';
+import useGetGuiIcons from 'src/api/query/useGetGuiIcons';
+import { screenContainerRender } from './UIObjects/UIScreen/container/screenContainerRender';
+import { baseContainerEvents } from './UIObjects/UIBase/container/baseContainerEvents';
+import { openWindow } from 'src/api/os/window';
 
 const App = () => {
   const [ready, setReady] = useState(false);

@@ -1,11 +1,11 @@
-import { IWindow } from 'UIObjects/UIWindow/windowInterface';
+import { IWindow } from 'src/UIObjects/UIWindow/windowInterface';
 import {
   createPixelBuffer,
   drawLine,
   drawText,
   fillRect,
 } from '../../../../../functions/graphics';
-import { WindowColour } from 'constants/colours';
+import { WindowColour } from 'src/constants/colours';
 import { IWindowContainerCalc } from '../../windowContainerCalc';
 
 export const windowTitleBarRender = (

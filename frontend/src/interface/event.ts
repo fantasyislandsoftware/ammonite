@@ -1,4 +1,4 @@
-import { IClientMouse, IScreenMouse } from 'functions/mouse';
+import { IClientMouse, IScreenMouse } from 'src/functions/mouse';
 import { IButton } from './intuition';
 
 export type IBaseEvent = any;

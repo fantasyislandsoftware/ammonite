@@ -1,11 +1,11 @@
-import { ScreenColour } from 'constants/colours';
-import { initPixelArray } from 'functions/graphics';
-import { getHighestScreenZIndex } from 'functions/screen';
-import { EnumButtonFunction } from 'interface/icon';
-import { IButton } from 'interface/intuition';
-import { useScreenStore } from 'stores/useScreenStore';
-import { generateDefaultColorPalette } from 'UIObjects/UIScreen/palettes';
-import { IScreen, IScreenMode } from 'UIObjects/UIScreen/screenInterface';
+import { ScreenColour } from 'src/constants/colours';
+import { initPixelArray } from 'src/functions/graphics';
+import { getHighestScreenZIndex } from 'src/functions/screen';
+import { EnumButtonFunction } from 'src/interface/icon';
+import { IButton } from 'src/interface/intuition';
+import { useScreenStore } from 'src/stores/useScreenStore';
+import { generateDefaultColorPalette } from '../../UIObjects/UIScreen/palettes';
+import { IScreen, IScreenMode } from '../../UIObjects/UIScreen/screenInterface';
 import { v4 as uuidv4 } from 'uuid';
 
 export const openScreen = (

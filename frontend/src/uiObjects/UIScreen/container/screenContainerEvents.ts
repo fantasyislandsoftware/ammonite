@@ -1,5 +1,5 @@
-import { IClientMouse, IScreenMouse } from 'functions/mouse';
-import { IOSEvent } from 'interface/event';
+import { IClientMouse, IScreenMouse } from 'src/functions/mouse';
+import { IOSEvent } from 'src/interface/event';
 import { screenClientEvents } from './client/screenClientEvents';
 import { screenTitleBarEvents } from './titleBar/screenTitleBarEvents';
 import { IScreen } from '../screenInterface';

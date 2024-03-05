@@ -1,4 +1,4 @@
-import { getTextInfo } from 'functions/graphics';
+import { getTextInfo } from 'src/functions/graphics';
 import { IScreen } from '../screenInterface';
 
 export interface IScreenContainerCalc {

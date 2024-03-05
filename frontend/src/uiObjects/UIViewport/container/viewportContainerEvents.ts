@@ -1,5 +1,5 @@
-import { EnumOSEventType, IBaseEvent } from 'interface/event';
-import { useScreenStore } from 'stores/useScreenStore';
+import { EnumOSEventType, IBaseEvent } from 'src/interface/event';
+import { useScreenStore } from 'src/stores/useScreenStore';
 
 export const viewportContainerEvents = (event: IBaseEvent) => {
   const { setSelectedScreen } = useScreenStore.getState();
