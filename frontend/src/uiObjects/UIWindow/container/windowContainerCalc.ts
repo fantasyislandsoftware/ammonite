@@ -1,5 +1,5 @@
-import { getTextInfo } from 'src/functions/graphics';
-import { IWindow } from 'src/UIObjects/UIWindow/windowInterface';
+import { getTextInfo } from 'functions/graphics';
+import { IWindow } from 'UIObjects/UIWindow/windowInterface';
 
 export interface IWindowContainerCalc {
   titleBar: {

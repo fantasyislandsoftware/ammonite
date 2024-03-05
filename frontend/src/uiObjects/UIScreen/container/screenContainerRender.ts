@@ -1,6 +1,6 @@
 import { windowContainerRender } from '../../../UIObjects/UIWindow/container/windowContainerRender';
-import { drawPixelBuffer } from 'src/functions/graphics';
-import { useIntuitionStore } from 'src/stores/useIntuitionStore';
+import { drawPixelBuffer } from 'functions/graphics';
+import { useIntuitionStore } from 'stores/useIntuitionStore';
 import { screenContainerCalc } from './screenContainerCalc';
 import { screenTitleBarRender } from './titleBar/screenTitleBarRender';
 import { screenClientRender } from './client/screenClientRender';

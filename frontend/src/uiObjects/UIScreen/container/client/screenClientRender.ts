@@ -1,7 +1,7 @@
 import { IScreenContainerCalc } from '../screenContainerCalc';
-import { createPixelBuffer } from 'src/functions/graphics';
-import { ScreenColour } from 'src/constants/colours';
-import { IScreen } from 'src/UIObjects/UIScreen/screenInterface';
+import { createPixelBuffer } from 'functions/graphics';
+import { ScreenColour } from 'constants/colours';
+import { IScreen } from 'UIObjects/UIScreen/screenInterface';
 
 export const screenClientRender = (
   screen: IScreen,

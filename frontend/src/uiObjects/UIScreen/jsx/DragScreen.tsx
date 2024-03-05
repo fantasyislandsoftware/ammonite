@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { baseContainerEvents } from 'src/UIObjects/UIBase/container/baseContainerEvents';
+import { baseContainerEvents } from 'UIObjects/UIBase/container/baseContainerEvents';
 import { IScreen } from '../screenInterface';
 
 interface IProps {

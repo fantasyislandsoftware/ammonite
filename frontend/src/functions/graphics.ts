@@ -1,9 +1,9 @@
-import { ICanvasTextInfo } from 'src/interface/canvas';
-import { useBufferStore } from 'src/stores/useBufferStore';
+import { ICanvasTextInfo } from '../interface/canvas';
+import { useBufferStore } from '..//stores/useBufferStore';
 import guiIconsPath from '../assets/gfx/gui.iff';
-import BinaryStream from 'src/api/lib/binarystream';
-import { detect, parse } from 'src/api/lib/iff';
-import { IBrush, IPixelBuffer } from 'src/interface/graphics';
+import BinaryStream from '../api/lib/binarystream';
+import { detect, parse } from '../api/lib/iff';
+import { IBrush, IPixelBuffer } from '../interface/graphics';
 import { IScreen } from '../UIObjects/UIScreen/screenInterface';
 
 export const initPixelArray = (

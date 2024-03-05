@@ -1,6 +1,6 @@
 import { windowDefault } from '../../UIObjects/UIWindow/windowDefault';
 import { IWindow } from '../../UIObjects/UIWindow/windowInterface';
-import { useScreenStore } from 'src/stores/useScreenStore';
+import { useScreenStore } from '../../stores/useScreenStore';
 import { findScreenIndex } from './screen';
 import { v4 as uuidv4 } from 'uuid';
 import { screenContainerRender } from '../../UIObjects/UIScreen/container/screenContainerRender';

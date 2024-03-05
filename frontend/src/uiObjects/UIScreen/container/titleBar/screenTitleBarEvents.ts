@@ -1,17 +1,13 @@
-import { screenBringToFront } from 'src/api/os/screen';
-import {
-  EnumMouseButton,
-  IClientMouse,
-  IScreenMouse,
-} from 'src/functions/mouse';
-import { screenIdToIndex } from 'src/functions/screen';
-import { EnumOSEventType, IBaseEvent } from 'src/interface/event';
-import { useScreenStore } from 'src/stores/useScreenStore';
+import { screenBringToFront } from 'api/os/screen';
+import { EnumMouseButton, IClientMouse, IScreenMouse } from 'functions/mouse';
+import { screenIdToIndex } from 'functions/screen';
+import { EnumOSEventType, IBaseEvent } from 'interface/event';
+import { useScreenStore } from 'stores/useScreenStore';
 import {
   screenContainerDrag,
   screenContainerSetYToTop,
 } from '../screenContainerFunc';
-import { IScreen } from 'src/UIObjects/UIScreen/screenInterface';
+import { IScreen } from 'UIObjects/UIScreen/screenInterface';
 
 export const screenTitleBarEvents = (
   event: IBaseEvent,

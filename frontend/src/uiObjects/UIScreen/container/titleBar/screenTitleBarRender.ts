@@ -4,9 +4,9 @@ import {
   drawLine,
   drawText,
   fillRect,
-} from 'src/functions/graphics';
-import { ScreenColour } from 'src/constants/colours';
-import { IScreen } from 'src/UIObjects/UIScreen/screenInterface';
+} from 'functions/graphics';
+import { ScreenColour } from 'constants/colours';
+import { IScreen } from 'UIObjects/UIScreen/screenInterface';
 
 export const screenTitleBarRender = (
   screen: IScreen,

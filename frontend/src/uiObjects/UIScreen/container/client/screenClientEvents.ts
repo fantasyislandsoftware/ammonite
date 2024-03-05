@@ -1,5 +1,5 @@
-import { IClientMouse, IScreenMouse } from 'src/functions/mouse';
-import { EnumOSEventType } from 'src/interface/event';
+import { IClientMouse, IScreenMouse } from 'functions/mouse';
+import { EnumOSEventType } from 'interface/event';
 import { screenContainerDrag } from '../screenContainerFunc';
 import { IScreen } from '../../../../UIObjects/UIScreen/screenInterface';
 

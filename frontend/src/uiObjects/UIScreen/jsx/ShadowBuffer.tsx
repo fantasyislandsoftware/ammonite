@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { canvasRenderStyle } from '../styles';
-import { useBufferStore } from 'src/stores/useBufferStore';
+import { useBufferStore } from 'stores/useBufferStore';
 
 const ShadowBuffer = () => {
   const ref = useRef<HTMLCanvasElement>(null);

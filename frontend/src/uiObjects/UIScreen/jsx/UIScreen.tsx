@@ -3,7 +3,7 @@ import Main from './Main';
 import React from 'react';
 import DragScreen from './DragScreen';
 import AspectRatio from './AspectRatio';
-import { getTextInfo } from 'src/functions/graphics';
+import { getTextInfo } from 'functions/graphics';
 import { screenContainerRender } from '../container/screenContainerRender';
 import { EnumScreenModeType, IScreen } from '../screenInterface';
 

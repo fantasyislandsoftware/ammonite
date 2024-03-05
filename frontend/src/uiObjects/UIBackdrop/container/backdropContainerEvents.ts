@@ -1,7 +1,7 @@
 import { screenContainerDrag } from '../../../UIObjects/UIScreen/container/screenContainerFunc';
-import { IClientMouse } from 'src/functions/mouse';
-import { EnumOSEventType, IBaseEvent } from 'src/interface/event';
-import { useScreenStore } from 'src/stores/useScreenStore';
+import { IClientMouse } from '../../../functions/mouse';
+import { EnumOSEventType, IBaseEvent } from '../../../interface/event';
+import { useScreenStore } from '../../../stores/useScreenStore';
 
 export const backdropContainerEvents = (
   event: IBaseEvent,

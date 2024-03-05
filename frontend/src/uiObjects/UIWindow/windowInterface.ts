@@ -1,5 +1,5 @@
-import { EnumMouseButton } from 'src/functions/mouse';
-import { IButton } from 'src/interface/intuition';
+import { EnumMouseButton } from 'functions/mouse';
+import { IButton } from 'interface/intuition';
 
 export interface IWindowEvent {
   x: number;
