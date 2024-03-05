@@ -1,0 +1,1 @@
+{"version":3,"file":"static/css/main.c3606896.css","mappings":"AAAA,gBAGE,wBAAyB,CACzB,UAAY,CAEZ,yDAAiE,CADjE,WAAY,CAEZ,QACF","sources":["css/base.css"],"sourcesContent":["html,\nbody,\n#root {\n  background-color: #301934;\n  color: white;\n  height: 100%;\n  font-family: 'Helvetica Neue', 'Lucida Grande', Arial, sans-serif;\n  margin: 0;\n}\n\n"],"names":[],"sourceRoot":""}
