@@ -1,4 +1,4 @@
-export const screenDefault = {
+export const defaultColorIndex = {
   titleBar: {
     backgroundColor: 1,
     fontColor: 0,

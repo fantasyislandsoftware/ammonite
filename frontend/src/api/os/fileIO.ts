@@ -5,7 +5,8 @@ export const getDirList = async (path: string) => {
       'Content-Type': 'application/json',
     },
   });
-  return await request.json();
+  const response = await request.json();
+  return response;
 };
 
 export const getFile = async (path: string) => {

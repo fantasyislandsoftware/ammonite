@@ -222,7 +222,7 @@ export const getTextInfo = (str: string, font: string): ICanvasTextInfo => {
   const height = fontBoundingBoxAscent + fontBoundingBoxDescent;
   return {
     width: Math.floor(width + 2),
-    height: height,
+    height: height * 2,
   };
 };
 

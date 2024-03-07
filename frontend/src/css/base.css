@@ -4,7 +4,9 @@ body,
   background-color: #301934;
   color: white;
   height: 100%;
-  font-family: 'Helvetica Neue', 'Lucida Grande', Arial, sans-serif;
+  font-family: 'amiga4ever';
   margin: 0;
+  font-smooth: never;
+  -webkit-font-smoothing: none;
 }
 

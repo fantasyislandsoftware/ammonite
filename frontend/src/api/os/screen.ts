@@ -7,6 +7,7 @@ import { useScreenStore } from 'stores/useScreenStore';
 import { generateDefaultColorPalette } from '../../UIObjects/UIScreen/palettes';
 import { IScreen, IScreenMode } from '../../UIObjects/UIScreen/screenInterface';
 import { v4 as uuidv4 } from 'uuid';
+import { screenDefault } from 'UIObjects/UIScreen/screenDefault';
 
 export const openScreen = (
   width: number,
@@ -66,32 +67,10 @@ export const openScreen = (
     ? {
         title: title,
         height: 0,
-        font: {
-          name: 'Arial',
-          size: 12,
-        },
+        font: screenDefault.titleBar.font,
         buttons: [orderButton(), maximizeButton()],
       }
     : null;
-
-  const testWindow = {
-    position: {
-      x: 50,
-      y: 50,
-    },
-    width: 100,
-    height: 50,
-    titleBar: {
-      title: 'Test Window',
-      height: 10,
-      font: {
-        name: 'Arial',
-        size: 12,
-      },
-      buttons: [orderButton()],
-    },
-    borderThickness: 1,
-  };
 
   const id = uuidv4();
 

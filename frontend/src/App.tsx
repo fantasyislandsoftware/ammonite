@@ -16,6 +16,9 @@ import useGetGuiIcons from 'api/query/useGetGuiIcons';
 import { screenContainerRender } from 'UIObjects/UIScreen/container/screenContainerRender';
 import { baseContainerEvents } from 'UIObjects/UIBase/container/baseContainerEvents';
 import { openWindow } from 'api/os/window';
+import useGetFontsList from 'api/query/useGetFontsList';
+import { Backdrop } from 'UIObjects/UIBackdrop/jsx/Backdrop';
+import { useFonts } from 'hooks/useFonts';
 
 const App = () => {
   const [ready, setReady] = useState(false);
@@ -55,7 +58,8 @@ const App = () => {
   };
 
   const useGuiIcons = useGetGuiIcons();
-  if (useGuiIcons.data && !useGuiIcons.loading) {
+  const fonts = useFonts('amiga4ever.ttf', 'abeezee.ttf');
+  if (useGuiIcons.data && !useGuiIcons.loading && fonts) {
     loaded = true;
   }
 
@@ -87,20 +91,16 @@ const App = () => {
     }
   }, [ready]);
 
+  /*return (
+    <>
+      <div style={{ font: '8px amiga4ever' }}>test</div>
+    </>
+  );*/
+
   if (ready) {
     return (
       <>
-        <div
-          data-id={EnumOSEventObjectType.Backdrop}
-          style={{
-            width: '100%',
-            height: '100%',
-            zIndex: -1000,
-          }}
-          onMouseUp={(event) => baseContainerEvents(event)}
-          onMouseMove={(event) => baseContainerEvents(event)}
-          onContextMenu={(e) => e.preventDefault()}
-        ></div>
+        <Backdrop />
         {screens.map((screen, index) => (
           <UIScreen key={index} screen={screen} />
         ))}

@@ -9,7 +9,7 @@ const getFile = async (app: Express) => {
         console.error(err);
         return;
       }
-      res.send({ file: data });
+      res.send(data);
     });
   });
 };
