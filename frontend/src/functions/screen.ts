@@ -1,4 +1,4 @@
-import { IScreen } from '../UIObjects/UIScreen/screenInterface';
+import { IScreen } from '../Objects/UIScreen/screenInterface';
 import { useScreenStore } from 'stores/useScreenStore';
 
 export const screenIdToIndex = (id: string | undefined): number | undefined => {

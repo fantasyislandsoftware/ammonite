@@ -1,7 +1,7 @@
 import {
   EnumScreenModeType,
   IScreen,
-} from '../UIObjects/UIScreen/screenInterface';
+} from '../Objects/UIScreen/screenInterface';
 
 export interface IClientMouse {
   x: number;

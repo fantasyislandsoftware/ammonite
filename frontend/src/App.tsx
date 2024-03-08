@@ -1,23 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { UIScreen } from './UIObjects/UIScreen';
+import { UIScreen } from './Objects/UIScreen';
 import { useScreenStore } from './stores/useScreenStore';
-import ShadowBuffer from 'UIObjects/UIScreen/jsx/ShadowBuffer';
+import ShadowBuffer from 'Objects/UIScreen/jsx/ShadowBuffer';
 import { openScreen } from 'api/os/screen';
-import {
-  full,
-  hi,
-  interlaced,
-  low,
-  med,
-} from './UIObjects/UIScreen/screenModes';
+import { full, hi, interlaced, low, med } from './Objects/UIScreen/screenModes';
 import { EnumOSEventObjectType } from 'interface/event';
 import { getHighestScreenZIndex } from 'functions/screen';
 import useGetGuiIcons from 'api/query/useGetGuiIcons';
-import { screenContainerRender } from 'UIObjects/UIScreen/container/screenContainerRender';
-import { baseContainerEvents } from 'UIObjects/UIBase/container/baseContainerEvents';
+import { screenContainerRender } from 'Objects/UIScreen/container/screenContainerRender';
+import { baseContainerEvents } from 'Objects/UIBase/container/baseContainerEvents';
 import { openWindow } from 'api/os/window';
 import useGetFontsList from 'api/query/useGetFontsList';
-import { Backdrop } from 'UIObjects/UIBackdrop/jsx/Backdrop';
+import { Backdrop } from 'Objects/UIBackdrop/jsx/Backdrop';
 import useGetFonts from 'api/query/useGetFonts';
 
 const App = () => {

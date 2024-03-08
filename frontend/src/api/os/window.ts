@@ -1,9 +1,9 @@
-import { windowDefault } from '../../UIObjects/UIWindow/windowDefault';
-import { IWindow } from '../../UIObjects/UIWindow/windowInterface';
+import { windowDefault } from '../../Objects/UIWindow/windowDefault';
+import { IWindow } from '../../Objects/UIWindow/windowInterface';
 import { useScreenStore } from '../../stores/useScreenStore';
 import { findScreenIndex } from './screen';
 import { v4 as uuidv4 } from 'uuid';
-import { screenContainerRender } from '../../UIObjects/UIScreen/container/screenContainerRender';
+import { screenContainerRender } from '../../Objects/UIScreen/container/screenContainerRender';
 
 export const openWindow = (
   parentId: string,

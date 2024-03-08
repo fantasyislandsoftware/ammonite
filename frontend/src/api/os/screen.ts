@@ -4,10 +4,10 @@ import { getHighestScreenZIndex } from 'functions/screen';
 import { EnumButtonFunction } from 'interface/icon';
 import { IButton } from 'interface/intuition';
 import { useScreenStore } from 'stores/useScreenStore';
-import { generateDefaultColorPalette } from '../../UIObjects/UIScreen/palettes';
-import { IScreen, IScreenMode } from '../../UIObjects/UIScreen/screenInterface';
+import { generateDefaultColorPalette } from '../../Objects/UIScreen/palettes';
+import { IScreen, IScreenMode } from '../../Objects/UIScreen/screenInterface';
 import { v4 as uuidv4 } from 'uuid';
-import { screenDefault } from 'UIObjects/UIScreen/screenDefault';
+import { screenDefault } from 'Objects/UIScreen/screenDefault';
 
 export const openScreen = (
   width: number,

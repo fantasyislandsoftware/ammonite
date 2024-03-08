@@ -4,7 +4,7 @@ import guiIconsPath from '../assets/gfx/gui.iff';
 import BinaryStream from '../api/lib/binarystream';
 import { detect, parse } from '../api/lib/iff';
 import { IBrush, IPixelBuffer } from '../interface/graphics';
-import { IScreen } from '../UIObjects/UIScreen/screenInterface';
+import { IScreen } from '../Objects/UIScreen/screenInterface';
 
 export const initPixelArray = (
   width: number,
