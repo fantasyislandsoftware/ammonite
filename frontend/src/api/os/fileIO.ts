@@ -1,5 +1,7 @@
+import { ENV } from 'constants/env';
+
 export const getDirList = async (path: string) => {
-  const request = await fetch(`http://localhost:1234/getDirList?path=${path}`, {
+  const request = await fetch(`${ENV.api}/getDirList?path=${path}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -10,7 +12,7 @@ export const getDirList = async (path: string) => {
 };
 
 export const getFile = async (path: string) => {
-  const request = await fetch(`http://localhost:1234/getFile?path=${path}`, {
+  const request = await fetch(`${ENV.api}/getFile?path=${path}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

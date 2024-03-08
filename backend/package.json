@@ -3,6 +3,7 @@
   "module": "index.ts",
   "type": "module",
   "target": "node",
+  "license": "UNLICENSED",
   "devDependencies": {
     "bun-types": "latest"
   },

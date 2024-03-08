@@ -18,7 +18,7 @@ import { baseContainerEvents } from 'UIObjects/UIBase/container/baseContainerEve
 import { openWindow } from 'api/os/window';
 import useGetFontsList from 'api/query/useGetFontsList';
 import { Backdrop } from 'UIObjects/UIBackdrop/jsx/Backdrop';
-import { useFonts } from 'hooks/useFonts';
+import useGetFonts from 'api/query/useGetFonts';
 
 const App = () => {
   const [ready, setReady] = useState(false);
@@ -58,8 +58,14 @@ const App = () => {
   };
 
   const useGuiIcons = useGetGuiIcons();
-  const fonts = useFonts('amiga4ever.ttf', 'abeezee.ttf');
-  if (useGuiIcons.data && !useGuiIcons.loading && fonts) {
+  const getFonts = useGetFonts('amiga4ever.ttf', 'abeezee.ttf');
+
+  if (
+    useGuiIcons.data &&
+    !useGuiIcons.loading &&
+    getFonts.data &&
+    !getFonts.loading
+  ) {
     loaded = true;
   }
 
