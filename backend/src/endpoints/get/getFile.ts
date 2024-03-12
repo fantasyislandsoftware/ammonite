@@ -6,8 +6,7 @@ const getFile = async (app: Express) => {
     const { path } = req.query;
     fs.readFile(path as string, (err, data) => {
       if (err) {
-        console.error(err);
-        return;
+        res.send(err);
       }
       res.send(data);
     });

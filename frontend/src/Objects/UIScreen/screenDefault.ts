@@ -1,8 +1,8 @@
 export const screenDefault = {
   titleBar: {
     font: {
-      name: 'amiga4ever',
-      size: 8,
+      name: 'arial',
+      size: 12,
     },
   },
 };

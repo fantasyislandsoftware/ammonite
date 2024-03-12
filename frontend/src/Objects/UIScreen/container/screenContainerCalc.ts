@@ -28,7 +28,8 @@ export const screenContainerCalc = (screen: IScreen) => {
 
   const textInfo = getTextInfo(
     titleBar.title,
-    `${titleBar.font.size}px ${titleBar.font.name}`
+    titleBar.font.name,
+    titleBar.font.size + 2
   );
   return {
     titleBar: {

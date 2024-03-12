@@ -24,7 +24,8 @@ export const windowTitleBarRender = (
   drawText(
     bar,
     title,
-    `${font.size}px ${font.name}`,
+    font.name,
+    font.size,
     1,
     0,
     WindowColour.TITLEBAR_BACKGROUND,

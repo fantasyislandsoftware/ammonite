@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { UIScreen } from './Objects/UIScreen';
 import { useScreenStore } from './stores/useScreenStore';
 import ShadowBuffer from 'Objects/UIScreen/jsx/ShadowBuffer';
@@ -13,103 +13,30 @@ import { openWindow } from 'api/os/window';
 import useGetFontsList from 'api/query/useGetFontsList';
 import { Backdrop } from 'Objects/UIBackdrop/jsx/Backdrop';
 import useGetFonts from 'api/query/useGetFonts';
+import './css/base.css';
 
 const App = () => {
-  const [ready, setReady] = useState(false);
   const { screens, setScreens, setSelectedScreen } = useScreenStore();
-  let loaded = false;
 
-  const mockScreens = () => {
-    //openScreen(window.innerWidth, window.innerHeight, full, 'Full Screen');
-    //openScreen(640, 512, hi, 'Hi Res');
-    //openScreen(320, 512, interlaced, 'Interlaced');
-    const medId = openScreen(640, 256, med, 'Med Res');
-    //
-    const lowId = openScreen(320, 256, low, 'Low Res');
-    setTimeout(() => {
-      openWindow(lowId, 20, 20, 100, 50, 'Test Window');
-      openWindow(medId, 20, 20, 100, 50, 'Test Window');
-    }, 10);
-  };
+  const ref = useRef<HTMLCanvasElement>(null);
 
-  const addEventListeners = () => {
-    /* Debug */
-    document.body.addEventListener('keydown', function (e) {
-      /*if (e.keyCode === 32) {
-        screens.map((screen) => {
-          console.log(screen.zIndex);
-        });
-      }*/
-    });
-    /* */
-    window.addEventListener('resize', (e) => {
-      setScreens(screens);
-    });
-    /* */
-    document.addEventListener('mouseleave', (e) => {
-      baseContainerEvents(e);
-    });
-  };
-
-  const useGuiIcons = useGetGuiIcons();
-  const getFonts = useGetFonts('amiga4ever.ttf', 'abeezee.ttf');
-
-  if (
-    useGuiIcons.data &&
-    !useGuiIcons.loading &&
-    getFonts.data &&
-    !getFonts.loading
-  ) {
-    loaded = true;
-  }
-
-  const renderLoop = () => {
-    const topScreen = getHighestScreenZIndex();
-    screens.map((screen) => {
-      if (screen.zIndex === topScreen) {
-        screenContainerRender(screen);
-      }
-    });
-    window.requestAnimationFrame(renderLoop);
-  };
-
-  useEffect(() => {
-    if (loaded) {
-      mockScreens();
-      setReady(true);
-      setTimeout(() => {
-        setScreens(screens);
-        setSelectedScreen(undefined);
-      });
-      renderLoop();
-    }
-  }, [loaded]);
-
-  useEffect(() => {
-    if (ready) {
-      addEventListeners();
-    }
-  }, [ready]);
+  const getFonts = useGetFonts(ref);
 
   /*return (
     <>
-      <div style={{ font: '8px amiga4ever' }}>test</div>
+      <div style={{ font: '8px Amiga Forever' }}>test</div>
     </>
   );*/
 
-  if (ready) {
-    return (
-      <>
-        <Backdrop />
-        {screens.map((screen, index) => (
-          <UIScreen key={index} screen={screen} />
-        ))}
-        <ShadowBuffer />
-      </>
-    );
-  } else {
-    return <div>Loading</div>;
-  }
+  return (
+    <>
+      {screens.map((screen, index) => (
+        <UIScreen key={index} screen={screen} />
+      ))}
+      <ShadowBuffer />
+      <Backdrop />
+    </>
+  );
 };
 
 export default App;

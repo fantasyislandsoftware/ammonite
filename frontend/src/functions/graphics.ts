@@ -173,19 +173,20 @@ export const drawText = (
   dst: any,
   text: string,
   font: string,
+  size: number,
   x: number,
   y: number,
   backgroundColorIndex: number,
   textColorIndex: number
 ) => {
-  const { width, height } = getTextInfo(text, font);
+  const { width, height } = getTextInfo(text, font, size);
 
   const { buffer } = useBufferStore.getState();
 
   if (buffer === null) return;
   buffer.canvas.width = width;
   buffer.canvas.height = height;
-  buffer.font = font;
+  buffer.font = `${size}px ${font}`;
   buffer.fillStyle = 'black';
   buffer.fillRect(0, 0, width, height);
   buffer.fillStyle = 'white';
@@ -211,18 +212,24 @@ export const drawText = (
   }
 };
 
-export const getTextInfo = (str: string, font: string): ICanvasTextInfo => {
+export const getTextInfo = (
+  str: string,
+  font: string,
+  size: number
+): ICanvasTextInfo => {
   const { buffer } = useBufferStore.getState();
   if (buffer === null) return { width: 0, height: 0 };
 
-  buffer.font = font;
+  buffer.font = `${size}px ${font}`;
   const { fontBoundingBoxAscent, fontBoundingBoxDescent, width } =
     buffer.measureText(str);
+
+  //console.log(buffer.measureText(str));
 
   const height = fontBoundingBoxAscent + fontBoundingBoxDescent;
   return {
     width: Math.floor(width + 2),
-    height: height * 2,
+    height: height,
   };
 };
 

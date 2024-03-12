@@ -7,6 +7,7 @@ import {
 } from 'functions/graphics';
 import { ScreenColour } from 'constants/colours';
 import { IScreen } from 'Objects/UIScreen/screenInterface';
+import { title } from 'process';
 
 export const screenTitleBarRender = (
   screen: IScreen,
@@ -17,6 +18,7 @@ export const screenTitleBarRender = (
 
   if (calc === null) return null;
   const { height: barHeight } = calc.titleBar;
+  //const barHeight = titleBar.font.size + 2;
 
   /* Create buffer */
   const bar = createPixelBuffer(
@@ -38,7 +40,8 @@ export const screenTitleBarRender = (
   drawText(
     bar,
     titleBar.title,
-    `${titleBar.font.size}px ${titleBar.font.name}`,
+    titleBar.font.name,
+    titleBar.font.size,
     0,
     0,
     ScreenColour.TITLEBAR_BACKGROUND,

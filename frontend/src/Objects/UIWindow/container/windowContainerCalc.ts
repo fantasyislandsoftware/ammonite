@@ -13,7 +13,8 @@ export const windowContainerCalc = (window: IWindow) => {
   const barWidth = width - borderThickness * 2;
   const textInfo = getTextInfo(
     titleBar.title,
-    `${titleBar.font.size}px ${titleBar.font.name}`
+    titleBar.font.name,
+    titleBar.font.size + 2
   );
   const barHeight = textInfo.height;
   return {
