@@ -17,7 +17,7 @@ const getFontsList = async () => {
     //console.log(font);
     const fontResponse = await getFile(`${path}/${font.name}`);
     const fontData = await fontResponse;
-    fonts.push({ name: font.name, data: fontData.file });
+    //fonts.push({ name: font.name, data: fontData.file });
   });
 
   console.log(fonts);

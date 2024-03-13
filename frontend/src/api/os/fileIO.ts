@@ -14,11 +14,8 @@ export const getDirList = async (path: string) => {
 export const getFile = async (path: string) => {
   const request = await fetch(`${ENV.api}/getFile?path=${path}`, {
     method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
   });
-  return await request.json();
+  return await request.text();
 };
 
 export const getFontList = async () => {

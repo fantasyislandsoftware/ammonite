@@ -14,19 +14,25 @@ import useGetFontsList from 'api/query/useGetFontsList';
 import { Backdrop } from 'Objects/UIBackdrop/jsx/Backdrop';
 import useGetFonts from 'api/query/useGetFonts';
 import './css/base.css';
+import { useTaskStore } from 'stores/useTaskStore';
+import { getDirList, getFile } from 'api/os/fileIO';
+import { startTask, startTaskProcessor } from 'functions/tasks';
 
 const App = () => {
   const { screens, setScreens, setSelectedScreen } = useScreenStore();
+  const [ready, setReady] = useState(false);
+  const [initBoot, setInitBoot] = useState(true);
 
-  const ref = useRef<HTMLCanvasElement>(null);
-
-  const getFonts = useGetFonts(ref);
-
-  /*return (
-    <>
-      <div style={{ font: '8px Amiga Forever' }}>test</div>
-    </>
-  );*/
+  useEffect(() => {
+    async function boot() {
+      startTask('/home/node/app/src/js/boot.js');
+    }
+    if (initBoot) {
+      boot();
+      setInitBoot(false);
+      startTaskProcessor();
+    }
+  }, [initBoot]);
 
   return (
     <>

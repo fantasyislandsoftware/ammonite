@@ -9,3 +9,12 @@ body,
   font-smooth: never;
   -webkit-font-smoothing: none;
 }
+
+table {
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid white;
+  padding: 3px;
+}
