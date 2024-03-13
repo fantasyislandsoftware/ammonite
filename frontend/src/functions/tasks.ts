@@ -1,4 +1,5 @@
 import { getFile } from 'api/os/fileIO';
+import { useErrorStore } from 'stores/useErrorStore';
 import { ITask, TaskType, useTaskStore } from 'stores/useTaskStore';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -31,7 +32,7 @@ export const startTask = async (path: string) => {
 
 export const startTaskProcessor = () => {
   const { tasks, setTasks } = useTaskStore.getState();
-  setInterval(() => {
+  return setInterval(() => {
     tasks.map((task) => {
       task = execCommand(task);
     });
@@ -65,6 +66,7 @@ export const analyseCommand = (task: ITask) => {
 };
 
 export const execCommand = (task: ITask) => {
+  const { setSystemCrash } = useErrorStore.getState();
   const line = analyseCommand(task);
   switch (line.func) {
     case 'define':
@@ -81,6 +83,9 @@ export const execCommand = (task: ITask) => {
       break;
     case 'jmp':
       jmp(task, line.params[0]);
+      break;
+    default:
+      setSystemCrash({ state: true, message: `Unknown command: ${line.func}` });
       break;
   }
   task.pos++;

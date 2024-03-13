@@ -17,11 +17,14 @@ import './css/base.css';
 import { useTaskStore } from 'stores/useTaskStore';
 import { getDirList, getFile } from 'api/os/fileIO';
 import { startTask, startTaskProcessor } from 'functions/tasks';
+import { useErrorStore } from 'stores/useErrorStore';
 
 const App = () => {
   const { screens, setScreens, setSelectedScreen } = useScreenStore();
   const [ready, setReady] = useState(false);
   const [initBoot, setInitBoot] = useState(true);
+  const { systemCrash } = useErrorStore();
+  const [taskProcessor, setTaskProcessor] = useState<any>(null);
 
   useEffect(() => {
     async function boot() {
@@ -30,19 +33,29 @@ const App = () => {
     if (initBoot) {
       boot();
       setInitBoot(false);
-      startTaskProcessor();
+      setTaskProcessor(startTaskProcessor());
     }
   }, [initBoot]);
 
-  return (
-    <>
-      {screens.map((screen, index) => (
-        <UIScreen key={index} screen={screen} />
-      ))}
-      <ShadowBuffer />
-      <Backdrop />
-    </>
-  );
+  useEffect(() => {
+    if (systemCrash.state) {
+      clearInterval(taskProcessor);
+    }
+  }, [systemCrash.state]);
+
+  if (systemCrash.state) {
+    return <div>{systemCrash.message}</div>;
+  } else {
+    return (
+      <>
+        {screens.map((screen, index) => (
+          <UIScreen key={index} screen={screen} />
+        ))}
+        <ShadowBuffer />
+        <Backdrop />
+      </>
+    );
+  }
 };
 
 export default App;
