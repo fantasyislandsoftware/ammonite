@@ -5,13 +5,20 @@ export enum TaskType {
   ASM,
 }
 
+export enum TaskState {
+  RUNNING = 'running',
+  ERROR = 'error',
+}
+
 export interface ITask {
   id: string;
   name: string;
   type: TaskType;
+  state: TaskState;
   code: string[];
-  vars: any;
-  labels: any;
+  var: any;
+  label: any;
+  promise: any;
   pos: number;
 }
 
