@@ -8,6 +8,7 @@ import { generateDefaultColorPalette } from '../../Objects/UIScreen/palettes';
 import { IScreen, IScreenMode } from '../../Objects/UIScreen/screenInterface';
 import { v4 as uuidv4 } from 'uuid';
 import { screenDefault } from 'Objects/UIScreen/screenDefault';
+import { screenContainerRender } from 'Objects/UIScreen/container/screenContainerRender';
 
 export const openScreen = (
   width: number,
@@ -15,7 +16,7 @@ export const openScreen = (
   mode: IScreenMode,
   title: string | null
 ) => {
-  const { screens, setScreens } = useScreenStore.getState();
+  const { screens, setScreens, setSelectedScreen } = useScreenStore.getState();
 
   const nextScreenIndex = screens.length ? getHighestScreenZIndex() + 1 : 100;
 
@@ -103,6 +104,9 @@ export const openScreen = (
   };
   screens.push(data);
   setScreens(screens);
+  setTimeout(() => {
+    setSelectedScreen(undefined);
+  });
   return id;
 };
 

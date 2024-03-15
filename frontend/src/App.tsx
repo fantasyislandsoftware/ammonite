@@ -2,26 +2,15 @@ import React, { useEffect, useRef, useState } from 'react';
 import { UIScreen } from './Objects/UIScreen';
 import { useScreenStore } from './stores/useScreenStore';
 import ShadowBuffer from 'Objects/UIScreen/jsx/ShadowBuffer';
-import { openScreen } from 'api/os/screen';
-import { full, hi, interlaced, low, med } from './Objects/UIScreen/screenModes';
-import { EnumOSEventObjectType } from 'interface/event';
-import { getHighestScreenZIndex } from 'functions/screen';
-import useGetGuiIcons from 'api/query/useGetGuiIcons';
-import { screenContainerRender } from 'Objects/UIScreen/container/screenContainerRender';
-import { baseContainerEvents } from 'Objects/UIBase/container/baseContainerEvents';
-import { openWindow } from 'api/os/window';
-import useGetFontsList from 'api/query/useGetFontsList';
 import { Backdrop } from 'Objects/UIBackdrop/jsx/Backdrop';
-import useGetFonts from 'api/query/useGetFonts';
-import './css/base.css';
-import { useTaskStore } from 'stores/useTaskStore';
-import { getDirList, getFile } from 'api/os/fileIO';
-import { startTask, startTaskProcessor } from 'functions/tasks';
+import { startTask, startTaskProcessor } from 'functions/tasks/tasks';
 import { useErrorStore } from 'stores/useErrorStore';
+import './css/base.css';
+import { getHighestScreenZIndex } from 'functions/screen';
+import { screenContainerRender } from 'Objects/UIScreen/container/screenContainerRender';
 
 const App = () => {
-  const { screens, setScreens, setSelectedScreen } = useScreenStore();
-  const [ready, setReady] = useState(false);
+  const { screens } = useScreenStore();
   const [initBoot, setInitBoot] = useState(true);
   const { systemCrash } = useErrorStore();
   const [taskProcessor, setTaskProcessor] = useState<any>(null);
@@ -34,8 +23,19 @@ const App = () => {
       boot();
       setInitBoot(false);
       setTaskProcessor(startTaskProcessor());
+      renderLoop();
     }
   }, [initBoot]);
+
+  const renderLoop = () => {
+    const topScreen = getHighestScreenZIndex();
+    screens.map((screen) => {
+      if (screen.zIndex === topScreen) {
+        screenContainerRender(screen);
+      }
+    });
+    window.requestAnimationFrame(renderLoop);
+  };
 
   useEffect(() => {
     if (systemCrash.state) {
