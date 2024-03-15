@@ -4,6 +4,7 @@ import { openScreen } from 'api/os/screen';
 import { useErrorStore } from 'stores/useErrorStore';
 import { useScreenStore } from 'stores/useScreenStore';
 import { ITask, TaskState, TaskType, useTaskStore } from 'stores/useTaskStore';
+import ts from 'typescript';
 import { v4 as uuidv4 } from 'uuid';
 
 interface IParam {
@@ -77,7 +78,9 @@ export const analyseCommand = (task: ITask) => {
       //@ts-ignore
       value = parseInt(value);
     } else {
-      value = value.replaceAll(`"`, '');
+      if (typeof value === 'string') {
+        value = value.replaceAll(`"`, '');
+      }
     }
 
     const processedParam: IParam = { id: id, value: value, type: type };
@@ -116,11 +119,17 @@ export const execCommand = (task: ITask) => {
         line.params[3]
       );
       break;
-    case 'loadFonts':
-      _loadFonts(task, line.params[0]);
+    case 'loadFontList':
+      _loadFontList(task, line.params[0], line.params[1]);
+      break;
+    case 'processFonts':
+      _processFonts(task);
       break;
     case 'getPromiseState':
       _getPromiseState(task, line.params[0], line.params[1]);
+      break;
+    case 'lengthOf':
+      _lengthOf(task, line.params[0], line.params[1]);
       break;
     case 'openScreen':
       _openScreen(
@@ -199,9 +208,15 @@ const _jmpIf = (
   }
 };
 
-const _loadFonts = (task: ITask, promise: IParam) => {
-  task.promise[promise.value] = makeQuerablePromise(getFontList());
+const _loadFontList = (task: ITask, promise: IParam, fonts: IParam) => {
+  const p = getFontList();
+  p.then((result) => {
+    task.var[fonts.id] = result;
+  });
+  task.promise[promise.value] = makeQuerablePromise(p);
 };
+
+const _processFonts = (task: ITask) => {};
 
 const _getPromiseState = (task: ITask, promise: IParam, dest: IParam) => {
   const result = task.promise[promise.value];
@@ -283,4 +298,9 @@ const _openScreen = (
       screenMode = low;
   }
   openScreen(width, height, screenMode, title);
+};
+
+export const _lengthOf = (task: ITask, v: IParam, l: IParam) => {
+  //@ts-ignore
+  task.var[l.id] = v.value.length;
 };
