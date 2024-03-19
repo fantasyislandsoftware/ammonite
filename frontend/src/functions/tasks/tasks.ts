@@ -1,6 +1,8 @@
 import { full, hi, low, med } from 'Objects/UIScreen/screenModes';
 import { getFile, getFontList } from 'api/os/fileIO';
 import { openScreen } from 'api/os/screen';
+import { makeQuerablePromise } from 'api/query/promiseHandling';
+import { ENV } from 'constants/env';
 import { useErrorStore } from 'stores/useErrorStore';
 import { useScreenStore } from 'stores/useScreenStore';
 import { ITask, TaskState, TaskType, useTaskStore } from 'stores/useTaskStore';
@@ -101,6 +103,9 @@ export const execCommand = (task: ITask) => {
     case 'add':
       _add(task, line.params[0], line.params[1]);
       break;
+    case 'sub':
+      _sub(task, line.params[0], line.params[1]);
+      break;
     case 'log':
       _log(task, line.params[0]);
       break;
@@ -122,8 +127,8 @@ export const execCommand = (task: ITask) => {
     case 'loadFontList':
       _loadFontList(task, line.params[0], line.params[1]);
       break;
-    case 'processFonts':
-      _processFonts(task);
+    case 'addFont':
+      _addFont(task, line.params[0], line.params[1], line.params[2]);
       break;
     case 'getPromiseState':
       _getPromiseState(task, line.params[0], line.params[1]);
@@ -139,6 +144,18 @@ export const execCommand = (task: ITask) => {
         line.params[2].value as string,
         line.params[3].value as string
       );
+      break;
+    case 'getArrayElement':
+      _getArrayElement(
+        task,
+        line.params[0],
+        line.params[1],
+        line.params[2],
+        line.params[3]
+      );
+      break;
+    case 'getFieldValue':
+      _getFieldValue(task, line.params[0], line.params[1], line.params[2]);
       break;
     default:
       task.state = TaskState.ERROR;
@@ -176,7 +193,11 @@ const _log = (task: ITask, param: IParam) => {
 };
 
 const _add = (task: ITask, varName: IParam, value: IParam) => {
-  //task.var[varName.data] = task.var[varName.data] + Number(value.data);
+  task.var[varName.id] = task.var[varName.id] + Number(value.value);
+};
+
+const _sub = (task: ITask, varName: IParam, value: IParam) => {
+  task.var[varName.id] = task.var[varName.id] - Number(value.value);
 };
 
 const _label = (task: ITask, label: IParam) => {
@@ -216,8 +237,6 @@ const _loadFontList = (task: ITask, promise: IParam, fonts: IParam) => {
   task.promise[promise.value] = makeQuerablePromise(p);
 };
 
-const _processFonts = (task: ITask) => {};
-
 const _getPromiseState = (task: ITask, promise: IParam, dest: IParam) => {
   const result = task.promise[promise.value];
   let state = 0;
@@ -232,46 +251,6 @@ const _getPromiseState = (task: ITask, promise: IParam, dest: IParam) => {
   }
   task.var[dest.id] = state;
 };
-
-export function makeQuerablePromise(promise: any) {
-  // Don't modify any promise that has been already modified.
-  if (promise.isFulfilled) return promise;
-
-  // Set initial state
-  let isPending = true;
-  let isRejected = false;
-  let isFulfilled = false;
-  let data: any = null;
-
-  // Observe the promise, saving the fulfillment in a closure scope.
-  const result = promise.then(
-    function (v: any) {
-      isFulfilled = true;
-      isPending = false;
-      data = v;
-      return v;
-    },
-    function (e: any) {
-      isRejected = true;
-      isPending = false;
-      throw e;
-    }
-  );
-
-  result.isFulfilled = function () {
-    return isFulfilled;
-  };
-  result.isPending = function () {
-    return isPending;
-  };
-  result.isRejected = function () {
-    return isRejected;
-  };
-  result.getData = function () {
-    return data;
-  };
-  return result;
-}
 
 const _openScreen = (
   task: ITask,
@@ -303,4 +282,31 @@ const _openScreen = (
 export const _lengthOf = (task: ITask, v: IParam, l: IParam) => {
   //@ts-ignore
   task.var[l.id] = v.value.length;
+};
+
+const _getArrayElement = (
+  task: ITask,
+  array: IParam,
+  index: IParam,
+  field: IParam,
+  result: IParam
+) => {
+  task.var[result.id] = task.var[array.id][index.value];
+};
+
+const _getFieldValue = (task: ITask, obj: IParam, field: IParam, v: IParam) => {
+  task.var[v.id] = task.var[obj.id][field.value];
+};
+
+const _addFont = async (
+  task: ITask,
+  name: IParam,
+  path: IParam,
+  promise: IParam
+) => {
+  const fontFace = new FontFace(
+    name.value as string,
+    `url(${ENV.api}/getFile?path=${path.value})`
+  );
+  task.promise[promise.value] = makeQuerablePromise(fontFace.load());
 };
