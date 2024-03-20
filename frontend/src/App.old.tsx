@@ -12,7 +12,7 @@ import { baseContainerEvents } from 'Objects/UIBase/container/baseContainerEvent
 import { openWindow } from 'api/os/window';
 import useGetFontsList from 'api/query/useGetFontsList';
 import { Backdrop } from 'Objects/UIBackdrop/jsx/Backdrop';
-import useGetFonts from 'api/query/useGetFonts';
+//import useGetFonts from 'api/query/useGetFonts';
 import './css/base.css';
 import { useFontStore } from 'stores/useFontStore';
 //import './fonts/amiga4ever.ttf';
@@ -57,12 +57,12 @@ const App = () => {
 
   const ref = useRef<HTMLCanvasElement>(null);
 
-  const getFonts = useGetFonts(ref);
+  //const getFonts = useGetFonts(ref);
 
-  if (!getFonts.loading) {
+  /*if (!getFonts.loading) {
     loaded = true;
     console.log(fonts);
-  }
+  }*/
 
   const renderLoop = () => {
     const topScreen = getHighestScreenZIndex();

@@ -3,10 +3,8 @@ import { getFile, getFontList } from 'api/os/fileIO';
 import { openScreen } from 'api/os/screen';
 import { makeQuerablePromise } from 'api/query/promiseHandling';
 import { ENV } from 'constants/env';
-import { useErrorStore } from 'stores/useErrorStore';
-import { useScreenStore } from 'stores/useScreenStore';
+import { useFontStore } from 'stores/useFontStore';
 import { ITask, TaskState, TaskType, useTaskStore } from 'stores/useTaskStore';
-import ts from 'typescript';
 import { v4 as uuidv4 } from 'uuid';
 
 interface IParam {
@@ -259,6 +257,8 @@ const _openScreen = (
   mode: string,
   title: string
 ) => {
+  const { fonts } = useFontStore.getState();
+  console.log(fonts);
   let screenMode = low;
   switch (mode) {
     case 'low':
@@ -304,9 +304,36 @@ const _addFont = async (
   path: IParam,
   promise: IParam
 ) => {
+  const { fonts, setFonts } = useFontStore.getState();
   const fontFace = new FontFace(
     name.value as string,
     `url(${ENV.api}/getFile?path=${path.value})`
   );
   task.promise[promise.value] = makeQuerablePromise(fontFace.load());
+  task.promise[promise.value].then((result: any) => {
+    const name = result.family.trim();
+    const canvas: any = document.getElementById('canvas_shadow');
+    const ctx = canvas?.getContext('2d');
+    const metrics: any = {};
+    if (ctx) {
+      let s = 4;
+      for (let i = 0; i < 10; i++) {
+        s = s + 2;
+        ctx.font = `${s}px ${name}`;
+        const measure = ctx.measureText(
+          'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890'
+        );
+        metrics[s] = {
+          top: 0,
+          height: Math.floor(
+            measure.actualBoundingBoxAscent + measure.hangingBaseline
+          ),
+        };
+      }
+    }
+    const duplicate = fonts.find((o) => o.name === name);
+    if (!duplicate) {
+      fonts.push({ name: name, metrics: metrics });
+    }
+  });
 };

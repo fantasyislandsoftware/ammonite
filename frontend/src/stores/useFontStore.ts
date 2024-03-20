@@ -2,6 +2,7 @@ import { create } from 'zustand';
 
 export interface Font {
   name: string;
+  metrics: { top: number; height: number }[];
 }
 
 export interface FontStore {

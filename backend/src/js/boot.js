@@ -25,8 +25,8 @@ jmpIf(n, notEq, fontCount, FONT_LOADING_LOOP);
 log("fonts loaded");
 
 /* Temp loop */
-label(LOOP);
-jmp(LOOP);
+//label(LOOP);
+//jmp(LOOP);
 
 /* Start workbench */
 exec("/home/node/app/src/js/workbench.js");

@@ -15,8 +15,15 @@ const App = () => {
   const { systemCrash } = useErrorStore();
   const [taskProcessor, setTaskProcessor] = useState<any>(null);
 
+  //const initEventListeners = () => {
+
+  //};
+
   useEffect(() => {
     async function boot() {
+      window.onerror = (message, source, lineno, colno, error) => {
+        console.log('test');
+      };
       startTask('/home/node/app/src/js/boot.js');
     }
     if (initBoot) {
@@ -24,6 +31,7 @@ const App = () => {
       setInitBoot(false);
       setTaskProcessor(startTaskProcessor());
       renderLoop();
+      //initEventListeners();
     }
   }, [initBoot]);
 

@@ -14,6 +14,7 @@ const ShadowBuffer = () => {
   }, [ref]);
   return (
     <canvas
+      id={'canvas_shadow'}
       ref={ref}
       style={{
         display: 'none',
