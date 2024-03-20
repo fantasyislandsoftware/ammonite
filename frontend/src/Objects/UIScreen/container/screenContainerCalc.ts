@@ -1,5 +1,6 @@
 import { getTextInfo } from 'functions/graphics';
 import { IScreen } from '../screenInterface';
+import { useFontStore } from 'stores/useFontStore';
 
 export interface IScreenContainerCalc {
   titleBar: {
@@ -14,6 +15,7 @@ export interface IScreenContainerCalc {
 
 export const screenContainerCalc = (screen: IScreen) => {
   const { titleBar } = screen;
+  const { fonts } = useFontStore.getState();
   if (titleBar === null)
     return {
       titleBar: {
@@ -31,10 +33,14 @@ export const screenContainerCalc = (screen: IScreen) => {
     titleBar.font.name,
     titleBar.font.size + 2
   );
+
+  const font: any =
+    fonts[screen.titleBar?.font.name as any][screen.titleBar?.font.size as any];
+
   return {
     titleBar: {
       width: textInfo.width,
-      height: textInfo.height,
+      height: font.height,
     },
     client: {
       y: textInfo.height,

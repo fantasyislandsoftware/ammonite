@@ -227,14 +227,6 @@ const _jmpIf = (
   }
 };
 
-const _loadFontList = (task: ITask, promise: IParam, fonts: IParam) => {
-  const p = getFontList();
-  p.then((result) => {
-    task.var[fonts.id] = result;
-  });
-  task.promise[promise.value] = makeQuerablePromise(p);
-};
-
 const _getPromiseState = (task: ITask, promise: IParam, dest: IParam) => {
   const result = task.promise[promise.value];
   let state = 0;
@@ -257,8 +249,6 @@ const _openScreen = (
   mode: string,
   title: string
 ) => {
-  const { fonts } = useFontStore.getState();
-  console.log(fonts);
   let screenMode = low;
   switch (mode) {
     case 'low':
@@ -298,6 +288,19 @@ const _getFieldValue = (task: ITask, obj: IParam, field: IParam, v: IParam) => {
   task.var[v.id] = task.var[obj.id][field.value];
 };
 
+const _loadFontList = (task: ITask, promise: IParam, fonts: IParam) => {
+  const p = getFontList();
+  p.then((result) => {
+    result.push({
+      name: 'Amiga Forever',
+      path: '',
+      style: 'regular',
+    });
+    task.var[fonts.id] = result;
+  });
+  task.promise[promise.value] = makeQuerablePromise(p);
+};
+
 const _addFont = async (
   task: ITask,
   name: IParam,
@@ -307,7 +310,9 @@ const _addFont = async (
   const { fonts, setFonts } = useFontStore.getState();
   const fontFace = new FontFace(
     name.value as string,
-    `url(${ENV.api}/getFile?path=${path.value})`
+    path.value === ''
+      ? `url(${ENV.api}/getFile?path=${path.value})`
+      : `url(fonts/amiga4ever.ttf)`
   );
   task.promise[promise.value] = makeQuerablePromise(fontFace.load());
   task.promise[promise.value].then((result: any) => {
@@ -333,7 +338,8 @@ const _addFont = async (
     }
     const duplicate = fonts.find((o) => o.name === name);
     if (!duplicate) {
-      fonts.push({ name: name, metrics: metrics });
+      fonts[name] = metrics;
     }
+    setFonts(fonts);
   });
 };
