@@ -42,7 +42,7 @@ const App = () => {
         screenContainerRender(screen);
       }
     });
-    window.requestAnimationFrame(renderLoop);
+    //window.requestAnimationFrame(renderLoop);
   };
 
   useEffect(() => {

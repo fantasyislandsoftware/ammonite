@@ -292,13 +292,21 @@ const _loadFontList = (task: ITask, promise: IParam, fonts: IParam) => {
   const p = getFontList();
   p.then((result) => {
     result.push({
-      name: 'Amiga Forever',
-      path: '',
+      name: 'Arial',
+      path: 'fonts/arial.ttf',
       style: 'regular',
     });
     task.var[fonts.id] = result;
   });
   task.promise[promise.value] = makeQuerablePromise(p);
+};
+
+const loadFont = async (name: string, path: string) => {
+  const fontFace = new FontFace(
+    name as string,
+    `url(${ENV.api}/getFile?path=${path})`
+  );
+  return fontFace;
 };
 
 const _addFont = async (
@@ -308,12 +316,7 @@ const _addFont = async (
   promise: IParam
 ) => {
   const { fonts, setFonts } = useFontStore.getState();
-  const fontFace = new FontFace(
-    name.value as string,
-    path.value === ''
-      ? `url(${ENV.api}/getFile?path=${path.value})`
-      : `url(fonts/amiga4ever.ttf)`
-  );
+  const fontFace = await loadFont(name.value as string, path.value as string);
   task.promise[promise.value] = makeQuerablePromise(fontFace.load());
   task.promise[promise.value].then((result: any) => {
     const name = result.family.trim();

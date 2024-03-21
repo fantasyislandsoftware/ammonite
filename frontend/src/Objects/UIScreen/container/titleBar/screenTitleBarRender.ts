@@ -7,13 +7,15 @@ import {
 } from 'functions/graphics';
 import { ScreenColour } from 'constants/colours';
 import { IScreen } from 'Objects/UIScreen/screenInterface';
-import { title } from 'process';
 import { useFontStore } from 'stores/useFontStore';
 
 export const screenTitleBarRender = (
   screen: IScreen,
   calc: IScreenContainerCalc | null
 ) => {
+  const { fonts } = useFontStore.getState();
+  console.log(fonts);
+
   const { titleBar } = screen;
   if (!titleBar) return null;
 
