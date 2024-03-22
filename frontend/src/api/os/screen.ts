@@ -8,9 +8,9 @@ import { generateDefaultColorPalette } from '../../Objects/UIScreen/palettes';
 import { IScreen, IScreenMode } from '../../Objects/UIScreen/screenInterface';
 import { v4 as uuidv4 } from 'uuid';
 import { screenDefault } from 'Objects/UIScreen/screenDefault';
-import { screenContainerRender } from 'Objects/UIScreen/container/screenContainerRender';
 
 export const openScreen = (
+  parentTaskId: string,
   width: number,
   height: number,
   mode: IScreenMode,
@@ -73,10 +73,11 @@ export const openScreen = (
       }
     : null;
 
-  const id = uuidv4();
+  const screenId = uuidv4();
 
   const data: IScreen = {
-    id: id,
+    screenId: screenId,
+    parentTaskId: parentTaskId,
     position: {
       y: 0,
       z: 0,
@@ -100,6 +101,12 @@ export const openScreen = (
       height: 0,
       margin: 0,
     },
+    client: {
+      width: 50,
+      height: 50,
+      pixels: initPixelArray(50, 50, ScreenColour.TITLEBAR_BACKGROUND),
+    },
+
     windows: [],
   };
   screens.push(data);
@@ -107,15 +114,15 @@ export const openScreen = (
   setTimeout(() => {
     setSelectedScreen(undefined);
   });
-  return id;
+  return screenId;
 };
 
 export const screenBringToFront = (screen: IScreen) => {
   const { screens, setScreens } = useScreenStore.getState();
-  const screenIndex = screens.findIndex((s) => s.id === screen.id);
+  const screenIndex = screens.findIndex((s) => s.screenId === screen.screenId);
   let pos = 100;
   screens.map((_screen) => {
-    if (_screen.id !== screen?.id) {
+    if (_screen.screenId !== screen?.screenId) {
       _screen.zIndex = pos;
       pos++;
     }
@@ -126,10 +133,10 @@ export const screenBringToFront = (screen: IScreen) => {
 
 export const screenSendToBack = (screen: IScreen) => {
   const { screens, setScreens } = useScreenStore.getState();
-  const screenIndex = screens.findIndex((s) => s.id === screen.id);
+  const screenIndex = screens.findIndex((s) => s.screenId === screen.screenId);
   let pos = getHighestScreenZIndex();
   screens.map((_screen) => {
-    if (_screen.id !== screen?.id) {
+    if (_screen.screenId !== screen?.screenId) {
       _screen.zIndex = pos;
       pos--;
     }
@@ -140,5 +147,5 @@ export const screenSendToBack = (screen: IScreen) => {
 
 export const findScreenIndex = (id: string) => {
   const { screens } = useScreenStore.getState();
-  return screens.findIndex((s) => s.id === id);
+  return screens.findIndex((s) => s.screenId === id);
 };

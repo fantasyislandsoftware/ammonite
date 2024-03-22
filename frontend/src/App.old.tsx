@@ -27,13 +27,13 @@ const App = () => {
     //openScreen(window.innerWidth, window.innerHeight, full, 'Full Screen');
     //openScreen(640, 512, hi, 'Hi Res');
     //openScreen(320, 512, interlaced, 'Interlaced');
-    const medId = openScreen(640, 256, med, 'Med Res');
+    //const medId = openScreen(640, 256, med, 'Med Res');
     //
-    const lowId = openScreen(320, 256, low, 'Low Res');
-    setTimeout(() => {
+    //const lowId = openScreen(320, 256, low, 'Low Res');
+    /*setTimeout(() => {
       openWindow(lowId, 20, 20, 100, 50, 'Test Window');
       openWindow(medId, 20, 20, 100, 50, 'Test Window');
-    }, 10);
+    }, 10);*/
   };
 
   const addEventListeners = () => {

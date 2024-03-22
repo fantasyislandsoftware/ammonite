@@ -6,7 +6,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { screenContainerRender } from '../../Objects/UIScreen/container/screenContainerRender';
 
 export const openWindow = (
-  parentId: string,
+  parentTaskId: string,
+  parentScreenId: string,
   x: number,
   y: number,
   width: number,
@@ -16,8 +17,9 @@ export const openWindow = (
   const { screens, setScreens } = useScreenStore.getState();
 
   const data: IWindow = {
-    id: uuidv4(),
-    parentId: parentId,
+    windowId: uuidv4(),
+    parentTaskId: parentTaskId,
+    parentScreenId: parentScreenId,
     position: { x, y },
     width,
     height,
@@ -29,7 +31,7 @@ export const openWindow = (
     },
     borderThickness: windowDefault.borderThickness,
   };
-  const screenIndex = findScreenIndex(parentId);
+  const screenIndex = findScreenIndex(parentScreenId);
   screens[screenIndex].windows.push(data);
   setScreens(screens);
   screenContainerRender(screens[screenIndex]);

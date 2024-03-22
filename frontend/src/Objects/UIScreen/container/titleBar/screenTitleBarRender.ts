@@ -13,8 +13,8 @@ export const screenTitleBarRender = (
   screen: IScreen,
   calc: IScreenContainerCalc | null
 ) => {
-  const { fonts } = useFontStore.getState();
-  console.log(fonts);
+  //const { fonts } = useFontStore.getState();
+  //console.log(fonts);
 
   const { titleBar } = screen;
   if (!titleBar) return null;
@@ -44,7 +44,7 @@ export const screenTitleBarRender = (
     bar,
     titleBar.title,
     titleBar.font.name,
-    barHeight,
+    titleBar.font.size,
     0,
     0,
     ScreenColour.TITLEBAR_BACKGROUND,

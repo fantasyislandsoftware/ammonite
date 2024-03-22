@@ -3,7 +3,7 @@ import { UIScreen } from './Objects/UIScreen';
 import { useScreenStore } from './stores/useScreenStore';
 import ShadowBuffer from 'Objects/UIScreen/jsx/ShadowBuffer';
 import { Backdrop } from 'Objects/UIBackdrop/jsx/Backdrop';
-import { startTask, startTaskProcessor } from 'functions/tasks/tasks';
+import { startTask, startTaskProcessor } from 'functions/tasks';
 import { useErrorStore } from 'stores/useErrorStore';
 import './css/base.css';
 import { getHighestScreenZIndex } from 'functions/screen';
@@ -42,7 +42,7 @@ const App = () => {
         screenContainerRender(screen);
       }
     });
-    //window.requestAnimationFrame(renderLoop);
+    window.requestAnimationFrame(renderLoop);
   };
 
   useEffect(() => {

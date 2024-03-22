@@ -1,5 +1,6 @@
 import { getTextInfo } from 'functions/graphics';
 import { IWindow } from 'Objects/UIWindow/windowInterface';
+import { useFontStore } from 'stores/useFontStore';
 
 export interface IWindowContainerCalc {
   titleBar: {
@@ -14,13 +15,18 @@ export const windowContainerCalc = (window: IWindow) => {
   const textInfo = getTextInfo(
     titleBar.title,
     titleBar.font.name,
-    titleBar.font.size + 2
+    titleBar.font.size
   );
-  const barHeight = textInfo.height;
+
+  const { fonts } = useFontStore.getState();
+
+  const font: any =
+    fonts[window.titleBar.font.name as any][window.titleBar?.font.size as any];
+
   return {
     titleBar: {
-      width: barWidth,
-      height: barHeight,
+      width: textInfo.width,
+      height: font.height,
     },
   };
 };

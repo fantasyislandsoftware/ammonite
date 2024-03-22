@@ -5,7 +5,7 @@ export const screenIdToIndex = (id: string | undefined): number | undefined => {
   const { screens } = useScreenStore.getState();
   let result;
   screens.map((screen: IScreen, index: number) => {
-    if (screen.id === id) result = index;
+    if (screen.screenId === id) result = index;
   });
   return result;
 };
@@ -29,7 +29,7 @@ export const getLowestScreenZIndex = () => {
 export const setScreen = (_screen: IScreen) => {
   const { screens, setScreens } = useScreenStore.getState();
   screens.map((screen, index) => {
-    if (screen.id === _screen.id) {
+    if (screen.screenId === _screen.screenId) {
       screens[index] = _screen;
     }
   });

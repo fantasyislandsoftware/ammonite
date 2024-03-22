@@ -187,6 +187,7 @@ export const drawText = (
   buffer.canvas.width = width;
   buffer.canvas.height = height;
   buffer.font = `${size}px ${font}`;
+  //console.log(buffer.font);
   buffer.fillStyle = 'black';
   buffer.fillRect(0, 0, width, height);
   buffer.fillStyle = 'white';
@@ -218,11 +219,15 @@ export const getTextInfo = (
   size: number
 ): ICanvasTextInfo => {
   const { buffer } = useBufferStore.getState();
-  if (buffer === null) return { width: 0, height: 0 };
+  if (buffer === null) return { width: 0, height: 0, top: 0 };
 
   buffer.font = `${size}px ${font}`;
-  const { fontBoundingBoxAscent, fontBoundingBoxDescent, width } =
-    buffer.measureText(str);
+  const {
+    actualBoundingBoxAscent,
+    fontBoundingBoxAscent,
+    fontBoundingBoxDescent,
+    width,
+  } = buffer.measureText(str);
 
   //console.log(buffer.measureText(str));
 
@@ -230,6 +235,7 @@ export const getTextInfo = (
   return {
     width: Math.floor(width + 2),
     height: height,
+    top: actualBoundingBoxAscent,
   };
 };
 

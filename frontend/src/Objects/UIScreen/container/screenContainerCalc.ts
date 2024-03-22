@@ -31,7 +31,7 @@ export const screenContainerCalc = (screen: IScreen) => {
   const textInfo = getTextInfo(
     titleBar.title,
     titleBar.font.name,
-    titleBar.font.size + 2
+    titleBar.font.size
   );
 
   const font: any =
@@ -43,8 +43,8 @@ export const screenContainerCalc = (screen: IScreen) => {
       height: font.height,
     },
     client: {
-      y: textInfo.height,
-      height: screen.height - textInfo.height,
+      y: font.height,
+      height: screen.height - font.height,
     },
   };
 };

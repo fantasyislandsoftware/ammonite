@@ -9,8 +9,9 @@ export interface IWindowEvent {
 }
 
 export interface IWindow {
-  id: string;
-  parentId: string;
+  windowId: string;
+  parentTaskId: string;
+  parentScreenId: string;
   position: {
     x: number;
     y: number;

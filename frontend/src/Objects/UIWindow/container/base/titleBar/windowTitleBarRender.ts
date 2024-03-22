@@ -14,19 +14,19 @@ export const windowTitleBarRender = (
 ) => {
   const { titleBar } = window;
   const { title, font } = titleBar;
-  const { width: barWidth, height: barHeight } = calc.titleBar;
+  const { height: barHeight } = calc.titleBar;
+  const barWidth = window.width - 2;
   const bar = createPixelBuffer(
     barWidth,
     barHeight,
     WindowColour.TITLEBAR_BACKGROUND
   );
-  fillRect(bar, 0, 0, barWidth, barHeight, WindowColour.TITLEBAR_BACKGROUND);
   drawText(
     bar,
     title,
     font.name,
     font.size,
-    1,
+    0,
     0,
     WindowColour.TITLEBAR_BACKGROUND,
     WindowColour.TITLEBAR_TEXT

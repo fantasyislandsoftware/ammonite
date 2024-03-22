@@ -17,14 +17,14 @@ export const screenTitleBarEvents = (
 ) => {
   const { selectedScreen, setSelectedScreen, screens } =
     useScreenStore.getState();
-  const screenIndex = screenIdToIndex(screen.id);
+  const screenIndex = screenIdToIndex(screen.screenId);
   if (screenIndex === undefined) return;
 
   const mouseDown = () => {
     if (event.button === EnumMouseButton.Left) {
       /* Select selected screen */
       setSelectedScreen({
-        id: screen.id,
+        id: screen.screenId,
         offset: {
           y: clientMouse.y - screens[screenIndex].position.y,
         },

@@ -1,11 +1,15 @@
 import { full, hi, low, med } from 'Objects/UIScreen/screenModes';
 import { getFile, getFontList } from 'api/os/fileIO';
 import { openScreen } from 'api/os/screen';
+import { openWindow } from 'api/os/window';
 import { makeQuerablePromise } from 'api/query/promiseHandling';
 import { ENV } from 'constants/env';
 import { useFontStore } from 'stores/useFontStore';
 import { ITask, TaskState, TaskType, useTaskStore } from 'stores/useTaskStore';
 import { v4 as uuidv4 } from 'uuid';
+import { createPixelBuffer } from './graphics';
+import { useScreenStore } from 'stores/useScreenStore';
+import { setScreen } from './screen';
 
 interface IParam {
   id: string;
@@ -140,7 +144,20 @@ export const execCommand = (task: ITask) => {
         line.params[0].value as number,
         line.params[1].value as number,
         line.params[2].value as string,
-        line.params[3].value as string
+        line.params[3].value as string,
+        line.params[4]
+      );
+      break;
+    case 'openWindow':
+      _openWindow(
+        task,
+        line.params[0].value as string,
+        line.params[1].value as number,
+        line.params[2].value as number,
+        line.params[3].value as number,
+        line.params[4].value as number,
+        line.params[5].value as string,
+        line.params[6]
       );
       break;
     case 'getArrayElement':
@@ -154,6 +171,19 @@ export const execCommand = (task: ITask) => {
       break;
     case 'getFieldValue':
       _getFieldValue(task, line.params[0], line.params[1], line.params[2]);
+      break;
+    case 'screenDrawText':
+      _screenDrawText(
+        task,
+        line.params[0].value as string,
+        line.params[1].value as number,
+        line.params[2].value as number,
+        line.params[3].value as string,
+        line.params[4].value as number,
+        line.params[5].value as string,
+        line.params[6].value as number,
+        line.params[7].value as number
+      );
       break;
     default:
       task.state = TaskState.ERROR;
@@ -247,7 +277,8 @@ const _openScreen = (
   width: number,
   height: number,
   mode: string,
-  title: string
+  title: string,
+  returnId: IParam
 ) => {
   let screenMode = low;
   switch (mode) {
@@ -266,7 +297,30 @@ const _openScreen = (
     default:
       screenMode = low;
   }
-  openScreen(width, height, screenMode, title);
+  const screenId = openScreen(task.id, width, height, screenMode, title);
+  task.var[returnId.id] = screenId;
+};
+
+const _openWindow = (
+  task: ITask,
+  parentScreenId: string,
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+  title: string,
+  returnId: IParam
+) => {
+  const windowId = openWindow(
+    task.id,
+    parentScreenId,
+    x,
+    y,
+    width,
+    height,
+    title
+  );
+  task.var[returnId.id] = windowId;
 };
 
 export const _lengthOf = (task: ITask, v: IParam, l: IParam) => {
@@ -293,7 +347,7 @@ const _loadFontList = (task: ITask, promise: IParam, fonts: IParam) => {
   p.then((result) => {
     result.push({
       name: 'Arial',
-      path: 'fonts/arial.ttf',
+      path: '',
       style: 'regular',
     });
     task.var[fonts.id] = result;
@@ -302,11 +356,19 @@ const _loadFontList = (task: ITask, promise: IParam, fonts: IParam) => {
 };
 
 const loadFont = async (name: string, path: string) => {
-  const fontFace = new FontFace(
-    name as string,
-    `url(${ENV.api}/getFile?path=${path})`
-  );
-  return fontFace;
+  if (path === 'NaN') {
+    return {
+      load: async () => {
+        return { family: name };
+      },
+    };
+  } else {
+    const fontFace = new FontFace(
+      name as string,
+      `url(${ENV.api}/getFile?path=${path})`
+    );
+    return fontFace;
+  }
 };
 
 const _addFont = async (
@@ -316,7 +378,7 @@ const _addFont = async (
   promise: IParam
 ) => {
   const { fonts, setFonts } = useFontStore.getState();
-  const fontFace = await loadFont(name.value as string, path.value as string);
+  const fontFace = await loadFont(name.value as string, String(path.value));
   task.promise[promise.value] = makeQuerablePromise(fontFace.load());
   task.promise[promise.value].then((result: any) => {
     const name = result.family.trim();
@@ -331,8 +393,14 @@ const _addFont = async (
         const measure = ctx.measureText(
           'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890'
         );
+        if (result.family === 'Arial' && s == 8) {
+          //console.log(measure);
+        }
+        if (result.family === 'Arial' && s == 10) {
+          //console.log(measure);
+        }
         metrics[s] = {
-          top: 0,
+          top: measure.actualBoundingBoxAscent,
           height: Math.floor(
             measure.actualBoundingBoxAscent + measure.hangingBaseline
           ),
@@ -345,4 +413,26 @@ const _addFont = async (
     }
     setFonts(fonts);
   });
+};
+
+const _screenDrawText = (
+  task: ITask,
+  screenId: string,
+  x: number,
+  y: number,
+  fontName: string,
+  fontSize: number,
+  text: string,
+  background: number,
+  foreground: number
+) => {
+  const { screens, setScreens } = useScreenStore.getState();
+  const screen = screens.find((o) => o.screenId === screenId);
+  console.log(screen);
+  if (screen) {
+    screen.client.pixels[0][0] = 0;
+    setScreens(screens);
+  }
+
+  //const buffer = createPixelBuffer(50, 50, 0);
 };

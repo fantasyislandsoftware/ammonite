@@ -2,7 +2,8 @@ import { IWindow } from 'Objects/UIWindow/windowInterface';
 import { IButton } from 'interface/intuition';
 
 export interface IScreen {
-  id: string;
+  screenId: string;
+  parentTaskId: string;
   position: IScreenPosition;
   mode: IScreenMode;
   width: number;
@@ -22,6 +23,11 @@ export interface IScreen {
     width: number;
     height: number;
     margin: number;
+  };
+  client: {
+    width: number;
+    height: number;
+    pixels: number[][];
   };
   windows: IWindow[];
 }

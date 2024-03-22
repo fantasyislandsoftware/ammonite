@@ -1,8 +1,8 @@
 export const windowDefault = {
   titleBar: {
     font: {
-      name: 'Amiga Forever',
-      size: 8,
+      name: 'Arial',
+      size: 20,
     },
   },
   borderThickness: 1,
