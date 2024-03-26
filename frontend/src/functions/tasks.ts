@@ -428,11 +428,11 @@ const _screenDrawText = (
 ) => {
   const { screens, setScreens } = useScreenStore.getState();
   const screen = screens.find((o) => o.screenId === screenId);
-  console.log(screen);
+  /*console.log(screen);
   if (screen) {
     screen.client.pixels[0][0] = 0;
     setScreens(screens);
-  }
+  }*/
 
   //const buffer = createPixelBuffer(50, 50, 0);
 };

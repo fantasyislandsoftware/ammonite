@@ -3,7 +3,7 @@ export const screenDefault = {
     font: {
       //name: 'Amiga Forever',
       name: 'Arial',
-      size: 10,
+      size: 12,
     },
   },
 };

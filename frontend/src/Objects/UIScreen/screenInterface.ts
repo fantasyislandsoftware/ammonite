@@ -24,11 +24,7 @@ export interface IScreen {
     height: number;
     margin: number;
   };
-  client: {
-    width: number;
-    height: number;
-    pixels: number[][];
-  };
+  client: IScreenClient;
   windows: IWindow[];
 }
 
@@ -60,6 +56,11 @@ export interface IScreentitleBar {
     size: number;
   };
   buttons: IButton[];
+  pixels: number[][];
+}
+
+export interface IScreenClient {
+  pixels: number[][];
 }
 
 export interface IScreenAspect {

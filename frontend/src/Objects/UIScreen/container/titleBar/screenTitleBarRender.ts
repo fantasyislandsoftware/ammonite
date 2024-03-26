@@ -1,63 +1,29 @@
-import { IScreenContainerCalc } from '../screenContainerCalc';
-import {
-  createPixelBuffer,
-  drawLine,
-  drawText,
-  fillRect,
-} from 'functions/graphics';
-import { ScreenColour } from 'constants/colours';
 import { IScreen } from 'Objects/UIScreen/screenInterface';
-import { useFontStore } from 'stores/useFontStore';
+import { textOut } from 'api/lib/graphics/text';
+import { drawLine } from 'api/lib/graphics/draw';
 
-export const screenTitleBarRender = (
-  screen: IScreen,
-  calc: IScreenContainerCalc | null
-) => {
-  //const { fonts } = useFontStore.getState();
-  //console.log(fonts);
-
+export const screenTitleBarRender = (pixels: number[][], screen: IScreen) => {
   const { titleBar } = screen;
-  if (!titleBar) return null;
+  if (!titleBar) return pixels;
 
-  if (calc === null) return null;
-
-  const { height: barHeight } = calc.titleBar;
-
-  /* Create buffer */
-  const bar = createPixelBuffer(
-    screen.width,
-    barHeight,
-    ScreenColour.TITLEBAR_BACKGROUND
-  );
-
-  /* Border */
-  fillRect(
-    bar,
+  textOut(
+    titleBar.pixels,
     0,
     0,
-    screen.width,
-    barHeight,
-    ScreenColour.TITLEBAR_BACKGROUND
-  );
-
-  drawText(
-    bar,
     titleBar.title,
+    0,
+    1,
     titleBar.font.name,
-    titleBar.font.size,
-    0,
-    0,
-    ScreenColour.TITLEBAR_BACKGROUND,
-    ScreenColour.TITLEBAR_TEXT
+    titleBar.font.size
   );
   drawLine(
-    bar,
+    titleBar.pixels,
     0,
-    barHeight - 1,
+    titleBar.height - 1,
     screen.width,
-    barHeight - 1,
-    ScreenColour.BORDER
+    titleBar.height - 1,
+    0
   );
 
-  return bar;
+  return pixels;
 };

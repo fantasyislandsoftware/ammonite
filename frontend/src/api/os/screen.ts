@@ -1,5 +1,4 @@
 import { ScreenColour } from 'constants/colours';
-import { initPixelArray } from 'functions/graphics';
 import { getHighestScreenZIndex } from 'functions/screen';
 import { EnumButtonFunction } from 'interface/icon';
 import { IButton } from 'interface/intuition';
@@ -8,6 +7,8 @@ import { generateDefaultColorPalette } from '../../Objects/UIScreen/palettes';
 import { IScreen, IScreenMode } from '../../Objects/UIScreen/screenInterface';
 import { v4 as uuidv4 } from 'uuid';
 import { screenDefault } from 'Objects/UIScreen/screenDefault';
+import { measureText } from 'api/lib/graphics/text';
+import { initPixelArray } from 'api/lib/graphics/pixelArray';
 
 export const openScreen = (
   parentTaskId: string,
@@ -64,14 +65,11 @@ export const openScreen = (
     return obj;
   };
 
-  const titleBar = title
-    ? {
-        title: title,
-        height: 0,
-        font: screenDefault.titleBar.font,
-        buttons: [orderButton(), maximizeButton()],
-      }
-    : null;
+  const { height: titleBarHeight } = measureText(
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890!@#$%^&*()_+-=',
+    screenDefault.titleBar.font.name,
+    screenDefault.titleBar.font.size
+  );
 
   const screenId = uuidv4();
 
@@ -89,11 +87,23 @@ export const openScreen = (
       x: 0,
       y: 0,
     },
-    titleBar: titleBar,
+    titleBar: title
+      ? {
+          title: title,
+          height: titleBarHeight,
+          font: screenDefault.titleBar.font,
+          buttons: [orderButton(), maximizeButton()],
+          pixels: initPixelArray(
+            width,
+            titleBarHeight,
+            ScreenColour.TITLEBAR_BACKGROUND
+          ),
+        }
+      : null,
     numberOfColours: 16,
     palette: generateDefaultColorPalette(16),
     ctx: null,
-    pixels: initPixelArray(width, height, ScreenColour.CLIENT),
+    pixels: initPixelArray(width, height, ScreenColour.BORDER),
     margin: 0,
     zIndex: nextScreenIndex,
     aspect: {
@@ -102,9 +112,11 @@ export const openScreen = (
       margin: 0,
     },
     client: {
-      width: 50,
-      height: 50,
-      pixels: initPixelArray(50, 50, ScreenColour.TITLEBAR_BACKGROUND),
+      pixels: initPixelArray(
+        width,
+        height - titleBarHeight,
+        ScreenColour.CLIENT
+      ),
     },
 
     windows: [],

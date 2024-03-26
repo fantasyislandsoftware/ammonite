@@ -1,10 +1,10 @@
 import { useQuery } from 'react-query';
 import guiIconsPath from '../../assets/gfx/gui.iff';
-import { initPixelArray } from 'functions/graphics';
 import { IBrush } from 'interface/graphics';
 import BinaryStream from 'api/lib/binarystream';
 import { detect, parse } from 'api/lib/iff';
 import { useIntuitionStore } from 'stores/useIntuitionStore';
+import { initPixelArray } from 'api/lib/graphics/pixelArray';
 
 export type UseGetGuiIcons = {
   data: any;

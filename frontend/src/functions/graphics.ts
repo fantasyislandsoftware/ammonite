@@ -5,22 +5,7 @@ import BinaryStream from '../api/lib/binarystream';
 import { detect, parse } from '../api/lib/iff';
 import { IBrush, IPixelBuffer } from '../interface/graphics';
 import { IScreen } from '../Objects/UIScreen/screenInterface';
-
-export const initPixelArray = (
-  width: number,
-  height: number,
-  colourIndex: number
-): number[][] => {
-  const array: number[][] = [];
-  for (let y = 0; y < height; y++) {
-    const row = [];
-    for (let x = 0; x < width; x++) {
-      row.push(colourIndex);
-    }
-    array.push(row);
-  }
-  return array;
-};
+import { initPixelArray } from 'api/lib/graphics/pixelArray';
 
 export const createPixelBuffer = (
   width: number,
@@ -187,7 +172,6 @@ export const drawText = (
   buffer.canvas.width = width;
   buffer.canvas.height = height;
   buffer.font = `${size}px ${font}`;
-  //console.log(buffer.font);
   buffer.fillStyle = 'black';
   buffer.fillRect(0, 0, width, height);
   buffer.fillStyle = 'white';

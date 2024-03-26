@@ -41,14 +41,6 @@ const UIScreen: FC<IProps> = ({ screen, children }) => {
     }
     if (ctx) {
       screen.ctx = ctx;
-      if (screen.titleBar) {
-        const { height } = getTextInfo(
-          screen.titleBar.title,
-          screen.titleBar.font.name,
-          screen.titleBar.font.size
-        );
-        screen.titleBar.height = height;
-      }
       screenContainerRender(screen);
     }
   }, [ref, ctx]);
