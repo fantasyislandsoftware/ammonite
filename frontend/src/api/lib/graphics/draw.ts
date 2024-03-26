@@ -42,3 +42,18 @@ export const drawLine = (
     }
   }
 };
+
+export const drawFillRect = (
+  pixels: number[][],
+  x1: number,
+  y1: number,
+  x2: number,
+  y2: number,
+  colorIndex: number
+) => {
+  for (let y = y1; y < y2; y++) {
+    for (let x = x1; x < x2; x++) {
+      plot(pixels, x, y, colorIndex);
+    }
+  }
+};

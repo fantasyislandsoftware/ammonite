@@ -1,6 +1,7 @@
 import { pixelMerge } from 'api/lib/graphics/pixelArray';
 import { IScreen } from '../screenInterface';
 import { screenTitleBarRender } from './titleBar/screenTitleBarRender';
+import { screenClientRender } from './client/screenClientRender';
 
 export const screenContainerRender = (screen: IScreen): IScreen => {
   const { ctx, titleBar, client } = screen;
@@ -14,6 +15,7 @@ export const screenContainerRender = (screen: IScreen): IScreen => {
   }
 
   /* Client */
+  client.pixels = screenClientRender(client.pixels, screen);
   screen.pixels = pixelMerge(
     client.pixels,
     screen.pixels,

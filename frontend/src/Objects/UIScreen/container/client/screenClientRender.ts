@@ -1,19 +1,33 @@
-import { IScreenContainerCalc } from '../screenContainerCalc';
-import { createPixelBuffer } from 'functions/graphics';
-import { ScreenColour } from 'constants/colours';
 import { IScreen } from 'Objects/UIScreen/screenInterface';
+import { initPixelArray, pixelMerge } from 'api/lib/graphics/pixelArray';
+import {
+  EnumVectorShapeType,
+  VectorCanvas,
+  renderVectorCanvas,
+} from 'api/lib/graphics/vector';
+import { render } from 'react-dom';
 
-export const screenClientRender = (
-  screen: IScreen,
-  calc: IScreenContainerCalc | null
-) => {
-  if (calc === null) return null;
+export const screenClientRender = (pixels: number[][], screen: IScreen) => {
+  const test: VectorCanvas = {
+    pixels: initPixelArray(20, 20, 0),
+    bgColorIndex: 0,
+    shapes: [
+      {
+        type: EnumVectorShapeType.RECT,
+        data: {
+          px1: 10,
+          py1: 10,
+          px2: 90,
+          py2: 90,
+          colorIndex: 1,
+        },
+      },
+    ],
+  };
 
-  const client = createPixelBuffer(
-    screen.width,
-    calc.client.height,
-    ScreenColour.CLIENT
-  );
+  const y = renderVectorCanvas(test);
 
-  return client;
+  pixels = pixelMerge(y, pixels, 20, 20);
+
+  return pixels;
 };
