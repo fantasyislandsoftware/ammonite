@@ -1,5 +1,4 @@
 import { EnumMouseButton } from 'functions/mouse';
-import { IButton } from 'interface/intuition';
 
 export interface IWindowEvent {
   x: number;
@@ -29,5 +28,4 @@ export interface IWindowtitleBar {
     name: string;
     size: number;
   };
-  buttons: IButton[];
 }

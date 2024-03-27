@@ -1,5 +1,5 @@
 import { IClientMouse, IScreenMouse } from '../functions/mouse';
-import { IButton } from './intuition';
+import { IButton } from '../Objects/UIButton/buttonInterface';
 
 export type IBaseEvent = any;
 

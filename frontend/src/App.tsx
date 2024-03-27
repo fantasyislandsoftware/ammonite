@@ -8,16 +8,22 @@ import { useErrorStore } from 'stores/useErrorStore';
 import './css/base.css';
 import { getHighestScreenZIndex } from 'functions/screen';
 import { screenContainerRender } from 'Objects/UIScreen/container/screenContainerRender';
+import { baseContainerEvents } from 'Objects/UIBase/container/baseContainerEvents';
 
 const App = () => {
-  const { screens } = useScreenStore();
+  const { screens, setScreens } = useScreenStore();
   const [initBoot, setInitBoot] = useState(true);
   const { systemCrash } = useErrorStore();
   const [taskProcessor, setTaskProcessor] = useState<any>(null);
 
-  //const initEventListeners = () => {
-
-  //};
+  const initEventListeners = () => {
+    window.addEventListener('resize', (e) => {
+      setScreens(screens);
+    });
+    document.addEventListener('mouseleave', (e) => {
+      baseContainerEvents(e);
+    });
+  };
 
   useEffect(() => {
     async function boot() {
@@ -31,7 +37,7 @@ const App = () => {
       setInitBoot(false);
       setTaskProcessor(startTaskProcessor());
       renderLoop();
-      //initEventListeners();
+      initEventListeners();
     }
   }, [initBoot]);
 

@@ -1,3 +1,4 @@
+import { orderButton } from 'Objects/UIButton/buttons';
 import { IScreen } from 'Objects/UIScreen/screenInterface';
 import { initPixelArray, pixelMerge } from 'api/lib/graphics/pixelArray';
 import {
@@ -5,29 +6,10 @@ import {
   VectorCanvas,
   renderVectorCanvas,
 } from 'api/lib/graphics/vector';
-import { render } from 'react-dom';
+import { ScreenColour } from 'constants/colours';
 
 export const screenClientRender = (pixels: number[][], screen: IScreen) => {
-  const test: VectorCanvas = {
-    pixels: initPixelArray(20, 20, 0),
-    bgColorIndex: 0,
-    shapes: [
-      {
-        type: EnumVectorShapeType.RECT,
-        data: {
-          px1: 10,
-          py1: 10,
-          px2: 90,
-          py2: 90,
-          colorIndex: 1,
-        },
-      },
-    ],
-  };
-
-  const y = renderVectorCanvas(test);
-
-  pixels = pixelMerge(y, pixels, 20, 20);
-
+  //const y = orderButton();
+  //pixels = pixelMerge(y, pixels, 20, 20);
   return pixels;
 };

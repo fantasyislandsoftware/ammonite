@@ -29,7 +29,6 @@ export const renderVectorCanvas = (canvas: VectorCanvas) => {
   canvas.shapes.forEach((shape) => {
     switch (shape.type) {
       case EnumVectorShapeType.RECT:
-        //plot(canvas.pixels, 0, 0, 1);
         const x1 = Math.round((shape.data.px1 * width) / 100);
         const y1 = Math.round((shape.data.py1 * height) / 100);
         const x2 = Math.round((shape.data.px2 * width) / 100);

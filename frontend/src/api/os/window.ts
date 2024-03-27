@@ -27,7 +27,6 @@ export const openWindow = (
       title: title,
       height: 20,
       font: windowDefault.titleBar.font,
-      buttons: [],
     },
     borderThickness: windowDefault.borderThickness,
   };

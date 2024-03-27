@@ -1,10 +1,10 @@
 import { _12BitColour } from '../../functions/colour';
 
 const defaultBase16Colors = [
+  _12BitColour(10, 10, 10),
   _12BitColour(0, 0, 0),
   _12BitColour(15, 15, 15),
-  _12BitColour(9, 9, 9),
-  _12BitColour(6, 6, 6),
+  _12BitColour(6, 8, 11),
   _12BitColour(12, 12, 12),
   _12BitColour(3, 3, 3),
   _12BitColour(8, 8, 8),

@@ -1,7 +1,5 @@
 import { ScreenColour } from 'constants/colours';
 import { getHighestScreenZIndex } from 'functions/screen';
-import { EnumButtonFunction } from 'interface/icon';
-import { IButton } from 'interface/intuition';
 import { useScreenStore } from 'stores/useScreenStore';
 import { generateDefaultColorPalette } from '../../Objects/UIScreen/palettes';
 import { IScreen, IScreenMode } from '../../Objects/UIScreen/screenInterface';
@@ -9,6 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { screenDefault } from 'Objects/UIScreen/screenDefault';
 import { measureText } from 'api/lib/graphics/text';
 import { initPixelArray } from 'api/lib/graphics/pixelArray';
+import { EnumButtonType, IButton } from 'Objects/UIButton/buttonInterface';
 
 export const openScreen = (
   parentTaskId: string,
@@ -21,50 +20,6 @@ export const openScreen = (
 
   const nextScreenIndex = screens.length ? getHighestScreenZIndex() + 1 : 100;
 
-  const closeButton = () => {
-    const obj = new Object() as IButton;
-    obj.id = uuidv4();
-    obj.name = EnumButtonFunction.close;
-    obj.imageIndex = [4, 5];
-    obj.currentImageIndex = 0;
-    obj.boundBox = {
-      x: 0,
-      y: 0,
-      width: 0,
-      height: 0,
-    };
-  };
-
-  const orderButton = () => {
-    const obj = new Object() as IButton;
-    obj.id = uuidv4();
-    obj.name = EnumButtonFunction.order;
-    obj.imageIndex = [0, 1];
-    obj.currentImageIndex = 0;
-    obj.boundBox = {
-      x: 0,
-      y: 0,
-      width: 0,
-      height: 0,
-    };
-    return obj;
-  };
-
-  const maximizeButton = () => {
-    const obj = new Object() as IButton;
-    obj.id = uuidv4();
-    obj.name = EnumButtonFunction.maximize;
-    obj.imageIndex = [2, 3];
-    obj.currentImageIndex = 0;
-    obj.boundBox = {
-      x: 0,
-      y: 0,
-      width: 0,
-      height: 0,
-    };
-    return obj;
-  };
-
   const { height: titleBarHeight } = measureText(
     'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890!@#$%^&*()_+-=',
     screenDefault.titleBar.font.name,
@@ -72,6 +27,23 @@ export const openScreen = (
   );
 
   const screenId = uuidv4();
+
+  const buttons = (types: EnumButtonType[]) => {
+    const result: IButton[] = [];
+    let x = width - titleBarHeight;
+    types.map((type) => {
+      result.push({
+        id: uuidv4(),
+        x: x,
+        y: 0,
+        w: titleBarHeight,
+        h: titleBarHeight,
+        type: type,
+      });
+      x -= titleBarHeight;
+    });
+    return result;
+  };
 
   const data: IScreen = {
     screenId: screenId,
@@ -92,7 +64,7 @@ export const openScreen = (
           title: title,
           height: titleBarHeight,
           font: screenDefault.titleBar.font,
-          buttons: [orderButton(), maximizeButton()],
+          buttons: buttons([EnumButtonType.MAXIMIZE, EnumButtonType.ORDER]),
           pixels: initPixelArray(
             width,
             titleBarHeight,
@@ -118,7 +90,6 @@ export const openScreen = (
         ScreenColour.CLIENT
       ),
     },
-
     windows: [],
   };
   screens.push(data);

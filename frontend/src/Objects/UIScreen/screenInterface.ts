@@ -1,5 +1,5 @@
 import { IWindow } from 'Objects/UIWindow/windowInterface';
-import { IButton } from 'interface/intuition';
+import { IButton } from 'Objects/UIButton/buttonInterface';
 
 export interface IScreen {
   screenId: string;
@@ -55,8 +55,8 @@ export interface IScreentitleBar {
     name: string;
     size: number;
   };
-  buttons: IButton[];
   pixels: number[][];
+  buttons: IButton[];
 }
 
 export interface IScreenClient {
