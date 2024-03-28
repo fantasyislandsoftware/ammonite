@@ -1,10 +1,6 @@
-import { full, hi, low, med } from 'Objects/UIScreen/screenModes';
 import { getFile } from 'api/http/fileIO';
-import { openScreen } from 'api/os/screen';
-import { openWindow } from 'api/os/window';
 import { ITask, TaskState, TaskType, useTaskStore } from 'stores/useTaskStore';
 import { v4 as uuidv4 } from 'uuid';
-import { useScreenStore } from 'stores/useScreenStore';
 import { _addFont, _loadFontList } from 'jam/fonts';
 import {
   _getArrayElement,
@@ -14,6 +10,10 @@ import {
 } from 'jam/data';
 import { _openScreen, _openWindow } from 'jam/intuition';
 import { _jmp, _jmpIf, _label } from 'jam/logic';
+import { _add, _sub } from 'jam/maths';
+import { _define } from 'jam/branch';
+import { _log } from 'jam/debug';
+import { _startTask } from 'jam/task';
 
 export interface IParam {
   id: string;
@@ -189,10 +189,6 @@ export const execCommand = (task: ITask) => {
   return task;
 };
 
-const _startTask = (path: string) => {
-  startTask(path);
-};
-
 const killTask = (id: string) => {
   const { tasks, setTasks } = useTaskStore.getState();
   tasks.map((task, index) => {
@@ -201,20 +197,4 @@ const killTask = (id: string) => {
     }
   });
   setTasks(tasks);
-};
-
-const _define = (task: ITask, varName: IParam, value: IParam) => {
-  task.var[varName.id] = value.value;
-};
-
-const _log = (task: ITask, param: IParam) => {
-  console.log(param.value);
-};
-
-const _add = (task: ITask, varName: IParam, value: IParam) => {
-  task.var[varName.id] = task.var[varName.id] + Number(value.value);
-};
-
-const _sub = (task: ITask, varName: IParam, value: IParam) => {
-  task.var[varName.id] = task.var[varName.id] - Number(value.value);
 };

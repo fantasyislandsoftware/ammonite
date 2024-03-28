@@ -1,3 +1,1 @@
-export const windowClientEvents = () => {
-  //console.log('client');
-};
+export const windowClientEvents = () => {};

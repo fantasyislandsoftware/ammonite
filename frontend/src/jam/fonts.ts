@@ -27,12 +27,6 @@ export const _addFont = async (
         const measure = ctx.measureText(
           'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890'
         );
-        if (result.family === 'Arial' && s == 8) {
-          //console.log(measure);
-        }
-        if (result.family === 'Arial' && s == 10) {
-          //console.log(measure);
-        }
         metrics[s] = {
           top: measure.actualBoundingBoxAscent,
           height: Math.floor(

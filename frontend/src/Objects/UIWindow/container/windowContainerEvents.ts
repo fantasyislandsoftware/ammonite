@@ -17,8 +17,6 @@ export const windowContainerEvents = (
     type: event.type,
   };
 
-  console.log('window');
-
   const { x, y } = windowEvent;
   if (
     x >= window.borderThickness &&

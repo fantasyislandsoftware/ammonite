@@ -395,17 +395,14 @@ export const parse = (
             ) {
               const pointer = pointers[bitPlaneIndex];
               if (pointer) {
-                //console.log('handling bitPlaneIndex ' + bitPlaneIndex + ' at ' + pointer);
                 file.goto(startIndex + pointer);
 
                 for (let colIndex = 0; colIndex < colCount; colIndex++) {
                   const opCount = file.readUbyte();
                   if (opCount === 0) continue;
-                  //console.warn(opCount + " opCounts in column " + colIndex);
                   let destinationIndex = 0;
                   for (let opIndex = 0; opIndex < opCount; opIndex++) {
                     let opCode = file.readUbyte();
-                    //console.warn("opCode", opCode);
                     if (opCode === 0) {
                       //Same ops
                       const copyCount = file.readUbyte();
@@ -483,7 +480,6 @@ export const parse = (
           }
           img.pixels.push(line);
         }
-        //console.log("to pixels", performance.now() - now);
 
         break;
       default:

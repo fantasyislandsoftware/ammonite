@@ -213,8 +213,6 @@ export const getTextInfo = (
     width,
   } = buffer.measureText(str);
 
-  //console.log(buffer.measureText(str));
-
   const height = fontBoundingBoxAscent + fontBoundingBoxDescent;
   return {
     width: Math.floor(width + 2),

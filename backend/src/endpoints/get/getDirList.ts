@@ -16,7 +16,6 @@ const getDirList = async (app: Express) => {
       }
       json.push({ name: name, type: type });
     });
-    //console.log(json);
     res.send(json);
   });
 };

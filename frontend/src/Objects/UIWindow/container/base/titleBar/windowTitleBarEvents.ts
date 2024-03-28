@@ -12,8 +12,6 @@ export const windowTitleBarEvents = (
 
   switch (type) {
     case EnumOSEventType.MouseDown:
-      console.log('titleBar mouse down');
-
       const test = screen;
       test.windows[0].titleBar.title = 'test';
       test.windows[0].position.y = 10;
