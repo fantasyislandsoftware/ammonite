@@ -1,8 +1,8 @@
 import { useQuery } from 'react-query';
 import guiIconsPath from '../../assets/gfx/gui.iff';
 import { IBrush } from 'interface/graphics';
-import BinaryStream from 'api/lib/binarystream';
-import { detect, parse } from 'api/lib/iff';
+import BinaryStream from 'api/lib/data/binarystream';
+import { detect, parse } from 'api/lib/data/iff';
 import { useIntuitionStore } from 'stores/useIntuitionStore';
 import { initPixelArray } from 'api/lib/graphics/pixelArray';
 

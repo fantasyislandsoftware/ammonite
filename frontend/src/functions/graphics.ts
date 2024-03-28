@@ -1,8 +1,8 @@
 import { ICanvasTextInfo } from '../interface/canvas';
 import { useBufferStore } from '..//stores/useBufferStore';
 import guiIconsPath from '../assets/gfx/gui.iff';
-import BinaryStream from '../api/lib/binarystream';
-import { detect, parse } from '../api/lib/iff';
+import BinaryStream from '../api/lib/data/binarystream';
+import { detect, parse } from '../api/lib/data/iff';
 import { IBrush, IPixelBuffer } from '../interface/graphics';
 import { IScreen } from '../Objects/UIScreen/screenInterface';
 import { initPixelArray } from 'api/lib/graphics/pixelArray';

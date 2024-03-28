@@ -6,9 +6,9 @@ import { Backdrop } from 'Objects/UIBackdrop/jsx/Backdrop';
 import { startTask, startTaskProcessor } from 'functions/tasks';
 import { useErrorStore } from 'stores/useErrorStore';
 import './css/base.css';
-import { getHighestScreenZIndex } from 'functions/screen';
 import { screenContainerRender } from 'Objects/UIScreen/container/screenContainerRender';
 import { baseContainerEvents } from 'Objects/UIBase/container/baseContainerEvents';
+import { getHighestScreenZIndex } from 'Objects/UIScreen/screenFunctions';
 
 const App = () => {
   const { screens, setScreens } = useScreenStore();

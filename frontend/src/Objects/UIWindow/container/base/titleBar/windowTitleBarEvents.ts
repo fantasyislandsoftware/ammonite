@@ -1,5 +1,5 @@
-import { setScreen } from 'functions/screen';
 import { EnumOSEventType } from 'interface/event';
+import { setScreen } from 'Objects/UIScreen/screenFunctions';
 import { IScreen } from 'Objects/UIScreen/screenInterface';
 import { IWindow, IWindowEvent } from 'Objects/UIWindow/windowInterface';
 

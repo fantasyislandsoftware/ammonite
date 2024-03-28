@@ -5,8 +5,8 @@ import {
   drawText,
   fillRect,
 } from '../../../../../functions/graphics';
-import { WindowColour } from 'constants/colours';
 import { IWindowContainerCalc } from '../../windowContainerCalc';
+import { WindowColour } from 'Objects/UIWindow/windowColour';
 
 export const windowTitleBarRender = (
   window: IWindow,

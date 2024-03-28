@@ -7,7 +7,7 @@ import {
   EnumButtonState,
   EnumButtonType,
 } from 'Objects/UIButton/buttonInterface';
-import { ScreenColour } from 'constants/colours';
+import { ScreenColour } from 'Objects/UIScreen/screenColour';
 
 export const screenTitleBarRender = (pixels: number[][], screen: IScreen) => {
   const { titleBar } = screen;

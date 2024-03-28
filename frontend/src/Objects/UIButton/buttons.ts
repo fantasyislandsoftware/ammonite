@@ -4,9 +4,8 @@ import {
   VectorCanvas,
   renderVectorCanvas,
 } from 'api/lib/graphics/vector';
-import { ButtonColour, ScreenColour } from 'constants/colours';
-import { Button } from 'semantic-ui-react';
 import { EnumButtonState } from './buttonInterface';
+import { ButtonColour } from './buttonColour';
 
 export const orderButton = (
   w: number,

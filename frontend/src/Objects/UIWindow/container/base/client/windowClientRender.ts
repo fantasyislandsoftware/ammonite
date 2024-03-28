@@ -1,7 +1,7 @@
-import { WindowColour } from 'constants/colours';
 import { createPixelBuffer } from 'functions/graphics';
 import { IWindow } from 'Objects/UIWindow/windowInterface';
 import { IWindowContainerCalc } from '../../windowContainerCalc';
+import { WindowColour } from 'Objects/UIWindow/windowColour';
 
 export const windowClientRender = (
   window: IWindow,

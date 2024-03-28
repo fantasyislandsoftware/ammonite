@@ -1,6 +1,5 @@
 import { screenBringToFront } from 'api/os/screen';
 import { EnumMouseButton, IClientMouse, IScreenMouse } from 'functions/mouse';
-import { screenIdToIndex } from 'functions/screen';
 import { EnumOSEventType, IBaseEvent } from 'interface/event';
 import { useScreenStore } from 'stores/useScreenStore';
 import {
@@ -8,6 +7,7 @@ import {
   screenContainerSetYToTop,
 } from '../screenContainerFunc';
 import { IScreen } from 'Objects/UIScreen/screenInterface';
+import { screenIdToIndex } from 'Objects/UIScreen/screenFunctions';
 
 export const screenTitleBarEvents = (
   event: IBaseEvent,

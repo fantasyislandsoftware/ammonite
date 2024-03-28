@@ -1,5 +1,3 @@
-import { ScreenColour } from 'constants/colours';
-import { getHighestScreenZIndex } from 'functions/screen';
 import { useScreenStore } from 'stores/useScreenStore';
 import { generateDefaultColorPalette } from '../../Objects/UIScreen/palettes';
 import { IScreen, IScreenMode } from '../../Objects/UIScreen/screenInterface';
@@ -8,6 +6,8 @@ import { screenDefault } from 'Objects/UIScreen/screenDefault';
 import { measureText } from 'api/lib/graphics/text';
 import { initPixelArray } from 'api/lib/graphics/pixelArray';
 import { EnumButtonType, IButton } from 'Objects/UIButton/buttonInterface';
+import { ScreenColour } from 'Objects/UIScreen/screenColour';
+import { getHighestScreenZIndex } from 'Objects/UIScreen/screenFunctions';
 
 export const openScreen = (
   parentTaskId: string,
