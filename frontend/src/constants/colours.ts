@@ -12,3 +12,8 @@ export const WindowColour = {
   TITLEBAR_TEXT: 0,
   CLIENT: 2,
 };
+
+export const ButtonColour = {
+  PRIMARY: 1,
+  SECONDARY: 0,
+};

@@ -20,27 +20,31 @@ export const openScreen = (
 
   const nextScreenIndex = screens.length ? getHighestScreenZIndex() + 1 : 100;
 
-  const { height: titleBarHeight } = measureText(
+  let { height: titleBarHeight } = measureText(
     'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890!@#$%^&*()_+-=',
     screenDefault.titleBar.font.name,
     screenDefault.titleBar.font.size
   );
 
+  const buttonSize = Math.round(titleBarHeight / 2) * 2;
+
+  titleBarHeight += 1;
+
   const screenId = uuidv4();
 
   const buttons = (types: EnumButtonType[]) => {
     const result: IButton[] = [];
-    let x = width - titleBarHeight;
+    let x = width - buttonSize;
     types.map((type) => {
       result.push({
         id: uuidv4(),
         x: x,
         y: 0,
-        w: titleBarHeight,
-        h: titleBarHeight,
+        w: buttonSize,
+        h: buttonSize,
         type: type,
       });
-      x -= titleBarHeight;
+      x -= buttonSize;
     });
     return result;
   };

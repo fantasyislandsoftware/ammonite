@@ -11,3 +11,8 @@ export enum EnumButtonType {
   ORDER = 'order',
   MAXIMIZE = 'maximize',
 }
+
+export enum EnumButtonState {
+  DOWN = 'down',
+  UP = 'up',
+}

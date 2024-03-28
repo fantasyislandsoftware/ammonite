@@ -4,11 +4,18 @@ import {
   VectorCanvas,
   renderVectorCanvas,
 } from 'api/lib/graphics/vector';
-import { ScreenColour } from 'constants/colours';
+import { ButtonColour, ScreenColour } from 'constants/colours';
+import { Button } from 'semantic-ui-react';
+import { EnumButtonState } from './buttonInterface';
 
-export const orderButton = (w: number, h: number) => {
+export const orderButton = (
+  w: number,
+  h: number,
+  bgColorIndex: number,
+  state: EnumButtonState
+) => {
   const data: VectorCanvas = {
-    pixels: initPixelArray(w, h, ScreenColour.BORDER),
+    pixels: initPixelArray(w, h, bgColorIndex),
     bgColorIndex: 0,
     shapes: [
       {
@@ -18,7 +25,10 @@ export const orderButton = (w: number, h: number) => {
           py1: 10,
           px2: 70,
           py2: 70,
-          colorIndex: ScreenColour.CLIENT,
+          colorIndex:
+            state === EnumButtonState.UP
+              ? ButtonColour.PRIMARY
+              : ButtonColour.SECONDARY,
         },
       },
       {
@@ -28,7 +38,10 @@ export const orderButton = (w: number, h: number) => {
           py1: 30,
           px2: 90,
           py2: 90,
-          colorIndex: ScreenColour.TITLEBAR_BACKGROUND,
+          colorIndex:
+            state === EnumButtonState.UP
+              ? ButtonColour.SECONDARY
+              : ButtonColour.PRIMARY,
         },
       },
     ],
@@ -36,9 +49,14 @@ export const orderButton = (w: number, h: number) => {
   return renderVectorCanvas(data);
 };
 
-export const maximizeButton = (w: number, h: number) => {
+export const maximizeButton = (
+  w: number,
+  h: number,
+  bgColorIndex: number,
+  state: EnumButtonState
+) => {
   const data: VectorCanvas = {
-    pixels: initPixelArray(w, h, ScreenColour.BORDER),
+    pixels: initPixelArray(w, h, bgColorIndex),
     bgColorIndex: 0,
     shapes: [
       {
@@ -48,7 +66,10 @@ export const maximizeButton = (w: number, h: number) => {
           py1: 10,
           px2: 90,
           py2: 20,
-          colorIndex: ScreenColour.TITLEBAR_BACKGROUND,
+          colorIndex:
+            state === EnumButtonState.UP
+              ? ButtonColour.PRIMARY
+              : ButtonColour.SECONDARY,
         },
       },
       {
@@ -58,7 +79,10 @@ export const maximizeButton = (w: number, h: number) => {
           py1: 20,
           px2: 90,
           py2: 90,
-          colorIndex: ScreenColour.CLIENT,
+          colorIndex:
+            state === EnumButtonState.UP
+              ? ButtonColour.SECONDARY
+              : ButtonColour.PRIMARY,
         },
       },
     ],
