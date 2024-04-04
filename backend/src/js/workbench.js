@@ -1,9 +1,9 @@
 define(wbScreenId, 0);
 define(testWindowId, 0);
-define(testWindowId, 0);
+define(system, 0);
 openScreen(320, 256, low, "Workbench", wbScreenId);
-openScreen(320, 256, low, "test", testScreenId);
 
-//openWindow(wbScreenId, 10, 10, 100, 100, "Test Window", testWindowId);
+drawIcon(wbScreenId, 0, 0, system);
+
 label(START);
 jmp(START);

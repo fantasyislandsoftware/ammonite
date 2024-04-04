@@ -14,6 +14,7 @@ import { _add, _sub } from 'jam/maths';
 import { _define } from 'jam/branch';
 import { _log } from 'jam/debug';
 import { _startTask } from 'jam/task';
+import { _drawIcon } from 'jam/graphics';
 
 export interface IParam {
   id: string;
@@ -175,6 +176,15 @@ export const execCommand = (task: ITask) => {
       break;
     case 'getFieldValue':
       _getFieldValue(task, line.params[0], line.params[1], line.params[2]);
+      break;
+    case 'drawIcon':
+      _drawIcon(
+        task,
+        line.params[0],
+        line.params[1],
+        line.params[2],
+        line.params[3]
+      );
       break;
     default:
       task.state = TaskState.ERROR;

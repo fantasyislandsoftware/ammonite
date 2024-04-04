@@ -1,4 +1,3 @@
-import { getTextInfo } from 'functions/graphics';
 import { IWindow } from 'Objects/UIWindow/windowInterface';
 import { useFontStore } from 'stores/useFontStore';
 
@@ -10,7 +9,7 @@ export interface IWindowContainerCalc {
 }
 
 export const windowContainerCalc = (window: IWindow) => {
-  const { width, height, titleBar, position, borderThickness } = window;
+  /*const { width, height, titleBar, position, borderThickness } = window;
   const barWidth = width - borderThickness * 2;
   const textInfo = getTextInfo(
     titleBar.title,
@@ -28,5 +27,5 @@ export const windowContainerCalc = (window: IWindow) => {
       width: textInfo.width,
       height: font.height,
     },
-  };
+  };*/
 };
