@@ -7,7 +7,10 @@ import {
   screenContainerSetYToTop,
 } from '../screenContainerFunc';
 import { IScreen } from 'Objects/UIScreen/screenInterface';
-import { screenIdToIndex } from 'Objects/UIScreen/screenFunctions';
+import {
+  getHighestScreenZIndex,
+  screenIdToIndex,
+} from 'Objects/UIScreen/screenFunctions';
 import { buttonContainerEvents } from 'Objects/UIButton/container/buttonContainerEvents';
 
 const inBoundary = (
@@ -35,6 +38,8 @@ export const screenTitleBarEvents = (
   const screenIndex = screenIdToIndex(screen.screenId);
   if (screenIndex === undefined) return;
 
+  const topScreen = getHighestScreenZIndex();
+
   /* Button events */
   screen.titleBar?.buttons.map((button) => {
     if (
@@ -46,7 +51,7 @@ export const screenTitleBarEvents = (
         button.y + button.h
       )
     ) {
-      buttonContainerEvents(event, screen, button);
+      buttonContainerEvents(event, screen, button, screen.zIndex === topScreen);
     }
   });
 
@@ -67,10 +72,6 @@ export const screenTitleBarEvents = (
     screenContainerDrag(clientMouse);
   };
 
-  const mouseDoubleClick = () => {
-    screenContainerSetYToTop(screen);
-  };
-
   switch (event.type) {
     case EnumOSEventType.None:
       break;
@@ -83,8 +84,7 @@ export const screenTitleBarEvents = (
     case EnumOSEventType.MouseMove:
       mouseMove();
       break;
-    case EnumOSEventType.MouseDoubleClick:
-      mouseDoubleClick();
+    default:
       break;
   }
 };

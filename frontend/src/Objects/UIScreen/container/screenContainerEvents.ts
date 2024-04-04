@@ -3,9 +3,6 @@ import { EnumOSEventType, IBaseEvent } from 'interface/event';
 import { screenClientEvents } from './client/screenClientEvents';
 import { screenTitleBarEvents } from './titleBar/screenTitleBarEvents';
 import { IScreen } from '../screenInterface';
-import { resetAllButtons } from 'Objects/UIButton/buttonContainerFunc';
-import { useScreenStore } from 'stores/useScreenStore';
-import { screenIdToIndex } from '../screenFunctions';
 import { screenContainerBringToFront } from './screenContainerFunc';
 
 export const screenContainerEvents = (
@@ -32,6 +29,7 @@ export const screenContainerEvents = (
     case EnumOSEventType.MouseDown:
       mouseDown();
       break;
+    case EnumOSEventType.MouseUp:
     default:
       break;
   }

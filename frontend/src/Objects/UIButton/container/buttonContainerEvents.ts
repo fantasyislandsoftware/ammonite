@@ -13,7 +13,8 @@ import { screenContainerRender } from 'Objects/UIScreen/container/screenContaine
 export const buttonContainerEvents = (
   event: IBaseEvent,
   screen: IScreen,
-  button: IButton
+  button: IButton,
+  x: boolean
 ) => {
   const { setSelectedScreen } = useScreenStore.getState();
   const screenIndex = screenIdToIndex(screen.screenId);
@@ -22,15 +23,22 @@ export const buttonContainerEvents = (
   /* Button events */
 
   const mouseDownLeftButton = () => {
-    setSelectedScreen(undefined);
-    setButtonDown(button.id);
+    //console.log(x);
+    if (x) {
+      setSelectedScreen(undefined);
+      setButtonDown(button.id);
+    }
   };
 
   const mouseUpLeftButton = () => {
-    const topScreen = getHighestScreenZIndex();
-    if (screen.zIndex == topScreen) {
+    //console.log(button.state);
+    if (button.state === EnumButtonState.DOWN) {
       execButtonFunction(screen, button);
     }
+    //const topScreen = getHighestScreenZIndex();
+    //if (screen.zIndex == topScreen) {
+    //execButtonFunction(screen, button);
+    //}
   };
 
   const mouseDownAnyButton = () => {

@@ -13,10 +13,6 @@ import {
 export const baseContainerEvents = (_event: IBaseEvent, screen?: IScreen) => {
   const event = _event;
 
-  if (event.type === EnumOSEventType.MouseUp) {
-    resetAllButtons();
-  }
-
   if (event.detail === 2) {
     event.type = EnumOSEventType.MouseDoubleClick;
   }
@@ -38,6 +34,10 @@ export const baseContainerEvents = (_event: IBaseEvent, screen?: IScreen) => {
     if (id === EnumOSEventObjectType.Screen) {
       screenContainerEvents(event, screenMouse, clientMouse, screen);
     }
+  }
+
+  if (event.type === EnumOSEventType.MouseUp) {
+    resetAllButtons();
   }
 
   if (event.target.dataset === undefined) {
