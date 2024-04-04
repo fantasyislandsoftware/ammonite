@@ -1,3 +1,4 @@
+import { resetAllButtons } from 'Objects/UIButton/buttonContainerFunc';
 import { backdropContainerEvents } from '../../UIBackdrop/container/backdropContainerEvents';
 import { screenContainerEvents } from '../../UIScreen/container/screenContainerEvents';
 import { IScreen } from '../../UIScreen/screenInterface';
@@ -11,6 +12,10 @@ import {
 
 export const baseContainerEvents = (_event: IBaseEvent, screen?: IScreen) => {
   const event = _event;
+
+  if (event.type === EnumOSEventType.MouseUp) {
+    resetAllButtons();
+  }
 
   if (event.detail === 2) {
     event.type = EnumOSEventType.MouseDoubleClick;

@@ -1,13 +1,29 @@
-import { screenBringToFront } from 'api/os/screen';
 import { EnumMouseButton, IClientMouse, IScreenMouse } from 'functions/mouse';
 import { EnumOSEventType, IBaseEvent } from 'interface/event';
 import { useScreenStore } from 'stores/useScreenStore';
 import {
+  screenContainerBringToFront,
   screenContainerDrag,
   screenContainerSetYToTop,
 } from '../screenContainerFunc';
 import { IScreen } from 'Objects/UIScreen/screenInterface';
 import { screenIdToIndex } from 'Objects/UIScreen/screenFunctions';
+import { buttonContainerEvents } from 'Objects/UIButton/container/buttonContainerEvents';
+
+const inBoundary = (
+  screenMouse: IScreenMouse,
+  x1: number,
+  y1: number,
+  x2: number,
+  y2: number
+) => {
+  return (
+    screenMouse.screen.x > x1 &&
+    screenMouse.screen.x < x2 &&
+    screenMouse.screen.y > y1 &&
+    screenMouse.screen.y < y2
+  );
+};
 
 export const screenTitleBarEvents = (
   event: IBaseEvent,
@@ -15,24 +31,32 @@ export const screenTitleBarEvents = (
   clientMouse: IClientMouse,
   screen: IScreen
 ) => {
-  const { selectedScreen, setSelectedScreen, screens } =
-    useScreenStore.getState();
+  const { setSelectedScreen, screens } = useScreenStore.getState();
   const screenIndex = screenIdToIndex(screen.screenId);
   if (screenIndex === undefined) return;
 
-  const mouseDown = () => {
-    if (event.button === EnumMouseButton.Left) {
-      /* Select selected screen */
-      setSelectedScreen({
-        id: screen.screenId,
-        offset: {
-          y: clientMouse.y - screens[screenIndex].position.y,
-        },
-      });
-
-      /* Set highest z-index */
-      screenBringToFront(screen);
+  /* Button events */
+  screen.titleBar?.buttons.map((button) => {
+    if (
+      inBoundary(
+        screenMouse,
+        button.x,
+        button.y,
+        button.x + button.w,
+        button.y + button.h
+      )
+    ) {
+      buttonContainerEvents(event, screen, button);
     }
+  });
+
+  const mouseDown = () => {
+    setSelectedScreen({
+      id: screen.screenId,
+      offset: {
+        y: clientMouse.y - screens[screenIndex].position.y,
+      },
+    });
   };
 
   const mouseUp = () => {
@@ -48,6 +72,8 @@ export const screenTitleBarEvents = (
   };
 
   switch (event.type) {
+    case EnumOSEventType.None:
+      break;
     case EnumOSEventType.MouseDown:
       mouseDown();
       break;

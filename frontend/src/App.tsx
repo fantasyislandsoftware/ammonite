@@ -23,6 +23,9 @@ const App = () => {
     document.addEventListener('mouseleave', (e) => {
       baseContainerEvents(e);
     });
+    document.addEventListener('keydown', (e) => {
+      console.log(screens);
+    });
   };
 
   useEffect(() => {

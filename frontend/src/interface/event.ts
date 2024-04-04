@@ -1,7 +1,12 @@
 import { IClientMouse, IScreenMouse } from '../functions/mouse';
 import { IButton } from '../Objects/UIButton/buttonInterface';
 
-export type IBaseEvent = any;
+export interface IBaseEvent {
+  type: string;
+  target: any;
+  detail: number;
+  button: number;
+}
 
 export interface IOSEvent {
   object:
@@ -22,6 +27,7 @@ export interface IOSEvent {
 }
 
 export enum EnumOSEventType {
+  None = 'none',
   MouseClick = 'mouseclick',
   MouseDown = 'mousedown',
   MouseUp = 'mouseup',

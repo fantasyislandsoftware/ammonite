@@ -4,10 +4,11 @@ export interface IButton {
   y: number;
   w: number;
   h: number;
-  type: EnumButtonType;
+  func: EnumButtonFunc;
+  state: EnumButtonState;
 }
 
-export enum EnumButtonType {
+export enum EnumButtonFunc {
   ORDER = 'order',
   MAXIMIZE = 'maximize',
 }

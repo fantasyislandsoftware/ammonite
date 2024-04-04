@@ -1,7 +1,6 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import { baseContainerEvents } from 'Objects/UIBase/container/baseContainerEvents';
 import { EnumOSEventObjectType } from 'interface/event';
-import { canvasRenderStyle } from 'Objects/UIScreen/styles';
 import { TaskState, useTaskStore } from 'stores/useTaskStore';
 
 export const Backdrop = () => {
@@ -13,6 +12,7 @@ export const Backdrop = () => {
         width: '100%',
         height: '100%',
         zIndex: -1000,
+        userSelect: 'none',
       }}
       onMouseUp={(event) => baseContainerEvents(event)}
       onMouseMove={(event) => baseContainerEvents(event)}

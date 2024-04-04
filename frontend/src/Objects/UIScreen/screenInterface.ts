@@ -1,9 +1,11 @@
 import { IWindow } from 'Objects/UIWindow/windowInterface';
 import { IButton } from 'Objects/UIButton/buttonInterface';
+import { EnumUIObjectType } from 'Objects/UIObject/objectInterface';
 
 export interface IScreen {
   screenId: string;
   parentTaskId: string;
+  object: EnumUIObjectType;
   position: IScreenPosition;
   mode: IScreenMode;
   width: number;

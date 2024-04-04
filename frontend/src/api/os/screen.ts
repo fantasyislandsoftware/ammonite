@@ -5,9 +5,14 @@ import { v4 as uuidv4 } from 'uuid';
 import { screenDefault } from 'Objects/UIScreen/screenDefault';
 import { measureText } from 'api/lib/graphics/text';
 import { initPixelArray } from 'api/lib/graphics/pixelArray';
-import { EnumButtonType, IButton } from 'Objects/UIButton/buttonInterface';
+import {
+  EnumButtonState,
+  EnumButtonFunc,
+  IButton,
+} from 'Objects/UIButton/buttonInterface';
 import { ScreenColour } from 'Objects/UIScreen/screenColour';
 import { getHighestScreenZIndex } from 'Objects/UIScreen/screenFunctions';
+import { EnumUIObjectType } from 'Objects/UIObject/objectInterface';
 
 export const openScreen = (
   parentTaskId: string,
@@ -32,7 +37,7 @@ export const openScreen = (
 
   const screenId = uuidv4();
 
-  const buttons = (types: EnumButtonType[]) => {
+  const buttons = (types: EnumButtonFunc[]) => {
     const result: IButton[] = [];
     let x = width - buttonSize;
     types.map((type) => {
@@ -42,7 +47,8 @@ export const openScreen = (
         y: 0,
         w: buttonSize,
         h: buttonSize,
-        type: type,
+        func: type,
+        state: EnumButtonState.UP,
       });
       x -= buttonSize;
     });
@@ -52,6 +58,7 @@ export const openScreen = (
   const data: IScreen = {
     screenId: screenId,
     parentTaskId: parentTaskId,
+    object: EnumUIObjectType.SCREEN,
     position: {
       y: 0,
       z: 0,
@@ -68,7 +75,7 @@ export const openScreen = (
           title: title,
           height: titleBarHeight,
           font: screenDefault.titleBar.font,
-          buttons: buttons([EnumButtonType.MAXIMIZE, EnumButtonType.ORDER]),
+          buttons: buttons([EnumButtonFunc.MAXIMIZE, EnumButtonFunc.ORDER]),
           pixels: initPixelArray(
             width,
             titleBarHeight,
@@ -102,34 +109,6 @@ export const openScreen = (
     setSelectedScreen(undefined);
   });
   return screenId;
-};
-
-export const screenBringToFront = (screen: IScreen) => {
-  const { screens, setScreens } = useScreenStore.getState();
-  const screenIndex = screens.findIndex((s) => s.screenId === screen.screenId);
-  let pos = 100;
-  screens.map((_screen) => {
-    if (_screen.screenId !== screen?.screenId) {
-      _screen.zIndex = pos;
-      pos++;
-    }
-  });
-  screens[screenIndex].zIndex = pos;
-  setScreens(screens);
-};
-
-export const screenSendToBack = (screen: IScreen) => {
-  const { screens, setScreens } = useScreenStore.getState();
-  const screenIndex = screens.findIndex((s) => s.screenId === screen.screenId);
-  let pos = getHighestScreenZIndex();
-  screens.map((_screen) => {
-    if (_screen.screenId !== screen?.screenId) {
-      _screen.zIndex = pos;
-      pos--;
-    }
-  });
-  screens[screenIndex].zIndex = pos;
-  setScreens(screens);
 };
 
 export const findScreenIndex = (id: string) => {
