@@ -8,6 +8,9 @@
 		},
 		{
 			"path": "."
+		},
+		{
+			"path": "../../../../FS-UAE/Hard Drives/dev_system"
 		}
 	],
 	"settings": {

@@ -1,0 +1,10 @@
+{
+    "name": "Ammonite",
+    "target": "",
+    "source": {
+        "name": "ammonite"
+    },
+    "build": {
+        "name": "ammonite"
+    }
+}

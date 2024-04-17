@@ -1,8 +1,9 @@
+import { spawn } from "child_process";
 import { Express } from "express";
 
 const getFontList = async (app: Express) => {
   app.get("/getFontList", async (req, res) => {
-    const { stdout, stderr } = Bun.spawn(["fc-list"]);
+    const { stdout, stderr } = spawn("fc-list");
     const list = (await new Response(stdout).text()).split("\n");
     let data: any = [];
     list.map((font) => {

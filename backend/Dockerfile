@@ -1,12 +1,10 @@
-FROM oven/bun:latest as backend
+FROM i386/alpine as backend
 
-RUN apt update && apt install nano fontconfig -y
+RUN apk add --update npm nano fontconfig
 
 COPY ./backend/package.json ./
-COPY ./backend/bun.lockb ./
 COPY ./backend/src ./
 COPY ./backend/fonts/ /usr/share/fonts/truetype/
 
-RUN bun install
-
 WORKDIR /home/node/app
+RUN npm install

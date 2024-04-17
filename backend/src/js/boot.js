@@ -24,6 +24,9 @@ add(n, 1);
 jmpIf(n, notEq, fontCount, FONT_LOADING_LOOP);
 log("fonts loaded");
 
+/* Load Icons */
+loadIcons(prIcons);
+
 /* Temp loop */
 //label(LOOP);
 //jmp(LOOP);

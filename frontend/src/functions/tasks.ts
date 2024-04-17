@@ -14,7 +14,9 @@ import { _add, _sub } from 'jam/maths';
 import { _define } from 'jam/branch';
 import { _log } from 'jam/debug';
 import { _startTask } from 'jam/task';
-import { _drawIcon } from 'jam/graphics';
+import { _drawIcon, _loadIcons } from 'jam/graphics';
+import { EnumDataFormat } from 'interface/data';
+import { get } from 'http';
 
 export interface IParam {
   id: string;
@@ -30,9 +32,10 @@ export enum IData {
 export const startTask = async (path: string) => {
   const name = path.substring(path.lastIndexOf('/') + 1);
   const { tasks, setTasks } = useTaskStore.getState();
-  const data = (await getFile(path)).split('\n');
+  let data = await getFile(path, EnumDataFormat.TEXT);
+  data = data.split('\n');
   const lines: string[] = [];
-  data.forEach((line) => {
+  data.forEach((line: string) => {
     line = line.trimStart().trimEnd();
     if (line !== '' && !line.startsWith('//') && !line.startsWith('/*')) {
       lines.push(line.trimStart().trimEnd());
@@ -185,6 +188,9 @@ export const execCommand = (task: ITask) => {
         line.params[2],
         line.params[3]
       );
+      break;
+    case 'loadIcons':
+      _loadIcons(task, line.params[0]);
       break;
     default:
       task.state = TaskState.ERROR;

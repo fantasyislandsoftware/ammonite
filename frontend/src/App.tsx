@@ -9,6 +9,8 @@ import './css/base.css';
 import { screenContainerRender } from 'Objects/UIScreen/container/screenContainerRender';
 import { baseContainerEvents } from 'Objects/UIBase/container/baseContainerEvents';
 import { getHighestScreenZIndex } from 'Objects/UIScreen/screenFunctions';
+import { getTest } from 'api/http/fileIO';
+import { ENV } from 'constants/env';
 
 const App = () => {
   const { screens, setScreens } = useScreenStore();
@@ -28,12 +30,17 @@ const App = () => {
     });
   };
 
+  const test = () => {
+    getTest(`${ENV.baseDir}resource/icons.iff`);
+  };
+
   useEffect(() => {
     async function boot() {
       window.onerror = (message, source, lineno, colno, error) => {
         console.log('error');
       };
       startTask('/home/node/app/src/js/boot.js');
+      //test();
     }
     if (initBoot) {
       boot();
