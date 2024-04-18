@@ -1,3 +1,4 @@
+import { IPixelArray } from 'interface/graphics';
 import { drawFillRect, plot } from './draw';
 
 export interface VectorRect {
@@ -18,7 +19,7 @@ export type VectorShape = {
 };
 
 export interface VectorCanvas {
-  pixels: number[][];
+  pixels: IPixelArray;
   bgColorIndex: number;
   shapes: VectorShape[];
 }

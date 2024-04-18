@@ -14,7 +14,7 @@ const FILETYPE = {
 };
 
 //@ts-nocheck
-export const detect = function (file: any) {
+export const detectIFF = function (file: any) {
   const id = file.readString(4, 0);
   if (id === 'FORM') {
     const size = file.readDWord();
@@ -35,7 +35,7 @@ export const detect = function (file: any) {
   }
 };
 
-export const parse = (
+export const parseIFF = (
   file: any,
   decodeBody: boolean,
   fileType: any,

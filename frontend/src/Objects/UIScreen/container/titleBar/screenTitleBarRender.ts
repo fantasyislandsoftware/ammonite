@@ -8,8 +8,9 @@ import {
   EnumButtonFunc,
 } from 'Objects/UIButton/buttonInterface';
 import { ScreenColour } from 'Objects/UIScreen/screenColour';
+import { IPixelArray } from 'interface/graphics';
 
-export const screenTitleBarRender = (pixels: number[][], screen: IScreen) => {
+export const screenTitleBarRender = (pixels: IPixelArray, screen: IScreen) => {
   const { titleBar } = screen;
   if (!titleBar) return pixels;
 

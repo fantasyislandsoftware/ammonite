@@ -1,5 +1,7 @@
+import { IPixelArray } from 'interface/graphics';
+
 export const plot = (
-  pixels: number[][],
+  pixels: IPixelArray,
   x: number,
   y: number,
   colorIndex: number
@@ -12,7 +14,7 @@ export const plot = (
 };
 
 export const drawLine = (
-  pixels: number[][],
+  pixels: IPixelArray,
   x0: number,
   y0: number,
   x1: number,
@@ -44,7 +46,7 @@ export const drawLine = (
 };
 
 export const drawFillRect = (
-  pixels: number[][],
+  pixels: IPixelArray,
   x1: number,
   y1: number,
   x2: number,

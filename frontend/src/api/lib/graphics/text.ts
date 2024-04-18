@@ -1,3 +1,4 @@
+import { IPixelArray } from 'interface/graphics';
 import { useBufferStore } from 'stores/useBufferStore';
 
 export const measureText = (text: string, font: string, size: number) => {
@@ -22,7 +23,7 @@ export const measureText = (text: string, font: string, size: number) => {
 };
 
 export const textOut = (
-  pixels: number[][],
+  pixels: IPixelArray,
   x: number,
   y: number,
   text: string,

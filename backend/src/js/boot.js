@@ -26,6 +26,10 @@ log("fonts loaded");
 
 /* Load Icons */
 loadIcons(prIcons);
+label(ICONS_LOADING);
+getPromiseState(prIcons, prIconsState);
+jmpIf(prIconsState, eq, 0, ICONS_LOADING);
+log("icons loaded");
 
 /* Temp loop */
 //label(LOOP);

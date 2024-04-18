@@ -1,5 +1,5 @@
 import BinaryStream from 'api/lib/data/binarystream';
-import { detect, parse } from 'api/lib/data/iff';
+import { detectIFF, parseIFF } from 'api/lib/data/iff';
 import { ENV } from 'constants/env';
 import { EnumDataFormat } from 'interface/data';
 
@@ -38,9 +38,9 @@ export const getTest = async (path: string) => {
 
   const stream = BinaryStream(data.slice(0, data.byteLength), true);
   //console.log(stream);
-  const fileType = detect(stream);
+  const fileType = detectIFF(stream);
   //console.log(fileType);
-  const iff: any = parse(stream, true, fileType);
+  const iff: any = parseIFF(stream, true, fileType);
   console.log(iff);
 
   //const y = Buffer.from(x).toString('base64');

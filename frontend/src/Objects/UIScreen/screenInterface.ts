@@ -1,6 +1,7 @@
 import { IWindow } from 'Objects/UIWindow/windowInterface';
 import { IButton } from 'Objects/UIButton/buttonInterface';
 import { EnumUIObjectType } from 'Objects/UIObject/objectInterface';
+import { IPixelArray } from 'interface/graphics';
 
 export interface IScreen {
   screenId: string;
@@ -16,9 +17,9 @@ export interface IScreen {
   };
   titleBar: IScreentitleBar | null;
   numberOfColours: number;
-  palette: number[][];
+  palette: IPixelArray;
   ctx: CanvasRenderingContext2D | null;
-  pixels: number[][];
+  pixels: IPixelArray;
   margin: number;
   zIndex: number;
   aspect: {
@@ -57,12 +58,12 @@ export interface IScreentitleBar {
     name: string;
     size: number;
   };
-  pixels: number[][];
+  pixels: IPixelArray;
   buttons: IButton[];
 }
 
 export interface IScreenClient {
-  pixels: number[][];
+  pixels: IPixelArray;
 }
 
 export interface IScreenAspect {

@@ -1,9 +1,11 @@
+import { IPixelArray } from 'interface/graphics';
+
 export const initPixelArray = (
   width: number,
   height: number,
   colourIndex: number
-): number[][] => {
-  const array: number[][] = [];
+): IPixelArray => {
+  const array: IPixelArray = [];
   for (let y = 0; y < height; y++) {
     const row = [];
     for (let x = 0; x < width; x++) {
@@ -15,8 +17,8 @@ export const initPixelArray = (
 };
 
 export const pixelMerge = (
-  from: number[][],
-  to: number[][],
+  from: IPixelArray,
+  to: IPixelArray,
   offsetX: number,
   offsetY: number
 ) => {
