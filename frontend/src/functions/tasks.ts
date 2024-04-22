@@ -14,9 +14,8 @@ import { _add, _sub } from 'jam/maths';
 import { _define } from 'jam/branch';
 import { _log } from 'jam/debug';
 import { _startTask } from 'jam/task';
-import { _drawIcon, _loadIcons } from 'jam/graphics';
+import { _drawImage, _loadIcons } from 'jam/graphics';
 import { EnumDataFormat } from 'interface/data';
-import { get } from 'http';
 
 export interface IParam {
   id: string;
@@ -180,13 +179,14 @@ export const execCommand = (task: ITask) => {
     case 'getFieldValue':
       _getFieldValue(task, line.params[0], line.params[1], line.params[2]);
       break;
-    case 'drawIcon':
-      _drawIcon(
-        task,
-        line.params[0],
-        line.params[1],
-        line.params[2],
-        line.params[3]
+    case 'drawImage':
+      _drawImage(
+        line.params[0].value as string,
+        line.params[1].value as string,
+        line.params[2].value as number,
+        line.params[3].value as number,
+        line.params[4].value as number,
+        line.params[5].value as number
       );
       break;
     case 'loadIcons':

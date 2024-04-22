@@ -1,4 +1,4 @@
 export const ButtonColour = {
-  PRIMARY: 1,
-  SECONDARY: 0,
+  PRIMARY: 0,
+  SECONDARY: 2,
 };

@@ -11,7 +11,7 @@ export const screenContainerRender = (screen: IScreen): IScreen => {
   /* Title Bar */
   if (titleBar) {
     titleBar.pixels = screenTitleBarRender(titleBar.pixels, screen);
-    screen.pixels = pixelMerge(titleBar.pixels, screen.pixels, 0, 0);
+    screen.pixels = pixelMerge(titleBar.pixels, screen.pixels, 0, 0, null);
   }
 
   /* Client */
@@ -20,7 +20,8 @@ export const screenContainerRender = (screen: IScreen): IScreen => {
     client.pixels,
     screen.pixels,
     0,
-    titleBar?.height || 0
+    titleBar?.height || 0,
+    null
   );
 
   /* Render Screen */

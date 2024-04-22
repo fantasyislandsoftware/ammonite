@@ -20,13 +20,17 @@ export const pixelMerge = (
   from: IPixelArray,
   to: IPixelArray,
   offsetX: number,
-  offsetY: number
+  offsetY: number,
+  transparentIndex: number | null
 ) => {
   const width = from[0].length;
   const height = from.length;
   for (let y = 0; y < height; y++) {
     for (let x = 0; x < width; x++) {
       try {
+        if (from[y][x] === transparentIndex) {
+          continue;
+        }
         to[y + offsetY][x + offsetX] = from[y][x];
       } catch (error) {
         () => {};

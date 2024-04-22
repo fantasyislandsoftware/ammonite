@@ -36,7 +36,8 @@ export const screenTitleBarRender = (pixels: IPixelArray, screen: IScreen) => {
           orderButton(w, h, ScreenColour.TITLEBAR_BACKGROUND, button.state),
           pixels,
           x,
-          y
+          y,
+          null
         );
         break;
       case EnumButtonFunc.MAXIMIZE:
@@ -44,7 +45,8 @@ export const screenTitleBarRender = (pixels: IPixelArray, screen: IScreen) => {
           maximizeButton(w, h, ScreenColour.TITLEBAR_BACKGROUND, button.state),
           pixels,
           x,
-          y
+          y,
+          null
         );
         break;
       default:
