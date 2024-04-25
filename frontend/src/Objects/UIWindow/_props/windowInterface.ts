@@ -1,3 +1,4 @@
+import { IButton } from 'Objects/UIButton/buttonInterface';
 import { EnumMouseButton } from 'functions/mouse';
 import { IPixelArray } from 'interface/graphics';
 
@@ -19,8 +20,13 @@ export interface IWindow {
   width: number;
   height: number;
   titleBar: IWindowTitleBar;
-  borderThickness: number;
+  border: IWindowBorder;
   pixels: IPixelArray;
+}
+
+export interface IWindowBorder {
+  thickness: number;
+  color: number;
 }
 
 export interface IWindowTitleBar {
@@ -36,4 +42,5 @@ export interface IWindowTitleBar {
     background: number;
     text: number;
   };
+  buttons: IButton[];
 }

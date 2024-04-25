@@ -1,7 +1,7 @@
 import { IClientMouse, IScreenMouse } from 'functions/mouse';
 import { EnumOSEventType } from 'interface/event';
 import { screenContainerDrag } from '../screenContainerFunc';
-import { IScreen } from '../../screenInterface';
+import { IScreen } from '../../_props/screenInterface';
 
 export const screenClientEvents = (
   event: any,

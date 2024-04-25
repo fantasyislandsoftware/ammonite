@@ -1,5 +1,5 @@
 import { pixelMerge } from 'api/lib/graphics/pixelArray';
-import { IScreen } from '../screenInterface';
+import { IScreen } from '../_props/screenInterface';
 import { screenTitleBarRender } from './titleBar/screenTitleBarRender';
 import { screenClientRender } from './client/screenClientRender';
 

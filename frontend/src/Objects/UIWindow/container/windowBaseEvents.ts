@@ -1,5 +1,5 @@
-import { IScreen } from 'Objects/UIScreen/screenInterface';
-import { IWindow, IWindowEvent } from '../../windowInterface';
+import { IScreen } from 'Objects/UIScreen/_props/screenInterface';
+import { IWindow, IWindowEvent } from '../_props/windowInterface';
 import { windowClientEvents } from './client/windowClientEvents';
 import { windowTitleBarEvents } from './titleBar/windowTitleBarEvents';
 

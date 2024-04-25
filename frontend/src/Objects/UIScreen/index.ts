@@ -1,1 +1,1 @@
-export { default as UIScreen } from './jsx/UIScreen';
+export { default as UIScreen } from './container/jsx/UIScreen';

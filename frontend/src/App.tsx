@@ -1,16 +1,14 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { UIScreen } from './Objects/UIScreen';
 import { useScreenStore } from './stores/useScreenStore';
-import ShadowBuffer from 'Objects/UIScreen/jsx/ShadowBuffer';
-import { Backdrop } from 'Objects/UIBackdrop/jsx/Backdrop';
+import ShadowBuffer from 'Objects/UIScreen/container/jsx/ShadowBuffer';
+import { Backdrop } from 'Objects/UIBackdrop/container/jsx/Backdrop';
 import { startTask, startTaskProcessor } from 'functions/tasks';
 import { useErrorStore } from 'stores/useErrorStore';
 import './css/base.css';
 import { screenContainerRender } from 'Objects/UIScreen/container/screenContainerRender';
 import { baseContainerEvents } from 'Objects/UIBase/container/baseContainerEvents';
-import { getHighestScreenZIndex } from 'Objects/UIScreen/screenFunctions';
-import { getTest } from 'api/http/fileIO';
-import { ENV } from 'constants/env';
+import { getHighestScreenZIndex } from 'Objects/UIScreen/_props/screenFunctions';
 
 const App = () => {
   const { screens, setScreens } = useScreenStore();

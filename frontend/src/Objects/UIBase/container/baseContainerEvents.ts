@@ -1,7 +1,7 @@
-import { resetAllButtons } from 'Objects/UIButton/buttonContainerFunc';
+import { resetAllButtons } from 'Objects/UIButton/buttonFunc';
 import { backdropContainerEvents } from '../../UIBackdrop/container/backdropContainerEvents';
 import { screenContainerEvents } from '../../UIScreen/container/screenContainerEvents';
-import { IScreen } from '../../UIScreen/screenInterface';
+import { IScreen } from '../../UIScreen/_props/screenInterface';
 import { viewportContainerEvents } from '../../UIViewport/container/viewportContainerEvents';
 import { getClientMouse, getScreenMouse } from 'functions/mouse';
 import {

@@ -3,8 +3,8 @@ import Main from './Main';
 import React from 'react';
 import DragScreen from './DragScreen';
 import AspectRatio from './AspectRatio';
-import { screenContainerRender } from '../container/screenContainerRender';
-import { EnumScreenModeType, IScreen } from '../screenInterface';
+import { screenContainerRender } from '../screenContainerRender';
+import { EnumScreenModeType, IScreen } from '../../_props/screenInterface';
 
 interface IProps {
   screen: IScreen;

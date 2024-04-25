@@ -1,4 +1,4 @@
-import { full, hi, low, med } from 'Objects/UIScreen/screenModes';
+import { full, hi, low, med } from 'Objects/UIScreen/_props/screenModes';
 import { openScreen } from 'api/os/screen';
 import { openWindow } from 'api/os/window';
 import { IParam } from 'functions/tasks';

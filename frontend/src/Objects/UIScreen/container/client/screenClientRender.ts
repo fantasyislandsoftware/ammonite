@@ -1,4 +1,4 @@
-import { IScreen } from 'Objects/UIScreen/screenInterface';
+import { IScreen } from 'Objects/UIScreen/_props/screenInterface';
 import { windowContainerRender } from 'Objects/UIWindow/container/windowContainerRender';
 import { pixelMerge } from 'api/lib/graphics/pixelArray';
 import { IPixelArray } from 'interface/graphics';

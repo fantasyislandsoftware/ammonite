@@ -1,8 +1,11 @@
 import { useScreenStore } from 'stores/useScreenStore';
-import { generateDefaultColorPalette } from '../../Objects/UIScreen/palettes';
-import { IScreen, IScreenMode } from '../../Objects/UIScreen/screenInterface';
+import { generateDefaultColorPalette } from '../../Objects/UIScreen/_props/palettes';
+import {
+  IScreen,
+  IScreenMode,
+} from '../../Objects/UIScreen/_props/screenInterface';
 import { v4 as uuidv4 } from 'uuid';
-import { screenDefault } from 'Objects/UIScreen/screenDefault';
+import { screenDefault } from 'Objects/UIScreen/_props/screenDefault';
 import { measureText } from 'api/lib/graphics/text';
 import { initPixelArray } from 'api/lib/graphics/pixelArray';
 import {
@@ -10,9 +13,10 @@ import {
   EnumButtonFunc,
   IButton,
 } from 'Objects/UIButton/buttonInterface';
-import { ScreenColour } from 'Objects/UIScreen/screenColour';
-import { getHighestScreenZIndex } from 'Objects/UIScreen/screenFunctions';
+import { ScreenColour } from 'Objects/UIScreen/_props/screenColour';
+import { getHighestScreenZIndex } from 'Objects/UIScreen/_props/screenFunctions';
 import { EnumUIObjectType } from 'Objects/UIObject/objectInterface';
+import { makeButtons } from 'Objects/UIButton/buttonFunc';
 
 export const openScreen = (
   parentTaskId: string,
@@ -37,24 +41,6 @@ export const openScreen = (
 
   const screenId = uuidv4();
 
-  const buttons = (types: EnumButtonFunc[]) => {
-    const result: IButton[] = [];
-    let x = width - buttonSize;
-    types.map((type) => {
-      result.push({
-        id: uuidv4(),
-        x: x,
-        y: 0,
-        w: buttonSize,
-        h: buttonSize,
-        func: type,
-        state: EnumButtonState.UP,
-      });
-      x -= buttonSize;
-    });
-    return result;
-  };
-
   const data: IScreen = {
     screenId: screenId,
     parentTaskId: parentTaskId,
@@ -75,7 +61,10 @@ export const openScreen = (
           title: title,
           height: titleBarHeight,
           font: screenDefault.titleBar.font,
-          buttons: buttons([EnumButtonFunc.MAXIMIZE, EnumButtonFunc.ORDER]),
+          buttons: makeButtons(width, buttonSize, [
+            EnumButtonFunc.MAXIMIZE,
+            EnumButtonFunc.ORDER,
+          ]),
           pixels: initPixelArray(
             width,
             titleBarHeight,

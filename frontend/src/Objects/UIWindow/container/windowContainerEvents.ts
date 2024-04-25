@@ -1,8 +1,7 @@
 import { IScreenMouse } from 'functions/mouse';
-import { IWindow, IWindowEvent } from '../windowInterface';
-import { windowBorderEvents } from './border/windowBorderEvents';
-import { windowBaseEvents } from './base/windowBaseEvents';
-import { IScreen } from 'Objects/UIScreen/screenInterface';
+import { IWindow, IWindowEvent } from '../_props/windowInterface';
+import { windowBaseEvents } from './windowBaseEvents';
+import { IScreen } from 'Objects/UIScreen/_props/screenInterface';
 
 export const windowContainerEvents = (
   event: IWindowEvent,
@@ -17,7 +16,7 @@ export const windowContainerEvents = (
     type: event.type,
   };
 
-  const { x, y } = windowEvent;
+  /*const { x, y } = windowEvent;
   if (
     x >= window.borderThickness &&
     y > window.borderThickness &&
@@ -27,5 +26,5 @@ export const windowContainerEvents = (
     windowBaseEvents(screen, window, windowEvent);
   } else {
     windowBorderEvents();
-  }
+  }*/
 };

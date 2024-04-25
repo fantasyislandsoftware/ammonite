@@ -1,4 +1,4 @@
-import { IScreen } from 'Objects/UIScreen/screenInterface';
+import { IScreen } from 'Objects/UIScreen/_props/screenInterface';
 import { create } from 'zustand';
 
 interface SelectedScreen {

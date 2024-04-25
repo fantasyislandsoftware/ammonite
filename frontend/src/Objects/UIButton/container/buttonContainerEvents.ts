@@ -1,13 +1,13 @@
 import { EnumMouseButton, EnumOSEventType, IBaseEvent } from 'interface/event';
 import { EnumButtonState, IButton } from '../buttonInterface';
 import { useScreenStore } from 'stores/useScreenStore';
-import { IScreen } from 'Objects/UIScreen/screenInterface';
-import { execButtonFunction, setButtonDown } from '../buttonContainerFunc';
+import { IScreen } from 'Objects/UIScreen/_props/screenInterface';
+import { execButtonFunction, setButtonDown } from '../buttonFunc';
 import { screenContainerBringToFront } from 'Objects/UIScreen/container/screenContainerFunc';
 import {
   getHighestScreenZIndex,
   screenIdToIndex,
-} from 'Objects/UIScreen/screenFunctions';
+} from 'Objects/UIScreen/_props/screenFunctions';
 import { screenContainerRender } from 'Objects/UIScreen/container/screenContainerRender';
 
 export const buttonContainerEvents = (

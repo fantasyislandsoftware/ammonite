@@ -2,7 +2,7 @@ import { EnumMouseButton, IClientMouse, IScreenMouse } from 'functions/mouse';
 import { EnumOSEventType, IBaseEvent } from 'interface/event';
 import { screenClientEvents } from './client/screenClientEvents';
 import { screenTitleBarEvents } from './titleBar/screenTitleBarEvents';
-import { IScreen } from '../screenInterface';
+import { IScreen } from '../_props/screenInterface';
 import { screenContainerBringToFront } from './screenContainerFunc';
 
 export const screenContainerEvents = (

@@ -1,4 +1,4 @@
-import { resetAllButtons } from 'Objects/UIButton/buttonContainerFunc';
+import { resetAllButtons } from 'Objects/UIButton/buttonFunc';
 import { EnumOSEventType, IBaseEvent } from 'interface/event';
 import { useScreenStore } from 'stores/useScreenStore';
 

@@ -1,4 +1,4 @@
-import { IWindow } from 'Objects/UIWindow/windowInterface';
+import { IWindow } from 'Objects/UIWindow/_props/windowInterface';
 import { useFontStore } from 'stores/useFontStore';
 
 export interface IWindowContainerCalc {

@@ -6,11 +6,11 @@ import {
   screenContainerDrag,
   screenContainerSetYToTop,
 } from '../screenContainerFunc';
-import { IScreen } from 'Objects/UIScreen/screenInterface';
+import { IScreen } from 'Objects/UIScreen/_props/screenInterface';
 import {
   getHighestScreenZIndex,
   screenIdToIndex,
-} from 'Objects/UIScreen/screenFunctions';
+} from 'Objects/UIScreen/_props/screenFunctions';
 import { buttonContainerEvents } from 'Objects/UIButton/container/buttonContainerEvents';
 
 const inBoundary = (

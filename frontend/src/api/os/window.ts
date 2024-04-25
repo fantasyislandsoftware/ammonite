@@ -1,12 +1,14 @@
-import { windowDefault } from '../../Objects/UIWindow/windowDefault';
-import { IWindow } from '../../Objects/UIWindow/windowInterface';
+import { windowDefault } from '../../Objects/UIWindow/_props/windowDefault';
+import { IWindow } from '../../Objects/UIWindow/_props/windowInterface';
 import { useScreenStore } from '../../stores/useScreenStore';
 import { findScreenIndex } from './screen';
 import { v4 as uuidv4 } from 'uuid';
 import { screenContainerRender } from '../../Objects/UIScreen/container/screenContainerRender';
 import { initPixelArray } from 'api/lib/graphics/pixelArray';
-import { WindowColour } from 'Objects/UIWindow/windowColour';
+import { WindowColour } from 'Objects/UIWindow/_props/windowColour';
 import { measureText } from 'api/lib/graphics/text';
+import { makeButtons } from 'Objects/UIButton/buttonFunc';
+import { EnumButtonFunc } from 'Objects/UIButton/buttonInterface';
 
 export const openWindow = (
   parentTaskId: string,
@@ -24,6 +26,8 @@ export const openWindow = (
     windowDefault.titleBar.font.name,
     windowDefault.titleBar.font.size
   );
+
+  const buttonSize = Math.round(titleBarHeight / 2) * 2;
 
   const data: IWindow = {
     windowId: uuidv4(),
@@ -46,8 +50,15 @@ export const openWindow = (
         background: WindowColour.TITLEBAR_BACKGROUND,
         text: WindowColour.TITLEBAR_TEXT,
       },
+      buttons: makeButtons(width, buttonSize, [
+        EnumButtonFunc.MAXIMIZE,
+        EnumButtonFunc.ORDER,
+      ]),
     },
-    borderThickness: windowDefault.borderThickness,
+    border: {
+      thickness: windowDefault.borderThickness,
+      color: WindowColour.BORDER,
+    },
     pixels: initPixelArray(width, height, WindowColour.CLIENT),
   };
   const screenIndex = findScreenIndex(parentScreenId);

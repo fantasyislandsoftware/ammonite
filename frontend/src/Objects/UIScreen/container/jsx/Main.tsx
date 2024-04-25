@@ -1,10 +1,10 @@
 import React from 'react';
 import { FC } from 'react';
-import { canvasRenderStyle } from '../styles';
+import { canvasRenderStyle } from '../../_props/styles';
 import { EnumOSEventObjectType } from 'interface/event';
 import { baseContainerEvents } from 'Objects/UIBase/container/baseContainerEvents';
-import { EnumScreenModeType, IScreen } from '../screenInterface';
-import { getHighestScreenZIndex } from '../screenFunctions';
+import { EnumScreenModeType, IScreen } from '../../_props/screenInterface';
+import { getHighestScreenZIndex } from '../../_props/screenFunctions';
 
 interface IProps {
   _ref: React.RefObject<HTMLCanvasElement>;

@@ -1,8 +1,8 @@
 import { IClientMouse } from 'functions/mouse';
 import { useScreenStore } from 'stores/useScreenStore';
-import { IScreen } from '../screenInterface';
+import { IScreen } from '../_props/screenInterface';
 import { findScreenIndex } from 'api/os/screen';
-import { getHighestScreenZIndex, setScreen } from '../screenFunctions';
+import { getHighestScreenZIndex, setScreen } from '../_props/screenFunctions';
 
 export const screenContainerDrag = (clientMouse: IClientMouse) => {
   const { selectedScreen, screens } = useScreenStore.getState();

@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { IScreenAspect } from '../screenInterface';
+import { IScreenAspect } from '../../_props/screenInterface';
 
 interface IProps {
   aspect: IScreenAspect;
