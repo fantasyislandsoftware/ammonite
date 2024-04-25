@@ -5,9 +5,12 @@ import { IWindow } from 'Objects/UIWindow/windowInterface';
 import { windowTitleBarRender } from './base/titleBar/windowTitleBarRender';
 import { IPixelArray, IPixelBuffer } from 'interface/graphics';
 import { IScreen } from 'Objects/UIScreen/screenInterface';
+import { drawFillRect, drawLine } from 'api/lib/graphics/draw';
+import { WindowColour } from '../windowColour';
+import { windowBorderRender } from './border/windowBorderRender';
 
 export const windowContainerRender = (
-  target: IPixelBuffer,
+  clientPixels: IPixelArray,
   screen: IScreen,
   window: IWindow
 ) => {
@@ -15,29 +18,8 @@ export const windowContainerRender = (
   const { width, height, titleBar, position, borderThickness } = window;
   const { x, y } = position;
 
-  /* Pre-Calc */
-  const calc = windowContainerCalc(window);
-  //const { height: barHeight } = calc.titleBar;
+  windowBorderRender(window);
+  windowTitleBarRender(window);
 
-  /* Create window buffer */
-  //const win = createPixelBuffer(width, height, 0);
-
-  /* Render window components */
-  //const titleBarObj = windowTitleBarRender(window, calc);
-  //const clientObj = windowClientRender(window, calc);
-
-  /* Draw window components */
-  //drawPixelBuffer(win.pixels, titleBarObj, borderThickness, borderThickness);
-  /*drawPixelBuffer(
-    win.pixels,
-    clientObj,
-    borderThickness,
-    barHeight + borderThickness
-  );*/
-
-  /* Draw window on screen */
-  //drawPixelBuffer(target.pixels, win, x, y);
-
-  /* Adjust window properties */
-  //window.titleBar.height = barHeight;
+  return window.pixels;
 };

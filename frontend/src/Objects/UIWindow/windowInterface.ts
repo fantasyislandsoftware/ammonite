@@ -1,4 +1,5 @@
 import { EnumMouseButton } from 'functions/mouse';
+import { IPixelArray } from 'interface/graphics';
 
 export interface IWindowEvent {
   x: number;
@@ -17,15 +18,22 @@ export interface IWindow {
   };
   width: number;
   height: number;
-  titleBar: IWindowtitleBar;
+  titleBar: IWindowTitleBar;
   borderThickness: number;
+  pixels: IPixelArray;
 }
 
-export interface IWindowtitleBar {
+export interface IWindowTitleBar {
   title: string;
+  offset: number;
   height: number;
   font: {
     name: string;
     size: number;
+  };
+  pixels: IPixelArray;
+  color: {
+    background: number;
+    text: number;
   };
 }

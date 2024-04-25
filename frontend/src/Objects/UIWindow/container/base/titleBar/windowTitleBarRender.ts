@@ -1,30 +1,35 @@
 import { IWindow } from 'Objects/UIWindow/windowInterface';
-import { IWindowContainerCalc } from '../../windowContainerCalc';
-import { WindowColour } from 'Objects/UIWindow/windowColour';
+import { drawLine } from 'api/lib/graphics/draw';
+import { pixelMerge } from 'api/lib/graphics/pixelArray';
+import { textOut } from 'api/lib/graphics/text';
 
-export const windowTitleBarRender = (
-  window: IWindow,
-  calc: IWindowContainerCalc
-) => {
-  const { titleBar } = window;
-  const { title, font } = titleBar;
-  const { height: barHeight } = calc.titleBar;
-  const barWidth = window.width - 2;
-  /*const bar = createPixelBuffer(
-    barWidth,
-    barHeight,
-    WindowColour.TITLEBAR_BACKGROUND
-  );*/
-  /*drawText(
-    bar,
+export const windowTitleBarRender = (window: IWindow) => {
+  const { pixels: windowPixels, titleBar } = window;
+  const { pixels: titleBarPixels, height, color } = titleBar;
+  const { font, title } = titleBar;
+  textOut(
+    titleBarPixels,
+    0,
+    0,
     title,
+    color.text,
+    color.background,
     font.name,
-    font.size,
-    0,
-    0,
-    WindowColour.TITLEBAR_BACKGROUND,
-    WindowColour.TITLEBAR_TEXT
+    font.size
   );
-  drawLine(bar, 0, barHeight - 1, barWidth, barHeight - 1, WindowColour.BORDER);*/
-  //return bar;
+  drawLine(
+    titleBarPixels,
+    0,
+    height - 1,
+    titleBar.pixels[0].length,
+    height - 1,
+    0
+  );
+  window.pixels = pixelMerge(
+    titleBarPixels,
+    windowPixels,
+    titleBar.offset,
+    titleBar.offset,
+    null
+  );
 };
