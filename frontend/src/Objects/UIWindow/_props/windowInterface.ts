@@ -32,6 +32,7 @@ export interface IWindowBorder {
 export interface IWindowTitleBar {
   title: string;
   offset: number;
+  width: number;
   height: number;
   font: {
     name: string;

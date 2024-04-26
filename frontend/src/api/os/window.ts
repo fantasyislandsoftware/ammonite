@@ -7,8 +7,12 @@ import { screenContainerRender } from '../../Objects/UIScreen/container/screenCo
 import { initPixelArray } from 'api/lib/graphics/pixelArray';
 import { WindowColour } from 'Objects/UIWindow/_props/windowColour';
 import { measureText } from 'api/lib/graphics/text';
-import { makeButtons } from 'Objects/UIButton/buttonFunc';
-import { EnumButtonFunc } from 'Objects/UIButton/buttonInterface';
+import {
+  EnumButtonFunc,
+  EnumButtonState,
+  IButton,
+} from 'Objects/UIButton/buttonInterface';
+import { generateBarIcons } from 'Objects/UIButton/buttonFunc';
 
 export const openWindow = (
   parentTaskId: string,
@@ -21,13 +25,21 @@ export const openWindow = (
 ) => {
   const { screens, setScreens } = useScreenStore.getState();
 
+  const titleBarWidth = width - windowDefault.border.thickness * 2;
+
   const { height: titleBarHeight } = measureText(
     'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890!@#$%^&*()_+-=',
     windowDefault.titleBar.font.name,
     windowDefault.titleBar.font.size
   );
 
-  const buttonSize = Math.round(titleBarHeight / 2) * 2;
+  /* Buttons */
+  const buttonSize = Math.round(titleBarHeight / 2) * 2 - 1;
+  const buttons = generateBarIcons(
+    [EnumButtonFunc.MAXIMIZE, EnumButtonFunc.ORDER],
+    buttonSize,
+    titleBarWidth
+  );
 
   const data: IWindow = {
     windowId: uuidv4(),
@@ -38,11 +50,12 @@ export const openWindow = (
     height,
     titleBar: {
       title: title,
-      offset: windowDefault.borderThickness,
+      offset: windowDefault.border.thickness,
+      width: titleBarWidth,
       height: titleBarHeight,
       font: windowDefault.titleBar.font,
       pixels: initPixelArray(
-        width - windowDefault.borderThickness * 2,
+        width - windowDefault.border.thickness * 2,
         titleBarHeight,
         WindowColour.TITLEBAR_BACKGROUND
       ),
@@ -50,13 +63,10 @@ export const openWindow = (
         background: WindowColour.TITLEBAR_BACKGROUND,
         text: WindowColour.TITLEBAR_TEXT,
       },
-      buttons: makeButtons(width, buttonSize, [
-        EnumButtonFunc.MAXIMIZE,
-        EnumButtonFunc.ORDER,
-      ]),
+      buttons: buttons,
     },
     border: {
-      thickness: windowDefault.borderThickness,
+      thickness: windowDefault.border.thickness,
       color: WindowColour.BORDER,
     },
     pixels: initPixelArray(width, height, WindowColour.CLIENT),

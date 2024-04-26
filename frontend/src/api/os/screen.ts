@@ -16,7 +16,7 @@ import {
 import { ScreenColour } from 'Objects/UIScreen/_props/screenColour';
 import { getHighestScreenZIndex } from 'Objects/UIScreen/_props/screenFunctions';
 import { EnumUIObjectType } from 'Objects/UIObject/objectInterface';
-import { makeButtons } from 'Objects/UIButton/buttonFunc';
+import { generateBarIcons } from 'Objects/UIButton/buttonFunc';
 
 export const openScreen = (
   parentTaskId: string,
@@ -35,9 +35,15 @@ export const openScreen = (
     screenDefault.titleBar.font.size
   );
 
-  const buttonSize = Math.round(titleBarHeight / 2) * 2;
-
   titleBarHeight += 1;
+
+  /* Buttons */
+  const buttonSize = Math.round(titleBarHeight / 2) * 2 - 2;
+  const buttons = generateBarIcons(
+    [EnumButtonFunc.MAXIMIZE, EnumButtonFunc.ORDER],
+    buttonSize,
+    width
+  );
 
   const screenId = uuidv4();
 
@@ -61,10 +67,7 @@ export const openScreen = (
           title: title,
           height: titleBarHeight,
           font: screenDefault.titleBar.font,
-          buttons: makeButtons(width, buttonSize, [
-            EnumButtonFunc.MAXIMIZE,
-            EnumButtonFunc.ORDER,
-          ]),
+          buttons: buttons,
           pixels: initPixelArray(
             width,
             titleBarHeight,

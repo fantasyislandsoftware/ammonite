@@ -1,3 +1,5 @@
+import { WindowColour } from './windowColour';
+
 export const windowDefault = {
   titleBar: {
     font: {
@@ -5,5 +7,8 @@ export const windowDefault = {
       size: 12,
     },
   },
-  borderThickness: 1,
+  border: {
+    thickness: 1,
+    color: WindowColour.BORDER,
+  },
 };

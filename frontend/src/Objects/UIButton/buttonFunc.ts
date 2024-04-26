@@ -50,24 +50,22 @@ export const execButtonFunction = (target: IScreen, button: IButton) => {
   }
 };
 
-export const makeButtons = (
-  width: number,
+export const generateBarIcons = (
+  buttonTypes: EnumButtonFunc[],
   buttonSize: number,
-  types: EnumButtonFunc[]
+  barWidth: number
 ) => {
-  const result: IButton[] = [];
-  let x = width - buttonSize;
-  types.map((type) => {
-    result.push({
+  const buttons: IButton[] = [];
+  buttonTypes.map((type, index) => {
+    buttons.push({
       id: uuidv4(),
-      x: x,
+      func: type,
+      state: EnumButtonState.UP,
+      x: barWidth - index * buttonSize - buttonSize,
       y: 0,
       w: buttonSize,
       h: buttonSize,
-      func: type,
-      state: EnumButtonState.UP,
     });
-    x -= buttonSize;
   });
-  return result;
+  return buttons;
 };

@@ -7,6 +7,68 @@ import {
 import { EnumButtonState } from './buttonInterface';
 import { ButtonColour } from './buttonColour';
 
+export const makeOrderButton = (state: EnumButtonState) => {
+  return [
+    {
+      type: EnumVectorShapeType.RECT,
+      data: {
+        px1: 10,
+        py1: 10,
+        px2: 70,
+        py2: 70,
+        colorIndex:
+          state === EnumButtonState.UP
+            ? ButtonColour.PRIMARY
+            : ButtonColour.SECONDARY,
+      },
+    },
+    {
+      type: EnumVectorShapeType.RECT,
+      data: {
+        px1: 30,
+        py1: 30,
+        px2: 90,
+        py2: 90,
+        colorIndex:
+          state === EnumButtonState.UP
+            ? ButtonColour.SECONDARY
+            : ButtonColour.PRIMARY,
+      },
+    },
+  ];
+};
+
+export const makeMaximizeButton = (state: EnumButtonState) => {
+  return [
+    {
+      type: EnumVectorShapeType.RECT,
+      data: {
+        px1: 10,
+        py1: 10,
+        px2: 90,
+        py2: 20,
+        colorIndex:
+          state === EnumButtonState.UP
+            ? ButtonColour.PRIMARY
+            : ButtonColour.SECONDARY,
+      },
+    },
+    {
+      type: EnumVectorShapeType.RECT,
+      data: {
+        px1: 10,
+        py1: 20,
+        px2: 90,
+        py2: 90,
+        colorIndex:
+          state === EnumButtonState.UP
+            ? ButtonColour.SECONDARY
+            : ButtonColour.PRIMARY,
+      },
+    },
+  ];
+};
+
 export const orderButton = (
   w: number,
   h: number,
