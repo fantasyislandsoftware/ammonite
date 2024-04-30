@@ -1,5 +1,5 @@
 import { resetAllButtons } from 'Objects/UIButton/buttonFunc';
-import { backdropContainerEvents } from '../../UIBackdrop/container/backdropContainerEvents';
+import { backdropContainerBuildEvents } from '../../UIBackdrop/container/eventHandlers/backdropContainerBuildEvents';
 import { screenContainerEvents } from '../../UIScreen/container/screenContainerEvents';
 import { IScreen } from '../../UIScreen/_props/screenInterface';
 import { viewportContainerEvents } from '../../UIViewport/container/viewportContainerEvents';
@@ -10,13 +10,12 @@ import {
   IBaseEvent,
 } from 'interface/event';
 import { addEvent, eventLog, processEvents } from 'functions/events';
-import { ENV } from 'constants/env';
+import { ENV, STATE } from 'constants/global';
 
 export const baseContainerEvents = (_event: IBaseEvent, screen?: IScreen) => {
   _event.persist && _event.persist();
-  ENV.events = [];
+  STATE.events = [];
   addEvent(EnumOSEventObjectType.Base, _event, screen);
-  processEvents();
 
   const event = _event;
 
@@ -25,14 +24,14 @@ export const baseContainerEvents = (_event: IBaseEvent, screen?: IScreen) => {
   }
 
   const clientMouse = getClientMouse(event);
-  ENV.clientMouse = getClientMouse(event);
+  STATE.clientMouse = getClientMouse(event);
 
   if (event.target.dataset !== undefined) {
     const { id } = event.target.dataset;
 
     /* Backdrop */
     if (id === EnumOSEventObjectType.Backdrop) {
-      backdropContainerEvents(event, clientMouse);
+      backdropContainerBuildEvents(event);
     }
 
     if (!screen) return;
@@ -51,4 +50,6 @@ export const baseContainerEvents = (_event: IBaseEvent, screen?: IScreen) => {
   if (event.target.dataset === undefined) {
     viewportContainerEvents(event);
   }
+
+  processEvents();
 };

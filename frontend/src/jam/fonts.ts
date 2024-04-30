@@ -1,6 +1,6 @@
 import { getFontList, loadFont } from 'api/http/fonts';
 import { makeQuerablePromise } from 'api/http/promiseHandling';
-import { ENV } from 'constants/env';
+import { ENV } from 'constants/global';
 import { IParam } from 'functions/tasks';
 import { useFontStore } from 'stores/useFontStore';
 import { ITask } from 'stores/useTaskStore';

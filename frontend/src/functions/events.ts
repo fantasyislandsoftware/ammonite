@@ -1,7 +1,9 @@
+import { backdropContainerProcessEvents } from 'Objects/UIBackdrop/container/eventHandlers/backdropContainerProcessEvents';
 import { IScreen } from 'Objects/UIScreen/_props/screenInterface';
-import { processScreenTitleBarEvents } from 'Objects/UIScreen/container/titleBar/screenTitleBarEvents';
+import { screenClientProcessEvents } from 'Objects/UIScreen/container/client/eventHandlers/screenClientProcessEvents';
+import { screenTitleBarProcessEvents } from 'Objects/UIScreen/container/titleBar/eventHandlers/screenTitleBarProcessEvents';
 import { IWindow } from 'Objects/UIWindow/_props/windowInterface';
-import { ENV } from 'constants/env';
+import { ENV, STATE } from 'constants/global';
 import { EnumOSEventObjectType, IBaseEvent, IEvent } from 'interface/event';
 
 export const eventLog = (event: IBaseEvent, name: string) => {
@@ -14,19 +16,24 @@ export const addEvent = (
   screen?: IScreen,
   window?: IWindow
 ) => {
-  ENV.events.push({ objectType: objectType, event, screen, window });
+  STATE.events.push({ objectType: objectType, event, screen, window });
 };
 
 export const processEvents = () => {
-  setTimeout(() => {
-    const event = ENV.events[ENV.events.length - 1];
-    if (event.event === null) return;
-    switch (event.objectType) {
-      case EnumOSEventObjectType.ScreenTitleBar:
-        processScreenTitleBarEvents(event);
-        break;
-      default:
-        break;
-    }
-  });
+  const event = STATE.events[STATE.events.length - 1];
+  console.log(event.objectType);
+  if (event.event === null) return;
+  switch (event.objectType) {
+    case EnumOSEventObjectType.Backdrop:
+      backdropContainerProcessEvents(event);
+      break;
+    case EnumOSEventObjectType.ScreenTitleBar:
+      screenTitleBarProcessEvents(event);
+      break;
+    case EnumOSEventObjectType.ScreenClient:
+      screenClientProcessEvents(event);
+      break;
+    default:
+      break;
+  }
 };

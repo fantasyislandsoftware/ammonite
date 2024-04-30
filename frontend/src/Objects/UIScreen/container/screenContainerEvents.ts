@@ -4,8 +4,8 @@ import {
   EnumOSEventType,
   IBaseEvent,
 } from 'interface/event';
-import { screenClientEvents } from './client/screenClientEvents';
-import { screenTitleBarEvents } from './titleBar/screenTitleBarEvents';
+import { screenClientBuildEvents } from './client/eventHandlers/screenClientBuildEvents';
+import { screenTitleBarBuildEvents } from './titleBar/eventHandlers/screenTitleBarBuildEvents';
 import { IScreen } from '../_props/screenInterface';
 import { screenContainerBringToFront } from './screenContainerFunc';
 import { addEvent, eventLog } from 'functions/events';
@@ -20,9 +20,9 @@ export const screenContainerEvents = (
   addEvent(EnumOSEventObjectType.Screen, event);
 
   if (screenMouse.screen.y > screen.titleBar!.height) {
-    screenClientEvents(event, screenMouse, clientMouse, screen);
+    screenClientBuildEvents(event, screenMouse, clientMouse, screen);
   } else {
-    screenTitleBarEvents(event, screenMouse, clientMouse, screen);
+    screenTitleBarBuildEvents(event, screenMouse, clientMouse, screen);
   }
 
   const mouseDown = () => {

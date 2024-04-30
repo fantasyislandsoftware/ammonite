@@ -97,9 +97,9 @@ export const openScreen = (
   };
   screens.push(data);
   setScreens(screens);
-  setTimeout(() => {
+  /*setTimeout(() => {
     setSelectedScreen(undefined);
-  });
+  });*/
   return screenId;
 };
 

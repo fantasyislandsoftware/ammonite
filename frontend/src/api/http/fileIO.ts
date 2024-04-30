@@ -1,6 +1,6 @@
 import BinaryStream from 'api/lib/data/binarystream';
 import { detectIFF, parseIFF } from 'api/lib/data/iff';
-import { ENV } from 'constants/env';
+import { ENV } from 'constants/global';
 import { EnumDataFormat } from 'interface/data';
 
 export const getDirList = async (path: string) => {

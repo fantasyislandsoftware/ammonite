@@ -3,7 +3,7 @@ import { makeQuerablePromise } from 'api/http/promiseHandling';
 import BinaryStream from 'api/lib/data/binarystream';
 import { detectIFF, parseIFF } from 'api/lib/data/iff';
 import { pixelMerge } from 'api/lib/graphics/pixelArray';
-import { ENV } from 'constants/env';
+import { ENV } from 'constants/global';
 import { IParam } from 'functions/tasks';
 import { EnumDataFormat } from 'interface/data';
 import { IPixelArray } from 'interface/graphics';
