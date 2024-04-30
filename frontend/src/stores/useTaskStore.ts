@@ -24,7 +24,7 @@ export interface ITask {
 
 export interface TaskStore {
   tasks: ITask[];
-  setTasks: (fonts: ITask[]) => void;
+  setTasks: (tasks: ITask[]) => void;
 }
 
 export const useTaskStore = create<TaskStore>((set) => ({

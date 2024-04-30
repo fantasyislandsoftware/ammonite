@@ -9,8 +9,15 @@ import {
   EnumOSEventType,
   IBaseEvent,
 } from 'interface/event';
+import { addEvent, eventLog, processEvents } from 'functions/events';
+import { ENV } from 'constants/env';
 
 export const baseContainerEvents = (_event: IBaseEvent, screen?: IScreen) => {
+  _event.persist && _event.persist();
+  ENV.events = [];
+  addEvent(EnumOSEventObjectType.Base, _event, screen);
+  processEvents();
+
   const event = _event;
 
   if (event.detail === 2) {
@@ -18,6 +25,7 @@ export const baseContainerEvents = (_event: IBaseEvent, screen?: IScreen) => {
   }
 
   const clientMouse = getClientMouse(event);
+  ENV.clientMouse = getClientMouse(event);
 
   if (event.target.dataset !== undefined) {
     const { id } = event.target.dataset;

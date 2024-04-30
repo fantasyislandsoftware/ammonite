@@ -1,4 +1,9 @@
-import { EnumMouseButton, EnumOSEventType, IBaseEvent } from 'interface/event';
+import {
+  EnumMouseButton,
+  EnumOSEventObjectType,
+  EnumOSEventType,
+  IBaseEvent,
+} from 'interface/event';
 import { EnumButtonState, IButton } from '../buttonInterface';
 import { useScreenStore } from 'stores/useScreenStore';
 import { IScreen } from 'Objects/UIScreen/_props/screenInterface';
@@ -9,6 +14,7 @@ import {
   screenIdToIndex,
 } from 'Objects/UIScreen/_props/screenFunctions';
 import { screenContainerRender } from 'Objects/UIScreen/container/screenContainerRender';
+import { addEvent, eventLog } from 'functions/events';
 
 export const buttonContainerEvents = (
   event: IBaseEvent,
@@ -16,6 +22,9 @@ export const buttonContainerEvents = (
   button: IButton,
   x: boolean
 ) => {
+  eventLog(event, EnumOSEventObjectType.Button);
+  addEvent(EnumOSEventObjectType.Button, event);
+
   const { setSelectedScreen } = useScreenStore.getState();
   const screenIndex = screenIdToIndex(screen.screenId);
   if (screenIndex === undefined) return;
@@ -72,7 +81,7 @@ export const buttonContainerEvents = (
     }
   };
 
-  switch (event.type) {
+  /*switch (event.type) {
     case EnumOSEventType.MouseDown:
       mouseDown();
       break;
@@ -81,5 +90,5 @@ export const buttonContainerEvents = (
       break;
     default:
       break;
-  }
+  }*/
 };

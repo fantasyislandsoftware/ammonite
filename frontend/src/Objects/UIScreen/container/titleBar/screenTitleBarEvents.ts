@@ -1,5 +1,10 @@
 import { EnumMouseButton, IClientMouse, IScreenMouse } from 'functions/mouse';
-import { EnumOSEventType, IBaseEvent } from 'interface/event';
+import {
+  EnumOSEventObjectType,
+  EnumOSEventType,
+  IBaseEvent,
+  IEvent,
+} from 'interface/event';
 import { useScreenStore } from 'stores/useScreenStore';
 import {
   screenContainerBringToFront,
@@ -12,6 +17,8 @@ import {
   screenIdToIndex,
 } from 'Objects/UIScreen/_props/screenFunctions';
 import { buttonContainerEvents } from 'Objects/UIButton/container/buttonContainerEvents';
+import { addEvent, eventLog } from 'functions/events';
+import { ENV } from 'constants/env';
 
 const inBoundary = (
   screenMouse: IScreenMouse,
@@ -34,6 +41,9 @@ export const screenTitleBarEvents = (
   clientMouse: IClientMouse,
   screen: IScreen
 ) => {
+  eventLog(event, EnumOSEventObjectType.ScreenTitleBar);
+  addEvent(EnumOSEventObjectType.ScreenTitleBar, event, screen);
+
   const { setSelectedScreen, screens } = useScreenStore.getState();
   const screenIndex = screenIdToIndex(screen.screenId);
   if (screenIndex === undefined) return;
@@ -71,18 +81,41 @@ export const screenTitleBarEvents = (
   const mouseMove = () => {
     screenContainerDrag(clientMouse);
   };
+};
 
-  switch (event.type) {
+export const processScreenTitleBarEvents = (event: IEvent) => {
+  const { setSelectedScreen, screens } = useScreenStore.getState();
+
+  const mouseDown = () => {
+    switch (event.event.button) {
+      case EnumMouseButton.Left:
+        if (!event.screen) return;
+        console.log(ENV.clientMouse);
+        const screenIndex = screenIdToIndex(event.screen.screenId);
+        if (screenIndex === undefined) return;
+        //console.log('left mouse down');
+        setSelectedScreen({
+          id: event.screen.screenId,
+          offset: {
+            y: ENV.clientMouse.y - screens[screenIndex].position.y,
+          },
+        });
+        break;
+      default:
+    }
+  };
+
+  switch (event.event.type) {
     case EnumOSEventType.None:
       break;
     case EnumOSEventType.MouseDown:
       mouseDown();
       break;
     case EnumOSEventType.MouseUp:
-      mouseUp();
+      break;
+    case EnumOSEventType.MouseDoubleClick:
       break;
     case EnumOSEventType.MouseMove:
-      mouseMove();
       break;
     default:
       break;

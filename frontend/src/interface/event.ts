@@ -1,29 +1,21 @@
+import { IScreen } from 'Objects/UIScreen/_props/screenInterface';
 import { IClientMouse, IScreenMouse } from '../functions/mouse';
 import { IButton } from '../Objects/UIButton/buttonInterface';
+import { IWindow } from 'Objects/UIWindow/_props/windowInterface';
 
 export interface IBaseEvent {
   type: string;
   target: any;
   detail: number;
   button: number;
+  persist?: () => void;
 }
 
-export interface IOSEvent {
-  object:
-    | OSEventViewport
-    | OSEventBackdrop
-    | OSEventScreen
-    | OSEventScreenClient
-    | OSEventScreentitleBar
-    | OSEventScreentitleBarIcon;
-
-  parent:
-    | OSEventBackdrop
-    | OSEventScreen
-    | OSEventScreenClient
-    | OSEventScreentitleBar
-    | undefined;
-  eventType: EnumOSEventType;
+export interface IEvent {
+  objectType: EnumOSEventObjectType;
+  event: IBaseEvent;
+  screen?: IScreen;
+  window?: IWindow;
 }
 
 export enum EnumOSEventType {
@@ -44,15 +36,17 @@ export enum EnumMouseButton {
 }
 
 export enum EnumOSEventObjectType {
+  Base = 'base',
   Viewport = 'viewport',
   Backdrop = 'backdrop',
   Screen = 'screen',
   Window = 'window',
-  ScreentitleBar = 'screentitleBar',
-  ScreentitleBarIcon = 'screentitleBarIcon',
+  ScreenTitleBar = 'screenTitleBar',
+  ScreenTitleBarIcon = 'screenTitleBarIcon',
   ScreenClient = 'screenClient',
   Client = 'client',
   Icon = 'icon',
+  Button = 'button',
 }
 
 export interface OSEventViewport {
