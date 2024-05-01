@@ -21,7 +21,6 @@ export const addEvent = (
 
 export const processEvents = () => {
   const event = STATE.events[STATE.events.length - 1];
-  console.log(event.objectType);
   if (event.event === null) return;
   switch (event.objectType) {
     case EnumOSEventObjectType.Backdrop:

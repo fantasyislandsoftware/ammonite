@@ -14,7 +14,6 @@ import {
 } from 'Objects/UIScreen/_props/screenFunctions';
 import { buttonContainerEvents } from 'Objects/UIButton/container/buttonContainerEvents';
 import { addEvent } from 'functions/events';
-import { STATE } from 'constants/global';
 
 const inBoundary = (
   screenMouse: IScreenMouse,
@@ -34,7 +33,6 @@ const inBoundary = (
 export const screenTitleBarBuildEvents = (
   event: IBaseEvent,
   screenMouse: IScreenMouse,
-  clientMouse: IClientMouse,
   screen: IScreen
 ) => {
   addEvent(EnumOSEventObjectType.ScreenTitleBar, event, screen);

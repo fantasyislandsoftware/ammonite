@@ -3,7 +3,6 @@ import { EnumOSEventType, IEvent } from 'interface/event';
 
 export const backdropContainerProcessEvents = (event: IEvent) => {
   const mouseMove = () => {
-    console.log('test');
     screenContainerDrag();
   };
 

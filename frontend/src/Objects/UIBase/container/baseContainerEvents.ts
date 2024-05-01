@@ -23,7 +23,6 @@ export const baseContainerEvents = (_event: IBaseEvent, screen?: IScreen) => {
     event.type = EnumOSEventType.MouseDoubleClick;
   }
 
-  const clientMouse = getClientMouse(event);
   STATE.clientMouse = getClientMouse(event);
 
   if (event.target.dataset !== undefined) {
@@ -34,12 +33,12 @@ export const baseContainerEvents = (_event: IBaseEvent, screen?: IScreen) => {
       backdropContainerBuildEvents(event);
     }
 
-    if (!screen) return;
-    const screenMouse = getScreenMouse(event, screen);
-
-    /* Screen */
-    if (id === EnumOSEventObjectType.Screen) {
-      screenContainerEvents(event, screenMouse, clientMouse, screen);
+    if (screen) {
+      /* Screen */
+      const screenMouse = getScreenMouse(event, screen);
+      if (id === EnumOSEventObjectType.Screen) {
+        screenContainerEvents(event, screenMouse, screen);
+      }
     }
   }
 
