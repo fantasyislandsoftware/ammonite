@@ -7,7 +7,7 @@ import { startTask, startTaskProcessor } from 'functions/tasks';
 import { useErrorStore } from 'stores/useErrorStore';
 import './css/base.css';
 import { screenContainerRender } from 'Objects/UIScreen/container/screenContainerRender';
-import { baseContainerEvents } from 'Objects/UIBase/container/baseContainerEvents';
+import { baseContainerBuildEvents } from 'Objects/UIBase/container/eventHandlers/baseContainerBuildEvents';
 import { getHighestScreenZIndex } from 'Objects/UIScreen/_props/screenFunctions';
 
 const App = () => {
@@ -21,7 +21,7 @@ const App = () => {
       setScreens(screens);
     });
     document.addEventListener('mouseleave', (e) => {
-      baseContainerEvents(e);
+      baseContainerBuildEvents(e);
     });
     document.addEventListener('keydown', (e) => {
       console.log(screens);
@@ -59,6 +59,19 @@ const App = () => {
       clearInterval(taskProcessor);
     }
   }, [systemCrash.state]);
+
+  /*return (
+    <div
+      style={{
+        userSelect: 'none',
+        msUserSelect: 'none',
+        MozUserSelect: 'none',
+        WebkitUserSelect: 'none',
+      }}
+    >
+      <input></input>
+    </div>
+  );*/
 
   if (systemCrash.state) {
     return <div>{systemCrash.message}</div>;

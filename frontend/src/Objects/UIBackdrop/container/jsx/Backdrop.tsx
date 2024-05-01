@@ -1,38 +1,11 @@
 import React from 'react';
-import { baseContainerEvents } from 'Objects/UIBase/container/baseContainerEvents';
+import { baseContainerBuildEvents } from 'Objects/UIBase/container/eventHandlers/baseContainerBuildEvents';
 import { EnumOSEventObjectType } from 'interface/event';
 import { TaskState, useTaskStore } from 'stores/useTaskStore';
 
 export const Backdrop = () => {
   const { tasks } = useTaskStore();
-  /*return (
-    <div
-      data-id={EnumOSEventObjectType.Backdrop}
-      style={{
-        width: '100%',
-        height: '100%',
-        zIndex: -1000,
-        userSelect: 'none',
-      }}
-      onMouseUp={(event) => baseContainerEvents(event)}
-      onMouseMove={(event) => baseContainerEvents(event)}
-      onContextMenu={(e) => e.preventDefault()}
-    >
-      <table>
-        <thead>
-          <tr>
-            <th>id</th>
-            <th>name</th>
-            <th>state</th>
-            <th>pos</th>
-            <th>var</th>
-            <th>label</th>
-            <th>Promise</th>
-          </tr>
-        </thead>
-      </table>
-    </div>
-  );*/
+
   return (
     <div
       data-id={EnumOSEventObjectType.Backdrop}
@@ -42,8 +15,8 @@ export const Backdrop = () => {
         zIndex: -1000,
         userSelect: 'none',
       }}
-      onMouseUp={(event) => baseContainerEvents(event)}
-      onMouseMove={(event) => baseContainerEvents(event)}
+      onMouseUp={(event) => baseContainerBuildEvents(event)}
+      onMouseMove={(event) => baseContainerBuildEvents(event)}
       onContextMenu={(e) => e.preventDefault()}
     >
       <table>

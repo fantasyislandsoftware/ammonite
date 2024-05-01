@@ -13,5 +13,6 @@ export const backdropContainerProcessEvents = (event: IEvent) => {
       mouseMove();
       break;
     default:
+      break;
   }
 };

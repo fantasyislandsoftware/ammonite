@@ -1,8 +1,11 @@
 import {
   EnumButtonFunc,
   EnumButtonState,
-} from 'Objects/UIButton/buttonInterface';
-import { makeMaximizeButton, makeOrderButton } from 'Objects/UIButton/buttons';
+} from 'Objects/UIButton/props/buttonInterface';
+import {
+  makeMaximizeButton,
+  makeOrderButton,
+} from 'Objects/UIButton/props/buttons';
 import { IWindow } from 'Objects/UIWindow/_props/windowInterface';
 import { drawLine } from 'api/lib/graphics/draw';
 import { pixelMerge } from 'api/lib/graphics/pixelArray';

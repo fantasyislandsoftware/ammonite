@@ -12,11 +12,11 @@ import {
   EnumButtonState,
   EnumButtonFunc,
   IButton,
-} from 'Objects/UIButton/buttonInterface';
+} from 'Objects/UIButton/props/buttonInterface';
 import { ScreenColour } from 'Objects/UIScreen/_props/screenColour';
 import { getHighestScreenZIndex } from 'Objects/UIScreen/_props/screenFunctions';
 import { EnumUIObjectType } from 'Objects/UIObject/objectInterface';
-import { generateBarIcons } from 'Objects/UIButton/buttonFunc';
+import { generateBarIcons } from 'Objects/UIButton/props/buttonFunc';
 
 export const openScreen = (
   parentTaskId: string,

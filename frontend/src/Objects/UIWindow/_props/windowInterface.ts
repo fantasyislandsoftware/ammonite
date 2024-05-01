@@ -1,4 +1,4 @@
-import { IButton } from 'Objects/UIButton/buttonInterface';
+import { IButton } from 'Objects/UIButton/props/buttonInterface';
 import { EnumMouseButton } from 'functions/mouse';
 import { IPixelArray } from 'interface/graphics';
 

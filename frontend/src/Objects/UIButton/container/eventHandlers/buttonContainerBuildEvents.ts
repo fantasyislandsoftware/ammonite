@@ -4,61 +4,55 @@ import {
   EnumOSEventType,
   IBaseEvent,
 } from 'interface/event';
-import { EnumButtonState, IButton } from '../buttonInterface';
+import { EnumButtonState, IButton } from '../../props/buttonInterface';
 import { useScreenStore } from 'stores/useScreenStore';
 import { IScreen } from 'Objects/UIScreen/_props/screenInterface';
-import { execButtonFunction, setButtonDown } from '../buttonFunc';
-import { screenContainerBringToFront } from 'Objects/UIScreen/container/screenContainerFunc';
-import {
-  getHighestScreenZIndex,
-  screenIdToIndex,
-} from 'Objects/UIScreen/_props/screenFunctions';
-import { screenContainerRender } from 'Objects/UIScreen/container/screenContainerRender';
+import { execButtonFunction, setButtonDown } from '../../props/buttonFunc';
+import { screenIdToIndex } from 'Objects/UIScreen/_props/screenFunctions';
 import { addEvent, eventLog } from 'functions/events';
 
-export const buttonContainerEvents = (
+export const buttonContainerBuildEvents = (
   event: IBaseEvent,
   screen: IScreen,
   button: IButton,
   x: boolean
 ) => {
   eventLog(event, EnumOSEventObjectType.Button);
-  addEvent(EnumOSEventObjectType.Button, event);
+  addEvent(EnumOSEventObjectType.Button, event, screen);
 
-  const { setSelectedScreen } = useScreenStore.getState();
-  const screenIndex = screenIdToIndex(screen.screenId);
-  if (screenIndex === undefined) return;
+  //const { setSelectedScreen } = useScreenStore.getState();
+  //const screenIndex = screenIdToIndex(screen.screenId);
+  //if (screenIndex === undefined) return;
 
   /* Button events */
 
-  const mouseDownLeftButton = () => {
-    //console.log(x);
+  /*const mouseDownLeftButton = () => {
     if (x) {
       setSelectedScreen(undefined);
       setButtonDown(button.id);
     }
-  };
+  };*/
 
-  const mouseUpLeftButton = () => {
-    //console.log(button.state);
-    if (button.state === EnumButtonState.DOWN) {
-      execButtonFunction(screen, button);
-    }
-    //const topScreen = getHighestScreenZIndex();
-    //if (screen.zIndex == topScreen) {
-    //execButtonFunction(screen, button);
-    //}
-  };
+  //const mouseUpLeftButton = () => {
+  //console.log(button.state);
+  //if (button.state === EnumButtonState.DOWN) {
+  //execButtonFunction(screen, button);
+  //}
+  //const topScreen = getHighestScreenZIndex();
+  //if (screen.zIndex == topScreen) {
+  //execButtonFunction(screen, button);
+  //}
+  //};
 
-  const mouseDownAnyButton = () => {
+  /*const mouseDownAnyButton = () => {
     setTimeout(() => {
       setSelectedScreen(undefined);
     });
-  };
+  };*/
 
   /* Sort events */
 
-  const mouseDown = () => {
+  /*const mouseDown = () => {
     mouseDownAnyButton();
     switch (event.button) {
       case EnumMouseButton.Left:
@@ -69,9 +63,9 @@ export const buttonContainerEvents = (
       default:
         break;
     }
-  };
+  };*/
 
-  const mouseUp = () => {
+  /*const mouseUp = () => {
     switch (event.button) {
       case EnumMouseButton.Left:
         mouseUpLeftButton();
@@ -79,7 +73,7 @@ export const buttonContainerEvents = (
       default:
         break;
     }
-  };
+  };*/
 
   /*switch (event.type) {
     case EnumOSEventType.MouseDown:

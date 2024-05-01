@@ -11,8 +11,8 @@ import {
   EnumButtonFunc,
   EnumButtonState,
   IButton,
-} from 'Objects/UIButton/buttonInterface';
-import { generateBarIcons } from 'Objects/UIButton/buttonFunc';
+} from 'Objects/UIButton/props/buttonInterface';
+import { generateBarIcons } from 'Objects/UIButton/props/buttonFunc';
 
 export const openWindow = (
   parentTaskId: string,

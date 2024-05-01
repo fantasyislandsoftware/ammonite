@@ -1,12 +1,12 @@
 import { IScreen } from 'Objects/UIScreen/_props/screenInterface';
 import { textOut } from 'api/lib/graphics/text';
 import { drawLine } from 'api/lib/graphics/draw';
-import { maximizeButton, orderButton } from 'Objects/UIButton/buttons';
+import { maximizeButton, orderButton } from 'Objects/UIButton/props/buttons';
 import { pixelMerge } from 'api/lib/graphics/pixelArray';
 import {
   EnumButtonState,
   EnumButtonFunc,
-} from 'Objects/UIButton/buttonInterface';
+} from 'Objects/UIButton/props/buttonInterface';
 import { ScreenColour } from 'Objects/UIScreen/_props/screenColour';
 import { IPixelArray } from 'interface/graphics';
 

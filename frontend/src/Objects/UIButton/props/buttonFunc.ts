@@ -47,6 +47,7 @@ export const execButtonFunction = (target: IScreen, button: IButton) => {
       break;
     /* */
     default:
+      break;
   }
 };
 

@@ -1,4 +1,9 @@
-import { EnumMouseButton, IClientMouse, IScreenMouse } from 'functions/mouse';
+import {
+  EnumMouseButton,
+  IClientMouse,
+  IScreenMouse,
+  inBoundary,
+} from 'functions/mouse';
 import {
   EnumOSEventObjectType,
   EnumOSEventType,
@@ -12,23 +17,8 @@ import {
   getHighestScreenZIndex,
   screenIdToIndex,
 } from 'Objects/UIScreen/_props/screenFunctions';
-import { buttonContainerEvents } from 'Objects/UIButton/container/buttonContainerEvents';
+import { buttonContainerBuildEvents } from 'Objects/UIButton/container/eventHandlers/buttonContainerBuildEvents';
 import { addEvent } from 'functions/events';
-
-const inBoundary = (
-  screenMouse: IScreenMouse,
-  x1: number,
-  y1: number,
-  x2: number,
-  y2: number
-) => {
-  return (
-    screenMouse.screen.x > x1 &&
-    screenMouse.screen.x < x2 &&
-    screenMouse.screen.y > y1 &&
-    screenMouse.screen.y < y2
-  );
-};
 
 export const screenTitleBarBuildEvents = (
   event: IBaseEvent,
@@ -53,7 +43,12 @@ export const screenTitleBarBuildEvents = (
         button.y + button.h
       )
     ) {
-      buttonContainerEvents(event, screen, button, screen.zIndex === topScreen);
+      buttonContainerBuildEvents(
+        event,
+        screen,
+        button,
+        screen.zIndex === topScreen
+      );
     }
   });
 };

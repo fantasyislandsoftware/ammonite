@@ -72,3 +72,18 @@ export const getScreenMouse = (
     button: e.button,
   };
 };
+
+export const inBoundary = (
+  screenMouse: IScreenMouse,
+  x1: number,
+  y1: number,
+  x2: number,
+  y2: number
+) => {
+  return (
+    screenMouse.screen.x > x1 &&
+    screenMouse.screen.x < x2 &&
+    screenMouse.screen.y > y1 &&
+    screenMouse.screen.y < y2
+  );
+};

@@ -1,8 +1,8 @@
-import { resetAllButtons } from 'Objects/UIButton/buttonFunc';
-import { backdropContainerBuildEvents } from '../../UIBackdrop/container/eventHandlers/backdropContainerBuildEvents';
-import { screenContainerEvents } from '../../UIScreen/container/screenContainerEvents';
-import { IScreen } from '../../UIScreen/_props/screenInterface';
-import { viewportContainerEvents } from '../../UIViewport/container/viewportContainerEvents';
+import { resetAllButtons } from 'Objects/UIButton/props/buttonFunc';
+import { backdropContainerBuildEvents } from '../../../UIBackdrop/container/eventHandlers/backdropContainerBuildEvents';
+import { screenContainerBuildEvents } from '../../../UIScreen/container/eventsHandlers/screenContainerBuildEvents';
+import { IScreen } from '../../../UIScreen/_props/screenInterface';
+import { viewportContainerEvents } from '../../../UIViewport/container/viewportContainerEvents';
 import { getClientMouse, getScreenMouse } from 'functions/mouse';
 import {
   EnumOSEventObjectType,
@@ -12,7 +12,10 @@ import {
 import { addEvent, eventLog, processEvents } from 'functions/events';
 import { ENV, STATE } from 'constants/global';
 
-export const baseContainerEvents = (_event: IBaseEvent, screen?: IScreen) => {
+export const baseContainerBuildEvents = (
+  _event: IBaseEvent,
+  screen?: IScreen
+) => {
   _event.persist && _event.persist();
   STATE.events = [];
   addEvent(EnumOSEventObjectType.Base, _event, screen);
@@ -37,7 +40,7 @@ export const baseContainerEvents = (_event: IBaseEvent, screen?: IScreen) => {
       /* Screen */
       const screenMouse = getScreenMouse(event, screen);
       if (id === EnumOSEventObjectType.Screen) {
-        screenContainerEvents(event, screenMouse, screen);
+        screenContainerBuildEvents(event, screenMouse, screen);
       }
     }
   }

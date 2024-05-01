@@ -1,6 +1,6 @@
 import { IScreen } from 'Objects/UIScreen/_props/screenInterface';
 import { IClientMouse, IScreenMouse } from '../functions/mouse';
-import { IButton } from '../Objects/UIButton/buttonInterface';
+import { IButton } from '../Objects/UIButton/props/buttonInterface';
 import { IWindow } from 'Objects/UIWindow/_props/windowInterface';
 
 export interface IBaseEvent {
@@ -16,6 +16,7 @@ export interface IEvent {
   event: IBaseEvent;
   screen?: IScreen;
   window?: IWindow;
+  button?: IButton;
 }
 
 export enum EnumOSEventType {

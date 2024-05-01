@@ -2,7 +2,7 @@ import React from 'react';
 import { FC } from 'react';
 import { canvasRenderStyle } from '../../_props/styles';
 import { EnumOSEventObjectType } from 'interface/event';
-import { baseContainerEvents } from 'Objects/UIBase/container/baseContainerEvents';
+import { baseContainerBuildEvents } from 'Objects/UIBase/container/eventHandlers/baseContainerBuildEvents';
 import { EnumScreenModeType, IScreen } from '../../_props/screenInterface';
 import { getHighestScreenZIndex } from '../../_props/screenFunctions';
 
@@ -37,10 +37,10 @@ const Main: FC<IProps> = ({ _ref, screen, children }) => {
         opacity: screen.zIndex === highestZorder ? 1 : 0.5,
         ...canvasRenderStyle,
       }}
-      onMouseDown={(event) => baseContainerEvents(event, screen)}
-      onMouseUp={(event) => baseContainerEvents(event, screen)}
-      onMouseMove={(event) => baseContainerEvents(event, screen)}
-      onMouseLeave={(event) => baseContainerEvents(event, screen)}
+      onMouseDown={(event) => baseContainerBuildEvents(event, screen)}
+      onMouseUp={(event) => baseContainerBuildEvents(event, screen)}
+      onMouseMove={(event) => baseContainerBuildEvents(event, screen)}
+      onMouseLeave={(event) => baseContainerBuildEvents(event, screen)}
       onContextMenu={(e) => e.preventDefault()}
     />
   );
