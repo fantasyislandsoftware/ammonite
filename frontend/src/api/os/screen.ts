@@ -8,11 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { screenDefault } from 'Objects/UIScreen/_props/screenDefault';
 import { measureText } from 'api/lib/graphics/text';
 import { initPixelArray } from 'api/lib/graphics/pixelArray';
-import {
-  EnumButtonState,
-  EnumButtonFunc,
-  IButton,
-} from 'Objects/UIButton/props/buttonInterface';
+import { EnumButtonType } from 'Objects/UIButton/props/buttonInterface';
 import { ScreenColour } from 'Objects/UIScreen/_props/screenColour';
 import { getHighestScreenZIndex } from 'Objects/UIScreen/_props/screenFunctions';
 import { EnumUIObjectType } from 'Objects/UIObject/objectInterface';
@@ -37,15 +33,24 @@ export const openScreen = (
 
   titleBarHeight += 1;
 
+  const screenId = uuidv4();
+
   /* Buttons */
   const buttonSize = Math.round(titleBarHeight / 2) * 2 - 2;
   const buttons = generateBarIcons(
-    [EnumButtonFunc.MAXIMIZE, EnumButtonFunc.ORDER],
+    [
+      {
+        type: EnumButtonType.ORDER,
+        func: `screen.reorderScreen('${screenId}')`,
+      },
+      {
+        type: EnumButtonType.MAXIMIZE,
+        func: `screen.maximizeScreen('${screenId}')`,
+      },
+    ],
     buttonSize,
     width
   );
-
-  const screenId = uuidv4();
 
   const data: IScreen = {
     screenId: screenId,
@@ -97,9 +102,6 @@ export const openScreen = (
   };
   screens.push(data);
   setScreens(screens);
-  /*setTimeout(() => {
-    setSelectedScreen(undefined);
-  });*/
   return screenId;
 };
 

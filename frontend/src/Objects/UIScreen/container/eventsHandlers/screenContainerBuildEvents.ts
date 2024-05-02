@@ -11,7 +11,7 @@ export const screenContainerBuildEvents = (
   screen: IScreen
 ) => {
   eventLog(event, EnumOSEventObjectType.Screen);
-  addEvent(EnumOSEventObjectType.Screen, event, screen);
+  addEvent(EnumOSEventObjectType.Screen, event, { screen: screen });
 
   if (screenMouse.screen.y > screen.titleBar!.height) {
     screenClientBuildEvents(event, screen);

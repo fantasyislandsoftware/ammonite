@@ -25,12 +25,7 @@ export const screenTitleBarBuildEvents = (
   screenMouse: IScreenMouse,
   screen: IScreen
 ) => {
-  addEvent(EnumOSEventObjectType.ScreenTitleBar, event, screen);
-
-  const screenIndex = screenIdToIndex(screen.screenId);
-  if (screenIndex === undefined) return;
-
-  const topScreen = getHighestScreenZIndex();
+  addEvent(EnumOSEventObjectType.ScreenTitleBar, event, { screen: screen });
 
   /* Button events */
   screen.titleBar?.buttons.map((button) => {
@@ -43,12 +38,7 @@ export const screenTitleBarBuildEvents = (
         button.y + button.h
       )
     ) {
-      buttonContainerBuildEvents(
-        event,
-        screen,
-        button,
-        screen.zIndex === topScreen
-      );
+      buttonContainerBuildEvents(event, screen, button);
     }
   });
 };

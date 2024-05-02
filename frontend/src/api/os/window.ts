@@ -7,11 +7,7 @@ import { screenContainerRender } from '../../Objects/UIScreen/container/screenCo
 import { initPixelArray } from 'api/lib/graphics/pixelArray';
 import { WindowColour } from 'Objects/UIWindow/_props/windowColour';
 import { measureText } from 'api/lib/graphics/text';
-import {
-  EnumButtonFunc,
-  EnumButtonState,
-  IButton,
-} from 'Objects/UIButton/props/buttonInterface';
+import { EnumButtonType } from 'Objects/UIButton/props/buttonInterface';
 import { generateBarIcons } from 'Objects/UIButton/props/buttonFunc';
 
 export const openWindow = (
@@ -34,12 +30,12 @@ export const openWindow = (
   );
 
   /* Buttons */
-  const buttonSize = Math.round(titleBarHeight / 2) * 2 - 1;
+  /*const buttonSize = Math.round(titleBarHeight / 2) * 2 - 1;
   const buttons = generateBarIcons(
-    [EnumButtonFunc.MAXIMIZE, EnumButtonFunc.ORDER],
+    [EnumButtonType.MAXIMIZE, EnumButtonType.ORDER],
     buttonSize,
     titleBarWidth
-  );
+  );*/
 
   const data: IWindow = {
     windowId: uuidv4(),
@@ -63,7 +59,7 @@ export const openWindow = (
         background: WindowColour.TITLEBAR_BACKGROUND,
         text: WindowColour.TITLEBAR_TEXT,
       },
-      buttons: buttons,
+      buttons: [],
     },
     border: {
       thickness: windowDefault.border.thickness,

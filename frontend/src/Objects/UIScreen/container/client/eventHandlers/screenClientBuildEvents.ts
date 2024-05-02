@@ -6,5 +6,5 @@ import { addEvent, eventLog } from 'functions/events';
 
 export const screenClientBuildEvents = (event: any, screen: IScreen) => {
   eventLog(event, EnumOSEventObjectType.ScreenClient);
-  addEvent(EnumOSEventObjectType.ScreenClient, event, screen);
+  addEvent(EnumOSEventObjectType.ScreenClient, event, { screen: screen });
 };

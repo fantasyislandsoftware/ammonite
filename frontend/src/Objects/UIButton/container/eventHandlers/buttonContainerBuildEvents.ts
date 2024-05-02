@@ -1,24 +1,18 @@
-import {
-  EnumMouseButton,
-  EnumOSEventObjectType,
-  EnumOSEventType,
-  IBaseEvent,
-} from 'interface/event';
-import { EnumButtonState, IButton } from '../../props/buttonInterface';
-import { useScreenStore } from 'stores/useScreenStore';
+import { EnumOSEventObjectType, IBaseEvent } from 'interface/event';
 import { IScreen } from 'Objects/UIScreen/_props/screenInterface';
-import { execButtonFunction, setButtonDown } from '../../props/buttonFunc';
-import { screenIdToIndex } from 'Objects/UIScreen/_props/screenFunctions';
 import { addEvent, eventLog } from 'functions/events';
+import { IButton } from 'Objects/UIButton/props/buttonInterface';
 
 export const buttonContainerBuildEvents = (
   event: IBaseEvent,
   screen: IScreen,
-  button: IButton,
-  x: boolean
+  button: IButton
 ) => {
   eventLog(event, EnumOSEventObjectType.Button);
-  addEvent(EnumOSEventObjectType.Button, event, screen);
+  addEvent(EnumOSEventObjectType.Button, event, {
+    screen: screen,
+    button: button,
+  });
 
   //const { setSelectedScreen } = useScreenStore.getState();
   //const screenIndex = screenIdToIndex(screen.screenId);

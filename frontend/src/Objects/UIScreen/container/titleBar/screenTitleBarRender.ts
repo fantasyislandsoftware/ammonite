@@ -3,12 +3,9 @@ import { textOut } from 'api/lib/graphics/text';
 import { drawLine } from 'api/lib/graphics/draw';
 import { maximizeButton, orderButton } from 'Objects/UIButton/props/buttons';
 import { pixelMerge } from 'api/lib/graphics/pixelArray';
-import {
-  EnumButtonState,
-  EnumButtonFunc,
-} from 'Objects/UIButton/props/buttonInterface';
 import { ScreenColour } from 'Objects/UIScreen/_props/screenColour';
 import { IPixelArray } from 'interface/graphics';
+import { EnumButtonType } from 'Objects/UIButton/props/buttonInterface';
 
 export const screenTitleBarRender = (pixels: IPixelArray, screen: IScreen) => {
   const { titleBar } = screen;
@@ -30,8 +27,8 @@ export const screenTitleBarRender = (pixels: IPixelArray, screen: IScreen) => {
   screen.titleBar?.buttons.map((button) => {
     const { x, y, w, h } = button;
 
-    switch (button.func) {
-      case EnumButtonFunc.ORDER:
+    switch (button.type) {
+      case EnumButtonType.ORDER:
         pixels = pixelMerge(
           orderButton(w, h, ScreenColour.TITLEBAR_BACKGROUND, button.state),
           pixels,
@@ -40,7 +37,7 @@ export const screenTitleBarRender = (pixels: IPixelArray, screen: IScreen) => {
           null
         );
         break;
-      case EnumButtonFunc.MAXIMIZE:
+      case EnumButtonType.MAXIMIZE:
         pixels = pixelMerge(
           maximizeButton(w, h, ScreenColour.TITLEBAR_BACKGROUND, button.state),
           pixels,

@@ -1,6 +1,7 @@
 import { backdropContainerProcessEvents } from 'Objects/UIBackdrop/container/eventHandlers/backdropContainerProcessEvents';
 import { baseContainerProcessEvents } from 'Objects/UIBase/container/eventHandlers/baseContainerProcessEvents';
 import { buttonContainerProcessEvents } from 'Objects/UIButton/container/eventHandlers/buttonContainerProcessEvents';
+import { IButton } from 'Objects/UIButton/props/buttonInterface';
 import { IScreen } from 'Objects/UIScreen/_props/screenInterface';
 import { screenClientProcessEvents } from 'Objects/UIScreen/container/client/eventHandlers/screenClientProcessEvents';
 import { screenContainerProcessEvents } from 'Objects/UIScreen/container/eventsHandlers/screenContainerProcessEvents';
@@ -16,10 +17,17 @@ export const eventLog = (event: IBaseEvent, name: string) => {
 export const addEvent = (
   objectType: EnumOSEventObjectType,
   event: IBaseEvent,
-  screen?: IScreen,
-  window?: IWindow
+  objects: {
+    screen?: IScreen;
+    window?: IWindow;
+    button?: IButton;
+  }
 ) => {
-  STATE.events.push({ objectType: objectType, event, screen, window });
+  STATE.events.push({
+    objectType: objectType,
+    event,
+    objects: objects,
+  });
 };
 
 export const processEvents = () => {

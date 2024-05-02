@@ -24,10 +24,12 @@ interface IState {
         };
       }
     | undefined;
+  buttonDownId: string | undefined;
 }
 
 export const STATE: IState = {
   events: [],
   clientMouse: { x: 0, y: 0 },
   dragScreen: undefined,
+  buttonDownId: undefined,
 };

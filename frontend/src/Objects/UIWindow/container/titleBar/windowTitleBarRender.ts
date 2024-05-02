@@ -1,7 +1,4 @@
-import {
-  EnumButtonFunc,
-  EnumButtonState,
-} from 'Objects/UIButton/props/buttonInterface';
+import { EnumButtonType } from 'Objects/UIButton/props/buttonInterface';
 import {
   makeMaximizeButton,
   makeOrderButton,
@@ -32,11 +29,11 @@ export const windowTitleBarRender = (window: IWindow) => {
   /* Buttons */
   buttons.map((button) => {
     let vectorData: VectorShape[] = [];
-    switch (button.func) {
-      case EnumButtonFunc.ORDER:
+    switch (button.type) {
+      case EnumButtonType.ORDER:
         vectorData = makeOrderButton(button.state);
         break;
-      case EnumButtonFunc.MAXIMIZE:
+      case EnumButtonType.MAXIMIZE:
         vectorData = makeMaximizeButton(button.state);
         break;
     }

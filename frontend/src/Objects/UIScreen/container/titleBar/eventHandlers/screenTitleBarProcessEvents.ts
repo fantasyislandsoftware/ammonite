@@ -4,18 +4,20 @@ import { EnumMouseButton } from 'functions/mouse';
 import { IEvent, EnumOSEventType } from 'interface/event';
 import { useScreenStore } from 'stores/useScreenStore';
 import { screenContainerDrag } from '../../screenContainerFunc';
+import { SCREEN } from 'api/os/commands/screen';
 
 export const screenTitleBarProcessEvents = (event: IEvent) => {
   const { screens } = useScreenStore.getState();
+  const screen = new SCREEN();
 
   const mouseDown = () => {
     switch (event.event.button) {
       case EnumMouseButton.Left:
-        if (!event.screen) return;
-        const screenIndex = screenIdToIndex(event.screen.screenId);
+        if (!event.objects.screen) return;
+        const screenIndex = screenIdToIndex(event.objects.screen.screenId);
         if (screenIndex === undefined) return;
         STATE.dragScreen = {
-          id: event.screen.screenId,
+          id: event.objects.screen.screenId,
           offset: {
             y: STATE.clientMouse.y - screens[screenIndex].position.y,
           },
@@ -23,6 +25,11 @@ export const screenTitleBarProcessEvents = (event: IEvent) => {
         break;
       default:
     }
+  };
+
+  const mouseDoubleClick = () => {
+    if (!event.objects.screen) return;
+    screen.maximizeScreen(event.objects.screen.screenId);
   };
 
   const mouseUp = () => {
@@ -44,6 +51,7 @@ export const screenTitleBarProcessEvents = (event: IEvent) => {
       mouseUp();
       break;
     case EnumOSEventType.MouseDoubleClick:
+      mouseDoubleClick();
       break;
     case EnumOSEventType.MouseMove:
       mouseMove();

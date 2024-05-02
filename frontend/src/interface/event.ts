@@ -14,9 +14,11 @@ export interface IBaseEvent {
 export interface IEvent {
   objectType: EnumOSEventObjectType;
   event: IBaseEvent;
-  screen?: IScreen;
-  window?: IWindow;
-  button?: IButton;
+  objects: {
+    screen?: IScreen;
+    window?: IWindow;
+    button?: IButton;
+  };
 }
 
 export enum EnumOSEventType {

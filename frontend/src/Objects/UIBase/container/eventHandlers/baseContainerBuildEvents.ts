@@ -18,7 +18,7 @@ export const baseContainerBuildEvents = (
 ) => {
   _event.persist && _event.persist();
   STATE.events = [];
-  addEvent(EnumOSEventObjectType.Base, _event, screen);
+  addEvent(EnumOSEventObjectType.Base, _event, { screen: screen });
 
   const event = _event;
 

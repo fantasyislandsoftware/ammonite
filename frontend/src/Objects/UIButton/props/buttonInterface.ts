@@ -1,14 +1,18 @@
+import { IScreen } from 'Objects/UIScreen/_props/screenInterface';
+import { IWindow } from 'Objects/UIWindow/_props/windowInterface';
+
 export interface IButton {
   id: string;
   x: number;
   y: number;
   w: number;
   h: number;
-  func: EnumButtonFunc;
+  type: EnumButtonType;
+  func: any;
   state: EnumButtonState;
 }
 
-export enum EnumButtonFunc {
+export enum EnumButtonType {
   ORDER = 'order',
   MAXIMIZE = 'maximize',
 }
@@ -16,4 +20,11 @@ export enum EnumButtonFunc {
 export enum EnumButtonState {
   DOWN = 'down',
   UP = 'up',
+}
+
+export type IButtonFunction = (screen: IScreen, window: IWindow) => void;
+
+export interface IButtonDef {
+  type: EnumButtonType;
+  func: any;
 }
