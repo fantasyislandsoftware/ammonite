@@ -28,8 +28,10 @@ export const screenTitleBarProcessEvents = (event: IEvent) => {
   };
 
   const mouseDoubleClick = () => {
-    if (!event.objects.screen) return;
-    screenAPI.maximizeScreen(event.objects.screen.screenId);
+    if (event.event.button === EnumMouseButton.Left) {
+      if (!event.objects.screen) return;
+      screenAPI.maximizeScreen(event.objects.screen.screenId);
+    }
   };
 
   const mouseUp = () => {

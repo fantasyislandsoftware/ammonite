@@ -2,13 +2,13 @@ import { setButtonDown } from 'Objects/UIButton/props/buttonFunc';
 import { screenContainerDrag } from 'Objects/UIScreen/container/screenContainerFunc';
 import { SCREEN_API } from 'api/os/api/screen';
 import { STATE } from 'constants/global';
-import { EnumOSEventType, IEvent } from 'interface/event';
+import { EnumMouseButton, EnumOSEventType, IEvent } from 'interface/event';
 
 export const buttonContainerProcessEvents = (event: IEvent) => {
   const screenAPI = new SCREEN_API();
 
   const mouseDown = () => {
-    if (event.objects.button) {
+    if (event.objects.button && event.event.button === EnumMouseButton.Left) {
       setButtonDown(event.objects.button.id);
     }
   };
