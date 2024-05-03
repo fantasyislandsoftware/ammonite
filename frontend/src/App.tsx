@@ -31,7 +31,7 @@ const App = () => {
   useEffect(() => {
     async function boot() {
       window.onerror = (message, source, lineno, colno, error) => {
-        console.log('error');
+        console.log(message, source, lineno, colno, error);
       };
       startTask('/home/node/app/src/js/boot.js');
     }

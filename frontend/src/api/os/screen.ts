@@ -41,11 +41,11 @@ export const openScreen = (
     [
       {
         type: EnumButtonType.ORDER,
-        func: `screen.reorderScreen('${screenId}')`,
+        func: `screenAPI.reorderScreen('${screenId}')`,
       },
       {
         type: EnumButtonType.MAXIMIZE,
-        func: `screen.maximizeScreen('${screenId}')`,
+        func: `screenAPI.maximizeScreen('${screenId}')`,
       },
     ],
     buttonSize,

@@ -1,19 +1,24 @@
-import { SCREEN } from 'api/os/commands/screen';
+import { SCREEN_API } from 'api/os/api/screen';
 import { EnumOSEventType, IEvent } from 'interface/event';
-//import { screenContainerBringToFront } from '../screenContainerFunc';
 
 export const screenContainerProcessEvents = (event: IEvent) => {
-  const screen = new SCREEN();
+  const screenAPI = new SCREEN_API();
 
   const mouseDown = () => {
-    if (event.objects.screen === undefined) return;
-    screen.bringToFront(event.objects.screen.screenId);
-    //screenContainerBringToFront(event.objects.screen);
+    setTimeout(() => {
+      if (!event.objects.screen) return;
+      screenAPI.bringToFront(event.objects.screen.screenId);
+    });
   };
+
+  const mouseUp = () => {};
 
   switch (event.event.type) {
     case EnumOSEventType.MouseDown:
       mouseDown();
+      break;
+    case EnumOSEventType.MouseUp:
+      mouseUp();
       break;
     default:
       break;

@@ -6,7 +6,7 @@ import {
 } from 'Objects/UIScreen/_props/screenFunctions';
 import { IScreen } from 'Objects/UIScreen/_props/screenInterface';
 
-export class SCREEN {
+export class SCREEN_API {
   public screens: IScreen[] = [];
   public setScreens: (screens: IScreen[]) => void;
 
@@ -54,6 +54,13 @@ export class SCREEN {
     });
     this.screens[screenIndex].zIndex = pos;
     this.setScreens(this.screens);
+  };
+
+  /****************************************************/
+
+  isTopScreen = (screenId: string) => {
+    const screenIndex = findScreenIndex(screenId);
+    return this.screens[screenIndex].zIndex === getHighestScreenZIndex();
   };
 
   /****************************************************/

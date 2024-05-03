@@ -7,6 +7,7 @@ import { screenClientProcessEvents } from 'Objects/UIScreen/container/client/eve
 import { screenContainerProcessEvents } from 'Objects/UIScreen/container/eventsHandlers/screenContainerProcessEvents';
 import { screenTitleBarProcessEvents } from 'Objects/UIScreen/container/titleBar/eventHandlers/screenTitleBarProcessEvents';
 import { IWindow } from 'Objects/UIWindow/_props/windowInterface';
+import { SCREEN_API } from 'api/os/api/screen';
 import { ENV, STATE } from 'constants/global';
 import { EnumOSEventObjectType, IBaseEvent, IEvent } from 'interface/event';
 
@@ -31,19 +32,17 @@ export const addEvent = (
 };
 
 export const processEvents = () => {
-  STATE.events.map((event) => {
-    switch (event.objectType) {
-      case EnumOSEventObjectType.Screen:
-        screenContainerProcessEvents(event);
-        break;
-      case EnumOSEventObjectType.Button:
-        buttonContainerProcessEvents(event);
-        break;
-    }
-  });
+  const screenAPI = new SCREEN_API();
+
   /* Top Object */
   const event = STATE.events[STATE.events.length - 1];
   if (event.event === null) return;
+
+  let isTopScreen = false;
+  if (event.objects.screen) {
+    isTopScreen = screenAPI.isTopScreen(event.objects.screen?.screenId);
+  }
+
   switch (event.objectType) {
     case EnumOSEventObjectType.Base:
       baseContainerProcessEvents(event);
@@ -60,4 +59,17 @@ export const processEvents = () => {
     default:
       break;
   }
+  /* */
+  STATE.events.map((event) => {
+    switch (event.objectType) {
+      case EnumOSEventObjectType.Screen:
+        screenContainerProcessEvents(event);
+        break;
+      case EnumOSEventObjectType.Button:
+        if (isTopScreen) {
+          buttonContainerProcessEvents(event);
+        }
+        break;
+    }
+  });
 };
