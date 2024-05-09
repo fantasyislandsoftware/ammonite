@@ -1,5 +1,5 @@
 import { IScreen } from 'Objects/UIScreen/_props/screenInterface';
-import { windowContainerRender } from 'Objects/UIWindow/container/windowContainerRender';
+import { windowContainerRender } from 'Objects/UIWindow/windowContainerRender';
 import { pixelMerge } from 'api/lib/graphics/pixelArray';
 import { IPixelArray } from 'interface/graphics';
 

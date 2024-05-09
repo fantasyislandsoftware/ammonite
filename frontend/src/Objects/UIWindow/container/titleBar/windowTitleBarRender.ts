@@ -5,14 +5,20 @@ import {
 } from 'Objects/UIButton/props/buttons';
 import { IWindow } from 'Objects/UIWindow/_props/windowInterface';
 import { drawLine } from 'api/lib/graphics/draw';
-import { pixelMerge } from 'api/lib/graphics/pixelArray';
+import {
+  getPixelArrayDimensions,
+  pixelMerge,
+} from 'api/lib/graphics/pixelArray';
 import { textOut } from 'api/lib/graphics/text';
 import { VectorShape, drawVector } from 'api/lib/graphics/vector';
 
 export const windowTitleBarRender = (window: IWindow) => {
+  if (!window.titleBar) return;
   const { pixels: windowPixels, titleBar } = window;
-  const { pixels: titleBarPixels, width, height, color, buttons } = titleBar;
+  const { pixels: titleBarPixels, color, buttons } = titleBar;
   const { font, title } = titleBar;
+
+  const { width, height } = getPixelArrayDimensions(titleBarPixels);
 
   /* Title */
   textOut(
@@ -48,12 +54,11 @@ export const windowTitleBarRender = (window: IWindow) => {
   });
 
   /* Border */
-  drawLine(titleBarPixels, 0, height - 1, width, height - 1, 5);
   window.pixels = pixelMerge(
     titleBarPixels,
     windowPixels,
-    titleBar.offset,
-    titleBar.offset,
+    titleBar.x,
+    titleBar.y,
     null
   );
 };

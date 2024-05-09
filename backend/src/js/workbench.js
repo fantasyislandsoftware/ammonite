@@ -10,8 +10,8 @@ openScreen(320, 256, low, "Workbench", wbScreenId);
 
 drawImage(screen, wbScreenId, 0, 0, 0, 0);
 
-openWindow(wbScreenId, 10, 10, 100, 50, "Test Window", testWindowIdA);
-openWindow(wbScreenId, 100, 100, 100, 50, "Test Window2", testWindowIdB);
+openWindow(wbScreenId, 10, 10, 100, 50, "1 - Test", testWindowIdA);
+openWindow(wbScreenId, 30, 30, 100, 50, "2 - Test", testWindowIdB);
 
 label(START);
 jmp(START);

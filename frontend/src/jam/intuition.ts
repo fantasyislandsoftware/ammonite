@@ -1,6 +1,6 @@
 import { full, hi, low, med } from 'Objects/UIScreen/_props/screenModes';
-import { openScreen } from 'api/os/screen';
-import { openWindow } from 'api/os/window';
+import { SCREEN_API } from 'api/os/api/screen';
+import { WINDOW_API } from 'api/os/api/window';
 import { IParam } from 'functions/tasks';
 import { ITask } from 'stores/useTaskStore';
 
@@ -12,6 +12,8 @@ export const _openScreen = (
   title: string,
   returnId: IParam
 ) => {
+  const screenAPI = new SCREEN_API();
+
   let screenMode = low;
   switch (mode) {
     case 'low':
@@ -29,7 +31,13 @@ export const _openScreen = (
     default:
       screenMode = low;
   }
-  const screenId = openScreen(task.id, width, height, screenMode, title);
+  const screenId = screenAPI.openScreen(
+    task.id,
+    width,
+    height,
+    screenMode,
+    title
+  );
   task.var[returnId.id] = screenId;
 };
 
@@ -43,7 +51,8 @@ export const _openWindow = (
   title: string,
   returnId: IParam
 ) => {
-  const windowId = openWindow(
+  const windowAPI = new WINDOW_API();
+  const windowId = windowAPI.openWindow(
     task.id,
     parentScreenId,
     x,

@@ -1,7 +1,7 @@
 import {
   EnumMouseButton,
   IClientMouse,
-  IScreenMouse,
+  IMouse,
   inBoundary,
 } from 'functions/mouse';
 import {
@@ -22,7 +22,7 @@ import { addEvent } from 'functions/events';
 
 export const screenTitleBarBuildEvents = (
   event: IBaseEvent,
-  screenMouse: IScreenMouse,
+  screenMouse: IMouse,
   screen: IScreen
 ) => {
   addEvent(EnumOSEventObjectType.ScreenTitleBar, event, { screen: screen });

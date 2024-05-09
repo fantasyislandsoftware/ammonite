@@ -1,5 +1,10 @@
 import { IPixelArray } from 'interface/graphics';
 
+export interface IPixelArrayDimensions {
+  width: number;
+  height: number;
+}
+
 export const initPixelArray = (
   width: number,
   height: number,
@@ -38,4 +43,13 @@ export const pixelMerge = (
     }
   }
   return to;
+};
+
+export const getPixelArrayDimensions = (
+  pixels: IPixelArray
+): IPixelArrayDimensions => {
+  return {
+    width: pixels[0].length,
+    height: pixels.length,
+  };
 };

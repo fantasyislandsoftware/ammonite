@@ -16,12 +16,14 @@ export interface IWindow {
   position: {
     x: number;
     y: number;
+    z: number;
   };
   width: number;
   height: number;
-  titleBar: IWindowTitleBar;
+  titleBar: IWindowTitleBar | null;
   border: IWindowBorder;
   pixels: IPixelArray;
+  client: IWindowClient;
 }
 
 export interface IWindowBorder {
@@ -30,10 +32,9 @@ export interface IWindowBorder {
 }
 
 export interface IWindowTitleBar {
+  x: number;
+  y: number;
   title: string;
-  offset: number;
-  width: number;
-  height: number;
   font: {
     name: string;
     size: number;
@@ -44,4 +45,10 @@ export interface IWindowTitleBar {
     text: number;
   };
   buttons: IButton[];
+}
+
+export interface IWindowClient {
+  x: number;
+  y: number;
+  pixels: IPixelArray;
 }

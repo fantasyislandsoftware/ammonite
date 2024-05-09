@@ -1,5 +1,5 @@
 import { IScreen } from 'Objects/UIScreen/_props/screenInterface';
-import { IClientMouse, IScreenMouse } from '../functions/mouse';
+import { IClientMouse, IMouse } from '../functions/mouse';
 import { IButton } from '../Objects/UIButton/props/buttonInterface';
 import { IWindow } from 'Objects/UIWindow/_props/windowInterface';
 
@@ -55,7 +55,7 @@ export enum EnumOSEventObjectType {
 export interface OSEventViewport {
   type: EnumOSEventObjectType;
   id?: number;
-  screenMouse?: IScreenMouse;
+  screenMouse?: IMouse;
   clientMouse?: IClientMouse;
   icon?: IButton;
 }
@@ -63,7 +63,7 @@ export interface OSEventViewport {
 export interface OSEventBackdrop {
   type: EnumOSEventObjectType;
   id?: number;
-  screenMouse?: IScreenMouse;
+  screenMouse?: IMouse;
   clientMouse?: IClientMouse;
   icon?: IButton;
 }
@@ -71,7 +71,7 @@ export interface OSEventBackdrop {
 export interface OSEventScreen {
   type: EnumOSEventObjectType;
   id: number;
-  screenMouse?: IScreenMouse;
+  screenMouse?: IMouse;
   clientMouse?: IClientMouse;
   icon?: IButton;
 }
@@ -79,7 +79,7 @@ export interface OSEventScreen {
 export interface OSEventScreenClient {
   id?: number;
   type: EnumOSEventObjectType;
-  screenMouse?: IScreenMouse;
+  screenMouse?: IMouse;
   clientMouse?: IClientMouse;
   icon?: IButton;
 }
@@ -87,7 +87,7 @@ export interface OSEventScreenClient {
 export interface OSEventScreentitleBar {
   id?: number;
   type: EnumOSEventObjectType;
-  screenMouse?: IScreenMouse;
+  screenMouse?: IMouse;
   clientMouse?: IClientMouse;
   icon?: IButton;
 }
@@ -95,7 +95,7 @@ export interface OSEventScreentitleBar {
 export interface OSEventScreentitleBarIcon {
   id?: number;
   type: EnumOSEventObjectType;
-  screenMouse?: IScreenMouse;
+  screenMouse?: IMouse;
   clientMouse?: IClientMouse;
   icon?: IButton;
 }

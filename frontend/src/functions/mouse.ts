@@ -8,8 +8,8 @@ export interface IClientMouse {
   y: number;
 }
 
-export interface IScreenMouse {
-  screen: {
+export interface IMouse {
+  position: {
     x: number;
     y: number;
   };
@@ -39,7 +39,7 @@ export const getScreenMouse = (
   e: any,
   screen: IScreen
   //aspect: IScreenAspect
-): IScreenMouse => {
+): IMouse => {
   //const m = aspect ? aspect.margin : 0;
   const m = screen.aspect.margin;
   const clientX = e.clientX - Math.round(m / 2);
@@ -65,7 +65,7 @@ export const getScreenMouse = (
   }
 
   return {
-    screen: {
+    position: {
       x: x,
       y: y,
     },
@@ -74,16 +74,16 @@ export const getScreenMouse = (
 };
 
 export const inBoundary = (
-  screenMouse: IScreenMouse,
+  screenMouse: IMouse,
   x1: number,
   y1: number,
   x2: number,
   y2: number
 ) => {
   return (
-    screenMouse.screen.x > x1 &&
-    screenMouse.screen.x < x2 &&
-    screenMouse.screen.y > y1 &&
-    screenMouse.screen.y < y2
+    screenMouse.position.x > x1 &&
+    screenMouse.position.x < x2 &&
+    screenMouse.position.y > y1 &&
+    screenMouse.position.y < y2
   );
 };
