@@ -81,9 +81,9 @@ export const inBoundary = (
   y2: number
 ) => {
   return (
-    screenMouse.position.x > x1 &&
+    screenMouse.position.x > x1 - 1 &&
     screenMouse.position.x < x2 &&
-    screenMouse.position.y > y1 &&
+    screenMouse.position.y > y1 - 1 &&
     screenMouse.position.y < y2
   );
 };

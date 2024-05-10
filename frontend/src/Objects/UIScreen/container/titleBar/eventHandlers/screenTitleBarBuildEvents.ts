@@ -25,7 +25,9 @@ export const screenTitleBarBuildEvents = (
   screenMouse: IMouse,
   screen: IScreen
 ) => {
-  addEvent(EnumOSEventObjectType.ScreenTitleBar, event, { screen: screen });
+  addEvent(EnumOSEventObjectType.ScreenTitleBar, event, screenMouse, {
+    screen: screen,
+  });
 
   /* Button events */
   screen.titleBar?.buttons.map((button) => {

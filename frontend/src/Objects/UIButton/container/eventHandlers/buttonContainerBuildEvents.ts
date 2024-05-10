@@ -9,7 +9,7 @@ export const buttonContainerBuildEvents = (
   button: IButton
 ) => {
   eventLog(event, EnumOSEventObjectType.Button);
-  addEvent(EnumOSEventObjectType.Button, event, {
+  addEvent(EnumOSEventObjectType.Button, event, null, {
     screen: screen,
     button: button,
   });

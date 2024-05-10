@@ -14,6 +14,7 @@ export interface IBaseEvent {
 export interface IEvent {
   objectType: EnumOSEventObjectType;
   event: IBaseEvent;
+  mouse: IMouse | null;
   objects: {
     screen?: IScreen;
     window?: IWindow;
@@ -42,12 +43,13 @@ export enum EnumOSEventObjectType {
   Base = 'base',
   Viewport = 'viewport',
   Backdrop = 'backdrop',
+  Client = 'client',
   Screen = 'screen',
-  Window = 'window',
   ScreenTitleBar = 'screenTitleBar',
   ScreenTitleBarIcon = 'screenTitleBarIcon',
   ScreenClient = 'screenClient',
-  Client = 'client',
+  Window = 'window',
+  WindowTitleBar = 'windowTitleBar',
   Icon = 'icon',
   Button = 'button',
 }

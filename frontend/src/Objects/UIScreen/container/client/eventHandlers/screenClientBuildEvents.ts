@@ -14,18 +14,18 @@ export const screenClientBuildEvents = (
 ) => {
   const windowAPI = new WINDOW_API();
   eventLog(event, EnumOSEventObjectType.ScreenClient);
-  addEvent(EnumOSEventObjectType.ScreenClient, event, { screen: screen });
 
   const screenClientMouse = screenMouse;
   screenClientMouse.position.y -= screen.titleBar!.height + 1;
 
+  addEvent(EnumOSEventObjectType.ScreenClient, event, screenClientMouse, {
+    screen: screen,
+  });
+
+  console.log('-----');
+
   const windows = windowAPI.sortWindowsByZIndex(screen.windows);
   windows.map((window: IWindow) => {
-    console.log(window.titleBar!.title);
+    windowContainerBuildEvents(event, window, screenClientMouse);
   });
-  console.log('-------');
-
-  //screen.windows.map((window) => {
-  //  windowContainerBuildEvents(event, window, screenClientMouse);
-  //});
 };

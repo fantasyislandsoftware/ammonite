@@ -3,5 +3,5 @@ import { addEvent, eventLog } from 'functions/events';
 
 export const backdropContainerBuildEvents = (event: IBaseEvent) => {
   eventLog(event, EnumOSEventObjectType.Backdrop);
-  addEvent(EnumOSEventObjectType.Backdrop, event, {});
+  addEvent(EnumOSEventObjectType.Backdrop, event, null, {});
 };
