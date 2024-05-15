@@ -50,6 +50,7 @@ export enum EnumOSEventObjectType {
   ScreenClient = 'screenClient',
   Window = 'window',
   WindowTitleBar = 'windowTitleBar',
+  WindowClient = 'windowClient',
   Icon = 'icon',
   Button = 'button',
 }

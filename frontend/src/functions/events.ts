@@ -14,6 +14,7 @@ import { SCREEN_API } from 'api/os/api/screen';
 import { ENV, STATE } from 'constants/global';
 import { EnumOSEventObjectType, IBaseEvent, IEvent } from 'interface/event';
 import { IMouse } from './mouse';
+import { windowClientProcessEvents } from 'Objects/UIWindow/container/client/eventHandlers/WindowClientProcessEvents';
 
 export const eventLog = (event: IBaseEvent, name: string) => {
   ENV.eventDebug && console.log(`evt_${name} {${event.type}}`);
@@ -67,6 +68,9 @@ export const processEvents = () => {
       break;
     case EnumOSEventObjectType.WindowTitleBar:
       windowTitleBarProcessEvents(event);
+      break;
+    case EnumOSEventObjectType.WindowClient:
+      windowClientProcessEvents(event);
       break;
     default:
       break;

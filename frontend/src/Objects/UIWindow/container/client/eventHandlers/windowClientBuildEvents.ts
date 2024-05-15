@@ -1,34 +1,27 @@
-import { buttonContainerBuildEvents } from 'Objects/UIButton/container/eventHandlers/buttonContainerBuildEvents';
 import { IWindow } from 'Objects/UIWindow/_props/windowInterface';
 import { getPixelArrayDimensions } from 'api/lib/graphics/pixelArray';
 import { addEvent } from 'functions/events';
 import { IMouse, inBoundary } from 'functions/mouse';
 import { EnumOSEventObjectType, IBaseEvent } from 'interface/event';
 
-export const windowTitleBarBuildEvents = (
+export const windowClientBuildEvents = (
   event: IBaseEvent,
   window: IWindow,
   windowMouse: IMouse
 ) => {
-  const { titleBar } = window;
-  if (!titleBar) return;
-  const { pixels, x, y, buttons } = titleBar;
+  const { client } = window;
+  const { pixels, x, y } = client;
   const { width, height } = getPixelArrayDimensions(pixels);
-
   if (inBoundary(windowMouse, x, y, x + width, y + height)) {
-    const titleBarMouse: IMouse = {
+    const clientMouse: IMouse = {
       position: {
         x: windowMouse.position.x - x,
         y: windowMouse.position.y - y,
       },
       button: windowMouse.button,
     };
-    addEvent(EnumOSEventObjectType.WindowTitleBar, event, titleBarMouse, {
+    addEvent(EnumOSEventObjectType.WindowClient, event, clientMouse, {
       window: window,
-    });
-    /* Buttons */
-    buttons.map((button) => {
-      buttonContainerBuildEvents(event, null, window, button, titleBarMouse);
     });
   }
 };

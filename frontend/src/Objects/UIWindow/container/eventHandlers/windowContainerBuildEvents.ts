@@ -5,6 +5,7 @@ import { addEvent } from 'functions/events';
 import { EnumOSEventObjectType, IBaseEvent } from 'interface/event';
 import { windowTitleBarBuildEvents } from '../titleBar/eventHandlers/windowTitleBarBuildEvents';
 import { getPixelArrayDimensions } from 'api/lib/graphics/pixelArray';
+import { windowClientBuildEvents } from '../client/eventHandlers/windowClientBuildEvents';
 
 export const windowContainerBuildEvents = (
   event: IBaseEvent,
@@ -27,5 +28,6 @@ export const windowContainerBuildEvents = (
       window: window,
     });
     windowTitleBarBuildEvents(event, window, windowMouse);
+    windowClientBuildEvents(event, window, windowMouse);
   }
 };

@@ -29,18 +29,12 @@ export const screenTitleBarBuildEvents = (
     screen: screen,
   });
 
-  /* Button events */
-  screen.titleBar?.buttons.map((button) => {
-    if (
-      inBoundary(
-        screenMouse,
-        button.x,
-        button.y,
-        button.x + button.w,
-        button.y + button.h
-      )
-    ) {
-      buttonContainerBuildEvents(event, screen, button);
-    }
+  const { titleBar } = screen;
+  if (!titleBar) return;
+  const { buttons } = titleBar;
+
+  /* Buttons */
+  buttons.map((button) => {
+    buttonContainerBuildEvents(event, screen, null, button, screenMouse);
   });
 };
