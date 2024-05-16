@@ -48,11 +48,11 @@ export class WINDOW_API {
       [
         {
           type: EnumButtonType.ORDER,
-          func: () => {},
+          func: `windowAPI.sendToBack('${uuidv4()}')`,
         },
         {
           type: EnumButtonType.MAXIMIZE,
-          func: () => {},
+          func: `windowAPI.maximize('${uuidv4()}')`,
         },
       ],
       buttonSize,
@@ -121,5 +121,17 @@ export class WINDOW_API {
     return windows.sort(
       (a: IWindow, b: IWindow) => a.position.z - b.position.z
     );
+  };
+
+  /****************************************************/
+
+  maximize = (windowId: string) => {
+    console.log('maximizeWindow');
+  };
+
+  /****************************************************/
+
+  sendToBack = (windowId: string) => {
+    console.log('sendToBack');
   };
 }

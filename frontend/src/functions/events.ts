@@ -82,7 +82,7 @@ export const processEvents = () => {
         screenContainerProcessEvents(event);
         break;
       case EnumOSEventObjectType.Button:
-        if (isTopScreen) {
+        if (isTopScreen || event.objects.window) {
           buttonContainerProcessEvents(event);
         }
         break;

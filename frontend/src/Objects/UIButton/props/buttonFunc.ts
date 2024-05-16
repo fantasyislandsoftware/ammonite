@@ -7,10 +7,19 @@ export const setButtonDown = (buttonId: string) => {
   const { screens } = useScreenStore.getState();
   STATE.buttonDownId = buttonId;
   screens.map((screen) => {
+    /* Title Bar */
     screen.titleBar?.buttons.map((button) => {
       if (button.id === buttonId) {
         button.state = EnumButtonState.DOWN;
       }
+    });
+    /* Window */
+    screen.windows.map((window) => {
+      window.titleBar?.buttons.map((button) => {
+        if (button.id === buttonId) {
+          button.state = EnumButtonState.DOWN;
+        }
+      });
     });
   });
 };
@@ -18,8 +27,15 @@ export const setButtonDown = (buttonId: string) => {
 export const resetAllButtons = () => {
   const { screens } = useScreenStore.getState();
   screens.map((screen) => {
+    /* Title Bar */
     screen.titleBar?.buttons.map((button) => {
       button.state = EnumButtonState.UP;
+    });
+    /* Window */
+    screen.windows.map((window) => {
+      window.titleBar?.buttons.map((button) => {
+        button.state = EnumButtonState.UP;
+      });
     });
   });
 };
