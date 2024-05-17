@@ -22,6 +22,7 @@ export const screenTitleBarProcessEvents = (event: IEvent) => {
             y: STATE.clientMouse.y - screens[screenIndex].position.y,
           },
         };
+        STATE.prevDragScreen = event.objects.screen.screenId;
         break;
       default:
     }

@@ -26,6 +26,10 @@ export const screenClientBuildEvents = (
 
   const windows = windowAPI.sortWindowsByZIndex(screen.windows);
   windows.map((window: IWindow) => {
-    windowContainerBuildEvents(event, window, screenClientMouse);
+    windowContainerBuildEvents(
+      event,
+      { screen: screen, window: window },
+      screenClientMouse
+    );
   });
 };

@@ -24,12 +24,18 @@ interface IState {
         };
       }
     | undefined;
+  prevDragScreen: string | undefined;
   buttonDownId: string | undefined;
+  currentScreenId: string | undefined;
+  prevScreenId: string | undefined;
 }
 
 export const STATE: IState = {
   events: [],
   clientMouse: { x: 0, y: 0 },
   dragScreen: undefined,
+  prevDragScreen: undefined,
   buttonDownId: undefined,
+  currentScreenId: undefined,
+  prevScreenId: undefined,
 };

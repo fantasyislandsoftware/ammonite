@@ -1,4 +1,5 @@
 import { buttonContainerBuildEvents } from 'Objects/UIButton/container/eventHandlers/buttonContainerBuildEvents';
+import { IScreen } from 'Objects/UIScreen/_props/screenInterface';
 import { IWindow } from 'Objects/UIWindow/_props/windowInterface';
 import { getPixelArrayDimensions } from 'api/lib/graphics/pixelArray';
 import { addEvent } from 'functions/events';
@@ -7,9 +8,14 @@ import { EnumOSEventObjectType, IBaseEvent } from 'interface/event';
 
 export const windowTitleBarBuildEvents = (
   event: IBaseEvent,
-  window: IWindow,
+  objects: {
+    screen?: IScreen;
+    window?: IWindow;
+  },
   windowMouse: IMouse
 ) => {
+  const { screen, window } = objects;
+  if (!screen || !window) return;
   const { titleBar } = window;
   if (!titleBar) return;
   const { pixels, x, y, buttons } = titleBar;
@@ -24,11 +30,20 @@ export const windowTitleBarBuildEvents = (
       button: windowMouse.button,
     };
     addEvent(EnumOSEventObjectType.WindowTitleBar, event, titleBarMouse, {
+      screen: screen,
       window: window,
     });
     /* Buttons */
     buttons.map((button) => {
-      buttonContainerBuildEvents(event, null, window, button, titleBarMouse);
+      buttonContainerBuildEvents(
+        event,
+        {
+          screen: screen,
+          window: window,
+          button: button,
+        },
+        titleBarMouse
+      );
     });
   }
 };

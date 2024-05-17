@@ -7,11 +7,15 @@ import { IWindow } from 'Objects/UIWindow/_props/windowInterface';
 
 export const buttonContainerBuildEvents = (
   event: IBaseEvent,
-  screen: IScreen | null,
-  window: IWindow | null,
-  button: IButton,
+  objects: {
+    screen?: IScreen;
+    window?: IWindow;
+    button?: IButton;
+  },
   parentMouse: IMouse
 ) => {
+  const { button } = objects;
+  if (!button) return;
   const { x, y, w, h } = button;
 
   if (inBoundary(parentMouse, x, y, x + w, y + h)) {
@@ -23,8 +27,8 @@ export const buttonContainerBuildEvents = (
       button: parentMouse.button,
     };
     addEvent(EnumOSEventObjectType.Button, event, buttonMouse, {
-      screen: screen!,
-      window: window!,
+      screen: objects.screen!,
+      window: objects.window!,
       button: button,
     });
   }

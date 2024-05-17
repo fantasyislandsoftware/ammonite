@@ -9,9 +9,14 @@ import { windowClientBuildEvents } from '../client/eventHandlers/windowClientBui
 
 export const windowContainerBuildEvents = (
   event: IBaseEvent,
-  window: IWindow,
+  objects: {
+    screen?: IScreen;
+    window?: IWindow;
+  },
   screenClientMouse: IMouse
 ) => {
+  const { screen, window } = objects;
+  if (!screen || !window) return;
   const { position, pixels } = window;
   const { x, y } = position;
   const { width, height } = getPixelArrayDimensions(pixels);
@@ -27,7 +32,15 @@ export const windowContainerBuildEvents = (
     addEvent(EnumOSEventObjectType.Window, event, windowMouse, {
       window: window,
     });
-    windowTitleBarBuildEvents(event, window, windowMouse);
-    windowClientBuildEvents(event, window, windowMouse);
+    windowTitleBarBuildEvents(
+      event,
+      { screen: screen, window: window },
+      windowMouse
+    );
+    windowClientBuildEvents(
+      event,
+      { screen: screen, window: window },
+      windowMouse
+    );
   }
 };

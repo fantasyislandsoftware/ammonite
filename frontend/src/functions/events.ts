@@ -12,7 +12,12 @@ import { windowContainerProcessEvents } from 'Objects/UIWindow/container/eventHa
 import { windowTitleBarProcessEvents } from 'Objects/UIWindow/container/titleBar/eventHandlers/windowTitleBarProcessEvents';
 import { SCREEN_API } from 'api/os/api/screen';
 import { ENV, STATE } from 'constants/global';
-import { EnumOSEventObjectType, IBaseEvent, IEvent } from 'interface/event';
+import {
+  EnumOSEventObjectType,
+  EnumOSEventType,
+  IBaseEvent,
+  IEvent,
+} from 'interface/event';
 import { IMouse } from './mouse';
 import { windowClientProcessEvents } from 'Objects/UIWindow/container/client/eventHandlers/WindowClientProcessEvents';
 
@@ -41,13 +46,27 @@ export const addEvent = (
 export const processEvents = () => {
   const screenAPI = new SCREEN_API();
 
-  /* Top Object */
+  if (STATE.events.length === 0) {
+    return;
+  }
+
   const event = STATE.events[STATE.events.length - 1];
   if (event.event === null) return;
 
-  let isTopScreen = false;
-  if (event.objects.screen) {
-    isTopScreen = screenAPI.isTopScreen(event.objects.screen?.screenId);
+  if (
+    event.objectType === EnumOSEventObjectType.ScreenTitleBar &&
+    event.event.type === EnumOSEventType.MouseDown
+  ) {
+    if (event.objects.screen?.screenId) {
+      screenAPI.bringToFront(event.objects.screen?.screenId);
+    }
+  }
+
+  if (event.event.type === EnumOSEventType.MouseDown) {
+    if (event.objects.screen?.screenId !== STATE.currentScreenId) {
+      console.log('Another screen');
+      return;
+    }
   }
 
   switch (event.objectType) {
@@ -72,20 +91,10 @@ export const processEvents = () => {
     case EnumOSEventObjectType.WindowClient:
       windowClientProcessEvents(event);
       break;
+    case EnumOSEventObjectType.Button:
+      buttonContainerProcessEvents(event);
+      break;
     default:
       break;
   }
-  /* */
-  STATE.events.map((event) => {
-    switch (event.objectType) {
-      case EnumOSEventObjectType.Screen:
-        screenContainerProcessEvents(event);
-        break;
-      case EnumOSEventObjectType.Button:
-        if (isTopScreen || event.objects.window) {
-          buttonContainerProcessEvents(event);
-        }
-        break;
-    }
-  });
 };

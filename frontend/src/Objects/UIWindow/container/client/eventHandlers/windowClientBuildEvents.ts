@@ -1,3 +1,4 @@
+import { IScreen } from 'Objects/UIScreen/_props/screenInterface';
 import { IWindow } from 'Objects/UIWindow/_props/windowInterface';
 import { getPixelArrayDimensions } from 'api/lib/graphics/pixelArray';
 import { addEvent } from 'functions/events';
@@ -6,9 +7,15 @@ import { EnumOSEventObjectType, IBaseEvent } from 'interface/event';
 
 export const windowClientBuildEvents = (
   event: IBaseEvent,
-  window: IWindow,
+  objects: {
+    screen?: IScreen;
+    window?: IWindow;
+  },
+
   windowMouse: IMouse
 ) => {
+  const { screen, window } = objects;
+  if (!screen || !window) return;
   const { client } = window;
   const { pixels, x, y } = client;
   const { width, height } = getPixelArrayDimensions(pixels);
@@ -21,6 +28,7 @@ export const windowClientBuildEvents = (
       button: windowMouse.button,
     };
     addEvent(EnumOSEventObjectType.WindowClient, event, clientMouse, {
+      screen: screen,
       window: window,
     });
   }

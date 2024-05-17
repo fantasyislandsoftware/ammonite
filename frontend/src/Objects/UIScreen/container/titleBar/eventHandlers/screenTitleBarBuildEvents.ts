@@ -35,6 +35,10 @@ export const screenTitleBarBuildEvents = (
 
   /* Buttons */
   buttons.map((button) => {
-    buttonContainerBuildEvents(event, screen, null, button, screenMouse);
+    buttonContainerBuildEvents(
+      event,
+      { screen: screen, button: button },
+      screenMouse
+    );
   });
 };
