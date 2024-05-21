@@ -14,6 +14,7 @@ import { initPixelArray } from 'api/lib/graphics/pixelArray';
 import { ScreenColour } from 'Objects/UIScreen/_props/screenColour';
 import { generateDefaultColorPalette } from 'Objects/UIScreen/_props/palettes';
 import { STATE } from 'constants/global';
+import { processScreenChange } from 'functions/events';
 
 export class SCREEN_API {
   public screens: IScreen[] = [];
@@ -117,7 +118,9 @@ export class SCREEN_API {
     };
     screens.push(data);
     setScreens(screens);
+    //
     STATE.currentScreenId = screenId;
+    //
     return screenId;
   };
 
@@ -134,26 +137,21 @@ export class SCREEN_API {
   bringToFront = (screenId: string) => {
     const screenIndex = this.findScreenIndex(screenId);
     let pos = 100;
+    if (this.isTopScreen(screenId)) return;
     this.screens.map((_screen) => {
       if (_screen.screenId !== screenId) {
         _screen.zIndex = pos;
         pos++;
+        processScreenChange();
       }
     });
     this.screens[screenIndex].zIndex = pos;
     this.setScreens(this.screens);
-    //
-    if (STATE.currentScreenId !== screenId) {
-      console.log('screen change');
-      STATE.events = [];
-    }
-    STATE.currentScreenId = screenId;
   };
 
   /****************************************************/
 
   sendToBack = (screenId: string) => {
-    //setTimeout(() => {
     const screenIndex = this.findScreenIndex(screenId);
     let pos = getHighestScreenZIndex();
     this.screens.map((_screen) => {
@@ -164,7 +162,7 @@ export class SCREEN_API {
     });
     this.screens[screenIndex].zIndex = pos;
     this.setScreens(this.screens);
-    //});
+    processScreenChange();
   };
 
   /****************************************************/

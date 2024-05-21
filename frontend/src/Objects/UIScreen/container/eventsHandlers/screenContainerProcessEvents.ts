@@ -1,3 +1,4 @@
+import { EnumUIObjectType } from 'Objects/UIObject/objectInterface';
 import { SCREEN_API } from 'api/os/api/screen';
 import { STATE } from 'constants/global';
 import { EnumOSEventType, IEvent } from 'interface/event';
@@ -9,11 +10,6 @@ export const screenContainerProcessEvents = (event: IEvent) => {
     if (!event.objects.screen) return;
     const screenId = event.objects.screen.screenId;
     screenAPI.bringToFront(screenId);
-    /*if (STATE.currentScreenId !== screenId) {
-      console.log('screen change');
-      STATE.events = [];
-    }
-    STATE.currentScreenId = screenId;*/
   };
 
   const mouseUp = () => {};

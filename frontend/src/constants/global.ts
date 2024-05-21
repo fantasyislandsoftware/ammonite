@@ -27,7 +27,8 @@ interface IState {
   prevDragScreen: string | undefined;
   buttonDownId: string | undefined;
   currentScreenId: string | undefined;
-  prevScreenId: string | undefined;
+  test: any;
+  canReorder: boolean;
 }
 
 export const STATE: IState = {
@@ -37,5 +38,6 @@ export const STATE: IState = {
   prevDragScreen: undefined,
   buttonDownId: undefined,
   currentScreenId: undefined,
-  prevScreenId: undefined,
+  test: null,
+  canReorder: true,
 };

@@ -44,29 +44,42 @@ export const addEvent = (
 };
 
 export const processEvents = () => {
-  const screenAPI = new SCREEN_API();
-
   if (STATE.events.length === 0) {
     return;
   }
 
-  const event = STATE.events[STATE.events.length - 1];
-  if (event.event === null) return;
-
-  if (
-    event.objectType === EnumOSEventObjectType.ScreenTitleBar &&
-    event.event.type === EnumOSEventType.MouseDown
-  ) {
-    if (event.objects.screen?.screenId) {
-      screenAPI.bringToFront(event.objects.screen?.screenId);
-    }
+  const parentEvent = STATE.events[1];
+  if (parentEvent === undefined) {
+    return;
   }
 
-  if (event.event.type === EnumOSEventType.MouseDown) {
-    if (event.objects.screen?.screenId !== STATE.currentScreenId) {
-      console.log('Another screen');
-      return;
+  switch (parentEvent.objectType) {
+    case EnumOSEventObjectType.Screen:
+      screenContainerProcessEvents(parentEvent);
+      break;
+    default:
+      break;
+  }
+
+  let event: IEvent | null = STATE.events[STATE.events.length - 1];
+  if (event === undefined) {
+    return;
+  }
+
+  if (!event.objects.screen) {
+    return;
+  }
+
+  /*if (event.event.type === EnumOSEventType.MouseDown) {
+    const screenId = event.objects.screen.screenId;
+    if (STATE.currentScreenId !== screenId) {
+      processScreenChange();
     }
+    STATE.currentScreenId = screenId;
+  }*/
+
+  if (event === null) {
+    return;
   }
 
   switch (event.objectType) {
@@ -97,4 +110,9 @@ export const processEvents = () => {
     default:
       break;
   }
+};
+
+export const processScreenChange = () => {
+  console.log('screen change');
+  STATE.events = [];
 };

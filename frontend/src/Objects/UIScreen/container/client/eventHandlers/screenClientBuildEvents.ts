@@ -22,8 +22,6 @@ export const screenClientBuildEvents = (
     screen: screen,
   });
 
-  console.log('-----');
-
   const windows = windowAPI.sortWindowsByZIndex(screen.windows);
   windows.map((window: IWindow) => {
     windowContainerBuildEvents(
