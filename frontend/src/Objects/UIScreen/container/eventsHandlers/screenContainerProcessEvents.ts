@@ -1,6 +1,6 @@
 import { EnumUIObjectType } from 'Objects/UIObject/objectInterface';
 import { SCREEN_API } from 'api/os/api/screen';
-import { STATE } from 'constants/global';
+import { STATE } from 'constants/globals/state';
 import { EnumOSEventType, IEvent } from 'interface/event';
 
 export const screenContainerProcessEvents = (event: IEvent) => {

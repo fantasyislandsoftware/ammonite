@@ -1,4 +1,4 @@
-import { ENV } from 'constants/global';
+import { ENV } from 'constants/globals/env';
 
 export const loadFont = async (name: string, path: string) => {
   if (path === 'NaN') {

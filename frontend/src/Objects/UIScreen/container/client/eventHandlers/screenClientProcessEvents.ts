@@ -1,4 +1,4 @@
-import { STATE } from 'constants/global';
+import { STATE } from 'constants/globals/state';
 import { EnumOSEventType, IEvent } from 'interface/event';
 import { screenContainerDrag } from '../../screenContainerFunc';
 

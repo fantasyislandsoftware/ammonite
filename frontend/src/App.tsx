@@ -9,6 +9,7 @@ import './css/base.css';
 import { screenContainerRender } from 'Objects/UIScreen/container/screenContainerRender';
 import { baseContainerBuildEvents } from 'Objects/UIBase/container/eventHandlers/baseContainerBuildEvents';
 import { getHighestScreenZIndex } from 'Objects/UIScreen/_props/screenFunctions';
+import SocketHandler from 'SocketHandler';
 
 const App = () => {
   const { screens, setScreens } = useScreenStore();
@@ -60,24 +61,12 @@ const App = () => {
     }
   }, [systemCrash.state]);
 
-  /*return (
-    <div
-      style={{
-        userSelect: 'none',
-        msUserSelect: 'none',
-        MozUserSelect: 'none',
-        WebkitUserSelect: 'none',
-      }}
-    >
-      <input></input>
-    </div>
-  );*/
-
   if (systemCrash.state) {
     return <div>{systemCrash.message}</div>;
   } else {
     return (
       <>
+        <SocketHandler />
         {screens.map((screen, index) => (
           <UIScreen key={index} screen={screen} />
         ))}

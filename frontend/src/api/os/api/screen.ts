@@ -13,7 +13,7 @@ import { EnumUIObjectType } from 'Objects/UIObject/objectInterface';
 import { initPixelArray } from 'api/lib/graphics/pixelArray';
 import { ScreenColour } from 'Objects/UIScreen/_props/screenColour';
 import { generateDefaultColorPalette } from 'Objects/UIScreen/_props/palettes';
-import { STATE } from 'constants/global';
+import { STATE } from 'constants/globals/state';
 import { processScreenChange } from 'functions/events';
 
 export class SCREEN_API {

@@ -2,7 +2,7 @@ import { setButtonDown } from 'Objects/UIButton/props/buttonFunc';
 import { screenContainerDrag } from 'Objects/UIScreen/container/screenContainerFunc';
 import { SCREEN_API } from 'api/os/api/screen';
 import { WINDOW_API } from 'api/os/api/window';
-import { STATE } from 'constants/global';
+import { STATE } from 'constants/globals/state';
 import { EnumMouseButton, EnumOSEventType, IEvent } from 'interface/event';
 
 export const buttonContainerProcessEvents = (event: IEvent) => {

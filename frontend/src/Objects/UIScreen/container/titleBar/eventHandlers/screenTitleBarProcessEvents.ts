@@ -1,5 +1,5 @@
 import { screenIdToIndex } from 'Objects/UIScreen/_props/screenFunctions';
-import { STATE } from 'constants/global';
+import { STATE } from 'constants/globals/state';
 import { EnumMouseButton } from 'functions/mouse';
 import { IEvent, EnumOSEventType } from 'interface/event';
 import { useScreenStore } from 'stores/useScreenStore';

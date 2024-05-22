@@ -2,7 +2,7 @@ import { IClientMouse } from 'functions/mouse';
 import { useScreenStore } from 'stores/useScreenStore';
 import { IScreen } from '../_props/screenInterface';
 import { getHighestScreenZIndex, setScreen } from '../_props/screenFunctions';
-import { STATE } from 'constants/global';
+import { STATE } from 'constants/globals/state';
 import { SCREEN_API } from 'api/os/api/screen';
 
 export const screenContainerDrag = () => {

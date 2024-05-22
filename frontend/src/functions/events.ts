@@ -11,7 +11,7 @@ import { IWindow } from 'Objects/UIWindow/_props/windowInterface';
 import { windowContainerProcessEvents } from 'Objects/UIWindow/container/eventHandlers/windowContainerProcessEvents';
 import { windowTitleBarProcessEvents } from 'Objects/UIWindow/container/titleBar/eventHandlers/windowTitleBarProcessEvents';
 import { SCREEN_API } from 'api/os/api/screen';
-import { ENV, STATE } from 'constants/global';
+import { STATE } from 'constants/globals/state';
 import {
   EnumOSEventObjectType,
   EnumOSEventType,
@@ -20,6 +20,7 @@ import {
 } from 'interface/event';
 import { IMouse } from './mouse';
 import { windowClientProcessEvents } from 'Objects/UIWindow/container/client/eventHandlers/WindowClientProcessEvents';
+import { ENV } from 'constants/globals/env';
 
 export const eventLog = (event: IBaseEvent, name: string) => {
   ENV.eventDebug && console.log(`evt_${name} {${event.type}}`);

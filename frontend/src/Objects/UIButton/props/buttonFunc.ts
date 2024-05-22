@@ -1,7 +1,7 @@
 import { useScreenStore } from 'stores/useScreenStore';
 import { EnumButtonState, IButton, IButtonDef } from './buttonInterface';
 import { v4 as uuidv4 } from 'uuid';
-import { STATE } from 'constants/global';
+import { STATE } from 'constants/globals/state';
 
 export const setButtonDown = (buttonId: string) => {
   const { screens } = useScreenStore.getState();

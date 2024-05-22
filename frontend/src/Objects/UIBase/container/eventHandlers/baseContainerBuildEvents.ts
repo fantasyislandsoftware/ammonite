@@ -10,7 +10,7 @@ import {
   IBaseEvent,
 } from 'interface/event';
 import { addEvent, eventLog, processEvents } from 'functions/events';
-import { ENV, STATE } from 'constants/global';
+import { STATE } from 'constants/globals/state';
 
 export const baseContainerBuildEvents = (
   _event: IBaseEvent,
