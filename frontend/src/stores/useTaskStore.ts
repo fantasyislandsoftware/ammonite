@@ -10,6 +10,11 @@ export enum TaskState {
   ERROR = 'error',
 }
 
+export interface ILabel {
+  name: string;
+  pos: number;
+}
+
 export interface ITask {
   id: string;
   name: string;

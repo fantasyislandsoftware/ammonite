@@ -16,6 +16,13 @@ import { _log } from 'jam/debug';
 import { _startTask } from 'jam/task';
 import { _drawImage, _loadIcons } from 'jam/graphics';
 import { EnumDataFormat } from 'interface/data';
+import { SCREEN_API } from 'api/os/api/screen';
+import { SYSTEM_API } from 'api/os/api/system';
+import { LOGIC_API } from 'api/os/api/logic';
+
+const logic_api = new LOGIC_API();
+const system_api = new SYSTEM_API();
+const screen_api = new SCREEN_API();
 
 export interface IParam {
   id: string;
@@ -28,18 +35,39 @@ export enum IData {
   VAR = 'var',
 }
 
+const squash = (str: string) => {
+  return str.toLowerCase().trimStart();
+};
+
 export const startTask = async (path: string) => {
   const name = path.substring(path.lastIndexOf('/') + 1);
   const { tasks, setTasks } = useTaskStore.getState();
   let data = await getFile(path, EnumDataFormat.TEXT);
   data = data.split('\n');
   const lines: string[] = [];
-  data.forEach((line: string) => {
-    line = line.trimStart().trimEnd();
-    if (line !== '' && !line.startsWith('//') && !line.startsWith('/*')) {
-      lines.push(line.trimStart().trimEnd());
+  const label: any = {};
+  data.forEach((line: string, index: number) => {
+    /* Imports */
+    if (squash(line).startsWith('import')) {
+      line = `// ${line}`;
     }
+    line = line.replaceAll('LOGIC_API', 'logic_api');
+    line = line.replaceAll('SYSTEM_API', 'system_api');
+    line = line.replaceAll('SCREEN_API', 'screen_api');
+
+    /* Label */
+
+    if (squash(line).startsWith('label')) {
+      const l_a = squash(line).split('label("')[1];
+      const l_b = l_a.split('");')[0];
+      label[l_b] = index;
+      line = `// ${line}`;
+    }
+
+    /* Add */
+    lines.push(line);
   });
+  console.log(lines);
   tasks.push({
     id: uuidv4(),
     name: name,
@@ -47,7 +75,7 @@ export const startTask = async (path: string) => {
     state: TaskState.RUNNING,
     code: lines,
     var: {},
-    label: {},
+    label: label,
     promise: {},
     pos: 0,
   });
@@ -100,109 +128,27 @@ export const analyseCommand = (task: ITask) => {
   return { func: funcName, params: parray };
 };
 
-export const execCommand = (task: ITask) => {
-  const line = analyseCommand(task);
-  switch (line.func) {
-    case 'exec':
-      _startTask(line.params[0].value as string);
-      break;
-    case 'define':
-      _define(task, line.params[0], line.params[1]);
-      break;
-    case 'add':
-      _add(task, line.params[0], line.params[1]);
-      break;
-    case 'sub':
-      _sub(task, line.params[0], line.params[1]);
-      break;
-    case 'log':
-      _log(task, line.params[0]);
-      break;
-    case 'label':
-      _label(task, line.params[0]);
-      break;
-    case 'jmp':
-      _jmp(task, line.params[0]);
-      break;
-    case 'jmpIf':
-      _jmpIf(
-        task,
-        line.params[0],
-        line.params[1],
-        line.params[2],
-        line.params[3]
-      );
-      break;
-    case 'loadFontList':
-      _loadFontList(task, line.params[0], line.params[1]);
-      break;
-    case 'addFont':
-      _addFont(task, line.params[0], line.params[1], line.params[2]);
-      break;
-    case 'getPromiseState':
-      _getPromiseState(task, line.params[0], line.params[1]);
-      break;
-    case 'lengthOf':
-      _lengthOf(task, line.params[0], line.params[1]);
-      break;
-    case 'openScreen':
-      _openScreen(
-        task,
-        line.params[0].value as number,
-        line.params[1].value as number,
-        line.params[2].value as string,
-        line.params[3].value as string,
-        line.params[4]
-      );
-      break;
-    case 'openWindow':
-      _openWindow(
-        task,
-        line.params[0].value as string,
-        line.params[1].value as number,
-        line.params[2].value as number,
-        line.params[3].value as number,
-        line.params[4].value as number,
-        line.params[5].value as string,
-        line.params[6]
-      );
-      break;
-    case 'getArrayElement':
-      _getArrayElement(
-        task,
-        line.params[0],
-        line.params[1],
-        line.params[2],
-        line.params[3]
-      );
-      break;
-    case 'getFieldValue':
-      _getFieldValue(task, line.params[0], line.params[1], line.params[2]);
-      break;
-    case 'drawImage':
-      _drawImage(
-        line.params[0].value as string,
-        line.params[1].value as string,
-        line.params[2].value as number,
-        line.params[3].value as number,
-        line.params[4].value as number,
-        line.params[5].value as number
-      );
-      break;
-    case 'loadIcons':
-      _loadIcons(task, line.params[0]);
-      break;
-    default:
-      task.state = TaskState.ERROR;
-      break;
+export const execCommand = (self: ITask) => {
+  const jp = (label: string) => {
+    self.pos = self.label[label];
+  };
+
+  const line = self.code[self.pos];
+
+  try {
+    eval(line);
+  } catch (e) {
+    console.log(e);
+    killTask(self.id);
   }
-  if (task.state === TaskState.RUNNING) {
-    task.pos++;
+
+  if (self.state === TaskState.RUNNING) {
+    self.pos++;
   }
-  if (task.pos >= task.code.length) {
-    killTask(task.id);
+  if (self.pos >= self.code.length) {
+    killTask(self.id);
   }
-  return task;
+  return self;
 };
 
 const killTask = (id: string) => {

@@ -34,7 +34,7 @@ const App = () => {
       window.onerror = (message, source, lineno, colno, error) => {
         console.log(message, source, lineno, colno, error);
       };
-      startTask('/home/node/app/src/js/boot.js');
+      startTask('/home/node/app/src/js/boot2.js');
     }
     if (initBoot) {
       boot();

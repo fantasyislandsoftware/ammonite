@@ -2,11 +2,11 @@ import { IParam } from 'functions/tasks';
 import { ITask } from 'stores/useTaskStore';
 
 export const _label = (task: ITask, label: IParam) => {
-  task.label[label.id] = task.pos;
+  //task.label[label.id] = task.pos;
 };
 
 export const _jmp = (task: ITask, label: IParam) => {
-  task.pos = task.label[label.value] - 1;
+  //task.pos = task.label[label.value] - 1;
 };
 
 export const _jmpIf = (
@@ -26,6 +26,6 @@ export const _jmpIf = (
   const calc = `${v1.value} ${c} ${v2.value}`;
   const ev = eval(calc);
   if (ev) {
-    task.pos = task.label[label.value] - 1;
+    //task.pos = task.label[label.value] - 1;
   }
 };

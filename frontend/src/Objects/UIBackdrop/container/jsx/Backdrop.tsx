@@ -19,7 +19,7 @@ export const Backdrop = () => {
       onMouseMove={(event) => baseContainerBuildEvents(event)}
       onContextMenu={(e) => e.preventDefault()}
     >
-      <table>
+      {/*<table>
         <thead>
           <tr>
             <th>id</th>
@@ -64,7 +64,7 @@ export const Backdrop = () => {
             );
           })}
         </tbody>
-      </table>
+        </table>*/}
     </div>
   );
 };
