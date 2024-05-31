@@ -1,39 +1,32 @@
+import { getPromise, exec } from "SYSTEM_API";
+import { getFontList, loadFont } from "FONT_API";
+import { loadIcons } from "ICON_API";
+
 /* Load font list */
-loadFontList(prFontList, fonts);
-label(FONT_LIST_LOADING);
-getPromiseState(prFontList, prFontListState);
-jmpIf(prFontListState, eq, 0, FONT_LIST_LOADING);
-log("font list loaded");
+self.p = getPromise(getFontList());
+label("FONT_LIST_LOADING");
+jpif("FONT_LIST_LOADING", self.p.isFulfilled(), false);
+self.fontList = self.p.getData();
 
 /* Load fonts */
-define(n, 0);
-define(fontCount, 0);
-lengthOf(fonts, fontCount);
-define(fontName, "");
-define(fontPath, "");
-// ** //
-label(FONT_LOADING_LOOP);
-getArrayElement(fonts, n, "", font);
-getFieldValue(font, name, fontName);
-getFieldValue(font, path, fontPath);
-addFont(fontName, fontPath, prFontLoad);
-label(FONT_LOADING);
-getPromiseState(prFontLoad, prFontLoadState);
-jmpIf(prFontLoadState, eq, 0, FONT_LOADING);
-add(n, 1);
-jmpIf(n, notEq, fontCount, FONT_LOADING_LOOP);
-log("fonts loaded");
+self.l = self.fontList.length;
+self.n = 0;
+label("FONT_ARRAY_LOOP");
+self.font = self.fontList[self.n];
 
-/* Load Icons */
-loadIcons(prIcons);
-label(ICONS_LOADING);
-getPromiseState(prIcons, prIconsState);
-jmpIf(prIconsState, eq, 0, ICONS_LOADING);
-log("icons loaded");
+/* Load font */
+self.p = getPromise(loadFont(self.font.name, self.font.path));
+label("FONT_LOADING");
+jpif("FONT_LOADING", self.p.isFulfilled(), false);
 
-/* Temp loop */
-//label(LOOP);
-//jmp(LOOP);
+/* Next font or end loop */
+self.n++;
+jpif("FONT_ARRAY_LOOP", self.n < self.l, true);
+
+/* Load icons */
+self.p = getPromise(loadIcons());
+label("ICONS_LOADING");
+jpif("ICONS_LOADING", self.p.isFulfilled(), false);
 
 /* Start workbench */
-exec("/home/node/app/src/js/workbench.js");
+exec("/home/node/app/src/js/workbench2.js");

@@ -15,8 +15,11 @@ import { ScreenColour } from 'Objects/UIScreen/_props/screenColour';
 import { generateDefaultColorPalette } from 'Objects/UIScreen/_props/palettes';
 import { STATE } from 'constants/globals/state';
 import { processScreenChange } from 'functions/events';
+import { low } from 'Objects/UIScreen/_props/screenModes';
+import { screenContainerRender } from 'Objects/UIScreen/container/screenContainerRender';
 
 export class SCREEN_API {
+  public low: IScreenMode = low;
   public screens: IScreen[] = [];
   public setScreens: (screens: IScreen[]) => void;
 
@@ -117,10 +120,14 @@ export class SCREEN_API {
       windows: [],
     };
     screens.push(data);
+
     setScreens(screens);
-    //
+    setTimeout(() => {
+      setScreen(data);
+    });
+
     STATE.currentScreenId = screenId;
-    //
+
     return screenId;
   };
 
@@ -186,6 +193,14 @@ export class SCREEN_API {
   findScreenIndex = (id: string) => {
     const { screens } = useScreenStore.getState();
     return screens.findIndex((s) => s.screenId === id);
+  };
+
+  /****************************************************/
+
+  setTitle = (screenId: string, title: string) => {
+    const screenIndex = this.findScreenIndex(screenId);
+    this.screens[screenIndex].titleBar!.title = title;
+    setScreen(this.screens[screenIndex]);
   };
 
   /****************************************************/

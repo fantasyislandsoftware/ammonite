@@ -3,19 +3,21 @@ import { UIScreen } from './Objects/UIScreen';
 import { useScreenStore } from './stores/useScreenStore';
 import ShadowBuffer from 'Objects/UIScreen/container/jsx/ShadowBuffer';
 import { Backdrop } from 'Objects/UIBackdrop/container/jsx/Backdrop';
-import { startTask, startTaskProcessor } from 'functions/tasks';
+import { startTaskProcessor } from 'functions/tasks';
 import { useErrorStore } from 'stores/useErrorStore';
 import './css/base.css';
 import { screenContainerRender } from 'Objects/UIScreen/container/screenContainerRender';
 import { baseContainerBuildEvents } from 'Objects/UIBase/container/eventHandlers/baseContainerBuildEvents';
 import { getHighestScreenZIndex } from 'Objects/UIScreen/_props/screenFunctions';
 import SocketHandler from 'SocketHandler';
+import { SYSTEM_API } from 'api/os/api/system';
 
 const App = () => {
   const { screens, setScreens } = useScreenStore();
   const [initBoot, setInitBoot] = useState(true);
   const { systemCrash } = useErrorStore();
   const [taskProcessor, setTaskProcessor] = useState<any>(null);
+  const system_api = new SYSTEM_API();
 
   const initEventListeners = () => {
     window.addEventListener('resize', (e) => {
@@ -34,7 +36,7 @@ const App = () => {
       window.onerror = (message, source, lineno, colno, error) => {
         console.log(message, source, lineno, colno, error);
       };
-      startTask('/home/node/app/src/js/boot2.js');
+      system_api.exec('/home/node/app/src/js/boot.js');
     }
     if (initBoot) {
       boot();
@@ -66,7 +68,6 @@ const App = () => {
   } else {
     return (
       <>
-        <SocketHandler />
         {screens.map((screen, index) => (
           <UIScreen key={index} screen={screen} />
         ))}
