@@ -21,6 +21,8 @@ import {
 import { IMouse } from './mouse';
 import { windowClientProcessEvents } from 'Objects/UIWindow/container/client/eventHandlers/WindowClientProcessEvents';
 import { ENV } from 'constants/globals/env';
+import { time } from 'console';
+import { EnumScreenChangeMode } from 'constants/globals/interface';
 
 export const eventLog = (event: IBaseEvent, name: string) => {
   ENV.eventDebug && console.log(`evt_${name} {${event.type}}`);
@@ -62,22 +64,10 @@ export const processEvents = () => {
       break;
   }
 
-  let event: IEvent | null = STATE.events[STATE.events.length - 1];
+  const event: IEvent | null = STATE.events[STATE.events.length - 1];
   if (event === undefined) {
     return;
   }
-
-  if (!event.objects.screen) {
-    return;
-  }
-
-  /*if (event.event.type === EnumOSEventType.MouseDown) {
-    const screenId = event.objects.screen.screenId;
-    if (STATE.currentScreenId !== screenId) {
-      processScreenChange();
-    }
-    STATE.currentScreenId = screenId;
-  }*/
 
   if (event === null) {
     return;
@@ -114,6 +104,5 @@ export const processEvents = () => {
 };
 
 export const processScreenChange = () => {
-  console.log('screen change');
-  STATE.events = [];
+  STATE.screenChangeMode = EnumScreenChangeMode.CHANGING;
 };

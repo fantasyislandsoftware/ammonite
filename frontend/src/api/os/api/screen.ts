@@ -182,6 +182,7 @@ export class SCREEN_API {
   /****************************************************/
 
   reorderScreen = (screenId: string) => {
+    if (STATE.screenChangeMode === 'changing') return;
     const screenIndex = this.findScreenIndex(screenId);
     if (this.screens[screenIndex].zIndex === getHighestScreenZIndex()) {
       this.sendToBack(screenId);

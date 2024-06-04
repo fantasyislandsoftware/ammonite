@@ -21,7 +21,12 @@ export interface IState {
   prevDragScreen: string | undefined;
   buttonDownId: string | undefined;
   currentScreenId: string | undefined;
-  canReorder: boolean;
+  screenChangeMode: EnumScreenChangeMode;
+}
+
+export enum EnumScreenChangeMode {
+  DONE = 'done',
+  CHANGING = 'changing',
 }
 
 export interface INetwork {

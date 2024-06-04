@@ -1,4 +1,4 @@
-import { IState } from './interface';
+import { EnumScreenChangeMode, IState } from './interface';
 
 export const STATE: IState = {
   events: [],
@@ -7,5 +7,5 @@ export const STATE: IState = {
   prevDragScreen: undefined,
   buttonDownId: undefined,
   currentScreenId: undefined,
-  canReorder: true,
+  screenChangeMode: EnumScreenChangeMode.DONE,
 };

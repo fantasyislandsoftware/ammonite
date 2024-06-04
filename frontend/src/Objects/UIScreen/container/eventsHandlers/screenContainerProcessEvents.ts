@@ -1,5 +1,6 @@
 import { EnumUIObjectType } from 'Objects/UIObject/objectInterface';
 import { SCREEN_API } from 'api/os/api/screen';
+import { EnumScreenChangeMode } from 'constants/globals/interface';
 import { STATE } from 'constants/globals/state';
 import { EnumOSEventType, IEvent } from 'interface/event';
 
@@ -12,7 +13,11 @@ export const screenContainerProcessEvents = (event: IEvent) => {
     screenAPI.bringToFront(screenId);
   };
 
-  const mouseUp = () => {};
+  const mouseUp = () => {
+    setTimeout(() => {
+      STATE.screenChangeMode = EnumScreenChangeMode.DONE;
+    });
+  };
 
   switch (event.event.type) {
     case EnumOSEventType.MouseDown:
