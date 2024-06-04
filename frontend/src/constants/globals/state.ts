@@ -8,8 +8,4 @@ export const STATE: IState = {
   buttonDownId: undefined,
   currentScreenId: undefined,
   canReorder: true,
-  memory: {
-    total: 0,
-    free: 0,
-  },
 };

@@ -22,11 +22,14 @@ export interface IState {
   buttonDownId: string | undefined;
   currentScreenId: string | undefined;
   canReorder: boolean;
-  memory: IDeviceMemory;
 }
 
 export interface INetwork {
   socket: any;
+}
+
+export interface ISYSTEM {
+  memory: IDeviceMemory;
 }
 
 export interface IDeviceMemory {

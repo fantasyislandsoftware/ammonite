@@ -1,22 +1,18 @@
-define(wbScreenId, 0);
-define(wbWindowIdA, 0);
-define(wbWindowIdB, 0);
+import { getMem, getPromise } from "SYSTEM_API";
+import { openScreen, low, setTitle } from "SCREEN_API";
+import { openWindow } from "WINDOW_API";
 
-define(testScreenId, 0);
-define(testWindowIdA, 0);
+self.wbScreenId = openScreen(self.id, 320, 256, low, "Workbench");
 
-define(system, 0);
-define(canvas, 0);
+openWindow(self.id, self.wbScreenId, 10, 10, 100, 50, "Window 1");
 
-openScreen(320, 256, low, "Test", testScreenId);
-openScreen(320, 256, low, "Workbench", wbScreenId);
+self.startTime = Date.now();
+self.iSec = 10;
 
-drawImage(screen, wbScreenId, 0, 0, 0, 0);
-
-openWindow(wbScreenId, 10, 10, 100, 50, "1 - Test", wbWindowIdA);
-openWindow(wbScreenId, 30, 30, 100, 50, "2 - Test", wbWindowIdB);
-
-openWindow(testScreenId, 30, 30, 100, 50, "Test", testWindowIdA);
-
-label(START);
-jmp(START);
+label("MAIN_LOOP");
+self.oldTime = Math.round((self.endTime - self.startTime) / 1000 / self.iSec);
+self.endTime = Date.now();
+self.newTime = Math.round((self.endTime - self.startTime) / 1000 / self.iSec);
+if (self.oldTime !== self.newTime)
+  setTitle(self.wbScreenId, `Workbench  ${getMem().freeStr} free mem`);
+jp("MAIN_LOOP");

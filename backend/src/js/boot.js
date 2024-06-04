@@ -29,4 +29,4 @@ label("ICONS_LOADING");
 jpif("ICONS_LOADING", self.p.isFulfilled(), false);
 
 /* Start workbench */
-exec("/home/node/app/src/js/workbench2.js");
+exec("/home/node/app/src/js/workbench.js");

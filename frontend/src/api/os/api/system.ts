@@ -1,5 +1,7 @@
 import { getFile } from 'api/http/fileIO';
+import { ENV } from 'constants/globals/env';
 import { BREAK, DO_NOT_PROCESS } from 'constants/globals/misc';
+import { SYSTEM } from 'constants/globals/system';
 import { EnumDataFormat } from 'interface/data';
 import { TaskState, TaskType, useTaskStore } from 'stores/useTaskStore';
 import { v4 as uuidv4 } from 'uuid';
@@ -140,6 +142,20 @@ export class SYSTEM_API {
     };
     return result;
   }
+
+  /****************************************************/
+
+  numberWithCommas(x: number) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  }
+
+  getMem = () => {
+    return {
+      total: SYSTEM.memory.total,
+      free: SYSTEM.memory.free,
+      freeStr: this.numberWithCommas(SYSTEM.memory.free),
+    };
+  };
 
   /****************************************************/
 }

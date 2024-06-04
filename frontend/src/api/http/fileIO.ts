@@ -6,9 +6,6 @@ import { EnumDataFormat } from 'interface/data';
 export const getDirList = async (path: string) => {
   const request = await fetch(`${ENV.api}/getDirList?path=${path}`, {
     method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
   });
   const response = await request.json();
   return response;
@@ -28,6 +25,14 @@ export const getFile = async (path: string, format: EnumDataFormat) => {
       break;
   }
   return result as any;
+};
+
+export const getMem = async () => {
+  const request = await fetch(`${ENV.api}/getMem`, {
+    method: 'GET',
+  });
+  const response = await request.json();
+  return response;
 };
 
 export const getTest = async (path: string) => {

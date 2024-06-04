@@ -9,8 +9,9 @@ import './css/base.css';
 import { screenContainerRender } from 'Objects/UIScreen/container/screenContainerRender';
 import { baseContainerBuildEvents } from 'Objects/UIBase/container/eventHandlers/baseContainerBuildEvents';
 import { getHighestScreenZIndex } from 'Objects/UIScreen/_props/screenFunctions';
-import SocketHandler from 'SocketHandler';
 import { SYSTEM_API } from 'api/os/api/system';
+import { getMem } from 'api/http/fileIO';
+import { SYSTEM } from 'constants/globals/system';
 
 const App = () => {
   const { screens, setScreens } = useScreenStore();
@@ -31,6 +32,18 @@ const App = () => {
     });
   };
 
+  const updateMem = async () => {
+    const mem = await getMem();
+    SYSTEM.memory = mem;
+  };
+
+  const heartBeat = () => {
+    updateMem();
+    setInterval(() => {
+      updateMem();
+    }, 8000);
+  };
+
   useEffect(() => {
     async function boot() {
       window.onerror = (message, source, lineno, colno, error) => {
@@ -44,6 +57,7 @@ const App = () => {
       setTaskProcessor(startTaskProcessor());
       renderLoop();
       initEventListeners();
+      heartBeat();
     }
   }, [initBoot]);
 
