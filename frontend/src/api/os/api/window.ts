@@ -117,6 +117,17 @@ export class WINDOW_API {
 
   /****************************************************/
 
+  findWindowIndex = (screenid: string, windowId: string) => {
+    const { screens } = useScreenStore.getState();
+    const screenAPI = new SCREEN_API();
+    const screenIndex = screenAPI.findScreenIndex(screenid);
+    return screens[screenIndex].windows.findIndex(
+      (w) => w.windowId === windowId
+    );
+  };
+
+  /****************************************************/
+
   sortWindowsByZIndex = (windows: IWindow[]) => {
     return windows.sort(
       (a: IWindow, b: IWindow) => a.position.z - b.position.z
@@ -133,5 +144,38 @@ export class WINDOW_API {
 
   sendToBack = (windowId: string) => {
     console.log('sendToBack');
+  };
+
+  /****************************************************/
+
+  setPosition = (screenId: string, windowId: string, x: number, y: number) => {
+    const { screens, setScreens } = useScreenStore.getState();
+    const screenAPI = new SCREEN_API();
+    const windowAPI = new WINDOW_API();
+    const screenIndex = screenAPI.findScreenIndex(screenId);
+    const windowIndex = windowAPI.findWindowIndex(screenId, windowId);
+    if (x < 0) x = 0;
+    if (y < 0) y = 0;
+    if (
+      x >
+      screens[screenIndex].width -
+        screens[screenIndex].windows[windowIndex].width
+    ) {
+      x =
+        screens[screenIndex].width -
+        screens[screenIndex].windows[windowIndex].width;
+    }
+    if (
+      y >
+      screens[screenIndex].height -
+        screens[screenIndex].windows[windowIndex].height
+    ) {
+      y =
+        screens[screenIndex].height -
+        screens[screenIndex].windows[windowIndex].height;
+    }
+    screens[screenIndex].windows[windowIndex].position.x = x;
+    screens[screenIndex].windows[windowIndex].position.y = y;
+    setScreens(screens);
   };
 }

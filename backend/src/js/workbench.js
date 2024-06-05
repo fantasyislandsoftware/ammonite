@@ -6,6 +6,9 @@ self.testScreenId = openScreen(self.id, 320, 256, low, "Test");
 self.wbScreenId = openScreen(self.id, 320, 256, low, "Workbench");
 
 openWindow(self.id, self.wbScreenId, 10, 10, 100, 50, "Window 1");
+openWindow(self.id, self.wbScreenId, 30, 30, 100, 50, "Window 2");
+
+openWindow(self.id, self.testScreenId, 10, 10, 100, 50, "Window 2");
 
 self.startTime = Date.now();
 self.iSec = 10;

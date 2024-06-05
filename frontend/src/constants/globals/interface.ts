@@ -7,21 +7,33 @@ export interface Environment {
   baseDir: string;
 }
 
+export interface IScreenDrag {
+  id: string;
+  offset: {
+    x: number;
+    y: number;
+  };
+}
+
+export interface IScreenClientDrag {
+  screenId: string;
+  windowId: string;
+  offset: {
+    x: number;
+    y: number;
+  };
+}
+
 export interface IState {
   events: IEvent[];
   clientMouse: IClientMouse;
-  dragScreen:
-    | {
-        id: string;
-        offset: {
-          y: number;
-        };
-      }
-    | undefined;
+  dragScreen: IScreenDrag | undefined;
   prevDragScreen: string | undefined;
   buttonDownId: string | undefined;
   currentScreenId: string | undefined;
   screenChangeMode: EnumScreenChangeMode;
+  dragWindow: IScreenClientDrag | undefined;
+  screenClientMouse: IClientMouse;
 }
 
 export enum EnumScreenChangeMode {

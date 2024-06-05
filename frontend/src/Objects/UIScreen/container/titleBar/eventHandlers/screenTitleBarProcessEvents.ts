@@ -19,6 +19,7 @@ export const screenTitleBarProcessEvents = (event: IEvent) => {
         STATE.dragScreen = {
           id: event.objects.screen.screenId,
           offset: {
+            x: 0,
             y: STATE.clientMouse.y - screens[screenIndex].position.y,
           },
         };

@@ -23,6 +23,7 @@ import { windowClientProcessEvents } from 'Objects/UIWindow/container/client/eve
 import { ENV } from 'constants/globals/env';
 import { time } from 'console';
 import { EnumScreenChangeMode } from 'constants/globals/interface';
+import { WINDOW_API } from 'api/os/api/window';
 
 export const eventLog = (event: IBaseEvent, name: string) => {
   ENV.eventDebug && console.log(`evt_${name} {${event.type}}`);
@@ -47,6 +48,8 @@ export const addEvent = (
 };
 
 export const processEvents = () => {
+  const window_api = new WINDOW_API();
+
   if (STATE.events.length === 0) {
     return;
   }
@@ -55,6 +58,23 @@ export const processEvents = () => {
   if (parentEvent === undefined) {
     return;
   }
+
+  STATE.events.map((event) => {
+    if (event.objectType === EnumOSEventObjectType.ScreenClient) {
+      if (event.mouse) {
+        STATE.screenClientMouse.x = event.mouse?.position.x;
+        STATE.screenClientMouse.y = event.mouse?.position.y;
+      }
+      if (event.event.type === EnumOSEventType.MouseMove && STATE.dragWindow) {
+        window_api.setPosition(
+          STATE.dragWindow.screenId,
+          STATE.dragWindow.windowId,
+          STATE.screenClientMouse.x - STATE.dragWindow.offset.x,
+          STATE.screenClientMouse.y - STATE.dragWindow.offset.y
+        );
+      }
+    }
+  });
 
   switch (parentEvent.objectType) {
     case EnumOSEventObjectType.Screen:
@@ -101,6 +121,15 @@ export const processEvents = () => {
     default:
       break;
   }
+
+  //console.log(parentEvent.objectType);
+
+  /* Parent events */
+  /*switch (parentEvent.objectType) {
+    case EnumOSEventObjectType.ScreenClient:
+      console.log('ScreenClient');
+      break;
+  }*/
 };
 
 export const processScreenChange = () => {

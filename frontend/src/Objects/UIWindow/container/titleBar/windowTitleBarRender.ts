@@ -3,8 +3,9 @@ import {
   makeMaximizeButton,
   makeOrderButton,
 } from 'Objects/UIButton/props/buttons';
+import { WindowColour } from 'Objects/UIWindow/_props/windowColour';
 import { IWindow } from 'Objects/UIWindow/_props/windowInterface';
-import { drawLine } from 'api/lib/graphics/draw';
+import { drawFillRect } from 'api/lib/graphics/draw';
 import {
   getPixelArrayDimensions,
   pixelMerge,
@@ -19,6 +20,16 @@ export const windowTitleBarRender = (window: IWindow) => {
   const { font, title } = titleBar;
 
   const { width, height } = getPixelArrayDimensions(titleBarPixels);
+
+  /* Background */
+  drawFillRect(
+    titleBarPixels,
+    0,
+    0,
+    width,
+    height,
+    WindowColour.TITLEBAR_BACKGROUND
+  );
 
   /* Title */
   textOut(

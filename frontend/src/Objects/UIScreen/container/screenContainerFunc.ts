@@ -16,17 +16,3 @@ export const screenContainerDrag = () => {
   selected.position = { y: newPos, z: 0 };
   setScreen(selected);
 };
-
-/*export const screenContainerSendToBack = (screen: IScreen) => {
-  const { screens, setScreens } = useScreenStore.getState();
-  const screenIndex = screens.findIndex((s) => s.screenId === screen.screenId);
-  let pos = getHighestScreenZIndex();
-  screens.map((_screen) => {
-    if (_screen.screenId !== screen?.screenId) {
-      _screen.zIndex = pos;
-      pos--;
-    }
-  });
-  screens[screenIndex].zIndex = pos;
-  setScreens(screens);
-};*/
