@@ -17,6 +17,7 @@ export const buttonContainerProcessEvents = (event: IEvent) => {
 
   const mouseUp = () => {
     STATE.dragScreen = undefined;
+    STATE.dragWindow = undefined;
     if (event.objects.button?.id === STATE.buttonDownId) {
       eval(event.objects.button?.func);
       STATE.buttonDownId = undefined;

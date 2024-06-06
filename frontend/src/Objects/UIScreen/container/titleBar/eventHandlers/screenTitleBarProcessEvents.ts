@@ -38,6 +38,7 @@ export const screenTitleBarProcessEvents = (event: IEvent) => {
 
   const mouseUp = () => {
     STATE.dragScreen = undefined;
+    STATE.dragWindow = undefined;
   };
 
   const mouseMove = () => {

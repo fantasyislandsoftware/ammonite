@@ -1,13 +1,21 @@
 import { screenContainerDrag } from 'Objects/UIScreen/container/screenContainerFunc';
+import { STATE } from 'constants/globals/state';
 import { EnumOSEventType, IEvent } from 'interface/event';
 
 export const backdropContainerProcessEvents = (event: IEvent) => {
+  const mouseUp = () => {
+    STATE.dragWindow = undefined;
+  };
+
   const mouseMove = () => {
     screenContainerDrag();
   };
 
   switch (event.event.type) {
-    case 'None':
+    case EnumOSEventType.None:
+      break;
+    case EnumOSEventType.MouseUp:
+      mouseUp();
       break;
     case EnumOSEventType.MouseMove:
       mouseMove();

@@ -44,6 +44,7 @@ export enum EnumOSEventObjectType {
   Viewport = 'viewport',
   Backdrop = 'backdrop',
   Client = 'client',
+  ScreenDrag = 'screenDrag',
   Screen = 'screen',
   ScreenTitleBar = 'screenTitleBar',
   ScreenTitleBarIcon = 'screenTitleBarIcon',

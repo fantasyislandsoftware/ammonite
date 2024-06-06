@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import { baseContainerBuildEvents } from 'Objects/UIBase/container/eventHandlers/baseContainerBuildEvents';
 import { IScreen } from '../../_props/screenInterface';
+import { EnumOSEventObjectType } from 'interface/event';
 
 interface IProps {
   screen: IScreen;
@@ -10,6 +11,7 @@ interface IProps {
 const DragScreen: FC<IProps> = ({ screen, children }) => {
   return (
     <div
+      data-id={EnumOSEventObjectType.ScreenDrag}
       style={{
         borderTop: '1px solid black',
         backgroundColor: 'black',
@@ -19,7 +21,9 @@ const DragScreen: FC<IProps> = ({ screen, children }) => {
         height: '100%',
         zIndex: screen.zIndex,
       }}
-      onMouseUp={(event) => baseContainerBuildEvents(event)}
+      onMouseUp={(event) => {
+        baseContainerBuildEvents(event);
+      }}
     >
       {children}
     </div>

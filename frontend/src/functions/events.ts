@@ -59,32 +59,8 @@ export const processEvents = () => {
     return;
   }
 
-  STATE.events.map((event) => {
-    if (event.objectType === EnumOSEventObjectType.ScreenClient) {
-      if (event.mouse) {
-        STATE.screenClientMouse.x = event.mouse?.position.x;
-        STATE.screenClientMouse.y = event.mouse?.position.y;
-      }
-      if (event.event.type === EnumOSEventType.MouseMove && STATE.dragWindow) {
-        window_api.setPosition(
-          STATE.dragWindow.screenId,
-          STATE.dragWindow.windowId,
-          STATE.screenClientMouse.x - STATE.dragWindow.offset.x,
-          STATE.screenClientMouse.y - STATE.dragWindow.offset.y
-        );
-      }
-    }
-  });
-
-  switch (parentEvent.objectType) {
-    case EnumOSEventObjectType.Screen:
-      screenContainerProcessEvents(parentEvent);
-      break;
-    default:
-      break;
-  }
-
   const event: IEvent | null = STATE.events[STATE.events.length - 1];
+
   if (event === undefined) {
     return;
   }
@@ -93,6 +69,43 @@ export const processEvents = () => {
     return;
   }
 
+  /* Cycle through all events */
+  STATE.events.map((event) => {
+    //console.log(event.objectType);
+    if (event.objectType === EnumOSEventObjectType.ScreenClient) {
+      if (event.mouse) {
+        STATE.screenClientMouse.x = event.mouse?.position.x;
+        STATE.screenClientMouse.y = event.mouse?.position.y;
+      }
+      if (
+        event.event.type === EnumOSEventType.MouseMove &&
+        STATE.dragWindow &&
+        event.objects.screen?.screenId === STATE.dragWindow.screenId
+      ) {
+        window_api.setPosition(
+          STATE.dragWindow.screenId,
+          STATE.dragWindow.windowId,
+          STATE.screenClientMouse.x - STATE.dragWindow.offset.x,
+          STATE.screenClientMouse.y - STATE.dragWindow.offset.y
+        );
+      }
+      if (event.event.type === EnumOSEventType.MouseUp) {
+        STATE.dragWindow = undefined;
+      }
+    }
+  });
+  //console.log('---------');
+
+  /* Process parent event */
+  switch (parentEvent.objectType) {
+    case EnumOSEventObjectType.Screen:
+      screenContainerProcessEvents(parentEvent);
+      break;
+    default:
+      break;
+  }
+
+  /* Process child event */
   switch (event.objectType) {
     case EnumOSEventObjectType.Base:
       baseContainerProcessEvents(event);
@@ -121,15 +134,6 @@ export const processEvents = () => {
     default:
       break;
   }
-
-  //console.log(parentEvent.objectType);
-
-  /* Parent events */
-  /*switch (parentEvent.objectType) {
-    case EnumOSEventObjectType.ScreenClient:
-      console.log('ScreenClient');
-      break;
-  }*/
 };
 
 export const processScreenChange = () => {

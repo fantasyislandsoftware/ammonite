@@ -36,8 +36,14 @@ export const baseContainerBuildEvents = (
       backdropContainerBuildEvents(event);
     }
 
+    /* Screen Drag Container */
+    if (id === EnumOSEventObjectType.ScreenDrag) {
+      STATE.dragScreen = undefined;
+      STATE.dragWindow = undefined;
+    }
+
+    /* Screen */
     if (screen) {
-      /* Screen */
       const screenMouse = getScreenMouse(event, screen);
       if (id === EnumOSEventObjectType.Screen) {
         screenContainerBuildEvents(event, screenMouse, screen);
