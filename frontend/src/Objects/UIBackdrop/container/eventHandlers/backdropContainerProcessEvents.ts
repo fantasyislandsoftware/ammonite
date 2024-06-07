@@ -3,9 +3,7 @@ import { STATE } from 'constants/globals/state';
 import { EnumOSEventType, IEvent } from 'interface/event';
 
 export const backdropContainerProcessEvents = (event: IEvent) => {
-  const mouseUp = () => {
-    STATE.dragWindow = undefined;
-  };
+  const mouseUp = () => {};
 
   const mouseMove = () => {
     screenContainerDrag();

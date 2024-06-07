@@ -14,9 +14,19 @@ import { initPixelArray } from 'api/lib/graphics/pixelArray';
 import { WindowColour } from 'Objects/UIWindow/_props/windowColour';
 import { v4 as uuidv4 } from 'uuid';
 import { screenContainerRender } from 'Objects/UIScreen/container/screenContainerRender';
-import { STATE } from 'constants/globals/state';
+
+const screen_api = new SCREEN_API();
 
 export class WINDOW_API {
+  public screens: IScreen[] = [];
+  public setScreens: (screens: IScreen[]) => void;
+
+  constructor() {
+    const { screens, setScreens } = useScreenStore.getState();
+    this.screens = screens;
+    this.setScreens = setScreens;
+  }
+
   openWindow = (
     parentTaskId: string,
     parentScreenId: string,
@@ -30,6 +40,8 @@ export class WINDOW_API {
 
     const screenAPI = new SCREEN_API();
     const windowAPI = new WINDOW_API();
+
+    const windowId = uuidv4();
 
     const z =
       windowAPI.getHighestWindowZIndex(
@@ -49,11 +61,11 @@ export class WINDOW_API {
       [
         {
           type: EnumButtonType.ORDER,
-          func: `windowAPI.sendToBack('${uuidv4()}')`,
+          func: `windowAPI.sendToBack('${windowId}')`,
         },
         {
           type: EnumButtonType.MAXIMIZE,
-          func: `windowAPI.maximize('${uuidv4()}')`,
+          func: `windowAPI.maximize('${windowId}')`,
         },
       ],
       buttonSize,
@@ -87,8 +99,6 @@ export class WINDOW_API {
       ),
     };
 
-    const windowId = uuidv4();
-
     const data: IWindow = {
       windowId: windowId,
       parentTaskId: parentTaskId,
@@ -120,6 +130,14 @@ export class WINDOW_API {
 
   /****************************************************/
 
+  getLowestWindowZIndex = (screen: IScreen) => {
+    return screen.windows.length
+      ? Math.min(...screen.windows.map((w) => w.position.z))
+      : 0;
+  };
+
+  /****************************************************/
+
   findWindowIndex = (screenid: string, windowId: string) => {
     const { screens } = useScreenStore.getState();
     const screenAPI = new SCREEN_API();
@@ -145,14 +163,43 @@ export class WINDOW_API {
 
   /****************************************************/
 
+  getWindowParentScreen = (windowId: string) => {
+    let result = undefined;
+    this.screens.map((screen) => {
+      screen.windows.map((window) => {
+        if (window.windowId === windowId) {
+          result = screen.screenId;
+        }
+      });
+    });
+    return result;
+  };
+
+  /****************************************************/
+
+  bringToFront = (windowId: string) => {
+    const screenId = this.getWindowParentScreen(windowId);
+    if (screenId === undefined) return;
+    const screenIndex = screen_api.findScreenIndex(screenId);
+    const windowIndex = this.findWindowIndex(screenId, windowId);
+    const pos = this.getHighestWindowZIndex(this.screens[screenIndex]);
+    this.screens[screenIndex].windows[windowIndex].position.z = pos + 1;
+  };
+
+  /****************************************************/
+
   sendToBack = (windowId: string) => {
-    console.log('sendToBack');
+    const screenId = this.getWindowParentScreen(windowId);
+    if (screenId === undefined) return;
+    const screenIndex = screen_api.findScreenIndex(screenId);
+    const windowIndex = this.findWindowIndex(screenId, windowId);
+    let pos = this.getLowestWindowZIndex(this.screens[screenIndex]);
+    this.screens[screenIndex].windows[windowIndex].position.z = pos - 1;
   };
 
   /****************************************************/
 
   setPosition = (screenId: string, windowId: string, x: number, y: number) => {
-    const { screens, setScreens } = useScreenStore.getState();
     const screenAPI = new SCREEN_API();
     const windowAPI = new WINDOW_API();
     const screenIndex = screenAPI.findScreenIndex(screenId);
@@ -161,24 +208,24 @@ export class WINDOW_API {
     if (y < 0) y = 0;
     if (
       x >
-      screens[screenIndex].width -
-        screens[screenIndex].windows[windowIndex].width
+      this.screens[screenIndex].width -
+        this.screens[screenIndex].windows[windowIndex].width
     ) {
       x =
-        screens[screenIndex].width -
-        screens[screenIndex].windows[windowIndex].width;
+        this.screens[screenIndex].width -
+        this.screens[screenIndex].windows[windowIndex].width;
     }
     if (
       y >
-      screens[screenIndex].height -
-        screens[screenIndex].windows[windowIndex].height
+      this.screens[screenIndex].height -
+        this.screens[screenIndex].windows[windowIndex].height
     ) {
       y =
-        screens[screenIndex].height -
-        screens[screenIndex].windows[windowIndex].height;
+        this.screens[screenIndex].height -
+        this.screens[screenIndex].windows[windowIndex].height;
     }
-    screens[screenIndex].windows[windowIndex].position.x = x;
-    screens[screenIndex].windows[windowIndex].position.y = y;
-    setScreens(screens);
+    this.screens[screenIndex].windows[windowIndex].position.x = x;
+    this.screens[screenIndex].windows[windowIndex].position.y = y;
+    this.setScreens(this.screens);
   };
 }

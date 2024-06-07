@@ -25,9 +25,7 @@ export const windowTitleBarProcessEvents = (event: IEvent) => {
     }
   };
 
-  const mouseUp = () => {
-    STATE.dragWindow = undefined;
-  };
+  const mouseUp = () => {};
 
   const mouseMove = () => {
     event.mouse && windowContainerDrag(event.mouse);

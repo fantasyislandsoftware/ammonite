@@ -31,15 +31,19 @@ export const baseContainerBuildEvents = (
   if (event.target.dataset !== undefined) {
     const { id } = event.target.dataset;
 
+    /* Global Event */
+    switch (event.type) {
+      case EnumOSEventType.MouseUp:
+        STATE.dragScreen = undefined;
+        STATE.dragWindow = undefined;
+        break;
+      default:
+        break;
+    }
+
     /* Backdrop */
     if (id === EnumOSEventObjectType.Backdrop) {
       backdropContainerBuildEvents(event);
-    }
-
-    /* Screen Drag Container */
-    if (id === EnumOSEventObjectType.ScreenDrag) {
-      STATE.dragScreen = undefined;
-      STATE.dragWindow = undefined;
     }
 
     /* Screen */

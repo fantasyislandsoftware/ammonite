@@ -25,9 +25,6 @@ export const screenClientProcessEventsAsAll = (event: IEvent) => {
         STATE.screenClientMouse.y - STATE.dragWindow.offset.y
       );
     }
-    if (event.event.type === EnumOSEventType.MouseUp) {
-      STATE.dragWindow = undefined;
-    }
   };
 
   switch (event.event.type) {
