@@ -9,7 +9,7 @@ export const windowContainerRender = (
   screen: IScreen,
   window: IWindow
 ) => {
-  windowTitleBarRender(window);
+  windowTitleBarRender(screen, window);
   windowClientRender(window);
 
   return window.pixels;

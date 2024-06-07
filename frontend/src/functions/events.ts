@@ -1,6 +1,5 @@
 import { backdropContainerProcessEvents } from 'Objects/UIBackdrop/container/eventHandlers/backdropContainerProcessEvents';
 import { baseContainerProcessEvents } from 'Objects/UIBase/container/eventHandlers/baseContainerProcessEvents';
-import { buttonContainerProcessEvents } from 'Objects/UIButton/container/eventHandlers/buttonContainerProcessEvents';
 import { IButton } from 'Objects/UIButton/props/buttonInterface';
 import { EnumUIObjectType } from 'Objects/UIObject/objectInterface';
 import { IScreen } from 'Objects/UIScreen/_props/screenInterface';
@@ -14,6 +13,7 @@ import { SCREEN_API } from 'api/os/api/screen';
 import { STATE } from 'constants/globals/state';
 import {
   EnumOSEventObjectType,
+  EnumOSEventScope,
   EnumOSEventType,
   IBaseEvent,
   IEvent,
@@ -24,6 +24,7 @@ import { ENV } from 'constants/globals/env';
 import { time } from 'console';
 import { EnumScreenChangeMode } from 'constants/globals/interface';
 import { WINDOW_API } from 'api/os/api/window';
+import { buttonContainerProcessEvents } from 'Objects/UIButton/container/eventHandlers/buttonContainerProcessEvents';
 
 export const eventLog = (event: IBaseEvent, name: string) => {
   ENV.eventDebug && console.log(`evt_${name} {${event.type}}`);
@@ -71,35 +72,24 @@ export const processEvents = () => {
 
   /* Cycle through all events */
   STATE.events.map((event) => {
-    //console.log(event.objectType);
-    if (event.objectType === EnumOSEventObjectType.ScreenClient) {
-      if (event.mouse) {
-        STATE.screenClientMouse.x = event.mouse?.position.x;
-        STATE.screenClientMouse.y = event.mouse?.position.y;
-      }
-      if (
-        event.event.type === EnumOSEventType.MouseMove &&
-        STATE.dragWindow &&
-        event.objects.screen?.screenId === STATE.dragWindow.screenId
-      ) {
-        window_api.setPosition(
-          STATE.dragWindow.screenId,
-          STATE.dragWindow.windowId,
-          STATE.screenClientMouse.x - STATE.dragWindow.offset.x,
-          STATE.screenClientMouse.y - STATE.dragWindow.offset.y
-        );
-      }
-      if (event.event.type === EnumOSEventType.MouseUp) {
-        STATE.dragWindow = undefined;
-      }
+    switch (event.objectType) {
+      case EnumOSEventObjectType.Screen:
+        screenContainerProcessEvents(event, EnumOSEventScope.All);
+        break;
+      case EnumOSEventObjectType.ScreenClient:
+        screenClientProcessEvents(event, EnumOSEventScope.All);
+        break;
+      case EnumOSEventObjectType.Window:
+        windowContainerProcessEvents(event, EnumOSEventScope.All);
+        break;
+      default:
     }
   });
-  //console.log('---------');
 
   /* Process parent event */
   switch (parentEvent.objectType) {
     case EnumOSEventObjectType.Screen:
-      screenContainerProcessEvents(parentEvent);
+      screenContainerProcessEvents(parentEvent, EnumOSEventScope.Parent);
       break;
     default:
       break;
@@ -117,10 +107,10 @@ export const processEvents = () => {
       screenTitleBarProcessEvents(event);
       break;
     case EnumOSEventObjectType.ScreenClient:
-      screenClientProcessEvents(event);
+      screenClientProcessEvents(event, EnumOSEventScope.Child);
       break;
     case EnumOSEventObjectType.Window:
-      windowContainerProcessEvents(event);
+      windowContainerProcessEvents(event, EnumOSEventScope.Child);
       break;
     case EnumOSEventObjectType.WindowTitleBar:
       windowTitleBarProcessEvents(event);

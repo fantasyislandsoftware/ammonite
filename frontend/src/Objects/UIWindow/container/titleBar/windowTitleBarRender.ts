@@ -3,6 +3,7 @@ import {
   makeMaximizeButton,
   makeOrderButton,
 } from 'Objects/UIButton/props/buttons';
+import { IScreen } from 'Objects/UIScreen/_props/screenInterface';
 import { WindowColour } from 'Objects/UIWindow/_props/windowColour';
 import { IWindow } from 'Objects/UIWindow/_props/windowInterface';
 import { drawFillRect } from 'api/lib/graphics/draw';
@@ -12,24 +13,23 @@ import {
 } from 'api/lib/graphics/pixelArray';
 import { textOut } from 'api/lib/graphics/text';
 import { VectorShape, drawVector } from 'api/lib/graphics/vector';
+import { STATE } from 'constants/globals/state';
 
-export const windowTitleBarRender = (window: IWindow) => {
+export const windowTitleBarRender = (screen: IScreen, window: IWindow) => {
   if (!window.titleBar) return;
-  const { pixels: windowPixels, titleBar } = window;
+  const { pixels: windowPixels, titleBar, windowId } = window;
   const { pixels: titleBarPixels, color, buttons } = titleBar;
   const { font, title } = titleBar;
 
   const { width, height } = getPixelArrayDimensions(titleBarPixels);
 
+  const titleBarColour =
+    window.windowId === screen.selectedWindowId
+      ? WindowColour.TITLEBAR_BACKGROUND_SELECTED
+      : WindowColour.TITLEBAR_BACKGROUND_NOT_SELECTED;
+
   /* Background */
-  drawFillRect(
-    titleBarPixels,
-    0,
-    0,
-    width,
-    height,
-    WindowColour.TITLEBAR_BACKGROUND
-  );
+  drawFillRect(titleBarPixels, 0, 0, width, height, titleBarColour);
 
   /* Title */
   textOut(
@@ -38,7 +38,7 @@ export const windowTitleBarRender = (window: IWindow) => {
     0,
     title,
     color.text,
-    color.background,
+    titleBarColour,
     font.name,
     font.size
   );

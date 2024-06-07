@@ -64,6 +64,12 @@ export interface OSEventViewport {
   icon?: IButton;
 }
 
+export enum EnumOSEventScope {
+  Child = 'child',
+  Parent = 'parent',
+  All = 'all',
+}
+
 export interface OSEventBackdrop {
   type: EnumOSEventObjectType;
   id?: number;

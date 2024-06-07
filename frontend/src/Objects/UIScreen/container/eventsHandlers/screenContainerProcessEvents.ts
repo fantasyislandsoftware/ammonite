@@ -2,31 +2,20 @@ import { EnumUIObjectType } from 'Objects/UIObject/objectInterface';
 import { SCREEN_API } from 'api/os/api/screen';
 import { EnumScreenChangeMode } from 'constants/globals/interface';
 import { STATE } from 'constants/globals/state';
-import { EnumOSEventType, IEvent } from 'interface/event';
+import { EnumOSEventScope, EnumOSEventType, IEvent } from 'interface/event';
+import { screenContainerProcessEventsAsParent } from './scope/screenContainerProcessEventsAsChild';
+import { screenContainerProcessEventsAsAll } from './scope/screenContainerProcessEventsAsAll';
 
-export const screenContainerProcessEvents = (event: IEvent) => {
-  const screenAPI = new SCREEN_API();
-
-  const mouseDown = () => {
-    if (!event.objects.screen) return;
-    const screenId = event.objects.screen.screenId;
-    screenAPI.bringToFront(screenId);
-  };
-
-  const mouseUp = () => {
-    setTimeout(() => {
-      STATE.screenChangeMode = EnumScreenChangeMode.DONE;
-    });
-  };
-
-  switch (event.event.type) {
-    case EnumOSEventType.MouseDown:
-      mouseDown();
+export const screenContainerProcessEvents = (
+  event: IEvent,
+  scope: EnumOSEventScope
+) => {
+  switch (scope) {
+    case EnumOSEventScope.All:
+      screenContainerProcessEventsAsAll(event);
       break;
-    case EnumOSEventType.MouseUp:
-      mouseUp();
-      break;
-    default:
+    case EnumOSEventScope.Parent:
+      screenContainerProcessEventsAsParent(event);
       break;
   }
 };

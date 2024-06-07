@@ -118,6 +118,7 @@ export class SCREEN_API {
         ),
       },
       windows: [],
+      selectedWindowId: undefined,
     };
     screens.push(data);
 
@@ -201,6 +202,14 @@ export class SCREEN_API {
   setTitle = (screenId: string, title: string) => {
     const screenIndex = this.findScreenIndex(screenId);
     this.screens[screenIndex].titleBar!.title = title;
+    setScreen(this.screens[screenIndex]);
+  };
+
+  /****************************************************/
+
+  setSelectedWindow = (screenId: string, windowId: string | undefined) => {
+    const screenIndex = this.findScreenIndex(screenId);
+    this.screens[screenIndex].selectedWindowId = windowId;
     setScreen(this.screens[screenIndex]);
   };
 

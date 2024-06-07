@@ -15,7 +15,7 @@ export interface IScreen {
     x: number;
     y: number;
   };
-  titleBar: IScreentitleBar | null;
+  titleBar: IScreenTitleBar | null;
   numberOfColours: number;
   palette: IPixelArray;
   ctx: CanvasRenderingContext2D | null;
@@ -29,6 +29,7 @@ export interface IScreen {
   };
   client: IScreenClient;
   windows: IWindow[];
+  selectedWindowId: string | undefined;
 }
 
 export interface IScreenPosition {
@@ -51,7 +52,7 @@ export interface IScreenMode {
   maxColors: 2 | 4 | 16 | 32 | 64 | 256 | 4096 | 65536 | 16777216;
 }
 
-export interface IScreentitleBar {
+export interface IScreenTitleBar {
   title: string;
   height: number;
   font: {

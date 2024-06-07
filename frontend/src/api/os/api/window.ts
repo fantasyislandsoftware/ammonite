@@ -14,6 +14,7 @@ import { initPixelArray } from 'api/lib/graphics/pixelArray';
 import { WindowColour } from 'Objects/UIWindow/_props/windowColour';
 import { v4 as uuidv4 } from 'uuid';
 import { screenContainerRender } from 'Objects/UIScreen/container/screenContainerRender';
+import { STATE } from 'constants/globals/state';
 
 export class WINDOW_API {
   openWindow = (
@@ -67,10 +68,10 @@ export class WINDOW_API {
       pixels: initPixelArray(
         width - windowDefault.border.thickness * 2,
         titleBarHeight,
-        WindowColour.TITLEBAR_BACKGROUND
+        WindowColour.TITLEBAR_BACKGROUND_NOT_SELECTED
       ),
       color: {
-        background: WindowColour.TITLEBAR_BACKGROUND,
+        background: WindowColour.TITLEBAR_BACKGROUND_NOT_SELECTED,
         text: WindowColour.TITLEBAR_TEXT,
       },
       buttons: buttons,
@@ -86,8 +87,10 @@ export class WINDOW_API {
       ),
     };
 
+    const windowId = uuidv4();
+
     const data: IWindow = {
-      windowId: uuidv4(),
+      windowId: windowId,
       parentTaskId: parentTaskId,
       parentScreenId: parentScreenId,
       position: { x, y, z },
