@@ -10,10 +10,14 @@ import { measureText } from 'api/lib/graphics/text';
 import { windowDefault } from 'Objects/UIWindow/_props/windowDefault';
 import { generateBarIcons } from 'Objects/UIButton/props/buttonFunc';
 import { EnumButtonType } from 'Objects/UIButton/props/buttonInterface';
-import { initPixelArray } from 'api/lib/graphics/pixelArray';
+import {
+  getPixelArrayDimensions,
+  initPixelArray,
+} from 'api/lib/graphics/pixelArray';
 import { WindowColour } from 'Objects/UIWindow/_props/windowColour';
 import { v4 as uuidv4 } from 'uuid';
 import { screenContainerRender } from 'Objects/UIScreen/container/screenContainerRender';
+import { get } from 'http';
 
 const screen_api = new SCREEN_API();
 
@@ -104,8 +108,8 @@ export class WINDOW_API {
       parentTaskId: parentTaskId,
       parentScreenId: parentScreenId,
       position: { x, y, z },
-      width,
-      height,
+      width: width,
+      height: height,
       titleBar: titleBar,
       border: {
         thickness: windowDefault.border.thickness,
@@ -157,8 +161,31 @@ export class WINDOW_API {
 
   /****************************************************/
 
+  resize = (windowId: string, width: number, height: number) => {
+    const screenId = this.getWindowParentScreen(windowId);
+    if (screenId === undefined) return;
+    const screenIndex = screen_api.findScreenIndex(screenId);
+    const windowIndex = this.findWindowIndex(screenId, windowId);
+    this.screens[screenIndex].windows[windowIndex].pixels = initPixelArray(
+      width,
+      height,
+      WindowColour.BORDER
+    );
+    this.screens[screenIndex].windows[windowIndex].width = width;
+    this.screens[screenIndex].windows[windowIndex].height = height;
+  };
+
+  /****************************************************/
+
   maximize = (windowId: string) => {
     console.log('maximizeWindow');
+    const screenId = this.getWindowParentScreen(windowId);
+    if (screenId === undefined) return;
+    const screenIndex = screen_api.findScreenIndex(screenId);
+    const windowIndex = this.findWindowIndex(screenId, windowId);
+    this.screens[screenIndex].windows[windowIndex].position.x = 0;
+    this.screens[screenIndex].windows[windowIndex].position.y = 0;
+    this.resize(windowId, 300, 200);
   };
 
   /****************************************************/
@@ -193,7 +220,7 @@ export class WINDOW_API {
     if (screenId === undefined) return;
     const screenIndex = screen_api.findScreenIndex(screenId);
     const windowIndex = this.findWindowIndex(screenId, windowId);
-    let pos = this.getLowestWindowZIndex(this.screens[screenIndex]);
+    const pos = this.getLowestWindowZIndex(this.screens[screenIndex]);
     this.screens[screenIndex].windows[windowIndex].position.z = pos - 1;
   };
 
@@ -204,25 +231,26 @@ export class WINDOW_API {
     const windowAPI = new WINDOW_API();
     const screenIndex = screenAPI.findScreenIndex(screenId);
     const windowIndex = windowAPI.findWindowIndex(screenId, windowId);
+    const { pixels } = this.screens[screenIndex].client;
+    const { width: clientWidth, height: clientHeight } =
+      getPixelArrayDimensions(pixels);
+
+    /* X Y */
     if (x < 0) x = 0;
     if (y < 0) y = 0;
-    if (
-      x >
-      this.screens[screenIndex].width -
-        this.screens[screenIndex].windows[windowIndex].width
-    ) {
-      x =
-        this.screens[screenIndex].width -
-        this.screens[screenIndex].windows[windowIndex].width;
+
+    /* Width */
+    const maxX =
+      clientWidth - this.screens[screenIndex].windows[windowIndex].width;
+    if (x > maxX) {
+      x = maxX;
     }
-    if (
-      y >
-      this.screens[screenIndex].height -
-        this.screens[screenIndex].windows[windowIndex].height
-    ) {
-      y =
-        this.screens[screenIndex].height -
-        this.screens[screenIndex].windows[windowIndex].height;
+
+    /* Height */
+    const maxY =
+      clientHeight - this.screens[screenIndex].windows[windowIndex].height;
+    if (y > maxY) {
+      y = maxY;
     }
     this.screens[screenIndex].windows[windowIndex].position.x = x;
     this.screens[screenIndex].windows[windowIndex].position.y = y;

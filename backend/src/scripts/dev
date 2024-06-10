@@ -1,1 +1,2 @@
-execute dpaint
+;execute dpaint
+amiblitz:amiblitz3 -s "dh1:/blitz/test.ab3" -e "dh1:/blitz/test.exe"
