@@ -38,14 +38,15 @@ export class WINDOW_API {
     y: number,
     width: number,
     height: number,
-    title: string
+    title: string,
+    id?: string
   ) => {
     const { screens, setScreens } = useScreenStore.getState();
 
     const screenAPI = new SCREEN_API();
     const windowAPI = new WINDOW_API();
 
-    const windowId = uuidv4();
+    const windowId = id ? id : uuidv4();
 
     const z =
       windowAPI.getHighestWindowZIndex(
@@ -65,7 +66,7 @@ export class WINDOW_API {
       [
         {
           type: EnumButtonType.ORDER,
-          func: `windowAPI.sendToBack('${windowId}')`,
+          func: `windowAPI.sortOrder('${windowId}')`,
         },
         {
           type: EnumButtonType.MAXIMIZE,
@@ -108,8 +109,6 @@ export class WINDOW_API {
       parentTaskId: parentTaskId,
       parentScreenId: parentScreenId,
       position: { x, y, z },
-      width: width,
-      height: height,
       titleBar: titleBar,
       border: {
         thickness: windowDefault.border.thickness,
@@ -119,9 +118,14 @@ export class WINDOW_API {
       client: client,
     };
     const screenIndex = screenAPI.findScreenIndex(parentScreenId);
-    screens[screenIndex].windows.push(data);
+
+    if (!id) {
+      screens[screenIndex].windows.push(data);
+    }
     setScreens(screens);
     screenContainerRender(screens[screenIndex]);
+
+    return data;
   };
 
   /****************************************************/
@@ -166,26 +170,36 @@ export class WINDOW_API {
     if (screenId === undefined) return;
     const screenIndex = screen_api.findScreenIndex(screenId);
     const windowIndex = this.findWindowIndex(screenId, windowId);
-    this.screens[screenIndex].windows[windowIndex].pixels = initPixelArray(
+
+    const id = this.screens[screenIndex].windows[windowIndex].windowId;
+    const z = this.screens[screenIndex].windows[windowIndex].position.z;
+
+    const clone: IWindow = this.openWindow(
+      this.screens[screenIndex].windows[windowIndex].parentTaskId,
+      this.screens[screenIndex].windows[windowIndex].parentScreenId,
+      this.screens[screenIndex].windows[windowIndex].position.x,
+      this.screens[screenIndex].windows[windowIndex].position.y,
       width,
       height,
-      WindowColour.BORDER
+      this.screens[screenIndex].windows[windowIndex].titleBar!.title,
+      id
     );
-    this.screens[screenIndex].windows[windowIndex].width = width;
-    this.screens[screenIndex].windows[windowIndex].height = height;
+    clone.position.z = z;
+    this.screens[screenIndex].windows[windowIndex] = clone;
   };
 
   /****************************************************/
 
   maximize = (windowId: string) => {
-    console.log('maximizeWindow');
     const screenId = this.getWindowParentScreen(windowId);
     if (screenId === undefined) return;
     const screenIndex = screen_api.findScreenIndex(screenId);
     const windowIndex = this.findWindowIndex(screenId, windowId);
+    const { width: clientWidth, height: clientHeight } =
+      getPixelArrayDimensions(this.screens[screenIndex].client.pixels);
     this.screens[screenIndex].windows[windowIndex].position.x = 0;
     this.screens[screenIndex].windows[windowIndex].position.y = 0;
-    this.resize(windowId, 300, 200);
+    this.resize(windowId, clientWidth, clientHeight);
   };
 
   /****************************************************/
@@ -226,29 +240,48 @@ export class WINDOW_API {
 
   /****************************************************/
 
+  sortOrder = (windowId: string) => {
+    const screenId = this.getWindowParentScreen(windowId);
+    if (screenId === undefined) return;
+    const screenIndex = screen_api.findScreenIndex(screenId);
+    const windowIndex = this.findWindowIndex(screenId, windowId);
+    const lowestIndex = this.getLowestWindowZIndex(this.screens[screenIndex]);
+    if (
+      lowestIndex === this.screens[screenIndex].windows[windowIndex].position.z
+    ) {
+      this.bringToFront(windowId);
+    } else {
+      this.sendToBack(windowId);
+    }
+  };
+
+  /****************************************************/
+
   setPosition = (screenId: string, windowId: string, x: number, y: number) => {
     const screenAPI = new SCREEN_API();
     const windowAPI = new WINDOW_API();
     const screenIndex = screenAPI.findScreenIndex(screenId);
     const windowIndex = windowAPI.findWindowIndex(screenId, windowId);
-    const { pixels } = this.screens[screenIndex].client;
+    const { pixels: screenPixels } = this.screens[screenIndex].client;
     const { width: clientWidth, height: clientHeight } =
-      getPixelArrayDimensions(pixels);
+      getPixelArrayDimensions(screenPixels);
+    const { pixels: windowPixels } =
+      this.screens[screenIndex].windows[windowIndex];
+    const { width: windowWidth, height: windowHeight } =
+      getPixelArrayDimensions(windowPixels);
 
-    /* X Y */
+    /* Position */
     if (x < 0) x = 0;
     if (y < 0) y = 0;
 
     /* Width */
-    const maxX =
-      clientWidth - this.screens[screenIndex].windows[windowIndex].width;
+    const maxX = clientWidth - windowWidth;
     if (x > maxX) {
       x = maxX;
     }
 
     /* Height */
-    const maxY =
-      clientHeight - this.screens[screenIndex].windows[windowIndex].height;
+    const maxY = clientHeight - windowHeight;
     if (y > maxY) {
       y = maxY;
     }

@@ -4,7 +4,6 @@ import { EnumMouseButton } from 'functions/mouse';
 import { EnumOSEventType, IEvent } from 'interface/event';
 
 const screen_api = new SCREEN_API();
-const window_api = new WINDOW_API();
 
 export const windowContainerProcessEventsAsAll = (event: IEvent) => {
   const mouseDownLeft = () => {
@@ -12,7 +11,6 @@ export const windowContainerProcessEventsAsAll = (event: IEvent) => {
     const windowId = event.objects.window?.windowId;
     if (screenId && windowId) {
       screen_api.setSelectedWindow(screenId, windowId);
-      window_api.bringToFront(windowId);
     }
   };
 

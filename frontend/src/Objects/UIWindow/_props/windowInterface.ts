@@ -18,8 +18,6 @@ export interface IWindow {
     y: number;
     z: number;
   };
-  width: number;
-  height: number;
   titleBar: IWindowTitleBar | null;
   border: IWindowBorder;
   pixels: IPixelArray;

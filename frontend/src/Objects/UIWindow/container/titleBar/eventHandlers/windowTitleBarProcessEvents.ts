@@ -1,4 +1,5 @@
 import { windowContainerDrag } from 'Objects/UIWindow/windowContainerFunc';
+import { WINDOW_API } from 'api/os/api/window';
 import { STATE } from 'constants/globals/state';
 import {
   EnumMouseButton,
@@ -6,6 +7,8 @@ import {
   EnumOSEventType,
   IEvent,
 } from 'interface/event';
+
+const window_api = new WINDOW_API();
 
 export const windowTitleBarProcessEvents = (event: IEvent) => {
   const mouseDown = (event: IEvent) => {
@@ -31,12 +34,21 @@ export const windowTitleBarProcessEvents = (event: IEvent) => {
     event.mouse && windowContainerDrag(event.mouse);
   };
 
+  const mouseDbClick = (event: IEvent) => {
+    if (event.mouse?.button === EnumMouseButton.Left) {
+      window_api.maximize(event.objects.window?.windowId || '');
+    }
+  };
+
   switch (event.event.type) {
     case EnumOSEventType.MouseDown:
       mouseDown(event);
       break;
     case EnumOSEventType.MouseUp:
       mouseUp();
+      break;
+    case EnumOSEventType.MouseDoubleClick:
+      mouseDbClick(event);
       break;
     case EnumOSEventType.MouseMove:
       mouseMove();
