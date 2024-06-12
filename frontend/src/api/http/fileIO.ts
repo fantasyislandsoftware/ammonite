@@ -27,6 +27,14 @@ export const getFile = async (path: string, format: EnumDataFormat) => {
   return result as any;
 };
 
+export const getExe = async (path: string) => {
+  const request = await fetch(`${ENV.api}/getExe?path=${path}`, {
+    method: 'GET',
+  });
+  const response = await request.json();
+  return response;
+};
+
 export const getMem = async () => {
   const request = await fetch(`${ENV.api}/getMem`, {
     method: 'GET',

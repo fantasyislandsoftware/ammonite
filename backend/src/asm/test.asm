@@ -1,0 +1,2 @@
+test:   jmp test
+        rts

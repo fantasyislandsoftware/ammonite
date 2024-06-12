@@ -10,8 +10,9 @@ import { screenContainerRender } from 'Objects/UIScreen/container/screenContaine
 import { baseContainerBuildEvents } from 'Objects/UIBase/container/eventHandlers/baseContainerBuildEvents';
 import { getHighestScreenZIndex } from 'Objects/UIScreen/_props/screenFunctions';
 import { SYSTEM_API } from 'api/os/api/system';
-import { getMem } from 'api/http/fileIO';
+import { getExe, getMem } from 'api/http/fileIO';
 import { SYSTEM } from 'constants/globals/system';
+import { decode as base64_decode } from 'base-64';
 
 const App = () => {
   const { screens, setScreens } = useScreenStore();
@@ -44,12 +45,20 @@ const App = () => {
     }, 8000);
   };
 
+  const test = () => {
+    const x = getExe('/home/node/app/src/jam/boot.js');
+    x.then((data) => {
+      let decoded = base64_decode(data.code);
+      console.log(decoded);
+    });
+  };
+
   useEffect(() => {
     async function boot() {
       window.onerror = (message, source, lineno, colno, error) => {
         console.log(message, source, lineno, colno, error);
       };
-      system_api.exec('/home/node/app/src/js/boot.js');
+      system_api.exec('/home/node/app/src/jam/boot.js');
     }
     if (initBoot) {
       boot();
@@ -58,6 +67,7 @@ const App = () => {
       renderLoop();
       initEventListeners();
       heartBeat();
+      test();
     }
   }, [initBoot]);
 

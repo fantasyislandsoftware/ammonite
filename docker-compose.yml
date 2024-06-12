@@ -10,6 +10,7 @@ services:
       - ./backend/nodemon.json:/home/node/app/nodemon.json
       - ./backend/package.json:/home/node/app/package.json
       - ./backend/fonts:/home/node/app/fonts
+      - ./backend/tools:/home/node/app/tools
     container_name: ammonite_backend
     expose:
       - "1234"

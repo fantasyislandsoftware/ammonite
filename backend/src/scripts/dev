@@ -1,2 +1,3 @@
 ;execute dpaint
-amiblitz:amiblitz3 -s "dh1:/blitz/test.ab3" -e "dh1:/blitz/test.exe"
+;amiblitz:amiblitz3 -s "dh1:/blitz/test.ab3" -e "dh1:/blitz/test.exe"
+develop:vasm -Fhunkexe dh1:/asm/test.asm -o dh1:/asm/test
