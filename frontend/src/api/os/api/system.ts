@@ -1,10 +1,11 @@
-import { getFile } from 'api/http/fileIO';
+import { getExe, getFile } from 'api/http/fileIO';
 import { ENV } from 'constants/globals/env';
 import { BREAK, DO_NOT_PROCESS } from 'constants/globals/misc';
 import { SYSTEM } from 'constants/globals/system';
 import { EnumDataFormat } from 'interface/data';
 import { TaskState, TaskType, useTaskStore } from 'stores/useTaskStore';
 import { v4 as uuidv4 } from 'uuid';
+import { decode as base64_decode } from 'base-64';
 
 export class SYSTEM_API {
   constructor() {}
@@ -33,11 +34,13 @@ export class SYSTEM_API {
 
     const name = path.substring(path.lastIndexOf('/') + 1);
     const { tasks, setTasks } = useTaskStore.getState();
-    let data = await getFile(path, EnumDataFormat.TEXT);
+    const response = await getExe(path);
+    let { type, org, code } = response;
 
-    data = pass1(data);
+    code = base64_decode(code);
+    code = pass1(code);
 
-    data = data
+    code = code
       .replaceAll('\n', '')
       .replaceAll(';', BREAK)
       .replaceAll('*/', BREAK)
@@ -45,7 +48,7 @@ export class SYSTEM_API {
     const lines: string[] = [];
     const label: any = {};
     const _funcList: any = [];
-    data.forEach((line: string, index: number) => {
+    code.forEach((line: string, index: number) => {
       /* Remove comment remains */
       if (line.startsWith('/*')) {
         line = DO_NOT_PROCESS;
@@ -96,7 +99,7 @@ export class SYSTEM_API {
       var: {},
       label: label,
       promise: {},
-      pos: 0,
+      pos: org,
     });
     setTasks(tasks);
   };

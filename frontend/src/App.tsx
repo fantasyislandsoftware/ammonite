@@ -67,7 +67,7 @@ const App = () => {
       renderLoop();
       initEventListeners();
       heartBeat();
-      test();
+      //test();
     }
   }, [initBoot]);
 
