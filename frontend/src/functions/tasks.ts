@@ -13,18 +13,21 @@ import { _define } from 'jam/branch';
 import { _log } from 'jam/debug';
 import { _drawImage, _loadIcons } from 'jam/graphics';
 import { EnumDataFormat } from 'interface/data';
-import { SCREEN_API } from 'api/os/api/screen';
-import { SYSTEM_API } from 'api/os/api/system';
-import { FONT_API } from 'api/os/api/font';
-import { ICON_API } from 'api/os/api/icon';
 import { DO_NOT_PROCESS } from 'constants/globals/misc';
-import { WINDOW_API } from 'api/os/api/window';
 
-const system_api = new SYSTEM_API();
-const font_api = new FONT_API();
-const screen_api = new SCREEN_API();
-const window_api = new WINDOW_API();
-const icon_api = new ICON_API();
+import { SYSTEM_API as system_api } from 'api/os/api/system';
+import { FONT_API as font_api } from 'api/os/api/font';
+import { SCREEN_API as screen_api } from 'api/os/api/screen';
+import { WINDOW_API as window_api } from 'api/os/api/window';
+import { ICON_API as icon_api } from 'api/os/api/icon';
+import { M68K_API as m68k_api } from 'api/os/api/m68k';
+
+const SYSTEM_API = new system_api();
+const FONT_API = new font_api();
+const SCREEN_API = new screen_api();
+const WINDOW_API = new window_api();
+const ICON_API = new icon_api();
+const M68K_API = new m68k_api();
 
 export interface IParam {
   id: string;
@@ -48,12 +51,6 @@ export const startTaskProcessor = () => {
 };
 
 export const execCommand = (self: ITask) => {
-  const SYSTEM_API = system_api;
-  const FONT_API = font_api;
-  const SCREEN_API = screen_api;
-  const WINDOW_API = window_api;
-  const ICON_API = icon_api;
-
   const jp = (label: string) => {
     self.pos = self.label[label];
   };
