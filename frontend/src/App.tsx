@@ -45,14 +45,6 @@ const App = () => {
     }, 8000);
   };
 
-  const test = () => {
-    const x = getExe('/home/node/app/src/jam/boot.js');
-    x.then((data) => {
-      let decoded = base64_decode(data.code);
-      console.log(decoded);
-    });
-  };
-
   useEffect(() => {
     async function boot() {
       window.onerror = (message, source, lineno, colno, error) => {
@@ -67,7 +59,6 @@ const App = () => {
       renderLoop();
       initEventListeners();
       heartBeat();
-      //test();
     }
   }, [initBoot]);
 

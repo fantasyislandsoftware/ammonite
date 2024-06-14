@@ -4,6 +4,8 @@ import { getMem } from "SYSTEM_API";
 import { openScreen, low, setTitle } from "SCREEN_API";
 import { openWindow } from "WINDOW_API";
 
+nop();
+
 self.testScreenId = openScreen(self.id, 320, 256, low, "Test");
 self.wbScreenId = openScreen(self.id, 320, 256, low, "Workbench");
 

@@ -62,25 +62,33 @@ const processAmiga = (data: string) => {
 
   let i = 0;
   for (const key in sep) {
-    const addr = sep[key].addr;
-    const hex = sep[key].hex;
+    const addr = sep[key].addr.trim();
+    const hex = sep[key].hex.trim();
     if (hex === "0000 03e9") {
       org = i + 2;
     }
     i++;
-    const op = sep[key].op;
-    const arg = sep[key].arg;
-    switch (sep[key].op) {
+    const op = sep[key].op.trim();
+    const arg = sep[key].arg.trim();
+    switch (op) {
       case "bra.b":
         const i = Object.keys(sep).indexOf(`${padZeros(arg)}`);
         output.push(`bra(${i});`);
         break;
+      case "rts":
+        output.push("ret();");
+        break;
       default:
-        output.push(`# ${addr} ${hex} ${op} ${arg}`);
+        const l = `nop("${op}${arg.length > 0 ? " " : ""}${arg}");`;
+        if (l.length > 0) {
+          output.push(l);
+        }
     }
   }
 
-  console.log(output);
+  output.map((line) => {
+    console.log(`${line}`);
+  });
 
   return { code: output.join("\n"), org: org };
 };

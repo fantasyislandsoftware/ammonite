@@ -64,6 +64,17 @@ export const execCommand = (self: ITask) => {
     }
   };
 
+  const bra = (line: number) => {
+    self.pos = line;
+    if (line === self.pos) {
+      self.pos--;
+    }
+  };
+
+  const nop = (line: string) => {};
+
+  const ret = () => {};
+
   for (let n = self.pos; n < self.code.length; n++) {
     if (self.code[n] === DO_NOT_PROCESS) {
       continue;

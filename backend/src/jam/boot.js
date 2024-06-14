@@ -32,3 +32,4 @@ jpif("ICONS_LOADING", self.p.isFulfilled(), false);
 
 /* Start workbench */
 exec("/home/node/app/src/jam/workbench.js");
+exec("/home/node/app/src/asm/test");
