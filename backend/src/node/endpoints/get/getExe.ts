@@ -79,7 +79,7 @@ const processAmiga = (data: string) => {
         output.push("ret();");
         break;
       default:
-        const l = `nop("${op}${arg.length > 0 ? " " : ""}${arg}");`;
+        const l = `nc("${op}${arg.length > 0 ? " " : ""}${arg}");`;
         if (l.length > 0) {
           output.push(l);
         }

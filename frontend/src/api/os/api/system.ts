@@ -35,7 +35,8 @@ export class SYSTEM_API {
     const name = path.substring(path.lastIndexOf('/') + 1);
     const { tasks, setTasks } = useTaskStore.getState();
     const response = await getExe(path);
-    let { type, org, code } = response;
+    let { code } = response;
+    const { org } = response;
 
     code = base64_decode(code);
     code = pass1(code);
@@ -90,7 +91,6 @@ export class SYSTEM_API {
 
       lines.push(line);
     });
-    //console.log(lines);
     tasks.push({
       id: uuidv4(),
       name: name,

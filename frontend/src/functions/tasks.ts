@@ -68,7 +68,9 @@ export const execCommand = (self: ITask) => {
     }
   };
 
-  const nop = (line: string) => {};
+  const nc = (line: string) => {};
+
+  //const nop = () => {};
 
   const ret = () => {};
 
@@ -85,7 +87,7 @@ export const execCommand = (self: ITask) => {
   try {
     eval(line);
   } catch (e) {
-    console.log(e);
+    console.log(line);
     killTask(self.id);
   }
 
