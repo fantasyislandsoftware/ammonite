@@ -73,13 +73,13 @@ const processAmiga = (data: string) => {
     switch (op) {
       case "bra.b":
         const i = Object.keys(sep).indexOf(`${padZeros(arg)}`);
-        output.push(`bra(${i});`);
+        output.push(`M68K_API.bra(self,${i});`);
         break;
       case "rts":
-        output.push("ret();");
+        output.push("M68K_API.rts(self);");
         break;
       default:
-        const l = `nc("${op}${arg.length > 0 ? " " : ""}${arg}");`;
+        const l = `M68K_API.nc("${op}${arg.length > 0 ? " " : ""}${arg}");`;
         if (l.length > 0) {
           output.push(l);
         }

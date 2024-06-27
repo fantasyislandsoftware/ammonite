@@ -1,13 +1,14 @@
 /* @JAM */
 
 import { getPromise, exec } from "SYSTEM_API";
+import { jpif } from "LOGIC_API";
 import { getFontList, loadFont } from "FONT_API";
 import { loadIcons } from "ICON_API";
 
 /* Load font list */
 self.p = getPromise(getFontList());
 label("FONT_LIST_LOADING");
-jpif("FONT_LIST_LOADING", self.p.isFulfilled(), false);
+jpif(self, "FONT_LIST_LOADING", self.p.isFulfilled(), false);
 self.fontList = self.p.getData();
 
 /* Load fonts */
@@ -19,16 +20,16 @@ self.font = self.fontList[self.n];
 /* Load font */
 self.p = getPromise(loadFont(self.font.name, self.font.path));
 label("FONT_LOADING");
-jpif("FONT_LOADING", self.p.isFulfilled(), false);
+jpif(self, "FONT_LOADING", self.p.isFulfilled(), false);
 
 /* Next font or end loop */
 self.n++;
-jpif("FONT_ARRAY_LOOP", self.n < self.l, true);
+jpif(self, "FONT_ARRAY_LOOP", self.n < self.l, true);
 
 /* Load icons */
 self.p = getPromise(loadIcons());
 label("ICONS_LOADING");
-jpif("ICONS_LOADING", self.p.isFulfilled(), false);
+jpif(self, "ICONS_LOADING", self.p.isFulfilled(), false);
 
 /* Start workbench */
 exec("/home/node/app/src/jam/workbench.js");

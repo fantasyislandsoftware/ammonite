@@ -91,6 +91,7 @@ export class SYSTEM_API {
 
       lines.push(line);
     });
+    console.log(lines);
     tasks.push({
       id: uuidv4(),
       name: name,
