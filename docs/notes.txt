@@ -2,3 +2,5 @@ python3 -m http.server -d /srv/http/ammonite/frontend/build 80
 serve frontend/build & bun backend/src/index.ts
 
 cd /srv/http/ammonite && serve frontend/build & cd /srv/http/ammonite & bun backend/src/index.ts
+
+https://asm-editor.specy.app/projects
