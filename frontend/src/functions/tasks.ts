@@ -41,6 +41,7 @@ export const execCommand = (self: ITask) => {
   try {
     eval(line);
   } catch (e) {
+    console.log(e);
     console.log(line);
     killTask(self.id);
   }

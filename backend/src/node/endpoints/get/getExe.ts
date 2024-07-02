@@ -48,6 +48,9 @@ const processAmiga = (data: string) => {
   let output: string[] = [];
   let org = 0;
   const split = data.split("\n");
+
+  //console.log(data);
+
   split.map((line, index) => {
     let code: string[] = [];
     const addr = line.substring(0, 8);
@@ -71,6 +74,9 @@ const processAmiga = (data: string) => {
     const op = sep[key].op.trim();
     const arg = sep[key].arg.trim();
     switch (op) {
+      case "move.b":
+        output.push(`M68K_API.move_8(self,"${arg}");`);
+        break;
       case "bra.b":
         const i = Object.keys(sep).indexOf(`${padZeros(arg)}`);
         output.push(`M68K_API.bra(self,${i});`);
@@ -87,7 +93,10 @@ const processAmiga = (data: string) => {
   }
 
   output.map((line) => {
-    console.log(`${line}`);
+    if (line.includes("move_8")) {
+      //console.log(line);
+    }
+    //console.log(`${line}`);
   });
 
   return { code: output.join("\n"), org: org };
@@ -97,22 +106,96 @@ const processJam = (data: string) => {
   return { code: data, org: 0 };
 };
 
+const hunkTypes: any = {
+  "0000 03e7": "HUNK_UNIT",
+  "0000 03e8": "HUNK_NAME",
+  "0000 03e9": "HUNK_CODE",
+  "0000 03ea": "HUNK_DATA",
+  "0000 03eb": "HUNK_BSS",
+  "0000 03ec": "HUNK_RELOC32",
+  "0000 03ed": "HUNK_RELOC16",
+  "0000 03ee": "HUNK_RELOC8",
+  "0000 03ef": "HUNK_EXT",
+  "0000 03f0": "HUNK_SYMBOL",
+  "0000 03f1": "HUNK_DEBUG",
+  "0000 03f3": "HUNK_HEADER",
+  "0000 03f5": "HUNK_OVERLAY",
+  "0000 03f6": "HUNK_BREAK",
+  "0000 03f7": "HUNK_DREL32",
+  "0000 03f8": "HUNK_DREL16",
+  "0000 03f9": "HUNK_DREL8",
+  "0000 03fa": "HUNK_LIB",
+  "0000 03fb": "HUNK_INDEX",
+  "0000 03fc": "HUNK_RELOC32SHORT",
+  "0000 03fd": "HUNK_RELRELOC32",
+  "0000 03fe": "HUNK_ABSRELOC16",
+};
+
+const getAmigaHunks = (data: string) => {
+  let hunks: any = [];
+  let hunkData: any = [];
+
+  let hunkType = "Unknown";
+
+  const hunkLines = data.split("\n");
+  hunkLines.map((line) => {
+    const addr = line.substring(0, 8);
+    const hex = line.substring(10, 19);
+    const op = line.substring(36, 44).trim();
+    const arg = line.substring(44).trim();
+
+    if (hex in hunkTypes && hunkData.length > 0) {
+      hunks.push({ type: hunkType, data: hunkData });
+      hunkData = [];
+    }
+
+    if (hex in hunkTypes) {
+      hunkType = hunkTypes[hex];
+    }
+
+    if (addr.length) {
+      hunkData.push({ addr, hex, op, arg });
+    }
+  });
+
+  hunks.push({ type: hunkType, data: hunkData });
+
+  return hunks;
+};
+
+const getJamHunks = (data: string) => {
+  const lines = data.split("\n");
+  const hunkType = "HUNK_CODE";
+  let hunkData: any = [];
+  let hunks: any = [];
+
+  let addr = "";
+  let hex = "";
+  let op = "";
+  let arg = "";
+
+  lines.map((line, index) => {
+    hunkData.push({ line: index, command: line });
+  });
+  hunks.push({ type: hunkType, data: hunkData });
+  return hunks;
+};
+
 const packageData = async (path: string) => {
   const fileData = readFileSync(path as string);
   const fileType = examineHeader(fileData);
-  let data: any = {};
+  let hunks: any = [];
   switch (fileType) {
     case "jam":
-      data = processJam(fileData.toString());
+      hunks = getJamHunks(fileData.toString());
       break;
     case "amiga":
-      data = processAmiga(spawnSync("vda68k", [path]).stdout.toString());
+      hunks = getAmigaHunks(spawnSync("vda68k", [path]).stdout.toString());
       break;
   }
   return {
     type: fileType,
-    org: data.org,
-    code: Buffer.from(data.code).toString("base64"),
+    hunks: hunks,
   };
 };
 

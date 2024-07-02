@@ -1,3 +1,10 @@
-test:   move.b  #$d0,d0
-        jmp     test
-        rts
+.section code
+
+test:   move.b  d0,d1
+        move.b  d0,d1
+        move.b  d0,d1
+        move.b  d0,d1
+        move.b  d0,d1
+
+.section data
+        dc.b 255
