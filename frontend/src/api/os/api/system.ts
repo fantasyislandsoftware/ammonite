@@ -68,18 +68,48 @@ export class SYSTEM_API {
   /****************************************************/
 
   processJamHunks = (hunks: IHunk[]) => {
-    const result: string[] = [];
+    let code: string[] = [];
+    const labels: any = {};
     let write = true;
     hunks.map((hunk) => {
       if (hunk.type === ENUM_HUNK_TYPE.HUNK_CODE) {
+        const imports: { name: string; file: string | undefined }[] = [];
         hunk.data.map((data) => {
+          /* Squash */
+          data.command = this.squash(data.command);
+
+          /* Remove Comments */
           if (data.command.startsWith('/*')) {
             write = false;
           }
           if (data.command.endsWith('*/')) {
             write = true;
           }
-          data.command = this.squash(data.command);
+
+          /* Process imports */
+          if (data.command.startsWith('import')) {
+            let importLine = data.command.split(' ');
+            data.command = '{remove}';
+            importLine = importLine.filter((part) => {
+              if (
+                part !== 'import' &&
+                part !== '{' &&
+                part !== '}' &&
+                part !== 'from'
+              ) {
+                return part;
+              }
+            });
+            const importFile = importLine
+              .pop()
+              ?.replaceAll('"', '')
+              .replaceAll(';', '');
+            importLine.forEach((part) => {
+              imports.push({ name: part.replace(',', ''), file: importFile });
+            });
+          }
+
+          /* Add Command */
           if (
             !data.command.startsWith('//') &&
             !data.command.startsWith('/*') &&
@@ -87,13 +117,83 @@ export class SYSTEM_API {
             data.command !== '' &&
             write
           ) {
-            result.push(data.command);
+            code.push(data.command);
           }
         });
-        return result;
+
+        /* Post Process */
+
+        /* Add Command Parents */
+        code.map((line, index) => {
+          imports.map((imp) => {
+            code[index] = code[index].replaceAll(
+              imp.name,
+              `${imp.file}.${imp.name}`
+            );
+          });
+        });
+
+        /* Remove Lines */
+        code = code.filter((line) => {
+          return line !== '{remove}';
+        });
+
+        /* Process Labels */
+        const LABEL_CMD = 'LOGIC_API.label';
+        code.map((line, index) => {
+          if (line.startsWith(LABEL_CMD)) {
+            const label = line
+              .replaceAll(LABEL_CMD, '')
+              .replaceAll('"', '')
+              .replaceAll('(', '')
+              .replaceAll(')', '')
+              .replaceAll(';', '');
+            labels[label] = index;
+          }
+        });
+
+        return { code, labels };
       }
     });
-    return result;
+
+    return { code, labels };
+  };
+
+  /****************************************************/
+
+  convertToMove8 = (data: IAmigaDataHunk) => {
+    return `M68K_API.move_8(${data.arg});`;
+  };
+
+  /****************************************************/
+
+  processAmigaHunks = (hunks: IHunk[]) => {
+    //console.log(hunks);
+    const code: string[] = [];
+    hunks.map((hunk) => {
+      if (hunk.type === ENUM_HUNK_TYPE.HUNK_CODE) {
+        hunk.data.map((data: IAmigaDataHunk, index) => {
+          let line = '';
+          if (index > 2) {
+            switch (data.op) {
+              case 'move.b':
+                //line = `M68K_API.move_8(${data.arg});`;
+                line = this.convertToMove8(data);
+                console.log(line);
+                code.push(line);
+                break;
+              case 'nop':
+                code.push('M68K_API.nop();');
+                break;
+              default:
+                code.push(`/* ${data.op} ${data.arg} * /`);
+                break;
+            }
+          }
+        });
+      }
+    });
+    return { code, labels: {} };
   };
 
   /****************************************************/
@@ -103,88 +203,30 @@ export class SYSTEM_API {
     const { tasks, setTasks } = useTaskStore.getState();
     const data = (await getExe(path)) as IHunks;
 
-    let code: string[] = [];
+    let block: any = {};
 
     switch (data.type) {
       case ENUM_HUNK_BLOCKS.JAM:
-        code = this.processJamHunks(data.hunks);
+        block = this.processJamHunks(data.hunks);
         break;
       case ENUM_HUNK_BLOCKS.AMIGA:
-        //this.processAmiga(response, name, debug);
+        block = this.processAmigaHunks(data.hunks);
         break;
     }
 
-    console.log(code);
+    //console.log(block.code);
 
-    //let { code } = response;
-    //const { org } = response;
-
-    //code = base64_decode(code);
-    //code = pass1(code);
-
-    //code = code
-    //  .replaceAll('\n', '')
-    //  .replaceAll(';', BREAK)
-    //  .replaceAll('*/', BREAK)
-    //  .split(BREAK);
-    //const lines: string[] = [];
-    //const label: any = {};
-    //const _funcList: any = [];
-    //code.forEach((line: string, index: number) => {
-    /* Remove comment remains */
-    //  if (line.startsWith('/*')) {
-    //    line = DO_NOT_PROCESS;
-    //  }
-
-    /* Process Imports */
-    //  if (line.startsWith('import')) {
-    //    const _whole = line.split(' ');
-    //    const _file = _whole.slice(-1)[0].replaceAll('"', '');
-    //    _whole.forEach((part) => {
-    //      if (
-    //        part !== 'import' &&
-    //        part !== 'from' &&
-    //        part !== '{' &&
-    //        part !== '}' &&
-    //        part !== ',' &&
-    //        part !== `"${_file}"`
-    //      ) {
-    //        _funcList.push({ name: part.replace(',', ''), file: _file });
-    //      }
-    //    });
-
-    //    line = DO_NOT_PROCESS;
-    //  }
-
-    /* Process function calls */
-    //  _funcList.forEach((func: any) => {
-    //    if (line.includes(func.name)) {
-    //      line = line.replaceAll(func.name, `${func.file}.${func.name}`);
-    //    }
-    //  });
-
-    /* Label */
-    //  if (line.startsWith('label')) {
-    //    const l = line.split('"')[1];
-    //    label[l] = index;
-    //    line = DO_NOT_PROCESS;
-    //  }
-
-    //  lines.push(line);
-    //});
-    //console.log(lines);
-
-    /*!debug &&
+    !debug &&
       tasks.push({
         id: uuidv4(),
         name: name,
         type: TaskType.JS,
         state: TaskState.RUNNING,
-        code: lines,
+        code: block.code,
         var: {},
-        label: label,
+        label: block.labels,
         promise: {},
-        pos: org,
+        pos: 0,
         reg: {
           d0: 0,
           d1: 0,
@@ -210,7 +252,7 @@ export class SYSTEM_API {
           n: false,
           x: false,
         },
-      });*/
+      });
     //setTasks(tasks);
   };
 

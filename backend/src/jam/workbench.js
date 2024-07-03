@@ -3,7 +3,7 @@
 import { getMem } from "SYSTEM_API";
 import { openScreen, low, setTitle } from "SCREEN_API";
 import { openWindow } from "WINDOW_API";
-import { jp } from "LOGIC_API";
+import { label, jp } from "LOGIC_API";
 
 self.testScreenId = openScreen(self.id, 320, 256, low, "Test");
 self.wbScreenId = openScreen(self.id, 320, 256, low, "Workbench");
@@ -21,6 +21,5 @@ label("MAIN_LOOP");
 self.oldTime = Math.round((self.endTime - self.startTime) / 1000 / self.iSec);
 self.endTime = Date.now();
 self.newTime = Math.round((self.endTime - self.startTime) / 1000 / self.iSec);
-if (self.oldTime !== self.newTime)
-  setTitle(self.wbScreenId, `Workbench  ${getMem().freeStr} free`);
+if (self.oldTime !== self.newTime) setTitle(self.wbScreenId, `Workbench  ${getMem().freeStr} free`);
 jp(self, "MAIN_LOOP");

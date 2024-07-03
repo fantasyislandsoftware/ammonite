@@ -1,7 +1,7 @@
 /* @JAM */
 
 import { getPromise, exec } from "SYSTEM_API";
-import { jpif } from "LOGIC_API";
+import { label, jpif } from "LOGIC_API";
 import { getFontList, loadFont } from "FONT_API";
 import { loadIcons } from "ICON_API";
 
@@ -37,5 +37,5 @@ jpif(self, "ICONS_LOADING", self.p.isFulfilled(), false);
 
 /* Start workbench */
 //exec("/home/node/app/src/jam/workbench.js");
-//exec("/home/node/app/src/asm/test", true);
+exec("/home/node/app/src/asm/test", true);
 //exec("/home/node/app/src/exe/calc", true);

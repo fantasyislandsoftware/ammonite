@@ -3,6 +3,10 @@ export class LOGIC_API {
 
   /****************************************************/
 
+  label = (self: any, label: string) => {};
+
+  /****************************************************/
+
   jp = (self: any, label: string) => {
     self.pos = self.label[label];
   };
