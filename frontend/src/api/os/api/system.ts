@@ -161,8 +161,40 @@ export class SYSTEM_API {
 
   /****************************************************/
 
+  convertArg = (arg: string) => {
+    const dreg = ['d0', 'd1', 'd2', 'd3', 'd4', 'd5', 'd6', 'd7'];
+    const areg = ['a0', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7'];
+
+    /* Data register */
+    if (dreg.includes(arg)) {
+      return `{ t: 'dreg', v: ${arg.replace('d', '')} }`;
+    }
+
+    /* Address register */
+    if (areg.includes(arg)) {
+      return `{ t: 'areg', v: ${arg.replace('d', '')} }`;
+    }
+
+    /* Immediate */
+    if (arg.startsWith('#')) {
+      return `{ t: 'imm', v: ${arg.replace('#', '')} }`;
+    }
+
+    /* Unknown */
+    return `'?'`;
+  };
+
+  /****************************************************/
+
   convertToMove8 = (data: IAmigaDataHunk) => {
-    return `M68K_API.move_8(${data.arg});`;
+    const args = data.arg.split(',');
+    if (args.length === 2) {
+      return `M68K_API.move_8(self,${this.convertArg(
+        args[0]
+      )}, ${this.convertArg(args[1])});`;
+    } else {
+      return `bad(M68K_API.move_8(self,${data.arg}));`;
+    }
   };
 
   /****************************************************/
@@ -174,10 +206,10 @@ export class SYSTEM_API {
       if (hunk.type === ENUM_HUNK_TYPE.HUNK_CODE) {
         hunk.data.map((data: IAmigaDataHunk, index) => {
           let line = '';
-          if (index > 2) {
+          if (index > 1) {
+            console.log(data.op, data.arg);
             switch (data.op) {
               case 'move.b':
-                //line = `M68K_API.move_8(${data.arg});`;
                 line = this.convertToMove8(data);
                 console.log(line);
                 code.push(line);
@@ -227,30 +259,9 @@ export class SYSTEM_API {
         label: block.labels,
         promise: {},
         pos: 0,
-        reg: {
-          d0: 0,
-          d1: 0,
-          d2: 0,
-          d3: 0,
-          d4: 0,
-          d5: 0,
-          d6: 0,
-          d7: 0,
-          a0: 0,
-          a1: 0,
-          a2: 0,
-          a3: 0,
-          a4: 0,
-          a5: 0,
-          a6: 0,
-          a7: 0,
-        },
-        flag: {
-          c: false,
-          v: false,
-          z: false,
-          n: false,
-          x: false,
+        r: {
+          d: [0, 0, 0, 0, 0, 0, 0, 0],
+          a: [0, 0, 0, 0, 0, 0, 0, 0],
         },
       });
     //setTasks(tasks);
