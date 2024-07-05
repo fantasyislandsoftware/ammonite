@@ -7,7 +7,7 @@ import { FONT_API as font_api } from 'api/os/api/font';
 import { SCREEN_API as screen_api } from 'api/os/api/screen';
 import { WINDOW_API as window_api } from 'api/os/api/window';
 import { ICON_API as icon_api } from 'api/os/api/icon';
-import { M68K_API as m68k_api } from 'api/os/api/m68k';
+import { M68K_API as m68k_api } from 'api/os/api/m68k/m68k';
 
 const SYSTEM_API = new system_api();
 const LOGIC_API = new logic_api();

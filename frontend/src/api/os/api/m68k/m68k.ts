@@ -1,4 +1,6 @@
 import { ITask } from 'stores/useTaskStore';
+import { move_dn_to_dst } from './move/move_dn_to_dst';
+import { EnumBit } from './IM68k';
 
 export interface IM68KArg {
   t: string;
@@ -6,26 +8,13 @@ export interface IM68KArg {
 }
 
 export class M68K_API {
-  constructor() {}
-
   /****************************************************/
 
-  move_8 = (self: ITask, arg1: IM68KArg, arg2: IM68KArg) => {
-    /* Copy DN to ? */
-    if (arg1.t === 'dreg') {
-      if (arg2.t === 'dreg') {
-        self.r.d[arg2.v as number] = self.r.d[arg1.v as number];
-      }
+  move = (self: ITask, bit: EnumBit, arg1: IM68KArg, arg2: IM68KArg) => {
+    switch (arg1.t) {
+      case 'dreg':
+        return move_dn_to_dst(self, bit, arg1, arg2);
     }
-
-    /* Copy IMM to ? */
-    if (arg1.t === 'imm') {
-      if (arg2.t === 'dreg') {
-        self.r.d[arg2.v as number] = arg1.v as number;
-      }
-    }
-
-    return self;
   };
 
   /****************************************************/

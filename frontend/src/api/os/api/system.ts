@@ -180,6 +180,16 @@ export class SYSTEM_API {
       return `{ t: 'imm', v: ${arg.replace('#', '')} }`;
     }
 
+    /* 16bit Absolute Address*/
+    if (arg.endsWith('w')) {
+      return `{ t: 'abs_w', v: ${arg.replace('.w', '')} }`;
+    }
+
+    /* 32bit Absolute Address*/
+    if (arg.endsWith('l')) {
+      return `{ t: 'abs_l', v: ${arg.replace('.l', '')} }`;
+    }
+
     /* Unknown */
     return `'?'`;
   };
@@ -189,11 +199,11 @@ export class SYSTEM_API {
   convertToMove8 = (data: IAmigaDataHunk) => {
     const args = data.arg.split(',');
     if (args.length === 2) {
-      return `M68K_API.move_8(self,${this.convertArg(
+      return `M68K_API.move(self,8,${this.convertArg(
         args[0]
       )}, ${this.convertArg(args[1])});`;
     } else {
-      return `bad(M68K_API.move_8(self,${data.arg}));`;
+      return `bad(M68K_API.move(self,${data.arg}));`;
     }
   };
 
