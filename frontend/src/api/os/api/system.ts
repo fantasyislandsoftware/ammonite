@@ -6,6 +6,7 @@ import { EnumDataFormat } from 'interface/data';
 import { TaskState, TaskType, useTaskStore } from 'stores/useTaskStore';
 import { v4 as uuidv4 } from 'uuid';
 import { decode as base64_decode } from 'base-64';
+import { EnumASMType, EnumBit } from './m68k/IM68k';
 
 enum ENUM_HUNK_BLOCKS {
   JAM = 'jam',
@@ -167,27 +168,27 @@ export class SYSTEM_API {
 
     /* Data register */
     if (dreg.includes(arg)) {
-      return `{ t: 'dreg', v: ${arg.replace('d', '')} }`;
+      return `{ t: '${EnumASMType.DREG}', v: ${arg.replace('d', '')} }`;
     }
 
     /* Address register */
     if (areg.includes(arg)) {
-      return `{ t: 'areg', v: ${arg.replace('d', '')} }`;
+      return `{ t: '${EnumASMType.AREG}', v: ${arg.replace('d', '')} }`;
     }
 
     /* Immediate */
     if (arg.startsWith('#')) {
-      return `{ t: 'imm', v: ${arg.replace('#', '')} }`;
+      return `{ t: '${EnumASMType.IMM}', v: ${arg.replace('#', '')} }`;
     }
 
     /* 16bit Absolute Address*/
     if (arg.endsWith('w')) {
-      return `{ t: 'abs_w', v: ${arg.replace('.w', '')} }`;
+      return `{ t: '${EnumASMType.ABS_W}', v: ${arg.replace('.w', '')} }`;
     }
 
     /* 32bit Absolute Address*/
     if (arg.endsWith('l')) {
-      return `{ t: 'abs_l', v: ${arg.replace('.l', '')} }`;
+      return `{ t: '${EnumASMType.ABS_L}', v: ${arg.replace('.l', '')} }`;
     }
 
     /* Unknown */
@@ -196,14 +197,14 @@ export class SYSTEM_API {
 
   /****************************************************/
 
-  convertToMove8 = (data: IAmigaDataHunk) => {
+  convertMove = (bit: EnumBit, data: IAmigaDataHunk) => {
     const args = data.arg.split(',');
     if (args.length === 2) {
-      return `M68K_API.move(self,8,${this.convertArg(
+      return `M68K_API.move(self,${bit},${this.convertArg(
         args[0]
       )}, ${this.convertArg(args[1])});`;
     } else {
-      return `bad(M68K_API.move(self,${data.arg}));`;
+      return `bad(M68K_API.${data.op}(self,${data.arg}));`;
     }
   };
 
@@ -220,8 +221,16 @@ export class SYSTEM_API {
             console.log(data.op, data.arg);
             switch (data.op) {
               case 'move.b':
-                line = this.convertToMove8(data);
+                line = this.convertMove(8, data);
                 console.log(line);
+                code.push(line);
+                break;
+              case 'move.w':
+                line = this.convertMove(16, data);
+                code.push(line);
+                break;
+              case 'move.l':
+                line = this.convertMove(32, data);
                 code.push(line);
                 break;
               case 'nop':
@@ -269,9 +278,17 @@ export class SYSTEM_API {
         label: block.labels,
         promise: {},
         pos: 0,
-        r: {
+        s: {
           d: [0, 0, 0, 0, 0, 0, 0, 0],
           a: [0, 0, 0, 0, 0, 0, 0, 0],
+          c: {
+            x: 0,
+            n: 0,
+            z: 0,
+            v: 0,
+            c: 0,
+          },
+          m: [],
         },
       });
     //setTasks(tasks);

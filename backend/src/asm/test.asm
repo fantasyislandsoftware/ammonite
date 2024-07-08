@@ -1,6 +1,6 @@
 .section code
 
-test:           move.b d0,d1
+test:           move.b d0,0
 
 .section data
         dc.b 255

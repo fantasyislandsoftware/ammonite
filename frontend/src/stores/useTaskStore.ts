@@ -15,6 +15,14 @@ export interface ILabel {
   pos: number;
 }
 
+export interface ICCR {
+  x: number;
+  n: number;
+  z: number;
+  v: number;
+  c: number;
+}
+
 export interface ITask {
   id: string;
   name: string;
@@ -25,9 +33,11 @@ export interface ITask {
   label: any;
   promise: any;
   pos: number;
-  r: {
+  s: {
     d: number[];
     a: number[];
+    c: ICCR;
+    m: number[];
   };
 }
 
