@@ -2,17 +2,9 @@ import { padHex, mergeHex } from 'functions/string';
 import { ITask } from 'stores/useTaskStore';
 import { bitSize, EnumBit } from '../../IM68k';
 import { IM68KArg } from '../../m68k';
-import { parse } from 'path';
+import { hex32Tohex8Array, moveC } from '../../m68kTestHelpers';
 
-const hex32Tohex8Array = (hex: string) => {
-  const arr = [];
-  for (let i = 0; i < 4; i++) {
-    arr.push(hex.substr(i * 2, 2));
-  }
-  return arr;
-};
-
-export const move_dn_to_abs_w = (
+export const move_dn_to_abs = (
   self: ITask,
   bit: EnumBit,
   arg1: IM68KArg,
@@ -21,17 +13,11 @@ export const move_dn_to_abs_w = (
   const src = padHex(self.s.d[arg1.v as number].toString(16), EnumBit.LONG);
   const hexBytes = hex32Tohex8Array(src);
   const width = bitSize[bit] / 2;
-  for (let n = 0; n < width; n += 1) {
+  const addr = arg2.v as number
+  for (let n = addr; n < width; n += 1) {
     const h = hexBytes[4 - width + n];
     self.s.m[n] = parseInt(h, 16);
   }
-
-  self.s.c = {
-    x: self.s.c.x,
-    n: 1,
-    z: 0,
-    v: 0,
-    c: 0,
-  };
+  self.s.c = moveC(self);
   return self;
 };

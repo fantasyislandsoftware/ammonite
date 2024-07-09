@@ -191,6 +191,13 @@ export class SYSTEM_API {
       return `{ t: '${EnumASMType.ABS_L}', v: ${arg.replace('.l', '')} }`;
     }
 
+    /* (An) */
+    if (arg.startsWith('(') && arg.endsWith(')')) {
+      return `{ t: '${EnumASMType.IND}', v: ${arg
+        .replace('(a', '')
+        .replace(')', '')} }`;
+    }
+
     /* Unknown */
     return `'?'`;
   };
@@ -212,6 +219,11 @@ export class SYSTEM_API {
 
   processAmigaHunks = (hunks: IHunk[]) => {
     //console.log(hunks);
+    const bits: any = {
+      b: 8,
+      w: 16,
+      l: 32,
+    };
     const code: string[] = [];
     hunks.map((hunk) => {
       if (hunk.type === ENUM_HUNK_TYPE.HUNK_CODE) {
@@ -219,18 +231,13 @@ export class SYSTEM_API {
           let line = '';
           if (index > 1) {
             console.log(data.op, data.arg);
-            switch (data.op) {
-              case 'move.b':
-                line = this.convertMove(8, data);
+            const opAll = data.op.split('.');
+            const op = data.op.split('.')[0];
+            const bitMode = bits[opAll[1]];
+            switch (op) {
+              case 'move':
+                line = this.convertMove(bitMode, data);
                 console.log(line);
-                code.push(line);
-                break;
-              case 'move.w':
-                line = this.convertMove(16, data);
-                code.push(line);
-                break;
-              case 'move.l':
-                line = this.convertMove(32, data);
                 code.push(line);
                 break;
               case 'nop':

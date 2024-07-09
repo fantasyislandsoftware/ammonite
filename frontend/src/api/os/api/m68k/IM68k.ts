@@ -10,6 +10,7 @@ export enum EnumASMType {
   DREG = 'dreg',
   AREG = 'areg',
   IMM = 'imm',
+  IND = 'ind',
   UNKNOWN = '?',
 }
 

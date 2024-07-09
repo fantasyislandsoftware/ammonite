@@ -60,3 +60,21 @@ export const autoFillCCR = () => {
     c: 0,
   };
 };
+
+export const hex32Tohex8Array = (hex: string) => {
+  const arr = [];
+  for (let i = 0; i < 4; i++) {
+    arr.push(hex.substr(i * 2, 2));
+  }
+  return arr;
+};
+
+export const moveC = (self: ITask) => {
+  return {
+    x: self.s.c.x,
+    n: 1,
+    z: 0,
+    v: 0,
+    c: 0,
+  };
+};

@@ -1,9 +1,9 @@
 import { ITask } from 'stores/useTaskStore';
 import { IM68KArg } from '../m68k';
 import { EnumASMType, EnumBit } from '../IM68k';
-import { mergeHex, padHex } from 'functions/string';
 import { move_dn_to_dn } from './move_dn_to_dn/move_dn_to_dn';
-import { move_dn_to_abs_w } from './move_dn_to_abs_w/move_dn_to_abs_w';
+import { move_dn_to_abs } from './move_dn_to_abs/move_dn_to_abs';
+import { move_dn_to_ind } from './move_dn_to_ind/move_dn_to_ind';
 
 export const move_dn_to_dst = (
   self: ITask,
@@ -15,7 +15,11 @@ export const move_dn_to_dst = (
     case EnumASMType.DREG:
       return move_dn_to_dn(self, bit, arg1, arg2);
     case EnumASMType.ABS_W:
-      return move_dn_to_abs_w(self, bit, arg1, arg2);
+      return move_dn_to_abs(self, bit, arg1, arg2);
+    case EnumASMType.ABS_L:
+      return move_dn_to_abs(self, bit, arg1, arg2);
+    case EnumASMType.IND:
+      return move_dn_to_ind(self, bit, arg1, arg2);
     default:
   }
 };

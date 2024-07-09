@@ -1,4 +1,3 @@
-import { ICCR, ITask, TaskState } from 'stores/useTaskStore';
 import { M68K_API as m68k_api } from '../../m68k';
 import { SYSTEM_API as system_api } from '../../../system';
 import {
@@ -11,20 +10,20 @@ import {
 const M68K_API = new m68k_api();
 const SYSTEM = new system_api();
 
-/* move_dn_to_abs_w_8bit */
-it(`move_dn_to_abs_w_8bit`, () => {
-  const t_move_dn_to_abs_w_8bit = makeTestTask(
+/* move_dn_to_ind_8bit */
+it(`move_dn_to_ind_8bit`, () => {
+  const t_move_dn_to_ind_8bit = makeTestTask(
     autoFillD(0xffffffff, [0xaabbccdd]),
-    autoFillA(0xffffffff),
+    autoFillA(0xffffffff, [0x00000000]),
     autoFillCCR(),
-    [0x01]
+    [0x00]
   );
   const line = SYSTEM.convertMove(8, {
     addr: '',
     hex: '',
     op: `move.b`,
-    arg: 'd0,0.w',
-  }).replace('self', `t_move_dn_to_abs_w_8bit`);
+    arg: 'd0,(a0)',
+  }).replace('self', `t_move_dn_to_ind_8bit`);
   const res = eval(line);
   expect(res.s).toEqual({
     d: [
@@ -32,7 +31,7 @@ it(`move_dn_to_abs_w_8bit`, () => {
       0xffffffff, 0xffffffff,
     ],
     a: [
-      0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff,
+      0x00000000, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff,
       0xffffffff, 0xffffffff,
     ],
     c: { x: 0, n: 1, z: 0, v: 0, c: 0 },
@@ -40,20 +39,20 @@ it(`move_dn_to_abs_w_8bit`, () => {
   });
 });
 
-/* move_dn_to_abs_w_16bit */
-it(`move_dn_to_abs_w_16bit`, () => {
-  const t_move_dn_to_abs_w_16bit = makeTestTask(
+/* move_dn_to_ind_16bit */
+it(`move_dn_to_ind_16bit`, () => {
+  const t_move_dn_to_ind_16bit = makeTestTask(
     autoFillD(0xffffffff, [0xaabbccdd]),
-    autoFillA(0xffffffff),
+    autoFillA(0xffffffff, [0x00000000]),
     autoFillCCR(),
-    [0x01, 0x01]
+    [0x00, 0x00]
   );
   const line = SYSTEM.convertMove(16, {
     addr: '',
     hex: '',
     op: `move.w`,
-    arg: 'd0,0.w',
-  }).replace('self', `t_move_dn_to_abs_w_16bit`);
+    arg: 'd0,(a0)',
+  }).replace('self', `t_move_dn_to_ind_16bit`);
   const res = eval(line);
   expect(res.s).toEqual({
     d: [
@@ -61,7 +60,7 @@ it(`move_dn_to_abs_w_16bit`, () => {
       0xffffffff, 0xffffffff,
     ],
     a: [
-      0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff,
+      0x00000000, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff,
       0xffffffff, 0xffffffff,
     ],
     c: { x: 0, n: 1, z: 0, v: 0, c: 0 },
@@ -69,20 +68,20 @@ it(`move_dn_to_abs_w_16bit`, () => {
   });
 });
 
-/* move_dn_to_abs_w_32bit */
-it(`move_dn_to_abs_w_32bit`, () => {
-  const t_move_dn_to_abs_w_32bit = makeTestTask(
+/* move_dn_to_ind_32bit */
+it(`move_dn_to_ind_32bit`, () => {
+  const t_move_dn_to_ind_32bit = makeTestTask(
     autoFillD(0xffffffff, [0xaabbccdd]),
-    autoFillA(0xffffffff),
+    autoFillA(0xffffffff, [0x00000000]),
     autoFillCCR(),
-    [0x01, 0x01, 0x01, 0x01]
+    [0x00, 0x00]
   );
   const line = SYSTEM.convertMove(32, {
     addr: '',
     hex: '',
     op: `move.l`,
-    arg: 'd0,0.w',
-  }).replace('self', `t_move_dn_to_abs_w_32bit`);
+    arg: 'd0,(a0)',
+  }).replace('self', `t_move_dn_to_ind_32bit`);
   const res = eval(line);
   expect(res.s).toEqual({
     d: [
@@ -90,7 +89,7 @@ it(`move_dn_to_abs_w_32bit`, () => {
       0xffffffff, 0xffffffff,
     ],
     a: [
-      0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff,
+      0x00000000, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff,
       0xffffffff, 0xffffffff,
     ],
     c: { x: 0, n: 1, z: 0, v: 0, c: 0 },
