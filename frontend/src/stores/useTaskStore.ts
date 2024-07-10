@@ -1,8 +1,8 @@
 import { create } from 'zustand';
 
-export enum TaskType {
+export enum TaskArch {
   JS,
-  ASM,
+  M68K,
 }
 
 export enum TaskState {
@@ -26,7 +26,7 @@ export interface ICCR {
 export interface ITask {
   id: string;
   name: string;
-  type: TaskType;
+  arch: TaskArch;
   state: TaskState;
   code: string[];
   var: any;

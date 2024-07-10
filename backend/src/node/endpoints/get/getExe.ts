@@ -43,69 +43,6 @@ const padZeros = (str: string) => {
   return "00000000".substring(str.length - 1) + str.replace("x", "");
 };
 
-const processAmiga = (data: string) => {
-  let sep: any = {};
-  let output: string[] = [];
-  let org = 0;
-  const split = data.split("\n");
-
-  //console.log(data);
-
-  split.map((line, index) => {
-    let code: string[] = [];
-    const addr = line.substring(0, 8);
-    const hex = line.substring(10, 19);
-    const op = line.substring(36, 44).trim();
-    const arg = line.substring(44).trim();
-
-    if (addr.trim() !== "") {
-      sep[addr] = { addr, hex, op, arg };
-    }
-  });
-
-  let i = 0;
-  for (const key in sep) {
-    const addr = sep[key].addr.trim();
-    const hex = sep[key].hex.trim();
-    if (hex === "0000 03e9") {
-      org = i + 2;
-    }
-    i++;
-    const op = sep[key].op.trim();
-    const arg = sep[key].arg.trim();
-    switch (op) {
-      case "move.b":
-        output.push(`M68K_API.move_8(self,"${arg}");`);
-        break;
-      case "bra.b":
-        const i = Object.keys(sep).indexOf(`${padZeros(arg)}`);
-        output.push(`M68K_API.bra(self,${i});`);
-        break;
-      case "rts":
-        output.push("M68K_API.rts(self);");
-        break;
-      default:
-        const l = `M68K_API.nc("${op}${arg.length > 0 ? " " : ""}${arg}");`;
-        if (l.length > 0) {
-          output.push(l);
-        }
-    }
-  }
-
-  output.map((line) => {
-    if (line.includes("move_8")) {
-      //console.log(line);
-    }
-    //console.log(`${line}`);
-  });
-
-  return { code: output.join("\n"), org: org };
-};
-
-const processJam = (data: string) => {
-  return { code: data, org: 0 };
-};
-
 const hunkTypes: any = {
   "0000 03e7": "HUNK_UNIT",
   "0000 03e8": "HUNK_NAME",
@@ -133,20 +70,24 @@ const hunkTypes: any = {
 
 const getAmigaHunks = (data: string) => {
   let hunks: any = [];
+  let hunkInfo: any = [];
   let hunkData: any = [];
 
   let hunkType = "Unknown";
 
   const hunkLines = data.split("\n");
+  let offset = 0;
   hunkLines.map((line) => {
     const addr = line.substring(0, 8);
-    const hex = line.substring(10, 19);
+    const hex = line.substring(10, 19).trim();
     const op = line.substring(36, 44).trim();
     const arg = line.substring(44).trim();
 
-    if (hex in hunkTypes && hunkData.length > 0) {
-      hunks.push({ type: hunkType, data: hunkData });
+    if (hex in hunkTypes && hunkInfo.length > 0) {
+      hunks.push({ type: hunkType, hunkData: hunkData, hunkInfo: hunkInfo });
+      hunkInfo = [];
       hunkData = [];
+      offset = 0;
     }
 
     if (hex in hunkTypes) {
@@ -154,11 +95,22 @@ const getAmigaHunks = (data: string) => {
     }
 
     if (addr.length) {
-      hunkData.push({ addr, hex, op, arg });
+      if (offset > 1) {
+        const hexArray = hex.split(" ");
+        hexArray.map((val) => {
+          for (let n = 0; n < 2; n++) {
+            const x = val.slice(n * 2, n * 2 + 2);
+            hunkData.push(parseInt(x, 16));
+          }
+        });
+      }
+      hunkInfo.push({ addr, hex, op, arg });
     }
+
+    offset++;
   });
 
-  hunks.push({ type: hunkType, data: hunkData });
+  hunks.push({ type: hunkType, hunkData: hunkData, hunkInfo: hunkInfo });
 
   return hunks;
 };
@@ -177,7 +129,7 @@ const getJamHunks = (data: string) => {
   lines.map((line, index) => {
     hunkData.push({ line: index, command: line });
   });
-  hunks.push({ type: hunkType, data: hunkData });
+  hunks.push({ type: hunkType, hunkData: hunkData });
   return hunks;
 };
 

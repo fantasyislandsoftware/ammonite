@@ -1,6 +1,5 @@
-import { ITask, TaskState, TaskType, useTaskStore } from 'stores/useTaskStore';
+import { ITask, TaskArch, TaskState, useTaskStore } from 'stores/useTaskStore';
 
-import { DO_NOT_PROCESS } from 'constants/globals/misc';
 import { SYSTEM_API as system_api } from 'api/os/api/system';
 import { LOGIC_API as logic_api } from 'api/os/api/logic';
 import { FONT_API as font_api } from 'api/os/api/font';
@@ -21,21 +20,13 @@ export const startTaskProcessor = () => {
   const { tasks, setTasks } = useTaskStore.getState();
   return setInterval(() => {
     tasks.map((task) => {
-      task = execCommand(task);
+      task = execInstruction(task);
     });
     setTasks(tasks);
   }, 1);
 };
 
-export const execCommand = (self: ITask) => {
-  for (let n = self.pos; n < self.code.length; n++) {
-    if (self.code[n] === DO_NOT_PROCESS) {
-      continue;
-    }
-    self.pos = n;
-    break;
-  }
-
+const execJamInstruction = (self: ITask) => {
   const line = self.code[self.pos];
 
   try {
@@ -52,6 +43,20 @@ export const execCommand = (self: ITask) => {
   if (self.pos >= self.code.length) {
     killTask(self.id);
   }
+
+  return self;
+};
+
+const execM68KInstruction = (self: ITask) => {
+  return self;
+};
+
+export const execInstruction = (task: ITask) => {
+  const self =
+    task.arch === TaskArch.JS
+      ? execJamInstruction(task)
+      : execM68KInstruction(task);
+
   return self;
 };
 

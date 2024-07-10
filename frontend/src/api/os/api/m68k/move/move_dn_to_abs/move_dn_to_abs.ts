@@ -13,7 +13,7 @@ export const move_dn_to_abs = (
   const src = padHex(self.s.d[arg1.v as number].toString(16), EnumBit.LONG);
   const hexBytes = hex32Tohex8Array(src);
   const width = bitSize[bit] / 2;
-  const addr = arg2.v as number
+  const addr = arg2.v as number;
   for (let n = addr; n < width; n += 1) {
     const h = hexBytes[4 - width + n];
     self.s.m[n] = parseInt(h, 16);

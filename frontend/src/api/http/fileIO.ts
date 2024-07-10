@@ -32,6 +32,7 @@ export const getExe = async (path: string) => {
     method: 'GET',
   });
   const response = await request.json();
+  console.log(response);
   return response;
 };
 

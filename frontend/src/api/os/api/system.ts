@@ -3,12 +3,12 @@ import { ENV } from 'constants/globals/env';
 import { BREAK, DO_NOT_PROCESS } from 'constants/globals/misc';
 import { SYSTEM } from 'constants/globals/system';
 import { EnumDataFormat } from 'interface/data';
-import { TaskState, TaskType, useTaskStore } from 'stores/useTaskStore';
+import { TaskState, TaskArch, useTaskStore } from 'stores/useTaskStore';
 import { v4 as uuidv4 } from 'uuid';
 import { decode as base64_decode } from 'base-64';
 import { EnumASMType, EnumBit } from './m68k/IM68k';
 
-enum ENUM_HUNK_BLOCKS {
+enum ENUM_HUNK_FILE_TYPE {
   JAM = 'jam',
   AMIGA = 'amiga',
 }
@@ -23,20 +23,22 @@ interface IJamDataHunk {
   command: string;
 }
 
-interface IAmigaDataHunk {
+interface IAmigaHunkInfo {
   addr: string;
   hex: string;
   op: string;
   arg: string;
 }
 
+type IAmigaDataHunk = number[];
+
 interface IHunk {
   type: string;
-  data: IJamDataHunk[] & IAmigaDataHunk[];
+  hunkData: IJamDataHunk[] & IAmigaHunkInfo[];
 }
 
 interface IHunks {
-  type: ENUM_HUNK_BLOCKS;
+  type: ENUM_HUNK_FILE_TYPE;
   hunks: IHunk[];
 }
 
@@ -75,7 +77,7 @@ export class SYSTEM_API {
     hunks.map((hunk) => {
       if (hunk.type === ENUM_HUNK_TYPE.HUNK_CODE) {
         const imports: { name: string; file: string | undefined }[] = [];
-        hunk.data.map((data) => {
+        hunk.hunkData.map((data) => {
           /* Squash */
           data.command = this.squash(data.command);
 
@@ -153,11 +155,17 @@ export class SYSTEM_API {
           }
         });
 
-        return { code, labels };
+        return { code, labels, mem: [] };
       }
     });
 
-    return { code, labels };
+    return { code, labels, mem: [] };
+  };
+
+  /****************************************************/
+
+  processAmigaHunks = (hunks: IHunk[]) => {
+    return { code: [], labels: {}, mem: [] };
   };
 
   /****************************************************/
@@ -204,58 +212,6 @@ export class SYSTEM_API {
 
   /****************************************************/
 
-  convertMove = (bit: EnumBit, data: IAmigaDataHunk) => {
-    const args = data.arg.split(',');
-    if (args.length === 2) {
-      return `M68K_API.move(self,${bit},${this.convertArg(
-        args[0]
-      )}, ${this.convertArg(args[1])});`;
-    } else {
-      return `bad(M68K_API.${data.op}(self,${data.arg}));`;
-    }
-  };
-
-  /****************************************************/
-
-  processAmigaHunks = (hunks: IHunk[]) => {
-    //console.log(hunks);
-    const bits: any = {
-      b: 8,
-      w: 16,
-      l: 32,
-    };
-    const code: string[] = [];
-    hunks.map((hunk) => {
-      if (hunk.type === ENUM_HUNK_TYPE.HUNK_CODE) {
-        hunk.data.map((data: IAmigaDataHunk, index) => {
-          let line = '';
-          if (index > 1) {
-            console.log(data.op, data.arg);
-            const opAll = data.op.split('.');
-            const op = data.op.split('.')[0];
-            const bitMode = bits[opAll[1]];
-            switch (op) {
-              case 'move':
-                line = this.convertMove(bitMode, data);
-                console.log(line);
-                code.push(line);
-                break;
-              case 'nop':
-                code.push('M68K_API.nop();');
-                break;
-              default:
-                code.push(`/* ${data.op} ${data.arg} * /`);
-                break;
-            }
-          }
-        });
-      }
-    });
-    return { code, labels: {} };
-  };
-
-  /****************************************************/
-
   exec = async (path: string, debug?: true) => {
     const name = path.substring(path.lastIndexOf('/') + 1);
     const { tasks, setTasks } = useTaskStore.getState();
@@ -264,21 +220,19 @@ export class SYSTEM_API {
     let block: any = {};
 
     switch (data.type) {
-      case ENUM_HUNK_BLOCKS.JAM:
+      case ENUM_HUNK_FILE_TYPE.JAM:
         block = this.processJamHunks(data.hunks);
         break;
-      case ENUM_HUNK_BLOCKS.AMIGA:
+      case ENUM_HUNK_FILE_TYPE.AMIGA:
         block = this.processAmigaHunks(data.hunks);
         break;
     }
-
-    //console.log(block.code);
 
     !debug &&
       tasks.push({
         id: uuidv4(),
         name: name,
-        type: TaskType.JS,
+        arch: TaskArch.JS,
         state: TaskState.RUNNING,
         code: block.code,
         var: {},
@@ -295,7 +249,7 @@ export class SYSTEM_API {
             v: 0,
             c: 0,
           },
-          m: [],
+          m: block.mem,
         },
       });
     //setTasks(tasks);

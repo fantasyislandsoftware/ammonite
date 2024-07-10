@@ -1,4 +1,4 @@
-import { ICCR, ITask, TaskState } from 'stores/useTaskStore';
+import { ICCR, ITask, TaskArch, TaskState } from 'stores/useTaskStore';
 
 export const makeTestTask = (
   d: number[],
@@ -12,7 +12,7 @@ export const makeTestTask = (
       code: [],
       pos: 0,
       state: TaskState.RUNNING,
-      type: 1,
+      arch: TaskArch.M68K,
       name: '',
       var: undefined,
       label: undefined,

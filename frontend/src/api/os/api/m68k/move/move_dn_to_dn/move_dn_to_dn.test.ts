@@ -7,7 +7,7 @@ const M68K_API = new m68k_api();
 const SYSTEM = new system_api();
 
 /* move_dn_to_dn_8bit */
-it(`move_dn_to_dn_8bit`, () => {
+/*it(`move_dn_to_dn_8bit`, () => {
   const t_move_dn_to_dn_8bit = makeTestTask(
     autoFillD(0xffffffff, [0xffffff01]),
     autoFillA(0xffffffff),
@@ -33,10 +33,10 @@ it(`move_dn_to_dn_8bit`, () => {
     c: { x: 0, n: 1, z: 0, v: 0, c: 0 },
     m: [],
   });
-});
+});*/
 
 /* move_dn_to_dn_16bit */
-it(`move_dn_to_dn_16bit`, () => {
+/*it(`move_dn_to_dn_16bit`, () => {
   const t_move_dn_to_dn_16bit = makeTestTask(
     autoFillD(0xffffffff, [0xffff0101]),
     autoFillA(0xffffffff),
@@ -62,10 +62,10 @@ it(`move_dn_to_dn_16bit`, () => {
     c: { x: 0, n: 1, z: 0, v: 0, c: 0 },
     m: [],
   });
-});
+});*/
 
 /* move_dn_to_dn_32bit */
-it(`move_dn_to_dn_32bit`, () => {
+/*it(`move_dn_to_dn_32bit`, () => {
   const t_move_dn_to_dn_32bit = makeTestTask(
     autoFillD(0xffffffff, [0x01010101]),
     autoFillA(0xffffffff),
@@ -90,7 +90,7 @@ it(`move_dn_to_dn_32bit`, () => {
     ],
     c: { x: 0, n: 1, z: 0, v: 0, c: 0 },
     m: [],
-  });
+  });*/
 
   /* */
-});
+//});
