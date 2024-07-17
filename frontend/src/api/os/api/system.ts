@@ -23,18 +23,16 @@ interface IJamDataHunk {
   command: string;
 }
 
-interface IAmigaHunkInfo {
+interface IAmigaDataHunk {
   addr: string;
   hex: string;
   op: string;
   arg: string;
 }
 
-type IAmigaDataHunk = number[];
-
 interface IHunk {
-  type: string;
-  hunkData: IJamDataHunk[] & IAmigaHunkInfo[];
+  type: ENUM_HUNK_TYPE;
+  hunkData: IJamDataHunk[] & IAmigaDataHunk[];
 }
 
 interface IHunks {
@@ -154,60 +152,32 @@ export class SYSTEM_API {
             labels[label] = index;
           }
         });
-
-        return { code, labels, mem: [] };
       }
     });
 
-    return { code, labels, mem: [] };
+    return { arch: TaskArch.JS, code, labels, mem: [], pos: 0 };
   };
 
   /****************************************************/
 
   processAmigaHunks = (hunks: IHunk[]) => {
-    return { code: [], labels: {}, mem: [] };
-  };
+    let pos = 0;
+    const mem: number[] = [];
+    hunks.map((hunk) => {
+      hunk.hunkData.map((data: IAmigaDataHunk) => {
+        const hexArray = data.hex.split(' ');
+        hexArray.map((val) => {
+          if (val === '03e9') {
+            pos = mem.length + 6;
+          }
+          for (let n = 0; n < 2; n++) {
+            mem.push(parseInt(val.slice(n * 2, n * 2 + 2), 16));
+          }
+        });
+      });
+    });
 
-  /****************************************************/
-
-  convertArg = (arg: string) => {
-    const dreg = ['d0', 'd1', 'd2', 'd3', 'd4', 'd5', 'd6', 'd7'];
-    const areg = ['a0', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7'];
-
-    /* Data register */
-    if (dreg.includes(arg)) {
-      return `{ t: '${EnumASMType.DREG}', v: ${arg.replace('d', '')} }`;
-    }
-
-    /* Address register */
-    if (areg.includes(arg)) {
-      return `{ t: '${EnumASMType.AREG}', v: ${arg.replace('d', '')} }`;
-    }
-
-    /* Immediate */
-    if (arg.startsWith('#')) {
-      return `{ t: '${EnumASMType.IMM}', v: ${arg.replace('#', '')} }`;
-    }
-
-    /* 16bit Absolute Address*/
-    if (arg.endsWith('w')) {
-      return `{ t: '${EnumASMType.ABS_W}', v: ${arg.replace('.w', '')} }`;
-    }
-
-    /* 32bit Absolute Address*/
-    if (arg.endsWith('l')) {
-      return `{ t: '${EnumASMType.ABS_L}', v: ${arg.replace('.l', '')} }`;
-    }
-
-    /* (An) */
-    if (arg.startsWith('(') && arg.endsWith(')')) {
-      return `{ t: '${EnumASMType.IND}', v: ${arg
-        .replace('(a', '')
-        .replace(')', '')} }`;
-    }
-
-    /* Unknown */
-    return `'?'`;
+    return { arch: TaskArch.M68K, code: [], labels: {}, mem: mem, pos: pos };
   };
 
   /****************************************************/
@@ -232,13 +202,13 @@ export class SYSTEM_API {
       tasks.push({
         id: uuidv4(),
         name: name,
-        arch: TaskArch.JS,
+        arch: block.arch,
         state: TaskState.RUNNING,
         code: block.code,
         var: {},
         label: block.labels,
         promise: {},
-        pos: 0,
+        pos: block.pos,
         s: {
           d: [0, 0, 0, 0, 0, 0, 0, 0],
           a: [0, 0, 0, 0, 0, 0, 0, 0],
@@ -252,7 +222,7 @@ export class SYSTEM_API {
           m: block.mem,
         },
       });
-    //setTasks(tasks);
+    setTasks(tasks);
   };
 
   /****************************************************/

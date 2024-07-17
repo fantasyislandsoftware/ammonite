@@ -19,3 +19,12 @@ export const bitSize = {
   16: 4,
   32: 8,
 };
+
+export enum EnumM68KOP {
+  MOVE = 'move',
+  BRA = 'bra',
+  RTS = 'rts',
+  NOP = 'nop',
+  NC = 'nc',
+  UNKNOWN = 'unknown',
+}

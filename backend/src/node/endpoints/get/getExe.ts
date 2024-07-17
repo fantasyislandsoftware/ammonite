@@ -70,7 +70,6 @@ const hunkTypes: any = {
 
 const getAmigaHunks = (data: string) => {
   let hunks: any = [];
-  let hunkInfo: any = [];
   let hunkData: any = [];
 
   let hunkType = "Unknown";
@@ -83,9 +82,8 @@ const getAmigaHunks = (data: string) => {
     const op = line.substring(36, 44).trim();
     const arg = line.substring(44).trim();
 
-    if (hex in hunkTypes && hunkInfo.length > 0) {
-      hunks.push({ type: hunkType, hunkData: hunkData, hunkInfo: hunkInfo });
-      hunkInfo = [];
+    if (hex in hunkTypes && hunkData.length > 0) {
+      hunks.push({ type: hunkType, hunkData: hunkData });
       hunkData = [];
       offset = 0;
     }
@@ -95,7 +93,7 @@ const getAmigaHunks = (data: string) => {
     }
 
     if (addr.length) {
-      if (offset > 1) {
+      /*if (offset > 1) {
         const hexArray = hex.split(" ");
         hexArray.map((val) => {
           for (let n = 0; n < 2; n++) {
@@ -103,14 +101,14 @@ const getAmigaHunks = (data: string) => {
             hunkData.push(parseInt(x, 16));
           }
         });
-      }
-      hunkInfo.push({ addr, hex, op, arg });
+      }*/
+      hunkData.push({ addr, hex, op, arg });
     }
 
     offset++;
   });
 
-  hunks.push({ type: hunkType, hunkData: hunkData, hunkInfo: hunkInfo });
+  hunks.push({ type: hunkType, hunkData: hunkData });
 
   return hunks;
 };

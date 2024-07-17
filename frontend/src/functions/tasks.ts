@@ -8,6 +8,17 @@ import { WINDOW_API as window_api } from 'api/os/api/window';
 import { ICON_API as icon_api } from 'api/os/api/icon';
 import { M68K_API as m68k_api } from 'api/os/api/m68k/m68k';
 
+import {
+  convertArg,
+  processMOVE,
+  processRTS,
+} from 'api/os/api/m68k/m68kFunctions';
+import { EnumBit, EnumM68KOP } from 'api/os/api/m68k/IM68k';
+
+import { opTable } from 'api/os/api/m68k/opTable';
+import { hex2bin } from './string';
+console.log(opTable);
+
 const SYSTEM_API = new system_api();
 const LOGIC_API = new logic_api();
 const FONT_API = new font_api();
@@ -28,7 +39,6 @@ export const startTaskProcessor = () => {
 
 const execJamInstruction = (self: ITask) => {
   const line = self.code[self.pos];
-
   try {
     eval(line);
   } catch (e) {
@@ -47,17 +57,81 @@ const execJamInstruction = (self: ITask) => {
   return self;
 };
 
+const matchPattern = (pattern: string, value: string) => {
+  const long = 16;
+  const p = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+  for (let i = 0; i < pattern.length; i++) {
+    if (pattern[i] === value[i]) {
+      p[i] = 1;
+    } else {
+      p[i] = 0;
+    }
+    if (pattern[i] === 'X') {
+      p[i] = 1;
+    }
+  }
+
+  let x = 0;
+  p.map((val) => {
+    if (val === 1) {
+      x++;
+    }
+  });
+
+  return x === long;
+};
+
 const execM68KInstruction = (self: ITask) => {
+  const inst = hex2bin(
+    `${self.s.m[self.pos].toString(16).padStart(2, '0')}${self.s.m[self.pos + 1]
+      .toString(16)
+      .padStart(2, '0')}`
+  );
+
+  const data = hex2bin(
+    `${self.s.m[self.pos + 2].toString(16).padStart(2, '0')}${self.s.m[
+      self.pos + 3
+    ]
+      .toString(16)
+      .padStart(2, '0')}`
+  );
+
+  let opName: string = EnumM68KOP.UNKNOWN;
+  let found = false;
+  let length = 0;
+  opTable.map((row: any) => {
+    if (matchPattern(row.pattern, inst)) {
+      opName = row.opName;
+      found = true;
+    }
+  });
+
+  if (found) {
+    switch (opName) {
+      case EnumM68KOP.MOVE:
+        length = processMOVE(self, inst, data);
+        break;
+    }
+
+    console.log(inst);
+    console.log(opName);
+  } else {
+    console.log('unknown');
+  }
+
+  killTask(self.id);
+
   return self;
 };
 
 export const execInstruction = (task: ITask) => {
-  const self =
-    task.arch === TaskArch.JS
-      ? execJamInstruction(task)
-      : execM68KInstruction(task);
-
-  return self;
+  switch (task.arch) {
+    case TaskArch.JS:
+      return execJamInstruction(task);
+    case TaskArch.M68K:
+      return execM68KInstruction(task);
+  }
 };
 
 const killTask = (id: string) => {

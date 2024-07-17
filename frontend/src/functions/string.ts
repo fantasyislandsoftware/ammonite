@@ -30,3 +30,7 @@ export const mergeHex = (src: string, dst: string, bit: EnumBit) => {
 
   return s;
 };
+
+export const hex2bin = (hex: string) => {
+  return parseInt(hex, 16).toString(2).padStart(16, '0');
+};
