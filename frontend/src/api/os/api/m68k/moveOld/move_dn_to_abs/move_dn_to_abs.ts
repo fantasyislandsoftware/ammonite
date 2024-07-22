@@ -1,7 +1,6 @@
 import { padHex, mergeHex } from 'functions/string';
 import { ITask } from 'stores/useTaskStore';
-import { bitSize, EnumBit } from '../../IM68k';
-import { IM68KArg } from '../../m68k';
+import { bitSize, EnumBit, IM68KArg } from '../../IM68k';
 import { hex32Tohex8Array, moveC } from '../../m68kTestHelpers';
 
 export const move_dn_to_abs = (

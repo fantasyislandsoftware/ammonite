@@ -28,3 +28,8 @@ export enum EnumM68KOP {
   NC = 'nc',
   UNKNOWN = 'unknown',
 }
+
+export interface IM68KArg {
+  t: string;
+  v: string | number;
+}

@@ -1,7 +1,6 @@
 import { ITask } from 'stores/useTaskStore';
-import { EnumBit } from '../../IM68k';
+import { EnumBit, IM68KArg } from '../../IM68k';
 import { padHex, mergeHex } from 'functions/string';
-import { IM68KArg } from '../../m68k';
 import { moveC } from '../../m68kTestHelpers';
 
 export const move_dn_to_dn = (

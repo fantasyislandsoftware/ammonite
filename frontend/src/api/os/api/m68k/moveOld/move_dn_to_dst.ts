@@ -1,6 +1,5 @@
 import { ITask } from 'stores/useTaskStore';
-import { IM68KArg } from '../m68k';
-import { EnumASMType, EnumBit } from '../IM68k';
+import { EnumASMType, EnumBit, IM68KArg } from '../IM68k';
 import { move_dn_to_dn } from './move_dn_to_dn/move_dn_to_dn';
 import { move_dn_to_abs } from './move_dn_to_abs/move_dn_to_abs';
 import { move_dn_to_ind } from './move_dn_to_ind/move_dn_to_ind';

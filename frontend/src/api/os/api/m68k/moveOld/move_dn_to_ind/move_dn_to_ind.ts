@@ -1,6 +1,5 @@
 import { ITask } from 'stores/useTaskStore';
-import { bitSize, EnumBit } from '../../IM68k';
-import { IM68KArg } from '../../m68k';
+import { bitSize, EnumBit, IM68KArg } from '../../IM68k';
 import { padHex } from 'functions/string';
 import { hex32Tohex8Array, moveC } from '../../m68kTestHelpers';
 

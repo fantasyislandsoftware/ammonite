@@ -6,18 +6,12 @@ import { FONT_API as font_api } from 'api/os/api/font';
 import { SCREEN_API as screen_api } from 'api/os/api/screen';
 import { WINDOW_API as window_api } from 'api/os/api/window';
 import { ICON_API as icon_api } from 'api/os/api/icon';
-import { M68K_API as m68k_api } from 'api/os/api/m68k/m68k';
 
-import {
-  convertArg,
-  processMOVE,
-  processRTS,
-} from 'api/os/api/m68k/m68kFunctions';
+import { convertArg, processMOVE } from 'api/os/api/m68k/m68kHelpers';
 import { EnumBit, EnumM68KOP } from 'api/os/api/m68k/IM68k';
 
 import { opTable } from 'api/os/api/m68k/opTable';
 import { hex2bin } from './string';
-console.log(opTable);
 
 const SYSTEM_API = new system_api();
 const LOGIC_API = new logic_api();
@@ -25,7 +19,6 @@ const FONT_API = new font_api();
 const SCREEN_API = new screen_api();
 const WINDOW_API = new window_api();
 const ICON_API = new icon_api();
-const M68K_API = new m68k_api();
 
 export const startTaskProcessor = () => {
   const { tasks, setTasks } = useTaskStore.getState();
@@ -113,12 +106,14 @@ const execM68KInstruction = (self: ITask) => {
         length = processMOVE(self, inst, data);
         break;
     }
-
-    console.log(inst);
-    console.log(opName);
   } else {
     console.log('unknown');
+    killTask(self.id);
   }
+
+  console.log(length);
+
+  self.pos += length;
 
   killTask(self.id);
 
