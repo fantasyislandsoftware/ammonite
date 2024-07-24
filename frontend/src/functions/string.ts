@@ -34,3 +34,11 @@ export const mergeHex = (src: string, dst: string, bit: EnumBit) => {
 export const hex2bin = (hex: string) => {
   return parseInt(hex, 16).toString(2).padStart(16, '0');
 };
+
+export const bin2int = (bin: string) => {
+  return parseInt(bin, 16);
+};
+
+export const int2Hex = (int: number) => {
+  return int.toString(16);
+}

@@ -1,6 +1,7 @@
 import { ITask } from 'stores/useTaskStore';
 import { EnumASMType, EnumBit, EnumM68KOP } from './IM68k';
 import { MOVE_DX_TO_DX } from './move/MOVE_DX_TO_DX/MOVE_DX_TO_DX';
+import { MOVE_DX_TO_ABS } from './move/MOVE_DX_TO_ABS.ts/MOVE_DX_TO_ABS';
 
 export const convertArg = (arg: string) => {
   const dreg = ['d0', 'd1', 'd2', 'd3', 'd4', 'd5', 'd6', 'd7'];
@@ -126,7 +127,7 @@ export const processOpSize = (opSize_bin: string) => {
   return opSize;
 };
 
-export const processMOVE = (task: ITask, i: string, d: string) => {
+export const processMOVE = (task: ITask, i: string, d_bin: string) => {
   /* 0123456789ABCDEF */
   /* 0000000000000000 */
 
@@ -147,12 +148,12 @@ export const processMOVE = (task: ITask, i: string, d: string) => {
   /* Source */
   const xt_src_bin = `${i[10]}${i[11]}${i[12]}`;
   const xn_src_bin = `${i[13]}${i[14]}${i[15]}`;
-  src = processXNXT(xt_src_bin, xn_src_bin, d);
+  src = processXNXT(xt_src_bin, xn_src_bin, d_bin);
 
   /* Destination */
   const xn_dst_bin = `${i[4]}${i[5]}${i[6]}`;
   const xt_dst_bin = `${i[7]}${i[8]}${i[9]}`;
-  dst = processXNXT(xt_dst_bin, xn_dst_bin, d);
+  dst = processXNXT(xt_dst_bin, xn_dst_bin, d_bin);
 
   if (src.length === 4 || dst.length === 4) {
     length = 4;
@@ -171,6 +172,9 @@ export const processMOVE = (task: ITask, i: string, d: string) => {
         parseInt(xn_src_bin, 2),
         parseInt(xn_dst_bin, 2)
       );
+      break;
+    case 'move.x dn,x.w':
+      MOVE_DX_TO_ABS(task, opSize, xn_src_bin, d_bin);
       break;
   }
 

@@ -111,8 +111,6 @@ const execM68KInstruction = (self: ITask) => {
     killTask(self.id);
   }
 
-  console.log(length);
-
   self.pos += length;
 
   killTask(self.id);
