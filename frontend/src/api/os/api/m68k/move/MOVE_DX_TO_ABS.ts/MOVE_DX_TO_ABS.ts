@@ -1,32 +1,32 @@
-import { bin2int } from 'functions/string';
 import { ITask } from 'stores/useTaskStore';
-import { moveC } from '../../m68kTestHelpers';
+import { EnumOpBit } from 'functions/dataHandling/IdataHandling';
+import {
+  copyLowLowByteToLongValue,
+  copyLowWordToLongValue,
+} from 'functions/dataHandling/dataHandling';
 
 export const MOVE_DX_TO_ABS = (
   task: ITask,
   opSize: number,
-  srcDN_bin: string,
-  dstABS_bin: string
+  srcDN: number,
+  dstAddr: number
 ) => {
-  const srcDN = bin2int(srcDN_bin);
-  console.log(srcDN);
+  const srcLong = task.s.d[srcDN];
+  const dstLong = task.s.m[dstAddr];
+  let res = -1;
 
-  const srcDN_data = task.s.d[srcDN];
-  console.log(srcDN_data);
-
-  //const srcData = padHex(task.s.d[srcDN].toString(16), EnumBit.LONG);
-  //console.log(srcData);
-
-  //console.log(dstABS);
-  //console.log(dstData);
-  //const srcData = hex32Tohex8Array(src);
-  //const width = bitSize[opSize] / 2;
-  //console.log(width);
-  //const addr = dstABS;
-  //for (let n = addr; n < width; n += 1) {
-  //  const h = hexBytes[4 - width + n];
-  //  task.s.m[n] = parseInt(h, 16);
-  //}
-  task.s.c = moveC(task);
+  switch (opSize) {
+    case EnumOpBit.BYTE:
+      res = copyLowLowByteToLongValue(srcLong, dstLong);
+      task.s.m[dstAddr] = res;
+      break;
+    case EnumOpBit.WORD:
+      res = copyLowWordToLongValue(srcLong, dstLong);
+      task.s.m[dstAddr] = res;
+      break;
+    case EnumOpBit.LONG:
+      task.s.m[dstAddr] = srcLong;
+      break;
+  }
   return task;
 };

@@ -175,7 +175,7 @@ export const processMOVE = (task: ITask, i: string, d_bin: string) => {
       );
       break;
     case 'move.x dn,x.w':
-      MOVE_DX_TO_ABS(task, opSize, xn_src_bin, d_bin);
+      MOVE_DX_TO_ABS(task, opSize, parseInt(xn_src_bin, 2), parseInt(d_bin, 2));
       break;
   }
 
