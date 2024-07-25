@@ -8,7 +8,7 @@ import { WINDOW_API as window_api } from 'api/os/api/window';
 import { ICON_API as icon_api } from 'api/os/api/icon';
 
 import { convertArg, processMOVE } from 'api/os/api/m68k/m68kHelpers';
-import { EnumBit, EnumM68KOP } from 'api/os/api/m68k/IM68k';
+import { EnumM68KOP } from 'api/os/api/m68k/IM68k';
 
 import { opTable } from 'api/os/api/m68k/opTable';
 import { hex2bin } from './string';

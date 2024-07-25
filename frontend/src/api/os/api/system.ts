@@ -5,8 +5,6 @@ import { SYSTEM } from 'constants/globals/system';
 import { EnumDataFormat } from 'interface/data';
 import { TaskState, TaskArch, useTaskStore } from 'stores/useTaskStore';
 import { v4 as uuidv4 } from 'uuid';
-import { decode as base64_decode } from 'base-64';
-import { EnumASMType, EnumBit } from './m68k/IM68k';
 
 enum ENUM_HUNK_FILE_TYPE {
   JAM = 'jam',

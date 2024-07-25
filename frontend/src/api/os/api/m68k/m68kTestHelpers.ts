@@ -1,11 +1,51 @@
 import { ICCR, ITask, TaskArch, TaskState } from 'stores/useTaskStore';
 
-export const makeTestTask = (
-  d: number[],
-  a: number[],
-  c: ICCR,
-  m: number[]
-) => {
+export interface IMakeTestTaskParams {
+  memoryBufferSize: number;
+  d?: number[];
+  a?: number[];
+  m?: number[];
+}
+
+export const makeTestTask = (params: IMakeTestTaskParams) => {
+  const { memoryBufferSize, d, m } = params;
+
+  /* DN */
+  const initD: number[] = [];
+  for (let i = 0; i < 8; i++) {
+    initD.push(0);
+  }
+  d?.forEach((v, i) => {
+    initD[i] = v;
+  });
+
+  /* AN */
+  const initA: number[] = [];
+  for (let i = 0; i < 8; i++) {
+    initA.push(0);
+  }
+  initA?.forEach((v, i) => {
+    initA[i] = v;
+  });
+
+  /* Memory */
+  const initM: number[] = [];
+  for (let i = 0; i < memoryBufferSize; i++) {
+    initM.push(0);
+  }
+  m?.forEach((v, i) => {
+    initM[i] = v;
+  });
+
+  /* CCR */
+  const c: ICCR = {
+    x: 0,
+    n: 0,
+    z: 0,
+    v: 0,
+    c: 0,
+  };
+
   class FreshTask {
     public task: ITask = {
       id: '1',
@@ -18,10 +58,10 @@ export const makeTestTask = (
       label: undefined,
       promise: undefined,
       s: {
-        d: d,
-        a: a,
+        d: initD,
+        a: initA,
         c: c,
-        m: m,
+        m: initM,
       },
     };
   }

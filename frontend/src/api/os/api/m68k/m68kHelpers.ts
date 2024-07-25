@@ -1,7 +1,8 @@
 import { ITask } from 'stores/useTaskStore';
-import { EnumASMType, EnumBit, EnumM68KOP } from './IM68k';
+import { EnumASMType, EnumM68KOP } from './IM68k';
 import { MOVE_DX_TO_DX } from './move/MOVE_DX_TO_DX/MOVE_DX_TO_DX';
 import { MOVE_DX_TO_ABS } from './move/MOVE_DX_TO_ABS.ts/MOVE_DX_TO_ABS';
+import { EnumBit, EnumOpBit } from 'functions/dataHandling/IdataHandling';
 
 export const convertArg = (arg: string) => {
   const dreg = ['d0', 'd1', 'd2', 'd3', 'd4', 'd5', 'd6', 'd7'];
@@ -110,19 +111,19 @@ const processXNXT = (xt_bin: string, xn_bin: string, d: string) => {
 };
 
 export const processOpSize = (opSize_bin: string) => {
-  let opSize: EnumBit = EnumBit.WORD;
+  let opSize: EnumOpBit = EnumOpBit.WORD;
   switch (opSize_bin) {
     case '01':
-      opSize = EnumBit.BYTE;
+      opSize = EnumOpBit.BYTE;
       break;
     case '11':
-      opSize = EnumBit.WORD;
+      opSize = EnumOpBit.WORD;
       break;
     case '10':
-      opSize = EnumBit.LONG;
+      opSize = EnumOpBit.LONG;
       break;
     default:
-      opSize = EnumBit.WORD;
+      opSize = EnumOpBit.WORD;
   }
   return opSize;
 };

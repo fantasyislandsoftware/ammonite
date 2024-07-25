@@ -1,18 +1,33 @@
-import { mergeHex, padHex } from 'functions/string';
 import { ITask } from 'stores/useTaskStore';
-import { EnumBit } from '../../IM68k';
-import { moveC } from '../../m68kTestHelpers';
+import { EnumOpBit } from 'functions/dataHandling/IdataHandling';
+import {
+  copyLowLowByteToLongValue,
+  copyLowWordToLongValue,
+} from 'functions/dataHandling/dataHandling';
 
 export const MOVE_DX_TO_DX = (
   task: ITask,
-  opSize: number,
+  opSize: EnumOpBit,
   srcDN: number,
   dstDN: number
 ) => {
-  const src = padHex(task.s.d[srcDN].toString(16), EnumBit.LONG);
-  const dst = padHex(task.s.d[dstDN].toString(16), EnumBit.LONG);
-  const res = mergeHex(src, dst, opSize);
-  task.s.d[dstDN] = parseInt(res, 16);
-  task.s.c = moveC(task);
+  const srcLong = task.s.d[srcDN];
+  const dstLong = task.s.d[dstDN];
+  let res = -1;
+
+  switch (opSize) {
+    case EnumOpBit.BYTE:
+      res = copyLowLowByteToLongValue(srcLong, dstLong);
+      task.s.d[dstDN] = res;
+      break;
+    case EnumOpBit.WORD:
+      res = copyLowWordToLongValue(srcLong, dstLong);
+      task.s.d[dstDN] = res;
+      break;
+    case EnumOpBit.LONG:
+      task.s.d[dstDN] = srcLong;
+      break;
+  }
+
   return task;
 };

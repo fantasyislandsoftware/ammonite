@@ -1,8 +1,6 @@
-import { bin2int, padHex } from 'functions/string';
+import { bin2int } from 'functions/string';
 import { ITask } from 'stores/useTaskStore';
-import { bitSize, EnumBit } from '../../IM68k';
-import { hex32Tohex8Array, moveC } from '../../m68kTestHelpers';
-import { parse } from 'path';
+import { moveC } from '../../m68kTestHelpers';
 
 export const MOVE_DX_TO_ABS = (
   task: ITask,

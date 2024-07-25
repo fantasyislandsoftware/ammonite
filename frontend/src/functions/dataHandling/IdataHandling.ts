@@ -4,11 +4,17 @@ export enum EnumByteOrder {
 }
 
 export enum EnumOpBit {
-  byte = 8,
-  word = 16,
-  long = 32,
+  BYTE = 8,
+  WORD = 16,
+  LONG = 32,
 }
 
 export type INumberCalcConfig = {
   log?: boolean;
 };
+
+export enum EnumBit {
+  BYTE = 8,
+  WORD = 16,
+  LONG = 32,
+}

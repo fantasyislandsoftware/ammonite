@@ -3,9 +3,13 @@ import {
   getWordFromLongValue,
   getByteFromWordValue,
   putWordIntoLongValue,
-  combine2WordInto1Long,
+  combine2WordsInto1Long,
+  combine2BytesInto1Word,
+  putByteIntoWordValue,
+  copyLowLowByteToLongValue,
+  copyLowWordToLongValue,
 } from './dataHandling';
-import { INumberCalcConfig, EnumByteOrder } from './IdataHandling';
+import { EnumByteOrder } from './IdataHandling';
 
 it(`test`, () => {
   const word = 0x1234;
@@ -25,14 +29,28 @@ it(`test`, () => {
   expect(getByteFromWordValue(word, EnumByteOrder.HIGH)).toBe(0x12);
 
   /* combine2WordInto1Long */
-  expect(combine2WordInto1Long(0x1234, 0x5678)).toBe(0x12345678);
-  expect(combine2WordInto1Long(0x7fff, 0xffff)).toBe(0x7fffffff);
+  expect(combine2WordsInto1Long(0x1234, 0x5678)).toBe(0x12345678);
+  expect(combine2WordsInto1Long(0x7fff, 0xffff)).toBe(0x7fffffff);
+
+  /* combine2ByteInto1Word */
+  expect(combine2BytesInto1Word(0x12, 0xff)).toBe(0x12ff);
+  expect(combine2BytesInto1Word(0x1f, 0x2a)).toBe(0x1f2a);
+
+  /* putByteIntoWordValue */
+  expect(putByteIntoWordValue(0xff, word, EnumByteOrder.LOW)).toBe(0x12ff);
+  expect(putByteIntoWordValue(0xff, word, EnumByteOrder.HIGH)).toBe(0xff34);
 
   /* putWordIntoLongValue */
-  expect(
-    putWordIntoLongValue(long, 0x0000, EnumByteOrder.LOW, { log: true })
-  ).toBe(0x12340000);
-  expect(
-    putWordIntoLongValue(long, 0x0000, EnumByteOrder.HIGH, { log: true })
-  ).toBe(0x00005678);
+  expect(putWordIntoLongValue(0x0000, long, EnumByteOrder.LOW)).toBe(
+    0x12340000
+  );
+  expect(putWordIntoLongValue(0x0000, long, EnumByteOrder.HIGH)).toBe(
+    0x00005678
+  );
+
+  /* copyLowLowByteToLongValue */
+  expect(copyLowLowByteToLongValue(0x7fffffaa, 0x00000000)).toBe(0x000000aa);
+
+  /* copyLowWordToLongValue */
+  expect(copyLowWordToLongValue(0x7fffaaaa, 0x00000000)).toBe(0x0000aaaa);
 });
