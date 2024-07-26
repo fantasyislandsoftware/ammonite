@@ -3,6 +3,8 @@ import { EnumOpBit } from 'functions/dataHandling/IdataHandling';
 import {
   copyLowLowByteToLongValue,
   copyLowWordToLongValue,
+  join4BytesInto1Long,
+  splitLongInto4Bytes,
 } from 'functions/dataHandling/dataHandling';
 
 export const MOVE_DX_TO_DX = (
@@ -11,23 +13,47 @@ export const MOVE_DX_TO_DX = (
   srcDN: number,
   dstDN: number
 ) => {
-  const srcLong = task.s.d[srcDN];
-  const dstLong = task.s.d[dstDN];
-  let res = -1;
+  const op8bit = () => {
+    dstLongA[3] = srcLongA[3];
+    return join4BytesInto1Long(
+      dstLongA[0],
+      dstLongA[1],
+      dstLongA[2],
+      dstLongA[3]
+    );
+  };
 
-  switch (opSize) {
-    case EnumOpBit.BYTE:
-      res = copyLowLowByteToLongValue(srcLong, dstLong);
-      task.s.d[dstDN] = res;
-      break;
-    case EnumOpBit.WORD:
-      res = copyLowWordToLongValue(srcLong, dstLong);
-      task.s.d[dstDN] = res;
-      break;
-    case EnumOpBit.LONG:
-      task.s.d[dstDN] = srcLong;
-      break;
-  }
+  const op16bit = () => {
+    dstLongA[2] = srcLongA[2];
+    dstLongA[3] = srcLongA[3];
+    return join4BytesInto1Long(
+      dstLongA[0],
+      dstLongA[1],
+      dstLongA[2],
+      dstLongA[3]
+    );
+  };
+
+  const main = () => {
+    switch (opSize) {
+      case EnumOpBit.BYTE:
+        task.s.d[dstDN] = op8bit();
+        break;
+      case EnumOpBit.WORD:
+        task.s.d[dstDN] = op16bit();
+        break;
+      case EnumOpBit.LONG:
+        task.s.d[dstDN] = srcLongL;
+        break;
+    }
+  };
+
+  const srcLongL = task.s.d[srcDN];
+  const srcLongA = splitLongInto4Bytes(srcLongL);
+  const dstLongL = task.s.d[dstDN];
+  let dstLongA = splitLongInto4Bytes(dstLongL);
+
+  main();
 
   return task;
 };

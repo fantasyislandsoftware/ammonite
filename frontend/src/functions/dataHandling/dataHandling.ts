@@ -141,3 +141,30 @@ export const copyLowWordToLongValue = (srcLong: number, dstLong: number) => {
   const res = combine2WordsInto1Long(dstWord, srcWord);
   return res;
 };
+
+export const splitWordInto2Bytes = (w: number) => {
+  const byte1 = (w >> 8) & 0xff;
+  const byte2 = w & 0xff;
+  return [byte1, byte2];
+};
+
+export const splitLongInto4Bytes = (l: number) => {
+  const byte1 = (l >> 24) & 0xff;
+  const byte2 = (l >> 16) & 0xff;
+  const byte3 = (l >> 8) & 0xff;
+  const byte4 = l & 0xff;
+  return [byte1, byte2, byte3, byte4];
+};
+
+export const join2BytesInto1Word = (byte1: number, byte2: number) => {
+  return (byte1 << 8) + byte2;
+};
+
+export const join4BytesInto1Long = (
+  byte1: number,
+  byte2: number,
+  byte3: number,
+  byte4: number
+) => {
+  return (byte1 << 24) + (byte2 << 16) + (byte3 << 8) + byte4;
+};

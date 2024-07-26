@@ -8,6 +8,10 @@ import {
   putByteIntoWordValue,
   copyLowLowByteToLongValue,
   copyLowWordToLongValue,
+  splitLongInto4Bytes,
+  splitWordInto2Bytes,
+  join2BytesInto1Word,
+  join4BytesInto1Long,
 } from './dataHandling';
 import { EnumByteOrder } from './IdataHandling';
 
@@ -53,4 +57,16 @@ it(`test`, () => {
 
   /* copyLowWordToLongValue */
   expect(copyLowWordToLongValue(0x7fffaaaa, 0x00000000)).toBe(0x0000aaaa);
+
+  /* splitWordInto2Bytes */
+  expect(splitWordInto2Bytes(0x1234)).toEqual([0x12, 0x34]);
+
+  /* splitLongInto4Bytes */
+  expect(splitLongInto4Bytes(0x12345678)).toEqual([0x12, 0x34, 0x56, 0x78]);
+
+  /* join2BytesInto1Word */
+  expect(join2BytesInto1Word(0x12, 0x34)).toBe(0x1234);
+
+  /* join4BytesInto1Long */
+  expect(join4BytesInto1Long(0x12, 0x34, 0x56, 0x78)).toBe(0x12345678);
 });
