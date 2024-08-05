@@ -1,15 +1,16 @@
-import { ITask } from 'stores/useTaskStore';
-import { EnumOpBit } from 'functions/dataHandling/IdataHandling';
 import { splitLongInto4Bytes } from 'functions/dataHandling/dataHandling';
+import { EnumOpBit } from 'functions/dataHandling/IdataHandling';
+import { ITask } from 'stores/useTaskStore';
 
-export const MOVE_DX_TO_ABS = (
+export const MOVE_DX_TO_IND = (
   task: ITask,
   opSize: number,
   srcDN: number,
-  dstAddr: number
+  dstIND: number
 ) => {
   const srcLongL = task.s.d[srcDN];
   const srcLongA = splitLongInto4Bytes(srcLongL);
+  const dstAddr = task.s.a[dstIND];
 
   const op8bit = () => {
     task.s.m[dstAddr] = srcLongA[3];

@@ -3,6 +3,7 @@ import { EnumASMType, EnumM68KOP } from './IM68k';
 import { MOVE_DX_TO_DX } from './move/MOVE_DX_TO_DX/MOVE_DX_TO_DX';
 import { MOVE_DX_TO_ABS } from './move/MOVE_DX_TO_ABS.ts/MOVE_DX_TO_ABS';
 import { EnumBit, EnumOpBit } from 'functions/dataHandling/IdataHandling';
+import { MOVE_DX_TO_IND } from './move/MOVE_DX_TO_IND.ts/MOVE_DX_TO_IND';
 
 export const convertArg = (arg: string) => {
   const dreg = ['d0', 'd1', 'd2', 'd3', 'd4', 'd5', 'd6', 'd7'];
@@ -163,7 +164,9 @@ export const processMOVE = (task: ITask, i: string, d_bin: string) => {
   }
 
   const template = `${EnumM68KOP.MOVE}.x ${src.arg},${dst.arg}`;
-  console.log(`${EnumM68KOP.MOVE}.x ${src.arg},${dst.arg}`);
+  console.log(template);
+
+  let success = true;
 
   switch (template) {
     case 'move.x dn,dn':
@@ -177,7 +180,18 @@ export const processMOVE = (task: ITask, i: string, d_bin: string) => {
     case 'move.x dn,x.w':
       MOVE_DX_TO_ABS(task, opSize, parseInt(xn_src_bin, 2), parseInt(d_bin, 2));
       break;
+    case 'move.x dn,(an)':
+      MOVE_DX_TO_IND(
+        task,
+        opSize,
+        parseInt(xn_src_bin, 2),
+        parseInt(xn_dst_bin, 2)
+      );
+      break;
+    default:
+      success = false;
+      break;
   }
 
-  return length;
+  return { success: success, length: length };
 };

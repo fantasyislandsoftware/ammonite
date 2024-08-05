@@ -8,7 +8,7 @@ export interface IMakeTestTaskParams {
 }
 
 export const makeTestTask = (params: IMakeTestTaskParams) => {
-  const { memoryBufferSize, d, m } = params;
+  const { memoryBufferSize, d, a, m } = params;
 
   /* DN */
   const initD: number[] = [];
@@ -24,7 +24,7 @@ export const makeTestTask = (params: IMakeTestTaskParams) => {
   for (let i = 0; i < 8; i++) {
     initA.push(0);
   }
-  initA?.forEach((v, i) => {
+  a?.forEach((v, i) => {
     initA[i] = v;
   });
 

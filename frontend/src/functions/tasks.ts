@@ -92,7 +92,12 @@ const execM68KInstruction = (self: ITask) => {
 
   let opName: string = EnumM68KOP.UNKNOWN;
   let found = false;
-  let length = 0;
+
+  let state = {
+    length: 0,
+    success: true,
+  };
+
   opTable.map((row: any) => {
     if (matchPattern(row.pattern, inst)) {
       opName = row.opName;
@@ -103,7 +108,7 @@ const execM68KInstruction = (self: ITask) => {
   if (found) {
     switch (opName) {
       case EnumM68KOP.MOVE:
-        length = processMOVE(self, inst, data);
+        state = processMOVE(self, inst, data);
         break;
     }
   } else {
@@ -111,7 +116,7 @@ const execM68KInstruction = (self: ITask) => {
     killTask(self.id);
   }
 
-  self.pos += length;
+  self.pos += state.length;
 
   killTask(self.id);
 
