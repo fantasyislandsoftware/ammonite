@@ -1,6 +1,6 @@
 .section code
 
-test:   move.b d0,(a5)
+test:   move.b d0,(a0)+
         bra test
 
 .section data

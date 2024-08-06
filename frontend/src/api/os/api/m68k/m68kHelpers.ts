@@ -188,6 +188,15 @@ export const processMOVE = (task: ITask, i: string, d_bin: string) => {
         parseInt(xn_dst_bin, 2)
       );
       break;
+    case 'move.x dn,(an)+':
+      MOVE_DX_TO_IND(
+        task,
+        opSize,
+        parseInt(xn_src_bin, 2),
+        parseInt(xn_dst_bin, 2),
+        { inc: true }
+      );
+      break;
     default:
       success = false;
       break;

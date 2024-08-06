@@ -116,6 +116,11 @@ const execM68KInstruction = (self: ITask) => {
     killTask(self.id);
   }
 
+  if (!state.success) {
+    console.log('command not found');
+    killTask(self.id);
+  }
+
   self.pos += state.length;
 
   killTask(self.id);

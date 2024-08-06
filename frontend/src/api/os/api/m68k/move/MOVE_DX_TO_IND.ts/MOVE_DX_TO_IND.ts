@@ -6,7 +6,10 @@ export const MOVE_DX_TO_IND = (
   task: ITask,
   opSize: number,
   srcDN: number,
-  dstIND: number
+  dstIND: number,
+  setting?: {
+    inc: boolean;
+  }
 ) => {
   const srcLongL = task.s.d[srcDN];
   const srcLongA = splitLongInto4Bytes(srcLongL);
@@ -14,6 +17,7 @@ export const MOVE_DX_TO_IND = (
 
   const op8bit = () => {
     task.s.m[dstAddr] = srcLongA[3];
+    if (setting?.inc) task.s.a[dstIND] += 1;
   };
 
   const op16bit = () => {
@@ -21,12 +25,14 @@ export const MOVE_DX_TO_IND = (
     for (let i = 0; i < 2; i++) {
       task.s.m[dstAddr + i] = srcLongA[i + offset];
     }
+    if (setting?.inc) task.s.a[dstIND] += 2;
   };
 
   const op32bit = () => {
     for (let i = 0; i < 4; i++) {
       task.s.m[dstAddr + i] = srcLongA[i];
     }
+    if (setting?.inc) task.s.a[dstIND] += 4;
   };
 
   const main = () => {
