@@ -1,5 +1,5 @@
 import { ITask } from 'stores/useTaskStore';
-import { EnumASMType, EnumM68KOP } from './IM68k';
+import { EnumASMType, EnumM68KOP, EnumOPAction } from './IM68k';
 import { MOVE_DX_TO_DX } from './move/MOVE_DX_TO_DX/MOVE_DX_TO_DX';
 import { MOVE_DX_TO_ABS } from './move/MOVE_DX_TO_ABS.ts/MOVE_DX_TO_ABS';
 import { EnumBit, EnumOpBit } from 'functions/dataHandling/IdataHandling';
@@ -194,7 +194,16 @@ export const processMOVE = (task: ITask, i: string, d_bin: string) => {
         opSize,
         parseInt(xn_src_bin, 2),
         parseInt(xn_dst_bin, 2),
-        { inc: true }
+        EnumOPAction.INC
+      );
+      break;
+    case 'move.x dn,-(an)':
+      MOVE_DX_TO_IND(
+        task,
+        opSize,
+        parseInt(xn_src_bin, 2),
+        parseInt(xn_dst_bin, 2),
+        EnumOPAction.DEC
       );
       break;
     default:
