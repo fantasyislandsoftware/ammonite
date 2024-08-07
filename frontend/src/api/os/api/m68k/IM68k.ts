@@ -28,7 +28,8 @@ export interface IM68KArg {
   v: string | number;
 }
 
-export enum EnumOPAction{
+export enum EnumOPAction {
   INC = 'inc',
   DEC = 'dec',
+  DIS = 'dis',
 }

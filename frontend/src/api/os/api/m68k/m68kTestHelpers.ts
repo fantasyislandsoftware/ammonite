@@ -31,7 +31,7 @@ export const makeTestTask = (params: IMakeTestTaskParams) => {
   /* Memory */
   const initM: number[] = [];
   for (let i = 0; i < memoryBufferSize; i++) {
-    initM.push(0);
+    initM.push(0xff);
   }
   m?.forEach((v, i) => {
     initM[i] = v;
