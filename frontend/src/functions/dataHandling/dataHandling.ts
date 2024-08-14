@@ -168,3 +168,53 @@ export const join4BytesInto1Long = (
 ) => {
   return (byte1 << 24) + (byte2 << 16) + (byte3 << 8) + byte4;
 };
+
+export const _4to1 = (array: number[]) => {
+  return (array[0] << 24) + (array[1] << 16) + (array[2] << 8) + array[3];
+};
+
+export const genM68KAddrSpace = (allocatedMemory: number) => {
+  let data: number[] = [];
+
+  let map: {
+    [key: string]: number;
+  } = {};
+
+  /* D */
+  for (let i = 0; i < 8; i++) {
+    map['d' + i] = data.length;
+    for (let i = 0; i < 4; i++) {
+      data.push(0);
+    }
+  }
+
+  /* A */
+  for (let i = 0; i < 8; i++) {
+    map['a' + i] = data.length;
+    for (let i = 0; i < 4; i++) {
+      data.push(0);
+    }
+  }
+
+  /* SR */
+  map['sr'] = data.length;
+  for (let i = 0; i < 2; i++) {
+    data.push(0);
+  }
+
+  /* M */
+  map['m'] = data.length;
+  for (let i = 0; i < allocatedMemory; i++) {
+    data.push(0);
+  }
+
+  return { data: data, map: map };
+};
+
+export const fillNumberArray = (n: number, length: number) => {
+  let arr = [];
+  for (let i = 0; i < length; i++) {
+    arr.push(n);
+  }
+  return arr;
+};

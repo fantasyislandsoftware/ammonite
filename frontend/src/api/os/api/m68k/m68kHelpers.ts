@@ -1,10 +1,6 @@
 import { ITask } from 'stores/useTaskStore';
 import { EnumASMType, EnumM68KOP, EnumOPAction } from './IM68k';
-import { MOVE_DX_TO_DX } from './move/MOVE_DX_TO_DX/MOVE_DX_TO_DX';
-import { MOVE_DX_TO_ABS } from './move/MOVE_DX_TO_ABS/MOVE_DX_TO_ABS';
 import { EnumBit, EnumOpBit } from 'functions/dataHandling/IdataHandling';
-import { MOVE_DX_TO_IND } from './move/MOVE_DX_TO_IND/MOVE_DX_TO_IND';
-import { parse } from 'path';
 
 export const convertArg = (arg: string) => {
   const dreg = ['d0', 'd1', 'd2', 'd3', 'd4', 'd5', 'd6', 'd7'];
@@ -46,68 +42,74 @@ export const convertArg = (arg: string) => {
   return `'?'`;
 };
 
-const processXNXT = (xt_bin: string, xn_bin: string, d: string) => {
-  let arg = '';
+export const processXNXT = (xt_bin: string, xn_bin: string, d: string) => {
+  let key = '';
+  let loc = '';
   let length = 0;
   switch (xt_bin) {
     case '000':
-      arg = 'dn';
+      key = 'd';
+      loc = 'task.s.d{n}[{i}]';
       length = 2;
       break;
     case '001':
-      arg = 'an';
+      key = 'a';
+      loc = 'task.s.a{n}[i]';
       length = 2;
       break;
     case '010':
-      arg = '(an)';
+      key = '(an)';
+      loc = 'task.s.m[_4to1(task.s.a{n})]';
       length = 2;
       break;
     case '011':
-      arg = '(an)+';
+      key = '(an)+';
       length = 2;
       break;
     case '100':
-      arg = '-(an)';
+      key = '-(an)';
       length = 2;
       break;
     case '101':
-      arg = 'd16(an)';
+      key = 'd16(an)';
       length = 2;
       break;
     case '110':
-      arg = 'd8(an,Xn)';
+      key = 'd8(an,Xn)';
       length = 2;
       break;
     case '111':
       switch (xn_bin) {
         case '000':
-          arg = 'x.w';
+          key = 'x.w';
+          loc = 'task.s.m[{d}+{i}]';
           length = 4;
           break;
         case '001':
-          arg = 'x.l';
+          key = 'x.l';
           length = 4;
           break;
         case '010':
-          arg = 'd16(pc)';
+          key = 'd16(pc)';
           length = 4;
           break;
         case '011':
-          arg = 'd8(pc,xn)';
+          key = 'd8(pc,xn)';
           length = 4;
           break;
         case '100':
-          arg = '#imm';
+          key = '#imm';
           length = 4;
           break;
         default:
-          arg = '#imm';
+          key = '#imm';
           length = 4;
       }
       break;
   }
   return {
-    arg: arg,
+    key: key,
+    loc: loc,
     length: length,
   };
 };
@@ -128,99 +130,4 @@ export const processOpSize = (opSize_bin: string) => {
       opSize = EnumOpBit.WORD;
   }
   return opSize;
-};
-
-export const processMOVE = (task: ITask, i: string, d_bin: string) => {
-  /* 0123456789ABCDEF */
-  /* 0000000000000000 */
-
-  let src = {
-    arg: '',
-    length: 0,
-  };
-  let dst = {
-    arg: '',
-    length: 0,
-  };
-  let length = 0;
-
-  /* Bit Size */
-  const opSize_bin = `${i[2]}${i[3]}`;
-  const opSize = processOpSize(opSize_bin);
-
-  /* Source */
-  const xt_src_bin = `${i[10]}${i[11]}${i[12]}`;
-  const xn_src_bin = `${i[13]}${i[14]}${i[15]}`;
-  src = processXNXT(xt_src_bin, xn_src_bin, d_bin);
-
-  /* Destination */
-  const xn_dst_bin = `${i[4]}${i[5]}${i[6]}`;
-  const xt_dst_bin = `${i[7]}${i[8]}${i[9]}`;
-  dst = processXNXT(xt_dst_bin, xn_dst_bin, d_bin);
-
-  if (src.length === 4 || dst.length === 4) {
-    length = 4;
-  } else {
-    length = 2;
-  }
-
-  const template = `${EnumM68KOP.MOVE}.x ${src.arg},${dst.arg}`;
-  console.log(template);
-
-  let success = true;
-
-  switch (template) {
-    case 'move.x dn,dn':
-      MOVE_DX_TO_DX(
-        task,
-        opSize,
-        parseInt(xn_src_bin, 2),
-        parseInt(xn_dst_bin, 2)
-      );
-      break;
-    case 'move.x dn,x.w':
-      MOVE_DX_TO_ABS(task, opSize, parseInt(xn_src_bin, 2), parseInt(d_bin, 2));
-      break;
-    case 'move.x dn,(an)':
-      MOVE_DX_TO_IND(
-        task,
-        opSize,
-        parseInt(xn_src_bin, 2),
-        parseInt(xn_dst_bin, 2)
-      );
-      break;
-    case 'move.x dn,(an)+':
-      MOVE_DX_TO_IND(
-        task,
-        opSize,
-        parseInt(xn_src_bin, 2),
-        parseInt(xn_dst_bin, 2),
-        EnumOPAction.INC
-      );
-      break;
-    case 'move.x dn,-(an)':
-      MOVE_DX_TO_IND(
-        task,
-        opSize,
-        parseInt(xn_src_bin, 2),
-        parseInt(xn_dst_bin, 2),
-        EnumOPAction.DEC
-      );
-      break;
-    case 'move.x dn,d16(an)':
-      MOVE_DX_TO_IND(
-        task,
-        opSize,
-        parseInt(xn_src_bin, 2),
-        parseInt(xn_dst_bin, 2),
-        EnumOPAction.DIS,
-        parseInt(d_bin, 2)
-      );
-      break;
-    default:
-      success = false;
-      break;
-  }
-
-  return { success: success, length: length };
 };

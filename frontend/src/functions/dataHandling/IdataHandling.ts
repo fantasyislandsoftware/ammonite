@@ -9,6 +9,14 @@ export enum EnumOpBit {
   LONG = 32,
 }
 
+export const opBitChar: {
+  [key: number]: string;
+} = {
+  8: 'b',
+  16: 'w',
+  32: 'l',
+};
+
 export type INumberCalcConfig = {
   log?: boolean;
 };

@@ -2,6 +2,10 @@ import { getExe, getFile } from 'api/http/fileIO';
 import { ENV } from 'constants/globals/env';
 import { BREAK, DO_NOT_PROCESS } from 'constants/globals/misc';
 import { SYSTEM } from 'constants/globals/system';
+import {
+  fillNumberArray,
+  genM68KAddrSpace,
+} from 'functions/dataHandling/dataHandling';
 import { EnumDataFormat } from 'interface/data';
 import { TaskState, TaskArch, useTaskStore } from 'stores/useTaskStore';
 import { v4 as uuidv4 } from 'uuid';
@@ -208,15 +212,23 @@ export class SYSTEM_API {
         promise: {},
         pos: block.pos,
         s: {
-          d: [0, 0, 0, 0, 0, 0, 0, 0],
-          a: [0, 0, 0, 0, 0, 0, 0, 0],
-          c: {
-            x: 0,
-            n: 0,
-            z: 0,
-            v: 0,
-            c: 0,
-          },
+          d0: fillNumberArray(0, 8),
+          d1: fillNumberArray(0, 8),
+          d2: fillNumberArray(0, 8),
+          d3: fillNumberArray(0, 8),
+          d4: fillNumberArray(0, 8),
+          d5: fillNumberArray(0, 8),
+          d6: fillNumberArray(0, 8),
+          d7: fillNumberArray(0, 8),
+          a0: fillNumberArray(0, 8),
+          a1: fillNumberArray(0, 8),
+          a2: fillNumberArray(0, 8),
+          a3: fillNumberArray(0, 8),
+          a4: fillNumberArray(0, 8),
+          a5: fillNumberArray(0, 8),
+          a6: fillNumberArray(0, 8),
+          a7: fillNumberArray(0, 8),
+          c: fillNumberArray(0, 2),
           m: block.mem,
         },
       });

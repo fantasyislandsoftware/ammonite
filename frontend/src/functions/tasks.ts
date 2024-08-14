@@ -6,12 +6,11 @@ import { FONT_API as font_api } from 'api/os/api/font';
 import { SCREEN_API as screen_api } from 'api/os/api/screen';
 import { WINDOW_API as window_api } from 'api/os/api/window';
 import { ICON_API as icon_api } from 'api/os/api/icon';
-
-import { convertArg, processMOVE } from 'api/os/api/m68k/m68kHelpers';
 import { EnumM68KOP } from 'api/os/api/m68k/IM68k';
 
 import { opTable } from 'api/os/api/m68k/opTable';
 import { hex2bin } from './string';
+import { MOVE } from 'api/os/api/m68k/move/MOVE';
 
 const SYSTEM_API = new system_api();
 const LOGIC_API = new logic_api();
@@ -108,7 +107,7 @@ const execM68KInstruction = (self: ITask) => {
   if (found) {
     switch (opName) {
       case EnumM68KOP.MOVE:
-        state = processMOVE(self, inst, data);
+        state = MOVE(self, inst, data);
         break;
     }
   } else {

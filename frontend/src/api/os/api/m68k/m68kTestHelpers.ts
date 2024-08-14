@@ -1,32 +1,50 @@
+import { EnumBit } from 'functions/dataHandling/IdataHandling';
 import { ICCR, ITask, TaskArch, TaskState } from 'stores/useTaskStore';
 
 export interface IMakeTestTaskParams {
   memoryBufferSize: number;
-  d?: number[];
-  a?: number[];
+  d0?: number[];
+  d1?: number[];
+  d2?: number[];
+  d3?: number[];
+  d4?: number[];
+  d5?: number[];
+  d6?: number[];
+  d7?: number[];
+  a0?: number[];
+  a1?: number[];
+  a2?: number[];
+  a3?: number[];
+  a4?: number[];
+  a5?: number[];
+  a6?: number[];
+  a7?: number[];
   m?: number[];
 }
 
 export const makeTestTask = (params: IMakeTestTaskParams) => {
-  const { memoryBufferSize, d, a, m } = params;
+  const {
+    memoryBufferSize,
+    d0,
+    d1,
+    d2,
+    d3,
+    d4,
+    d5,
+    d6,
+    d7,
+    a0,
+    a1,
+    a2,
+    a3,
+    a4,
+    a5,
+    a6,
+    a7,
+    m,
+  } = params;
 
-  /* DN */
-  const initD: number[] = [];
-  for (let i = 0; i < 8; i++) {
-    initD.push(0);
-  }
-  d?.forEach((v, i) => {
-    initD[i] = v;
-  });
-
-  /* AN */
-  const initA: number[] = [];
-  for (let i = 0; i < 8; i++) {
-    initA.push(0);
-  }
-  a?.forEach((v, i) => {
-    initA[i] = v;
-  });
+  const defaultReg = [0x0, 0x0, 0x0, 0x0];
 
   /* Memory */
   const initM: number[] = [];
@@ -36,15 +54,6 @@ export const makeTestTask = (params: IMakeTestTaskParams) => {
   m?.forEach((v, i) => {
     initM[i] = v;
   });
-
-  /* CCR */
-  const c: ICCR = {
-    x: 0,
-    n: 0,
-    z: 0,
-    v: 0,
-    c: 0,
-  };
 
   class FreshTask {
     public task: ITask = {
@@ -58,10 +67,24 @@ export const makeTestTask = (params: IMakeTestTaskParams) => {
       label: undefined,
       promise: undefined,
       s: {
-        d: initD,
-        a: initA,
-        c: c,
+        d0: d0 ? d0 : defaultReg,
+        d1: d1 ? d1 : defaultReg,
+        d2: d2 ? d2 : defaultReg,
+        d3: d3 ? d3 : defaultReg,
+        d4: d4 ? d4 : defaultReg,
+        d5: d5 ? d5 : defaultReg,
+        d6: d6 ? d6 : defaultReg,
+        d7: d7 ? d7 : defaultReg,
+        a0: a0 ? a0 : defaultReg,
+        a1: a1 ? a1 : defaultReg,
+        a2: a2 ? a2 : defaultReg,
+        a3: a3 ? a3 : defaultReg,
+        a4: a4 ? a4 : defaultReg,
+        a5: a5 ? a5 : defaultReg,
+        a6: a6 ? a6 : defaultReg,
+        a7: a7 ? a7 : defaultReg,
         m: initM,
+        c: [],
       },
     };
   }
@@ -109,12 +132,6 @@ export const hex32Tohex8Array = (hex: string) => {
   return arr;
 };
 
-export const moveC = (self: ITask) => {
-  return {
-    x: self.s.c.x,
-    n: 1,
-    z: 0,
-    v: 0,
-    c: 0,
-  };
-};
+export const buildMoveCode = (bit : EnumBit) => {
+
+}
