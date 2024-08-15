@@ -43,72 +43,73 @@ export const convertArg = (arg: string) => {
 };
 
 export const processXNXT = (xt_bin: string, xn_bin: string, d: string) => {
-  let key = '';
+  let arg = '';
   let loc = '';
   let length = 0;
   switch (xt_bin) {
     case '000':
-      key = 'd';
+      arg = 'd{n}';
       loc = 'task.s.d{n}[{i}]';
       length = 2;
       break;
     case '001':
-      key = 'a';
+      arg = 'an';
       loc = 'task.s.a{n}[i]';
       length = 2;
       break;
     case '010':
-      key = '(an)';
+      arg = '(an)';
       loc = 'task.s.m[_4to1(task.s.a{n})]';
       length = 2;
       break;
     case '011':
-      key = '(an)+';
+      arg = '(an)+';
       length = 2;
       break;
     case '100':
-      key = '-(an)';
+      arg = '-(an)';
       length = 2;
       break;
     case '101':
-      key = 'd16(an)';
+      arg = 'd16(an)';
       length = 2;
       break;
     case '110':
-      key = 'd8(an,Xn)';
+      arg = 'd8(an,Xn)';
       length = 2;
       break;
     case '111':
       switch (xn_bin) {
         case '000':
-          key = 'x.w';
-          loc = 'task.s.m[{d}+{i}]';
+          arg = '{d}.w';
+          loc = 'task.s.m[{d}+{i}-{s}]';
           length = 4;
           break;
         case '001':
-          key = 'x.l';
+          arg = '{d}.l';
+          loc = 'task.s.m[{d}+{i}-{s}]';
           length = 4;
           break;
         case '010':
-          key = 'd16(pc)';
+          arg = 'd16(pc)';
           length = 4;
           break;
         case '011':
-          key = 'd8(pc,xn)';
+          arg = 'd8(pc,xn)';
           length = 4;
           break;
         case '100':
-          key = '#imm';
+          arg = '#imm';
           length = 4;
           break;
         default:
-          key = '#imm';
+          arg = '#imm';
           length = 4;
       }
       break;
   }
   return {
-    key: key,
+    arg: arg,
     loc: loc,
     length: length,
   };

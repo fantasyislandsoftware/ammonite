@@ -44,7 +44,7 @@ export const makeTestTask = (params: IMakeTestTaskParams) => {
     m,
   } = params;
 
-  const defaultReg = [0x0, 0x0, 0x0, 0x0];
+  //const defaultReg = [0x0, 0x0, 0x0, 0x0];
 
   /* Memory */
   const initM: number[] = [];
@@ -67,22 +67,22 @@ export const makeTestTask = (params: IMakeTestTaskParams) => {
       label: undefined,
       promise: undefined,
       s: {
-        d0: d0 ? d0 : defaultReg,
-        d1: d1 ? d1 : defaultReg,
-        d2: d2 ? d2 : defaultReg,
-        d3: d3 ? d3 : defaultReg,
-        d4: d4 ? d4 : defaultReg,
-        d5: d5 ? d5 : defaultReg,
-        d6: d6 ? d6 : defaultReg,
-        d7: d7 ? d7 : defaultReg,
-        a0: a0 ? a0 : defaultReg,
-        a1: a1 ? a1 : defaultReg,
-        a2: a2 ? a2 : defaultReg,
-        a3: a3 ? a3 : defaultReg,
-        a4: a4 ? a4 : defaultReg,
-        a5: a5 ? a5 : defaultReg,
-        a6: a6 ? a6 : defaultReg,
-        a7: a7 ? a7 : defaultReg,
+        d0: d0 ? d0 : [0x0, 0x0, 0x0, 0x0],
+        d1: d1 ? d1 : [0x0, 0x0, 0x0, 0x0],
+        d2: d2 ? d2 : [0x0, 0x0, 0x0, 0x0],
+        d3: d3 ? d3 : [0x0, 0x0, 0x0, 0x0],
+        d4: d4 ? d4 : [0x0, 0x0, 0x0, 0x0],
+        d5: d5 ? d5 : [0x0, 0x0, 0x0, 0x0],
+        d6: d6 ? d6 : [0x0, 0x0, 0x0, 0x0],
+        d7: d7 ? d7 : [0x0, 0x0, 0x0, 0x0],
+        a0: a0 ? a0 : [0x0, 0x0, 0x0, 0x0],
+        a1: a1 ? a1 : [0x0, 0x0, 0x0, 0x0],
+        a2: a2 ? a2 : [0x0, 0x0, 0x0, 0x0],
+        a3: a3 ? a3 : [0x0, 0x0, 0x0, 0x0],
+        a4: a4 ? a4 : [0x0, 0x0, 0x0, 0x0],
+        a5: a5 ? a5 : [0x0, 0x0, 0x0, 0x0],
+        a6: a6 ? a6 : [0x0, 0x0, 0x0, 0x0],
+        a7: a7 ? a7 : [0x0, 0x0, 0x0, 0x0],
         m: initM,
         c: [],
       },
@@ -132,6 +132,4 @@ export const hex32Tohex8Array = (hex: string) => {
   return arr;
 };
 
-export const buildMoveCode = (bit : EnumBit) => {
-
-}
+export const buildMoveCode = (bit: EnumBit) => {};

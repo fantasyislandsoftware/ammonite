@@ -17,12 +17,12 @@ export const MOVE = (
   const { verbose } = setting || { verbose: false };
 
   let src = {
-    key: '',
+    arg: '',
     loc: '',
     length: 0,
   };
   let dst = {
-    key: '',
+    arg: '',
     loc: '',
     length: 0,
   };
@@ -53,31 +53,50 @@ export const MOVE = (
   /* */
 
   /* src address */
-  const xn_src = parseInt(xn_src_bin, 2);
-  const srcLoc = `${src.loc}`.replace('{n}', xn_src.toString());
+  const xn_src = parseInt(xn_src_bin, 2).toString();
+  const srcLoc = `${src.loc}`.replace('{n}', xn_src);
 
   /* dst address */
-  const xn_dst = parseInt(xn_dst_bin, 2);
-  const dstLoc = `${dst.loc}`.replace('{n}', xn_dst.toString());
+  const xn_dst = parseInt(xn_dst_bin, 2).toString();
+  const dstLoc = `${dst.loc}`.replace('{n}', xn_dst);
   //console.log(dstKey);
 
   let start = 0;
+  switch (opSize) {
+    case EnumOpBit.BYTE:
+      start = 3;
+      break;
+    case EnumOpBit.WORD:
+      start = 2;
+      break;
+    case EnumOpBit.LONG:
+      start = 0;
+      break;
+  }
   if (opSize === EnumOpBit.BYTE) start = 3;
   if (opSize === EnumOpBit.WORD) start = 2;
 
   const opSizeChar = opBitChar[opSize];
 
-  const ins = `move.${opSizeChar} ${srcLoc},${dstLoc}`
-    .replaceAll('task.s.', '')
-    .replaceAll('[{i}]', '')
-    .replaceAll('{d}', '');
+  const data = parseInt(d, 2).toString();
+
+  const rp = (s: string, n: string, d: string) => {
+    return s.replaceAll('{n}', n).replaceAll('{d}', d);
+  };
+
+  const ins = `move.${opSizeChar} ${rp(src.arg, xn_src, data)},${rp(
+    dst.arg,
+    xn_dst,
+    data
+  )}`;
   verbose && console.log(ins);
 
   for (let i = start; i < 4; i++) {
     const cmd = `${dstLoc} = ${srcLoc}`
       .replaceAll('{i}', i.toString())
-      .replaceAll('{d}', parseInt(d, 2).toString());
-    //console.log(cmd);
+      .replaceAll('{d}', data)
+      .replaceAll('{s}', start.toString());
+    verbose && console.log(cmd);
     eval(cmd);
   }
 

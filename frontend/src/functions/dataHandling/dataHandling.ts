@@ -218,3 +218,7 @@ export const fillNumberArray = (n: number, length: number) => {
   }
   return arr;
 };
+
+export const dec2bin = (dec: number, pad: number) => {
+  return (dec >>> 0).toString(2).padStart(pad, '0');
+};

@@ -10,7 +10,7 @@ import { EnumM68KOP } from 'api/os/api/m68k/IM68k';
 
 import { opTable } from 'api/os/api/m68k/opTable';
 import { hex2bin } from './string';
-import { MOVE } from 'api/os/api/m68k/move/MOVE';
+import { MOVE } from 'api/os/api/m68k/MOVE/MOVE';
 
 const SYSTEM_API = new system_api();
 const LOGIC_API = new logic_api();
@@ -107,7 +107,7 @@ const execM68KInstruction = (self: ITask) => {
   if (found) {
     switch (opName) {
       case EnumM68KOP.MOVE:
-        state = MOVE(self, inst, data);
+        state = MOVE(self, inst, data, { verbose: true });
         break;
     }
   } else {

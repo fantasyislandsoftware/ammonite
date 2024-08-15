@@ -33,3 +33,19 @@ export enum EnumOPAction {
   DEC = 'dec',
   DIS = 'dis',
 }
+
+export enum EnumOpSizeBin {
+  B = '01',
+  W = '11',
+  L = '10',
+}
+
+export enum EnumLOC2BIN {
+  D = '000',
+  M = '111',
+}
+
+export enum EnumLOCD2BIN {
+  ABS_W = '000',
+  ABS_L = '001',
+}
