@@ -44,26 +44,30 @@ export const convertArg = (arg: string) => {
 
 export const processXNXT = (xt_bin: string, xn_bin: string, d: string) => {
   let arg = '';
-  let loc = '';
+  let calc = '';
+  let preCalc = '';
+  let postCalc = '';
   let length = 0;
   switch (xt_bin) {
     case '000':
       arg = 'd{n}';
-      loc = 'task.s.d{n}[{i}]';
+      calc = 'task.s.d{n}[{i}]';
       length = 2;
       break;
     case '001':
       arg = 'an';
-      loc = 'task.s.a{n}[i]';
+      calc = 'task.s.a{n}[i]';
       length = 2;
       break;
     case '010':
       arg = '(a{n})';
-      loc = 'task.s.m[_4to1(task.s.a{n})+{i}-{s}]';
+      calc = 'task.s.m[_4to1(task.s.a{n})+{i}-{s}]';
       length = 2;
       break;
     case '011':
-      arg = '(an)+';
+      arg = '(a{n})+';
+      calc = 'task.s.m[_4to1(task.s.a{n})+{i}-{s}]';
+      postCalc = 'task.s.a{n} = _incReg(task.s.a{n},{pi})';
       length = 2;
       break;
     case '100':
@@ -82,12 +86,12 @@ export const processXNXT = (xt_bin: string, xn_bin: string, d: string) => {
       switch (xn_bin) {
         case '000':
           arg = '{d}.w';
-          loc = 'task.s.m[{d}+{i}-{s}]';
+          calc = 'task.s.m[{d}+{i}-{s}]';
           length = 4;
           break;
         case '001':
           arg = '{d}.l';
-          loc = 'task.s.m[{d}+{i}-{s}]';
+          calc = 'task.s.m[{d}+{i}-{s}]';
           length = 4;
           break;
         case '010':
@@ -110,7 +114,9 @@ export const processXNXT = (xt_bin: string, xn_bin: string, d: string) => {
   }
   return {
     arg: arg,
-    loc: loc,
+    calc: calc,
+    preCalc: preCalc,
+    postCalc: postCalc,
     length: length,
   };
 };

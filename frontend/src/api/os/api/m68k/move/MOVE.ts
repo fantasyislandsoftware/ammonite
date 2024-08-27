@@ -2,9 +2,10 @@ import { ITask } from 'stores/useTaskStore';
 import { processOpSize, processXNXT } from '../m68kHelpers';
 import { EnumM68KOP } from '../IM68k';
 import { EnumOpBit, opBitChar } from 'functions/dataHandling/IdataHandling';
-import { _4to1 as __4to1 } from 'functions/dataHandling/dataHandling';
+import { _4to1 as __4to1, incReg } from 'functions/dataHandling/dataHandling';
 
 const _4to1 = __4to1;
+const _incReg = incReg;
 
 export const MOVE = (
   task: ITask,
@@ -18,12 +19,16 @@ export const MOVE = (
 
   let src = {
     arg: '',
-    loc: '',
+    calc: '',
+    preCalc: '',
+    postCalc: '',
     length: 0,
   };
   let dst = {
     arg: '',
-    loc: '',
+    calc: '',
+    preCalc: '',
+    postCalc: '',
     length: 0,
   };
   let length = 0;
@@ -48,17 +53,30 @@ export const MOVE = (
     length = 2;
   }
 
+  let pi = 0;
+  switch (opSize) {
+    case EnumOpBit.BYTE:
+      pi = 1;
+      break;
+    case EnumOpBit.WORD:
+      pi = 2;
+      break;
+    case EnumOpBit.LONG:
+      pi = 4;
+      break;
+  }
+
   let success = true;
 
   /* */
 
   /* src address */
   const xn_src = parseInt(xn_src_bin, 2).toString();
-  const srcLoc = `${src.loc}`.replace('{n}', xn_src);
+  const srcLoc = `${src.calc}`.replace('{n}', xn_src);
 
   /* dst address */
   const xn_dst = parseInt(xn_dst_bin, 2).toString();
-  const dstLoc = `${dst.loc}`.replace('{n}', xn_dst);
+  const dstLoc = `${dst.calc}`.replace('{n}', xn_dst);
   //console.log(dstKey);
 
   let start = 0;
@@ -91,11 +109,21 @@ export const MOVE = (
   )}`;
   verbose && console.log(ins);
 
+  /* Calc */
   for (let i = start; i < 4; i++) {
     const cmd = `${dstLoc} = ${srcLoc}`
       .replaceAll('{i}', i.toString())
       .replaceAll('{d}', data)
       .replaceAll('{s}', start.toString());
+    verbose && console.log(cmd);
+    eval(cmd);
+  }
+
+  /* Post Calc */
+  if (dst.postCalc) {
+    const cmd = dst.postCalc
+      .replaceAll('{n}', xn_dst)
+      .replaceAll('{pi}', pi.toString());
     verbose && console.log(cmd);
     eval(cmd);
   }

@@ -173,6 +173,13 @@ export const _4to1 = (array: number[]) => {
   return (array[0] << 24) + (array[1] << 16) + (array[2] << 8) + array[3];
 };
 
+export const incReg = (reg: any, i: number) => {
+  let n = _4to1(reg);
+  n += i;
+  return splitLongInto4Bytes(n);
+
+};
+
 export const genM68KAddrSpace = (allocatedMemory: number) => {
   let data: number[] = [];
 
