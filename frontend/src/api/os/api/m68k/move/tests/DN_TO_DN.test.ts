@@ -12,7 +12,7 @@ it(`move.b d0,d1`, () => {
   const d = dec2bin(0x00, 32);
   const i = ['00', EnumOpSizeBin.B, d_dst_n, d_dst_t, d_src_n, d_src_t];
   const testTask = makeTestTask({
-    memoryBufferSize: 8,
+    memoryBufferSize: 0,
     d0: [0x12, 0x34, 0x56, 0x78],
   });
   const res = MOVE(testTask, i.join(''), d);
@@ -31,7 +31,7 @@ it(`move.w d0,d1`, () => {
   const d = dec2bin(0x00, 32);
   const i = ['00', EnumOpSizeBin.W, d_dst_n, d_dst_t, d_src_n, d_src_t];
   const testTask = makeTestTask({
-    memoryBufferSize: 8,
+    memoryBufferSize: 0,
     d0: [0x12, 0x34, 0x56, 0x78],
   });
   const res = MOVE(testTask, i.join(''), d);
@@ -50,7 +50,7 @@ it(`move.l d0,d1`, () => {
   const d = dec2bin(0x00, 32);
   const i = ['00', EnumOpSizeBin.L, d_dst_n, d_dst_t, d_src_n, d_src_t];
   const testTask = makeTestTask({
-    memoryBufferSize: 8,
+    memoryBufferSize: 0,
     d0: [0x12, 0x34, 0x56, 0x78],
   });
   const res = MOVE(testTask, i.join(''), d);

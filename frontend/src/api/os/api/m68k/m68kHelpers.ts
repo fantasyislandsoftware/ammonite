@@ -58,8 +58,8 @@ export const processXNXT = (xt_bin: string, xn_bin: string, d: string) => {
       length = 2;
       break;
     case '010':
-      arg = '(an)';
-      loc = 'task.s.m[_4to1(task.s.a{n})]';
+      arg = '(a{n})';
+      loc = 'task.s.m[_4to1(task.s.a{n})+{i}-{s}]';
       length = 2;
       break;
     case '011':

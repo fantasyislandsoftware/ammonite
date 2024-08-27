@@ -43,6 +43,7 @@ export enum EnumOpSizeBin {
 export enum EnumLOC2BIN {
   D = '000',
   M = '111',
+  I = '010',
 }
 
 export enum EnumLOCD2BIN {
