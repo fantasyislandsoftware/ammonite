@@ -46,6 +46,7 @@ export enum EnumLOC2BIN {
   I = '010',
   IPI = '011',
   IPD = '100',
+  IWD = '101',
 }
 
 export enum EnumLOCD2BIN {

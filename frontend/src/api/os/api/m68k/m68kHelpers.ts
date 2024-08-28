@@ -45,8 +45,8 @@ export const convertArg = (arg: string) => {
 export const processXNXT = (xt_bin: string, xn_bin: string, d: string) => {
   let arg = '';
   let calc = '';
-  let preCalc = '';
-  let postCalc = '';
+  let post = '';
+  let pre = '';
   let length = 0;
   switch (xt_bin) {
     case '000':
@@ -67,17 +67,19 @@ export const processXNXT = (xt_bin: string, xn_bin: string, d: string) => {
     case '011':
       arg = '(a{n})+';
       calc = 'task.s.m[_4to1(task.s.a{n})+{i}-{s}]';
-      postCalc = 'task.s.a{n} = _incReg(task.s.a{n},{pi})';
+      post = 'task.s.a{n} = _incReg(task.s.a{n},{pi})';
       length = 2;
       break;
     case '100':
       arg = '-(a{n})';
       calc = 'task.s.m[_4to1(task.s.a{n})+{i}-{s}]';
-      preCalc = 'task.s.a{n} = _decReg(task.s.a{n},{pi})';
+      pre = 'task.s.a{n} = _decReg(task.s.a{n},{pi})';
       length = 2;
       break;
     case '101':
-      arg = 'd16(an)';
+      arg = 'd(a{n})';
+      calc = 'task.s.m[_4to1(task.s.a{n})+{i}-{s}]';
+      pre = 'task.s.a{n} = _incReg(task.s.a{n},{d})';
       length = 2;
       break;
     case '110':
@@ -117,8 +119,8 @@ export const processXNXT = (xt_bin: string, xn_bin: string, d: string) => {
   return {
     arg: arg,
     calc: calc,
-    preCalc: preCalc,
-    postCalc: postCalc,
+    pre: pre,
+    post: post,
     length: length,
   };
 };

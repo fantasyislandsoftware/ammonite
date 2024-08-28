@@ -1,7 +1,7 @@
 import { dec2bin } from 'functions/dataHandling/dataHandling';
-import { EnumLOC2BIN, EnumLOCD2BIN, EnumOpSizeBin } from '../../IM68k';
-import { makeTestTask } from '../../m68kTestHelpers';
-import { MOVE } from '../MOVE';
+import { EnumLOC2BIN, EnumLOCD2BIN, EnumOpSizeBin } from '../../../IM68k';
+import { makeTestTask } from '../../../m68kTestHelpers';
+import { MOVE } from '../../MOVE';
 
 /* move.b d0,0.w */
 it(`move.b d0,0.w`, () => {

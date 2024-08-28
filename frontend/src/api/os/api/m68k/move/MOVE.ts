@@ -25,15 +25,15 @@ export const MOVE = (
   let src = {
     arg: '',
     calc: '',
-    preCalc: '',
-    postCalc: '',
+    pre: '',
+    post: '',
     length: 0,
   };
   let dst = {
     arg: '',
     calc: '',
-    preCalc: '',
-    postCalc: '',
+    pre: '',
+    post: '',
     length: 0,
   };
   let length = 0;
@@ -114,10 +114,10 @@ export const MOVE = (
   verbose && console.log(ins);
 
   /* Pre Calc */
-  if (dst.preCalc != '') {
-    const cmd = dst.preCalc
-      .replaceAll('{n}', xn_dst)
-      .replaceAll('{pi}', pi.toString());
+  if (dst.pre != '') {
+    const cmd = dst.pre.replaceAll('{n}', xn_dst)
+      .replaceAll('{pi}', pi.toString())
+      .replaceAll('{d}', data);
     verbose && console.log(cmd);
     eval(cmd);
   }
@@ -133,10 +133,10 @@ export const MOVE = (
   }
 
   /* Post Calc */
-  if (dst.postCalc != '') {
-    const cmd = dst.postCalc
-      .replaceAll('{n}', xn_dst)
-      .replaceAll('{pi}', pi.toString());
+  if (dst.post != '') {
+    const cmd = dst.post.replaceAll('{n}', xn_dst)
+      .replaceAll('{pi}', pi.toString())
+      .replaceAll('{d}', data);
     verbose && console.log(cmd);
     eval(cmd);
   }
