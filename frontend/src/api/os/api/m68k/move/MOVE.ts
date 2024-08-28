@@ -2,10 +2,15 @@ import { ITask } from 'stores/useTaskStore';
 import { processOpSize, processXNXT } from '../m68kHelpers';
 import { EnumM68KOP } from '../IM68k';
 import { EnumOpBit, opBitChar } from 'functions/dataHandling/IdataHandling';
-import { _4to1 as __4to1, incReg } from 'functions/dataHandling/dataHandling';
+import {
+  _4to1 as __4to1,
+  incReg,
+  decReg,
+} from 'functions/dataHandling/dataHandling';
 
 const _4to1 = __4to1;
 const _incReg = incReg;
+const _decReg = decReg;
 
 export const MOVE = (
   task: ITask,
@@ -77,7 +82,6 @@ export const MOVE = (
   /* dst address */
   const xn_dst = parseInt(xn_dst_bin, 2).toString();
   const dstLoc = `${dst.calc}`.replace('{n}', xn_dst);
-  //console.log(dstKey);
 
   let start = 0;
   switch (opSize) {
@@ -109,6 +113,15 @@ export const MOVE = (
   )}`;
   verbose && console.log(ins);
 
+  /* Pre Calc */
+  if (dst.preCalc != '') {
+    const cmd = dst.preCalc
+      .replaceAll('{n}', xn_dst)
+      .replaceAll('{pi}', pi.toString());
+    verbose && console.log(cmd);
+    eval(cmd);
+  }
+
   /* Calc */
   for (let i = start; i < 4; i++) {
     const cmd = `${dstLoc} = ${srcLoc}`
@@ -120,7 +133,7 @@ export const MOVE = (
   }
 
   /* Post Calc */
-  if (dst.postCalc) {
+  if (dst.postCalc != '') {
     const cmd = dst.postCalc
       .replaceAll('{n}', xn_dst)
       .replaceAll('{pi}', pi.toString());

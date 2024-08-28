@@ -71,7 +71,9 @@ export const processXNXT = (xt_bin: string, xn_bin: string, d: string) => {
       length = 2;
       break;
     case '100':
-      arg = '-(an)';
+      arg = '-(a{n})';
+      calc = 'task.s.m[_4to1(task.s.a{n})+{i}-{s}]';
+      preCalc = 'task.s.a{n} = _decReg(task.s.a{n},{pi})';
       length = 2;
       break;
     case '101':

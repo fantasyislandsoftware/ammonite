@@ -177,7 +177,12 @@ export const incReg = (reg: any, i: number) => {
   let n = _4to1(reg);
   n += i;
   return splitLongInto4Bytes(n);
+};
 
+export const decReg = (reg: any, i: number) => {
+  let n = _4to1(reg);
+  n -= i;
+  return splitLongInto4Bytes(n);
 };
 
 export const genM68KAddrSpace = (allocatedMemory: number) => {
