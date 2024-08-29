@@ -7,8 +7,8 @@ DN_TO_IMM       x
 DN_TO_I         x
 DN_TO_IPI       x
 DN_TO_IPD       x
-DN_TO_IWD
-DN_TO_PC
+DN_TO_IWD       x
+DN_TO_IWID
 
 /* AN */
 AN_TO_DN

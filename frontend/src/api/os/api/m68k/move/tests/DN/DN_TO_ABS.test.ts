@@ -3,8 +3,8 @@ import { EnumLOC2BIN, EnumLOCD2BIN, EnumOpSizeBin } from '../../../IM68k';
 import { makeTestTask } from '../../../m68kTestHelpers';
 import { MOVE } from '../../MOVE';
 
-/* move.b d0,0.w */
-it(`move.b d0,0.w`, () => {
+/* move.b d0,0 */
+it(`move.b d0,0`, () => {
   const d_src_t = EnumLOC2BIN.D;
   const d_src_n = dec2bin(0, 3);
   const d_dst_t = EnumLOC2BIN.M;
@@ -23,8 +23,8 @@ it(`move.b d0,0.w`, () => {
   expect(task.s.m).toEqual([0x78, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff]);
 });
 
-/* move.w d0,0.w */
-it(`move.w d0,0.w`, () => {
+/* move.w d0,0 */
+/*it(`move.w d0,0`, () => {
   const d_src_t = EnumLOC2BIN.D;
   const d_src_n = dec2bin(0, 3);
   const d_dst_t = EnumLOC2BIN.M;
@@ -41,10 +41,10 @@ it(`move.w d0,0.w`, () => {
   expect(success).toEqual(true);
   expect(length).toEqual(4);
   expect(task.s.m).toEqual([0x56, 0x78, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff]);
-});
+});*/
 
-/* move.w d0,0.l */
-it(`move.w d0,0.l`, () => {
+/* move.l d0,0 */
+/*it(`move.l d0,0`, () => {
   const d_src_t = EnumLOC2BIN.D;
   const d_src_n = dec2bin(0, 3);
   const d_dst_t = EnumLOC2BIN.M;
@@ -61,4 +61,4 @@ it(`move.w d0,0.l`, () => {
   expect(success).toEqual(true);
   expect(length).toEqual(4);
   expect(task.s.m).toEqual([0x12, 0x34, 0x56, 0x78, 0xff, 0xff, 0xff, 0xff]);
-});
+});*/

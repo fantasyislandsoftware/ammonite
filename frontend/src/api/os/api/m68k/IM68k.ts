@@ -47,9 +47,18 @@ export enum EnumLOC2BIN {
   IPI = '011',
   IPD = '100',
   IWD = '101',
+  IWDI = '110',
 }
 
 export enum EnumLOCD2BIN {
   ABS_W = '000',
   ABS_L = '001',
+}
+
+export interface IOperand {
+  asmOperand: string;
+  jsOperand: string;
+  ipi: boolean;
+  ipd: boolean;
+  length: number;
 }

@@ -1,12 +1,16 @@
 import { ITask } from 'stores/useTaskStore';
 import { processOpSize, processXNXT } from '../m68kHelpers';
-import { EnumM68KOP } from '../IM68k';
+import { EnumM68KOP, IOperand } from '../IM68k';
 import { EnumOpBit, opBitChar } from 'functions/dataHandling/IdataHandling';
 import {
   _4to1 as __4to1,
   incReg,
   decReg,
+  splitLongInto4Bytes,
+  dec2bin,
 } from 'functions/dataHandling/dataHandling';
+import { parse } from 'path';
+import { rp } from 'functions/string';
 
 const _4to1 = __4to1;
 const _incReg = incReg;
@@ -22,18 +26,18 @@ export const MOVE = (
 ) => {
   const { verbose } = setting || { verbose: false };
 
-  let src = {
-    arg: '',
-    calc: '',
-    pre: '',
-    post: '',
+  let src: IOperand = {
+    asmOperand: '',
+    jsOperand: '',
+    ipi: false,
+    ipd: false,
     length: 0,
   };
-  let dst = {
-    arg: '',
-    calc: '',
-    pre: '',
-    post: '',
+  let dst: IOperand = {
+    asmOperand: '',
+    jsOperand: '',
+    ipi: false,
+    ipd: false,
     length: 0,
   };
   let length = 0;
@@ -52,12 +56,14 @@ export const MOVE = (
   const xt_dst_bin = `${i[7]}${i[8]}${i[9]}`;
   dst = processXNXT(xt_dst_bin, xn_dst_bin, d);
 
+  /* Length */
   if (src.length === 4 || dst.length === 4) {
     length = 4;
   } else {
     length = 2;
   }
 
+  /* */
   let pi = 0;
   switch (opSize) {
     case EnumOpBit.BYTE:
@@ -77,11 +83,9 @@ export const MOVE = (
 
   /* src address */
   const xn_src = parseInt(xn_src_bin, 2).toString();
-  const srcLoc = `${src.calc}`.replace('{n}', xn_src);
 
   /* dst address */
   const xn_dst = parseInt(xn_dst_bin, 2).toString();
-  const dstLoc = `${dst.calc}`.replace('{n}', xn_dst);
 
   let start = 0;
   switch (opSize) {
@@ -100,46 +104,95 @@ export const MOVE = (
 
   const opSizeChar = opBitChar[opSize];
 
-  const data = parseInt(d, 2).toString();
+  const data = splitLongInto4Bytes(parseInt(d, 2));
+  const d0 = data[0];
+  const d1 = data[1];
+  const d2 = data[2];
+  const d3 = data[3];
 
-  const rp = (s: string, n: string, d: string) => {
-    return s.replaceAll('{n}', n).replaceAll('{d}', d);
-  };
+  const ib = dec2bin(d2, 8);
 
-  const ins = `move.${opSizeChar} ${rp(src.arg, xn_src, data)},${rp(
-    dst.arg,
-    xn_dst,
-    data
-  )}`;
+  const it = parseInt(`${ib[0]}`, 2);
+  const its = it === 1 ? 'a' : 'd';
+
+  const inum = parseInt(`${ib[1]}${ib[2]}${ib[3]}`, 2).toString();
+
+  /* Replacers */
+  const generalRp = [
+    { str: 'd0', with: d0.toString() },
+    { str: 'd1', with: d1.toString() },
+    { str: 'd2', with: d2.toString() },
+    { str: 'd3', with: d3.toString() },
+    { str: 'it', with: its },
+    { str: 'in', with: inum },
+  ];
+
+  let srcRp = [{ str: 'n', with: xn_src }];
+  let dstRp = [{ str: 'n', with: xn_dst }];
+
+  /* Verbose Instruction */
+  const srcAsmOperand = rp(src.asmOperand, generalRp.concat(srcRp));
+  const dstAsmOperand = rp(dst.asmOperand, generalRp.concat(dstRp));
+  const ins = `move.${opSizeChar} ${srcAsmOperand},${dstAsmOperand}`;
   verbose && console.log(ins);
 
   /* Pre Calc */
-  if (dst.pre != '') {
-    const cmd = dst.pre.replaceAll('{n}', xn_dst)
-      .replaceAll('{pi}', pi.toString())
-      .replaceAll('{d}', data);
+  /*if (dst.pre != '') {
+    const cmd = rp(dst.pre, {
+      n: xn_dst,
+      pi: pi.toString(),
+      d: data,
+    });
     verbose && console.log(cmd);
-    eval(cmd);
-  }
+    try {
+      eval(cmd);
+    } catch (error) {
+      success = false;
+    }
+  }*/
 
   /* Calc */
+  srcRp = [
+    { str: 'n', with: xn_src },
+    { str: 'd', with: d3.toString() },
+    { str: 's', with: start.toString() },
+  ];
+  dstRp = [
+    { str: 'n', with: xn_dst },
+    { str: 'd', with: d3.toString() },
+    { str: 's', with: start.toString() },
+  ];
   for (let i = start; i < 4; i++) {
-    const cmd = `${dstLoc} = ${srcLoc}`
-      .replaceAll('{i}', i.toString())
-      .replaceAll('{d}', data)
-      .replaceAll('{s}', start.toString());
+    const generalRp = [{ str: 'i', with: i.toString() }];
+    const srcJsOperand = rp(src.jsOperand, generalRp.concat(srcRp));
+    const dstJsOperand = rp(dst.jsOperand, generalRp.concat(dstRp));
+    const cmd = `${dstJsOperand} = ${srcJsOperand}`;
     verbose && console.log(cmd);
-    eval(cmd);
+    try {
+      eval(cmd);
+    } catch (error) {
+      success = false;
+    }
   }
 
   /* Post Calc */
-  if (dst.post != '') {
-    const cmd = dst.post.replaceAll('{n}', xn_dst)
-      .replaceAll('{pi}', pi.toString())
-      .replaceAll('{d}', data);
-    verbose && console.log(cmd);
-    eval(cmd);
+  if (src.ipi || dst.ipi) {
+    const x = 'task.s.a{n} = _incReg(task.s.a{n},{pi})';
+    verbose && console.log(x);
   }
+  /*if (dst.post != '') {
+    const cmd = rp(dst.post, {
+      n: xn_dst,
+      pi: pi.toString(),
+      d: data,
+    });
+    verbose && console.log(cmd);
+    try {
+      eval(cmd);
+    } catch (error) {
+      success = false;
+    }
+  }*/
 
   return { task: task, success: success, length: length };
 };

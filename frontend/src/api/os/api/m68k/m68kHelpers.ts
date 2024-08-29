@@ -1,5 +1,5 @@
 import { ITask } from 'stores/useTaskStore';
-import { EnumASMType, EnumM68KOP, EnumOPAction } from './IM68k';
+import { EnumASMType, EnumM68KOP, EnumOPAction, IOperand } from './IM68k';
 import { EnumBit, EnumOpBit } from 'functions/dataHandling/IdataHandling';
 
 export const convertArg = (arg: string) => {
@@ -43,86 +43,84 @@ export const convertArg = (arg: string) => {
 };
 
 export const processXNXT = (xt_bin: string, xn_bin: string, d: string) => {
-  let arg = '';
-  let calc = '';
-  let post = '';
-  let pre = '';
-  let length = 0;
+  let res: IOperand = {
+    asmOperand: '',
+    jsOperand: '',
+    ipi: false,
+    ipd: false,
+    length: 0,
+  };
+
   switch (xt_bin) {
     case '000':
-      arg = 'd{n}';
-      calc = 'task.s.d{n}[{i}]';
-      length = 2;
+      res.asmOperand = 'd{n}';
+      res.jsOperand = 'task.s.d{n}[{i}]';
+      res.length = 2;
       break;
     case '001':
-      arg = 'an';
-      calc = 'task.s.a{n}[i]';
-      length = 2;
+      res.asmOperand = 'a{n}';
+      res.jsOperand = 'task.s.a{n}[i]';
+      res.length = 2;
       break;
     case '010':
-      arg = '(a{n})';
-      calc = 'task.s.m[_4to1(task.s.a{n})+{i}-{s}]';
-      length = 2;
+      res.asmOperand = '(a{n})';
+      res.jsOperand = 'task.s.m[_4to1(task.s.a{n})+{i}-{s}]';
+      res.length = 2;
       break;
     case '011':
-      arg = '(a{n})+';
-      calc = 'task.s.m[_4to1(task.s.a{n})+{i}-{s}]';
-      post = 'task.s.a{n} = _incReg(task.s.a{n},{pi})';
-      length = 2;
+      res.asmOperand = '(a{n})+';
+      res.jsOperand = 'task.s.m[_4to1(task.s.a{n})+{i}-{s}]';
+      res.ipi = true;
+      //post = 'task.s.a{n} = _incReg(task.s.a{n},{pi})';
+      res.length = 2;
       break;
     case '100':
-      arg = '-(a{n})';
-      calc = 'task.s.m[_4to1(task.s.a{n})+{i}-{s}]';
-      pre = 'task.s.a{n} = _decReg(task.s.a{n},{pi})';
-      length = 2;
+      res.asmOperand = '-(a{n})';
+      res.jsOperand = 'task.s.m[_4to1(task.s.a{n})+{i}-{s}]';
+      //pre = 'task.s.a{n} = _decReg(task.s.a{n},{pi})';
+      res.length = 2;
       break;
     case '101':
-      arg = 'd(a{n})';
-      calc = 'task.s.m[_4to1(task.s.a{n})+{i}-{s}]';
-      pre = 'task.s.a{n} = _incReg(task.s.a{n},{d})';
-      length = 2;
+      res.asmOperand = '{d}(a{n})';
+      res.jsOperand = 'task.s.m[_4to1(task.s.a{n})+{i}-{s}]';
+      //pre = 'task.s.a{n} = _incReg(task.s.a{n},{d})';
+      res.length = 2;
       break;
     case '110':
-      arg = 'd8(an,Xn)';
-      length = 2;
+      res.asmOperand = '{d3}(a{n},{it}{in})';
+      res.length = 2;
       break;
     case '111':
       switch (xn_bin) {
         case '000':
-          arg = '{d}.w';
-          calc = 'task.s.m[{d}+{i}-{s}]';
-          length = 4;
+          res.asmOperand = '{d3}';
+          res.jsOperand = 'task.s.m[{d}+{i}-{s}]';
+          res.length = 4;
           break;
         case '001':
-          arg = '{d}.l';
-          calc = 'task.s.m[{d}+{i}-{s}]';
-          length = 4;
+          res.asmOperand = '{d}';
+          res.jsOperand = 'task.s.m[{d}+{i}-{s}]';
+          res.length = 4;
           break;
         case '010':
-          arg = 'd16(pc)';
-          length = 4;
+          res.asmOperand = 'd16(pc)';
+          res.length = 4;
           break;
         case '011':
-          arg = 'd8(pc,xn)';
-          length = 4;
+          res.asmOperand = 'd8(pc,xn)';
+          res.length = 4;
           break;
         case '100':
-          arg = '#imm';
-          length = 4;
+          res.asmOperand = '#imm';
+          res.length = 4;
           break;
         default:
-          arg = '#imm';
-          length = 4;
+          res.asmOperand = '#imm';
+          res.length = 4;
       }
       break;
   }
-  return {
-    arg: arg,
-    calc: calc,
-    pre: pre,
-    post: post,
-    length: length,
-  };
+  return res;
 };
 
 export const processOpSize = (opSize_bin: string) => {

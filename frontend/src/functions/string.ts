@@ -9,3 +9,10 @@ export const bin2int = (bin: string) => {
 export const int2Hex = (int: number) => {
   return int.toString(16);
 };
+
+export const rp = (src: string, a: { str: string; with: string }[]) => {
+  a.map((v) => {
+    src = src.replaceAll(`{${v.str}}`, v.with);
+  });
+  return src;
+};
