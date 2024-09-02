@@ -48,6 +48,7 @@ export const processXNXT = (xt_bin: string, xn_bin: string, d: string) => {
     jsOperand: '',
     ipi: false,
     ipd: false,
+    iwd: false,
     length: 0,
   };
 
@@ -71,19 +72,18 @@ export const processXNXT = (xt_bin: string, xn_bin: string, d: string) => {
       res.asmOperand = '(a{n})+';
       res.jsOperand = 'task.s.m[_4to1(task.s.a{n})+{i}-{s}]';
       res.ipi = true;
-      //post = 'task.s.a{n} = _incReg(task.s.a{n},{pi})';
       res.length = 2;
       break;
     case '100':
       res.asmOperand = '-(a{n})';
       res.jsOperand = 'task.s.m[_4to1(task.s.a{n})+{i}-{s}]';
-      //pre = 'task.s.a{n} = _decReg(task.s.a{n},{pi})';
+      res.ipd = true;
       res.length = 2;
       break;
     case '101':
       res.asmOperand = '{d}(a{n})';
       res.jsOperand = 'task.s.m[_4to1(task.s.a{n})+{i}-{s}]';
-      //pre = 'task.s.a{n} = _incReg(task.s.a{n},{d})';
+      res.iwd = true;
       res.length = 2;
       break;
     case '110':

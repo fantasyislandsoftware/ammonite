@@ -60,5 +60,6 @@ export interface IOperand {
   jsOperand: string;
   ipi: boolean;
   ipd: boolean;
+  iwd: boolean;
   length: number;
 }

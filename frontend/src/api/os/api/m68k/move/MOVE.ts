@@ -31,6 +31,7 @@ export const MOVE = (
     jsOperand: '',
     ipi: false,
     ipd: false,
+    iwd: false,
     length: 0,
   };
   let dst: IOperand = {
@@ -38,6 +39,7 @@ export const MOVE = (
     jsOperand: '',
     ipi: false,
     ipd: false,
+    iwd: false,
     length: 0,
   };
   let length = 0;
@@ -136,20 +138,33 @@ export const MOVE = (
   const ins = `move.${opSizeChar} ${srcAsmOperand},${dstAsmOperand}`;
   verbose && console.log(ins);
 
-  /* Pre Calc */
-  /*if (dst.pre != '') {
-    const cmd = rp(dst.pre, {
-      n: xn_dst,
-      pi: pi.toString(),
-      d: data,
-    });
+  /* Indirect Pre-Decrement */
+  const preIPDCmd = 'task.s.a{n} = _decReg(task.s.a{n},{pi})';
+  const preIPDRep = [{ str: 'pi', with: pi.toString() }];
+  if (src.ipd) {
+    const cmd = rp(preIPDCmd, [{ str: 'n', with: xn_src }].concat(preIPDRep));
     verbose && console.log(cmd);
-    try {
-      eval(cmd);
-    } catch (error) {
-      success = false;
-    }
-  }*/
+    eval(cmd);
+  }
+  if (dst.ipd) {
+    const cmd = rp(preIPDCmd, [{ str: 'n', with: xn_dst }].concat(preIPDRep));
+    verbose && console.log(cmd);
+    eval(cmd);
+  }
+
+  /* Indirect Pre-Increment with Displacement */
+  const preIWDCmd = 'task.s.a{n} = _incReg(task.s.a{n},{d})';
+  const preIWDRep = [{ str: 'd', with: parseInt(d, 2).toString() }];
+  if (src.iwd) {
+    const cmd = rp(preIWDCmd, [{ str: 'n', with: xn_src }].concat(preIWDRep));
+    verbose && console.log(cmd);
+    eval(cmd);
+  }
+  if (dst.iwd) {
+    const cmd = rp(preIWDCmd, [{ str: 'n', with: xn_dst }].concat(preIWDRep));
+    verbose && console.log(cmd);
+    eval(cmd);
+  }
 
   /* Calc */
   srcRp = [
@@ -175,24 +190,19 @@ export const MOVE = (
     }
   }
 
-  /* Post Calc */
-  if (src.ipi || dst.ipi) {
-    const x = 'task.s.a{n} = _incReg(task.s.a{n},{pi})';
-    verbose && console.log(x);
-  }
-  /*if (dst.post != '') {
-    const cmd = rp(dst.post, {
-      n: xn_dst,
-      pi: pi.toString(),
-      d: data,
-    });
+  /* Indirect Post-Increment */
+  const postIPICmd = 'task.s.a{n} = _incReg(task.s.a{n},{pi})';
+  const postIPIRep = [{ str: 'pi', with: pi.toString() }];
+  if (src.ipi) {
+    const cmd = rp(postIPICmd, [{ str: 'n', with: xn_src }].concat(postIPIRep));
     verbose && console.log(cmd);
-    try {
-      eval(cmd);
-    } catch (error) {
-      success = false;
-    }
-  }*/
+    eval(cmd);
+  }
+  if (dst.ipi) {
+    const cmd = rp(postIPICmd, [{ str: 'n', with: xn_dst }].concat(postIPIRep));
+    verbose && console.log(cmd);
+    eval(cmd);
+  }
 
   return { task: task, success: success, length: length };
 };

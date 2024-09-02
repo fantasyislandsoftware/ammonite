@@ -16,7 +16,7 @@ it(`move.b d0,d(a0)`, () => {
     d0: [0x12, 0x34, 0x56, 0x78],
     a0: [0x00, 0x00, 0x00, 0x00],
   });
-  const res = MOVE(testTask, i.join(''), d);
+  const res = MOVE(testTask, i.join(''), d, { verbose: true });
   const { task, success, length } = res;
   expect(success).toEqual(true);
   expect(length).toEqual(2);
