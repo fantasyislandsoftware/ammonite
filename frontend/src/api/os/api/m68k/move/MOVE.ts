@@ -8,8 +8,10 @@ import {
   decReg,
   splitLongInto4Bytes,
   dec2bin,
+  bin2hex,
+  combine2BytesInto1Word,
 } from 'functions/dataHandling/dataHandling';
-import { parse } from 'path';
+import { join, parse } from 'path';
 import { rp } from 'functions/string';
 
 const _4to1 = __4to1;
@@ -19,7 +21,131 @@ const _decReg = decReg;
 export const MOVE = (
   task: ITask,
   i: string,
-  d: string,
+  data: string,
+  setting?: {
+    verbose: boolean;
+  }
+) => {
+  /* Bit Size */
+  const opSize_bin = `${i[2]}${i[3]}`;
+  const opSize = processOpSize(opSize_bin);
+  const opSizeChar = opBitChar[opSize];
+
+  /* Source */
+  const xt_src_bin = `${i[10]}${i[11]}${i[12]}`;
+  const xn_src_bin = `${i[13]}${i[14]}${i[15]}`;
+  const xn_src_n = parseInt(xn_src_bin, 2).toString();
+
+  /* Destination */
+  const xn_dst_bin = `${i[4]}${i[5]}${i[6]}`;
+  const xt_dst_bin = `${i[7]}${i[8]}${i[9]}`;
+  const xn_dst_n = parseInt(xn_dst_bin, 2).toString();
+
+  const data0 = data.substring(0, 16);
+  const data1 = data.substring(16, 32);
+  const data0A = splitLongInto4Bytes(parseInt(data0, 2));
+  const data1A = splitLongInto4Bytes(parseInt(data1, 2));
+
+  /* Data conversion */
+  const db0 = data0A[0];
+  const db1 = data0A[1];
+  const w0 = combine2BytesInto1Word(db0, db1);
+  const db2 = data0A[2];
+  const db3 = data0A[3];
+  const w1 = combine2BytesInto1Word(db2, db3);
+  const db4 = data1A[0];
+  const db5 = data1A[1];
+  const w2 = combine2BytesInto1Word(db4, db5);
+  const db6 = data1A[2];
+  const db7 = data1A[3];
+  const w3 = combine2BytesInto1Word(db6, db7);
+
+  const src: IOperand = processXNXT('src', xt_src_bin, xn_src_bin);
+  const dst: IOperand = processXNXT('dst', xt_dst_bin, xn_dst_bin);
+
+  /* Sort data positions */
+  let d0 = 0;
+  let d1 = 0;
+  if (src.iwd === true && dst.iwd === false) {
+    d0 = w1;
+  }
+  if (src.iwd === false && dst.iwd === true) {
+    d1 = w1;
+  }
+  if (src.iwd && dst.iwd) {
+    d0 = w1;
+    d1 = w3;
+  }
+
+  const srcRp = [
+    { str: '{src_d}', with: d0.toString() },
+    {
+      str: '{src_n}',
+      with: xn_src_n,
+    },
+  ];
+
+  const dstRp = [
+    {
+      str: '{dst_d}',
+      with: d1.toString(),
+    },
+    {
+      str: '{dst_n}',
+      with: xn_dst_n,
+    },
+  ];
+
+  const srcAsmOperand = rp(src.asmOperand, srcRp);
+  const dstAsmOperand = rp(dst.asmOperand, dstRp);
+
+  const asm = `move.${opSizeChar} ${srcAsmOperand},${dstAsmOperand}`;
+
+  return { task: exeMove(task, asm), success: true, length: 0 };
+};
+
+export const exeMove = (task: ITask, asm: string) => {
+  console.log(asm);
+
+  const rps = [
+    { str: 'move.b ', with: '' },
+    { str: 'move.w ', with: '' },
+    { str: 'move.l ', with: '' },
+    { str: 'd0', with: 'task.s.d0' },
+    { str: 'd1', with: 'task.s.d1' },
+    { str: 'd2', with: 'task.s.d2' },
+    { str: 'd3', with: 'task.s.d3' },
+    { str: 'd4', with: 'task.s.d4' },
+    { str: 'd5', with: 'task.s.d5' },
+    { str: 'd6', with: 'task.s.d6' },
+    { str: 'd7', with: 'task.s.d7' },
+    { str: 'a0', with: 'task.s.a0' },
+    { str: 'a1', with: 'task.s.a1' },
+    { str: 'a2', with: 'task.s.a2' },
+    { str: 'a3', with: 'task.s.a3' },
+    { str: 'a4', with: 'task.s.a4' },
+    { str: 'a5', with: 'task.s.a5' },
+    { str: 'a6', with: 'task.s.a6' },
+    { str: 'a7', with: 'task.s.a7' },
+
+    { str: '(task.s.a0)', with: 'task.s.m[task.s.a0]' },
+  ];
+
+  const _move = (task: ITask, src: string, dst: string) => {
+    console.log(dst);
+  };
+
+  const js = `task = _move(task,${rp(asm, rps)});`.replaceAll(',', ', ');
+  console.log(js);
+  eval(js);
+
+  return task;
+};
+
+export const MOVE_ = (
+  task: ITask,
+  i: string,
+  data: string,
   setting?: {
     verbose: boolean;
   }
@@ -51,12 +177,12 @@ export const MOVE = (
   /* Source */
   const xt_src_bin = `${i[10]}${i[11]}${i[12]}`;
   const xn_src_bin = `${i[13]}${i[14]}${i[15]}`;
-  src = processXNXT(xt_src_bin, xn_src_bin, d);
+  src = processXNXT('src', xt_src_bin, xn_src_bin);
 
   /* Destination */
   const xn_dst_bin = `${i[4]}${i[5]}${i[6]}`;
   const xt_dst_bin = `${i[7]}${i[8]}${i[9]}`;
-  dst = processXNXT(xt_dst_bin, xn_dst_bin, d);
+  dst = processXNXT('dst', xt_dst_bin, xn_dst_bin);
 
   /* Length */
   if (src.length === 4 || dst.length === 4) {
@@ -106,13 +232,25 @@ export const MOVE = (
 
   const opSizeChar = opBitChar[opSize];
 
-  const data = splitLongInto4Bytes(parseInt(d, 2));
-  const d0 = data[0];
-  const d1 = data[1];
-  const d2 = data[2];
-  const d3 = data[3];
+  const data0 = data.substring(0, 16);
+  const data1 = data.substring(16, 32);
+  const data0A = splitLongInto4Bytes(parseInt(data0, 2));
+  const data1A = splitLongInto4Bytes(parseInt(data1, 2));
 
-  const ib = dec2bin(d2, 8);
+  const db0 = data0A[0];
+  const db1 = data0A[1];
+  const w0 = combine2BytesInto1Word(db0, db1);
+  const db2 = data0A[2];
+  const db3 = data0A[3];
+  const w1 = combine2BytesInto1Word(db2, db3);
+  const db4 = data1A[4];
+  const db5 = data1A[5];
+  const w2 = combine2BytesInto1Word(db4, db5);
+  const db6 = data1A[6];
+  const db7 = data1A[7];
+  const w3 = combine2BytesInto1Word(db6, db7);
+
+  const ib = dec2bin(db2, 8);
 
   const it = parseInt(`${ib[0]}`, 2);
   const its = it === 1 ? 'a' : 'd';
@@ -121,10 +259,10 @@ export const MOVE = (
 
   /* Replacers */
   const generalRp = [
-    { str: 'd0', with: d0.toString() },
-    { str: 'd1', with: d1.toString() },
-    { str: 'd2', with: d2.toString() },
-    { str: 'd3', with: d3.toString() },
+    { str: 'd0', with: db0.toString() },
+    { str: 'd1', with: db1.toString() },
+    { str: 'd2', with: db2.toString() },
+    { str: 'd3', with: db3.toString() },
     { str: 'it', with: its },
     { str: 'in', with: inum },
   ];
@@ -152,29 +290,29 @@ export const MOVE = (
     eval(cmd);
   }
 
-  /* Indirect Pre-Increment with Displacement */
+  /* Indirect with Displacement */
   const preIWDCmd = 'task.s.a{n} = _incReg(task.s.a{n},{d})';
-  const preIWDRep = [{ str: 'd', with: parseInt(d, 2).toString() }];
+  //const preIWDRep = [{ str: 'd', with: parseInt(d, 2).toString() }];
   if (src.iwd) {
-    const cmd = rp(preIWDCmd, [{ str: 'n', with: xn_src }].concat(preIWDRep));
-    verbose && console.log(cmd);
-    eval(cmd);
+    //const cmd = rp(preIWDCmd, [{ str: 'n', with: xn_src }].concat(preIWDRep));
+    //verbose && console.log(cmd);
+    //eval(cmd);
   }
-  if (dst.iwd) {
+  /*if (dst.iwd) {
     const cmd = rp(preIWDCmd, [{ str: 'n', with: xn_dst }].concat(preIWDRep));
     verbose && console.log(cmd);
     eval(cmd);
-  }
+  }*/
 
   /* Calc */
   srcRp = [
     { str: 'n', with: xn_src },
-    { str: 'd', with: d3.toString() },
+    { str: 'd', with: db3.toString() },
     { str: 's', with: start.toString() },
   ];
   dstRp = [
     { str: 'n', with: xn_dst },
-    { str: 'd', with: d3.toString() },
+    { str: 'd', with: db3.toString() },
     { str: 's', with: start.toString() },
   ];
   for (let i = start; i < 4; i++) {

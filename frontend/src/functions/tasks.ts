@@ -75,19 +75,27 @@ const matchPattern = (pattern: string, value: string) => {
 };
 
 const execM68KInstruction = (self: ITask) => {
-  const inst = hex2bin(
-    `${self.s.m[self.pos].toString(16).padStart(2, '0')}${self.s.m[self.pos + 1]
-      .toString(16)
-      .padStart(2, '0')}`
-  );
+  /* Instruction */
+  const ih = `${self.s.m[self.pos + 0].toString(16).padStart(2, '0')}${self.s.m[
+    self.pos + 1
+  ]
+    .toString(16)
+    .padStart(2, '0')}`;
+  const inst = hex2bin(ih);
 
-  const data = hex2bin(
-    `${self.s.m[self.pos + 2].toString(16).padStart(2, '0')}${self.s.m[
-      self.pos + 3
-    ]
-      .toString(16)
-      .padStart(2, '0')}`
-  );
+  /* Data0 */
+  const d0h = `${self.s.m[self.pos + 2]
+    .toString(16)
+    .padStart(2, '0')}${self.s.m[self.pos + 3].toString(16).padStart(2, '0')}`;
+  const d0 = hex2bin(d0h);
+
+  /* Data1 */
+  const d1h = `${self.s.m[self.pos + 4]
+    .toString(16)
+    .padStart(2, '0')}${self.s.m[self.pos + 5].toString(16).padStart(2, '0')}`;
+  const d1 = hex2bin(d1h);
+
+  const data = `${d0}${d1}`;
 
   let opName: string = EnumM68KOP.UNKNOWN;
   let found = false;

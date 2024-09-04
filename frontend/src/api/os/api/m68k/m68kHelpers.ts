@@ -42,7 +42,11 @@ export const convertArg = (arg: string) => {
   return `'?'`;
 };
 
-export const processXNXT = (xt_bin: string, xn_bin: string, d: string) => {
+export const processXNXT = (
+  l: 'src' | 'dst',
+  xt_bin: string,
+  xn_bin: string
+) => {
   let res: IOperand = {
     asmOperand: '',
     jsOperand: '',
@@ -54,8 +58,8 @@ export const processXNXT = (xt_bin: string, xn_bin: string, d: string) => {
 
   switch (xt_bin) {
     case '000':
-      res.asmOperand = 'd{n}';
-      res.jsOperand = 'task.s.d{n}[{i}]';
+      res.asmOperand = `d{${l}_n}`;
+      res.jsOperand = `task.s.d{${l}_n}`;
       res.length = 2;
       break;
     case '001':
@@ -64,7 +68,7 @@ export const processXNXT = (xt_bin: string, xn_bin: string, d: string) => {
       res.length = 2;
       break;
     case '010':
-      res.asmOperand = '(a{n})';
+      res.asmOperand = `(a{${l}_n})`;
       res.jsOperand = 'task.s.m[_4to1(task.s.a{n})+{i}-{s}]';
       res.length = 2;
       break;
@@ -81,8 +85,8 @@ export const processXNXT = (xt_bin: string, xn_bin: string, d: string) => {
       res.length = 2;
       break;
     case '101':
-      res.asmOperand = '{d}(a{n})';
-      res.jsOperand = 'task.s.m[_4to1(task.s.a{n})+{i}-{s}]';
+      res.asmOperand = `{${l}_d}(a{${l}_n})`;
+      res.jsOperand = 'task.s.m[_4to1(task.s.a{n})+{di}+{i}-{s}]';
       res.iwd = true;
       res.length = 2;
       break;

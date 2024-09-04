@@ -12,7 +12,7 @@ export const int2Hex = (int: number) => {
 
 export const rp = (src: string, a: { str: string; with: string }[]) => {
   a.map((v) => {
-    src = src.replaceAll(`{${v.str}}`, v.with);
+    src = src.replaceAll(`${v.str}`, v.with);
   });
   return src;
 };

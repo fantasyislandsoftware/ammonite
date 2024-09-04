@@ -1,4 +1,4 @@
-import { Express } from "express";
+import { Express, raw } from "express";
 import fs, { readFileSync } from "fs";
 const { spawnSync } = require("node:child_process");
 //const ls = spawn('ls', ['-lh', '/usr']);
@@ -68,7 +68,7 @@ const hunkTypes: any = {
   "0000 03fe": "HUNK_ABSRELOC16",
 };
 
-const getAmigaHunks = (data: string) => {
+const getAmigaHunks = (data: string, raw: any) => {
   let hunks: any = [];
   let hunkData: any = [];
 
@@ -140,11 +140,15 @@ const packageData = async (path: string) => {
       hunks = getJamHunks(fileData.toString());
       break;
     case "amiga":
-      hunks = getAmigaHunks(spawnSync("vda68k", [path]).stdout.toString());
+      hunks = getAmigaHunks(
+        spawnSync("vda68k", [path]).stdout.toString(),
+        readFileSync(path)
+      );
       break;
   }
   return {
     type: fileType,
+    raw: fileData,
     hunks: hunks,
   };
 };

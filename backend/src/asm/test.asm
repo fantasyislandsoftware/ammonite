@@ -1,6 +1,6 @@
 .section code
 
-test:   move.l d0,0
+test:   move.b d0,(a0)
         bra test
 
 ; a0,d0 - 00000000

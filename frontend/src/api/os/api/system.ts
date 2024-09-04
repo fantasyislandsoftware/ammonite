@@ -9,6 +9,7 @@ import {
 import { EnumDataFormat } from 'interface/data';
 import { TaskState, TaskArch, useTaskStore } from 'stores/useTaskStore';
 import { v4 as uuidv4 } from 'uuid';
+var Buffer = require('buffer/').Buffer;
 
 enum ENUM_HUNK_FILE_TYPE {
   JAM = 'jam',
@@ -39,6 +40,7 @@ interface IHunk {
 
 interface IHunks {
   type: ENUM_HUNK_FILE_TYPE;
+  raw: Buffer;
   hunks: IHunk[];
 }
 
@@ -191,6 +193,8 @@ export class SYSTEM_API {
 
     let block: any = {};
 
+    const test = new Buffer(data.raw);
+
     switch (data.type) {
       case ENUM_HUNK_FILE_TYPE.JAM:
         block = this.processJamHunks(data.hunks);
@@ -229,7 +233,8 @@ export class SYSTEM_API {
           a6: fillNumberArray(0, 8),
           a7: fillNumberArray(0, 8),
           c: fillNumberArray(0, 2),
-          m: block.mem,
+          //m: block.mem,
+          m: test,
         },
       });
     setTasks(tasks);
