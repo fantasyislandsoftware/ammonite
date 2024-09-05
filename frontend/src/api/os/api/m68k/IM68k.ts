@@ -58,6 +58,7 @@ export enum EnumLOCD2BIN {
 export interface IOperand {
   asmOperand: string;
   jsOperand: string;
+  abs?: boolean;
   ipi: boolean;
   ipd: boolean;
   iwd: boolean;

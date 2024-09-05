@@ -1,7 +1,11 @@
 .section code
 
-test:   move.b d0,(a0)
+dat = 1
+
+test:   move.l (a0),d0
         bra test
+
+
 
 ; a0,d0 - 00000000
 ; a0,d1 - 00010000

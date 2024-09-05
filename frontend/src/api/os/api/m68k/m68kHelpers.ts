@@ -63,7 +63,7 @@ export const processXNXT = (
       res.length = 2;
       break;
     case '001':
-      res.asmOperand = 'a{n}';
+      res.asmOperand = `a{${l}_n}`;
       res.jsOperand = 'task.s.a{n}[i]';
       res.length = 2;
       break;
@@ -97,7 +97,8 @@ export const processXNXT = (
     case '111':
       switch (xn_bin) {
         case '000':
-          res.asmOperand = '{d3}';
+          res.asmOperand = `{${l}_d}`;
+          res.abs = true;
           res.jsOperand = 'task.s.m[{d}+{i}-{s}]';
           res.length = 4;
           break;

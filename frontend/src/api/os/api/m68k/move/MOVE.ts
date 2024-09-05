@@ -18,6 +18,28 @@ const _4to1 = __4to1;
 const _incReg = incReg;
 const _decReg = decReg;
 
+enum EnumLRB {
+  N = 0,
+  L = 1,
+  R = 2,
+  B = 3,
+}
+
+const lrb = (v0: boolean | undefined, v1: boolean | undefined) => {
+  let result: EnumLRB = EnumLRB.N;
+
+  if (v0 === true && v1 === undefined) {
+    result = EnumLRB.L;
+  }
+  if (v0 === undefined && v1 === true) {
+    result = EnumLRB.R;
+  }
+  if (v0 === true && v1 === true) {
+    result = EnumLRB.B;
+  }
+  return result;
+};
+
 export const MOVE = (
   task: ITask,
   i: string,
@@ -35,16 +57,21 @@ export const MOVE = (
   const xt_src_bin = `${i[10]}${i[11]}${i[12]}`;
   const xn_src_bin = `${i[13]}${i[14]}${i[15]}`;
   const xn_src_n = parseInt(xn_src_bin, 2).toString();
+  console.log(xn_src_n);
 
   /* Destination */
   const xn_dst_bin = `${i[4]}${i[5]}${i[6]}`;
   const xt_dst_bin = `${i[7]}${i[8]}${i[9]}`;
   const xn_dst_n = parseInt(xn_dst_bin, 2).toString();
+  console.log(xn_dst_n);
 
   const data0 = data.substring(0, 16);
   const data1 = data.substring(16, 32);
   const data0A = splitLongInto4Bytes(parseInt(data0, 2));
   const data1A = splitLongInto4Bytes(parseInt(data1, 2));
+
+  //console.log(data0A);
+  //console.log(data1A);
 
   /* Data conversion */
   const db0 = data0A[0];
@@ -63,18 +90,35 @@ export const MOVE = (
   const src: IOperand = processXNXT('src', xt_src_bin, xn_src_bin);
   const dst: IOperand = processXNXT('dst', xt_dst_bin, xn_dst_bin);
 
-  /* Sort data positions */
   let d0 = 0;
   let d1 = 0;
-  if (src.iwd === true && dst.iwd === false) {
-    d0 = w1;
+
+  /* absolute */
+  const abs = lrb(src.abs, dst.abs);
+  switch (abs) {
+    case EnumLRB.L:
+      d0 = w1;
+      break;
+    case EnumLRB.R:
+      d1 = w1;
+      break;
+    case EnumLRB.B:
+      d0 = w1;
+      d1 = w3;
   }
-  if (src.iwd === false && dst.iwd === true) {
-    d1 = w1;
-  }
-  if (src.iwd && dst.iwd) {
-    d0 = w1;
-    d1 = w3;
+
+  /* iwd */
+  const iwd = lrb(src.iwd, dst.iwd);
+  switch (iwd) {
+    case EnumLRB.L:
+      d0 = w1;
+      break;
+    case EnumLRB.R:
+      d1 = w1;
+      break;
+    case EnumLRB.B:
+      d0 = w1;
+      d1 = w3;
   }
 
   const srcRp = [
@@ -104,40 +148,117 @@ export const MOVE = (
   return { task: exeMove(task, asm), success: true, length: 0 };
 };
 
+const OPReg = {
+  /* Reg */
+  MOVE_REG_TO_ABS: /move\.[A-Za-z]+ [A-Za-z]+[0-9]+,[0-9]+/i,
+  MOVE_REG_TO_I: /move\.[A-Za-z]+ [A-Za-z]+[0-9]+,\(a[0-9]+\)/i,
+  MOVE_REG_TO_IPI: /move\.[A-Za-z]+ [A-Za-z]+[0-9]+,\(a[0-9]+\)\+/i,
+  MOVE_REG_TO_IPD: /move\.[A-Za-z]+ [A-Za-z]+[0-9]+,-\(a[0-9]+\)/i,
+  MOVE_REG_TO_IWD: /move\.[A-Za-z]+ [A-Za-z]+[0-9]+,[0-9]+\(a[0-9]+\)/i,
+  MOVE_REG_TO_IWDI:
+    /move\.[A-Za-z]+ [A-Za-z]+[0-9]+,[0-9]+\(a[0-9]+,[A-Za-z]+[0-9]+\)/i,
+  MOVE_REG_TO_REG: /move\.[A-Za-z]+ [A-Za-z]+[0-9]+,[A-Za-z]+[0-9]+/i,
+
+  /* Abs */
+  MOVE_ABS_TO_REG: /move\.[A-Za-z]+ [0-9]+,[A-Za-z]+[0-9]+/i,
+  MOVE_ABS_TO_ABS: /move\.[A-Za-z]+ [0-9]+,[0-9]+/i,
+  MOVE_ABS_TO_I: /move\.[A-Za-z]+ [0-9]+,\(a[0-9]+\)/i,
+  MOVE_ABS_TO_IPI: /move\.[A-Za-z]+ [0-9]+,\(a[0-9]+\)\+/i,
+  MOVE_ABS_TO_IPD: /move\.[A-Za-z]+ [0-9]+,-\(a[0-9]+\)/i,
+  MOVE_ABS_TO_IWD: /move\.[A-Za-z]+ [0-9]+,[0-9]+\(a[0-9]+\)/i,
+  MOVE_ABS_TO_IWDI: /move\.[A-Za-z]+ [0-9]+,[0-9]+\(a[0-9]+,[A-Za-z]+[0-9]+\)/i,
+
+  /* I */
+  MOVE_I_TO_REG: /move\.[A-Za-z]+ \(a[0-9]+\),[A-Za-z]+[0-9]+/i,
+  MOVE_I_TO_ABS: /move\.[A-Za-z]+ \(a[0-9]+\),[0-9]+/i,
+  MOVE_I_TO_I: /move\.[A-Za-z]+ \(a[0-9]+\),\(a[0-9]+\)/i,
+  MOVE_I_TO_IPI: /move\.[A-Za-z]+ \(a[0-9]+\),\(a[0-9]+\)\+/i,
+  MOVE_TO_IPD: /move\.[A-Za-z]+ \(a[0-9]+\),-\(a[0-9]+\)/i,
+  MOVE_I_TO_IWD: /move\.[A-Za-z]+ \(a[0-9]+\),[0-9]+\(a[0-9]+\)/i,
+  MOVE_I_TO_IWDI:
+    /move\.[A-Za-z]+ \(a[0-9]+\),[0-9]+\(a[0-9]+,[A-Za-z]+[0-9]+\)/i,
+
+  /* IPI */
+  MOVE_IPI_TO_REG: /move\.[A-Za-z]+ \(a[0-9]+\)\+,[A-Za-z]+[0-9]+/i,
+  MOVE_IPI_TO_ABS: /move\.[A-Za-z]+ \(a[0-9]+\)\+,[0-9]+/i,
+  MOVE_IPI_TO_I: /move\.[A-Za-z]+ \(a[0-9]+\)\+,\([A-Za-z]+[0-9]+\)/i,
+  MOVE_IPI_TO_IPI: /move\.[A-Za-z]+ \(a[0-9]+\)\+,\([A-Za-z]+[0-9]+\)\+/i,
+  MOVE_IPI_TO_IPD: /move\.[A-Za-z]+ \(a[0-9]+\)\+,-\([A-Za-z]+[0-9]+\)/i,
+  MOVE_IPI_TO_IWD: /move\.[A-Za-z]+ \(a[0-9]+\)\+,[0-9]+\(a[0-9]+\)/i,
+  MOVE_IPI_TO_IWDI:
+    /move\.[A-Za-z]+ \(a[0-9]+\)\+,[0-9]+\(a[0-9]+,[A-Za-z]+[0-9]+\)/i,
+
+  /* IPD */
+  MOVE_IPD_TO_REG: /move\.[A-Za-z]+ -\(a[0-9]+\),[A-Za-z]+[0-9]+/i,
+  MOVE_IPD_TO_ABS: /move\.[A-Za-z]+ -\(a[0-9]+\),[0-9]+/i,
+  MOVE_IPD_TO_I: /move\.[A-Za-z]+ -\(a[0-9]+\),\(a[0-9]+\)/i,
+  MOVE_IPD_TO_IPI: /move\.[A-Za-z]+ -\(a[0-9]+\),\(a[0-9]+\)\+/i,
+  MOVE_IPD_TO_IPD: /move\.[A-Za-z]+ -\(a[0-9]+\),-\(a[0-9]+\)/i,
+  MOVE_IPD_TO_IWD: /move\.[A-Za-z]+ -\(a[0-9]+\),[0-9]+\(a[0-9]+\)/i,
+  MOVE_IPD_TO_IWDI:
+    /move\.[A-Za-z]+ -\(a[0-9]+\),[0-9]+\(a[0-9]+\.[A-Za-z]+[0-9]+\)/i,
+};
+
 export const exeMove = (task: ITask, asm: string) => {
+  asm = 'move.b -(a0),1(a0.d0)';
   console.log(asm);
 
-  const rps = [
-    { str: 'move.b ', with: '' },
-    { str: 'move.w ', with: '' },
-    { str: 'move.l ', with: '' },
-    { str: 'd0', with: 'task.s.d0' },
-    { str: 'd1', with: 'task.s.d1' },
-    { str: 'd2', with: 'task.s.d2' },
-    { str: 'd3', with: 'task.s.d3' },
-    { str: 'd4', with: 'task.s.d4' },
-    { str: 'd5', with: 'task.s.d5' },
-    { str: 'd6', with: 'task.s.d6' },
-    { str: 'd7', with: 'task.s.d7' },
-    { str: 'a0', with: 'task.s.a0' },
-    { str: 'a1', with: 'task.s.a1' },
-    { str: 'a2', with: 'task.s.a2' },
-    { str: 'a3', with: 'task.s.a3' },
-    { str: 'a4', with: 'task.s.a4' },
-    { str: 'a5', with: 'task.s.a5' },
-    { str: 'a6', with: 'task.s.a6' },
-    { str: 'a7', with: 'task.s.a7' },
+  let state = 'unknown';
 
-    { str: '(task.s.a0)', with: 'task.s.m[task.s.a0]' },
-  ];
+  /* Reg */
+  if (OPReg.MOVE_REG_TO_REG.test(asm)) state = 'MOVE_REG_TO_REG';
+  if (OPReg.MOVE_REG_TO_ABS.test(asm)) state = 'MOVE_REG_TO_ABS';
+  if (OPReg.MOVE_REG_TO_I.test(asm)) state = 'MOVE_REG_TO_I';
+  if (OPReg.MOVE_REG_TO_IPI.test(asm)) state = 'MOVE_REG_TO_IPI';
+  if (OPReg.MOVE_REG_TO_IPD.test(asm)) state = 'MOVE_REG_TO_IPD';
+  if (OPReg.MOVE_REG_TO_IWD.test(asm)) state = 'MOVE_REG_TO_IWD';
+  if (OPReg.MOVE_REG_TO_IWDI.test(asm)) state = 'MOVE_REG_TO_IWDI';
 
-  const _move = (task: ITask, src: string, dst: string) => {
-    console.log(dst);
-  };
+  /* Abs */
+  if (OPReg.MOVE_ABS_TO_REG.test(asm)) state = 'MOVE_ABS_TO_REG';
+  if (OPReg.MOVE_ABS_TO_ABS.test(asm)) state = 'MOVE_ABS_TO_ABS';
+  if (OPReg.MOVE_ABS_TO_I.test(asm)) state = 'MOVE_ABS_TO_I';
+  if (OPReg.MOVE_ABS_TO_IPI.test(asm)) state = 'MOVE_ABS_TO_IPI';
+  if (OPReg.MOVE_ABS_TO_IPD.test(asm)) state = 'MOVE_ABS_TO_IPD';
+  if (OPReg.MOVE_ABS_TO_IWD.test(asm)) state = 'MOVE_ABS_TO_IWD';
+  if (OPReg.MOVE_ABS_TO_IWDI.test(asm)) state = 'MOVE_ABS_TO_IWDI';
 
-  const js = `task = _move(task,${rp(asm, rps)});`.replaceAll(',', ', ');
-  console.log(js);
-  eval(js);
+  /* I */
+  if (OPReg.MOVE_I_TO_REG.test(asm)) state = 'MOVE_I_TO_REG';
+  if (OPReg.MOVE_I_TO_ABS.test(asm)) state = 'MOVE_I_TO_ABS';
+  if (OPReg.MOVE_I_TO_I.test(asm)) state = 'MOVE_I_TO_I';
+  if (OPReg.MOVE_I_TO_IPI.test(asm)) state = 'MOVE_I_TO_IPI';
+  if (OPReg.MOVE_TO_IPD.test(asm)) state = 'MOVE_TO_IPD';
+  if (OPReg.MOVE_I_TO_IWD.test(asm)) state = 'MOVE_I_TO_IWD';
+  if (OPReg.MOVE_I_TO_IWDI.test(asm)) state = 'MOVE_I_TO_IWDI';
+
+  /* IPI */
+  if (OPReg.MOVE_IPI_TO_REG.test(asm)) state = 'MOVE_IPI_TO_REG';
+  if (OPReg.MOVE_IPI_TO_ABS.test(asm)) state = 'MOVE_IPI_TO_ABS';
+  if (OPReg.MOVE_IPI_TO_I.test(asm)) state = 'MOVE_IPI_TO_I';
+  if (OPReg.MOVE_IPI_TO_IPI.test(asm)) state = 'MOVE_IPI_TO_IPI';
+  if (OPReg.MOVE_IPI_TO_IPD.test(asm)) state = 'MOVE_IPI_TO_IPD';
+  if (OPReg.MOVE_IPI_TO_IWD.test(asm)) state = 'MOVE_IPI_TO_IWD';
+  if (OPReg.MOVE_IPI_TO_IWDI.test(asm)) state = 'MOVE_IPI_TO_IWDI';
+
+  /* IPD */
+  if (OPReg.MOVE_IPD_TO_REG.test(asm)) state = 'MOVE_IPD_TO_REG';
+  if (OPReg.MOVE_IPD_TO_ABS.test(asm)) state = 'MOVE_IPD_TO_ABS';
+  if (OPReg.MOVE_IPD_TO_I.test(asm)) state = 'MOVE_IPD_TO_I';
+  if (OPReg.MOVE_IPD_TO_IPI.test(asm)) state = 'MOVE_IPD_TO_IPI';
+  if (OPReg.MOVE_IPD_TO_IPD.test(asm)) state = 'MOVE_IPD_TO_IPD';
+  if (OPReg.MOVE_IPD_TO_IWD.test(asm)) state = 'MOVE_IPD_TO_IWD';
+  if (OPReg.MOVE_IPD_TO_IWDI.test(asm)) state = 'MOVE_IPD_TO_IWDI';
+
+  /* IWD */
+
+  /* IWDI */
+
+  /* PC
+
+  /* PCID */
+
+  console.log(state);
 
   return task;
 };
