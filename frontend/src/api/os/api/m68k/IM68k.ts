@@ -1,6 +1,8 @@
+import { EnumOpBit } from 'functions/dataHandling/IdataHandling';
+
 export enum EnumASMType {
-  ABS_W = 'abs.w',
-  ABS_L = 'abs.l',
+  ABW_W = 'ABW.w',
+  ABW_L = 'ABW.l',
   DREG = 'dreg',
   AREG = 'areg',
   IMM = 'imm',
@@ -51,16 +53,109 @@ export enum EnumLOC2BIN {
 }
 
 export enum EnumLOCD2BIN {
-  ABS_W = '000',
-  ABS_L = '001',
+  ABW_W = '000',
+  ABW_L = '001',
 }
 
 export interface IOperand {
   asmOperand: string;
   jsOperand: string;
-  abs?: boolean;
+  ABS?: boolean;
   ipi: boolean;
   ipd: boolean;
   iwd: boolean;
   length: number;
+}
+
+export enum EnumArgSrcDst {
+  /* Unknowm */
+  UNKNOWN = 'UNKNOWN',
+
+  /* Reg */
+  REG_TO_REG = 'REG_TO_REG',
+  REG_TO_ABW = 'REG_TO_ABW',
+  REG_TO_I = 'REG_TO_I',
+  REG_TO_IPI = 'REG_TO_IPI',
+  REG_TO_IPD = 'REG_TO_IPD',
+  REG_TO_IWD = 'REG_TO_IWD',
+  REG_TO_IWDI = 'REG_TO_IWDI',
+
+  /* ABW */
+  ABW_TO_REG = 'ABW_TO_REG',
+  ABW_TO_ABW = 'ABW_TO_ABW',
+  ABW_TO_I = 'ABW_TO_I',
+  ABW_TO_IPI = 'ABW_TO_IPI',
+  ABW_TO_IPD = 'ABW_TO_IPD',
+  ABW_TO_IWD = 'ABW_TO_IWD',
+  ABW_TO_IWDI = 'ABW_TO_IWDI',
+
+  /* I */
+  I_TO_REG = 'I_TO_REG',
+  I_TO_ABW = 'I_TO_ABW',
+  I_TO_I = 'I_TO_I',
+  I_TO_IPI = 'I_TO_IPI',
+  I_TO_IPD = 'I_TO_IPD',
+  I_TO_IWD = 'I_TO_IWD',
+  I_TO_IWDI = 'I_TO_IWDI',
+
+  /* IPI */
+  IPI_TO_REG = 'IPI_TO_REG',
+  IPI_TO_ABW = 'IPI_TO_ABW',
+  IPI_TO_I = 'IPI_TO_I',
+  IPI_TO_IPI = 'IPI_TO_IPI',
+  IPI_TO_IPD = 'IPI_TO_IPD',
+  IPI_TO_IWD = 'IPI_TO_IWD',
+  IPI_TO_IWDI = 'IPI_TO_IWDI',
+
+  /* IPD */
+  IPD_TO_REG = 'IPD_TO_REG',
+  IPD_TO_ABW = 'IPD_TO_ABW',
+  IPD_TO_I = 'IPD_TO_I',
+  IPD_TO_IPI = 'IPD_TO_IPI',
+  IPD_TO_IPD = 'IPD_TO_IPD',
+  IPD_TO_IWD = 'IPD_TO_IWD',
+  IPD_TO_IWDI = 'IPD_TO_IWDI',
+
+  /* IWD */
+  IWD_TO_REG = 'IWD_TO_REG',
+  IWD_TO_ABW = 'IWD_TO_ABW',
+  IWD_TO_I = 'IWD_TO_I',
+  IWD_TO_IPI = 'IWD_TO_IPI',
+  IWD_TO_IPD = 'IWD_TO_IPD',
+  IWD_TO_IWD = 'IWD_TO_IWD',
+  IWD_TO_IWDI = 'IWD_TO_IWDI',
+
+  /* IWDI */
+  IWDI_TO_REG = 'IWDI_TO_REG',
+  IWDI_TO_ABW = 'IWDI_TO_ABW',
+  IWDI_TO_I = 'IWDI_TO_I',
+  IWDI_TO_IPI = 'IWDI_TO_IPI',
+  IWDI_TO_IPD = 'IWDI_TO_IPD',
+  IWDI_TO_IWD = 'IWDI_TO_IWD',
+  IWDI_TO_IWDI = 'IWDI_TO_IWDI',
+
+  /* PCD */
+  PCD_TO_REG = 'PCD_TO_REG',
+  PCD_TO_ABW = 'PCD_TO_ABW',
+  PCD_TO_I = 'PCD_TO_I',
+  PCD_TO_IPI = 'PCD_TO_IPI',
+  PCD_TO_IPD = 'PCD_TO_IPD',
+  PCD_TO_IWD = 'PCD_TO_IWD',
+  PCD_TO_IWDI = 'CD_TO_IWDI',
+
+  /* PCID */
+  PCID_TO_REG = 'PCID_TO_REG',
+  PCID_TO_ABW = 'PCID_TO_ABW',
+  PCID_TO_I = 'PCID_TO_I',
+  PCID_TO_IPI = 'PCID_TO_IPI',
+  PCID_TO_IPD = 'PCID_TO_IPD',
+  PCID_TO_IWD = 'PCID_TO_IWD',
+  PCID_TO_IWDI = 'PCID_TO_IWDI',
+}
+
+export interface IExamineInstruction {
+  inst: string;
+  opBit: EnumOpBit;
+  args: string;
+  argSrcDst: EnumArgSrcDst;
 }

@@ -1,6 +1,15 @@
 import { ITask } from 'stores/useTaskStore';
-import { processOpSize, processXNXT } from '../m68kHelpers';
-import { EnumM68KOP, IOperand } from '../IM68k';
+import {
+  examineInstruction,
+  processOpSize,
+  processXNXT,
+} from '../m68KHelpers/m68kHelpers';
+import {
+  EnumArgSrcDst,
+  EnumM68KOP,
+  IExamineInstruction,
+  IOperand,
+} from '../IM68k';
 import { EnumOpBit, opBitChar } from 'functions/dataHandling/IdataHandling';
 import {
   _4to1 as __4to1,
@@ -94,7 +103,7 @@ export const MOVE = (
   let d1 = 0;
 
   /* absolute */
-  const abs = lrb(src.abs, dst.abs);
+  const abs = lrb(src.ABS, dst.ABS);
   switch (abs) {
     case EnumLRB.L:
       d0 = w1;
@@ -148,161 +157,27 @@ export const MOVE = (
   return { task: exeMove(task, asm), success: true, length: 0 };
 };
 
-const OPReg = {
-  /* Reg */
-  MOVE_REG_TO_ABS: /move\.[A-Za-z]+ [A-Za-z]+[0-9]+,[0-9]+/i,
-  MOVE_REG_TO_I: /move\.[A-Za-z]+ [A-Za-z]+[0-9]+,\(a[0-9]+\)/i,
-  MOVE_REG_TO_IPI: /move\.[A-Za-z]+ [A-Za-z]+[0-9]+,\(a[0-9]+\)\+/i,
-  MOVE_REG_TO_IPD: /move\.[A-Za-z]+ [A-Za-z]+[0-9]+,-\(a[0-9]+\)/i,
-  MOVE_REG_TO_IWD: /move\.[A-Za-z]+ [A-Za-z]+[0-9]+,[0-9]+\(a[0-9]+\)/i,
-  MOVE_REG_TO_IWDI:
-    /move\.[A-Za-z]+ [A-Za-z]+[0-9]+,[0-9]+\(a[0-9]+,[A-Za-z]+[0-9]+\)/i,
-  MOVE_REG_TO_REG: /move\.[A-Za-z]+ [A-Za-z]+[0-9]+,[A-Za-z]+[0-9]+/i,
-
-  /* Abs */
-  MOVE_ABS_TO_REG: /move\.[A-Za-z]+ [0-9]+,[A-Za-z]+[0-9]+/i,
-  MOVE_ABS_TO_ABS: /move\.[A-Za-z]+ [0-9]+,[0-9]+/i,
-  MOVE_ABS_TO_I: /move\.[A-Za-z]+ [0-9]+,\(a[0-9]+\)/i,
-  MOVE_ABS_TO_IPI: /move\.[A-Za-z]+ [0-9]+,\(a[0-9]+\)\+/i,
-  MOVE_ABS_TO_IPD: /move\.[A-Za-z]+ [0-9]+,-\(a[0-9]+\)/i,
-  MOVE_ABS_TO_IWD: /move\.[A-Za-z]+ [0-9]+,[0-9]+\(a[0-9]+\)/i,
-  MOVE_ABS_TO_IWDI: /move\.[A-Za-z]+ [0-9]+,[0-9]+\(a[0-9]+,[A-Za-z]+[0-9]+\)/i,
-
-  /* I */
-  MOVE_I_TO_REG: /move\.[A-Za-z]+ \(a[0-9]+\),[A-Za-z]+[0-9]+/i,
-  MOVE_I_TO_ABS: /move\.[A-Za-z]+ \(a[0-9]+\),[0-9]+/i,
-  MOVE_I_TO_I: /move\.[A-Za-z]+ \(a[0-9]+\),\(a[0-9]+\)/i,
-  MOVE_I_TO_IPI: /move\.[A-Za-z]+ \(a[0-9]+\),\(a[0-9]+\)\+/i,
-  MOVE_TO_IPD: /move\.[A-Za-z]+ \(a[0-9]+\),-\(a[0-9]+\)/i,
-  MOVE_I_TO_IWD: /move\.[A-Za-z]+ \(a[0-9]+\),[0-9]+\(a[0-9]+\)/i,
-  MOVE_I_TO_IWDI:
-    /move\.[A-Za-z]+ \(a[0-9]+\),[0-9]+\(a[0-9]+,[A-Za-z]+[0-9]+\)/i,
-
-  /* IPI */
-  MOVE_IPI_TO_REG: /move\.[A-Za-z]+ \(a[0-9]+\)\+,[A-Za-z]+[0-9]+/i,
-  MOVE_IPI_TO_ABS: /move\.[A-Za-z]+ \(a[0-9]+\)\+,[0-9]+/i,
-  MOVE_IPI_TO_I: /move\.[A-Za-z]+ \(a[0-9]+\)\+,\([A-Za-z]+[0-9]+\)/i,
-  MOVE_IPI_TO_IPI: /move\.[A-Za-z]+ \(a[0-9]+\)\+,\([A-Za-z]+[0-9]+\)\+/i,
-  MOVE_IPI_TO_IPD: /move\.[A-Za-z]+ \(a[0-9]+\)\+,-\([A-Za-z]+[0-9]+\)/i,
-  MOVE_IPI_TO_IWD: /move\.[A-Za-z]+ \(a[0-9]+\)\+,[0-9]+\(a[0-9]+\)/i,
-  MOVE_IPI_TO_IWDI:
-    /move\.[A-Za-z]+ \(a[0-9]+\)\+,[0-9]+\(a[0-9]+,[A-Za-z]+[0-9]+\)/i,
-
-  /* IPD */
-  MOVE_IPD_TO_REG: /move\.[A-Za-z]+ -\(a[0-9]+\),[A-Za-z]+[0-9]+/i,
-  MOVE_IPD_TO_ABS: /move\.[A-Za-z]+ -\(a[0-9]+\),[0-9]+/i,
-  MOVE_IPD_TO_I: /move\.[A-Za-z]+ -\(a[0-9]+\),\(a[0-9]+\)/i,
-  MOVE_IPD_TO_IPI: /move\.[A-Za-z]+ -\(a[0-9]+\),\(a[0-9]+\)\+/i,
-  MOVE_IPD_TO_IPD: /move\.[A-Za-z]+ -\(a[0-9]+\),-\(a[0-9]+\)/i,
-  MOVE_IPD_TO_IWD: /move\.[A-Za-z]+ -\(a[0-9]+\),[0-9]+\(a[0-9]+\)/i,
-  MOVE_IPD_TO_IWDI:
-    /move\.[A-Za-z]+ -\(a[0-9]+\),[0-9]+\(a[0-9]+\.[A-Za-z]+[0-9]+\)/i,
-
-  /* IWD */
-  MOVE_IWD_TO_REG: /move\.[A-Za-z]+ [0-9]+\(a[0-9]+\),[A-Za-z]+[0-9]+/i,
-  MOVE_IWD_TO_ABS: /move\.[A-Za-z]+ [0-9]+\(a[0-9]+\),[0-9]+/i,
-  MOVE_IWD_TO_I: /move\.[A-Za-z]+ [0-9]+\(a[0-9]+\),\(a[0-9]+\)/i,
-  MOVE_IWD_TO_IPI: /move\.[A-Za-z]+ [0-9]+\(a[0-9]+\),\(a[0-9]+\)\+/i,
-  MOVE_IWD_TO_IPD: /move\.[A-Za-z]+ [0-9]+\(a[0-9]+\),-\(a[0-9]+\)/i,
-  MOVE_IWD_TO_IWD: /move\.[A-Za-z]+ [0-9]+\(a[0-9]+\),[0-9]+\(a[0-9]+\)/i,
-  MOVE_IWD_TO_IWDI:
-    /move\.[A-Za-z]+ [0-9]+\(a[0-9]+\),[0-9]+\(a[0-9]+,[A-Za-z]+[0-9]+\)/i,
-
-  /* IWDI */
-  MOVE_IWDI_TO_REG:
-    /move\.[A-Za-z]+ [0-9]+\(a[0-9]+,[A-Za-z]+[0-9]+\),[A-Za-z]+[0-9]+/i,
-  MOVE_IWDI_TO_ABS: /move\.[A-Za-z]+ [0-9]+\(a[0-9]+,[A-Za-z]+[0-9]+\),[0-9]+/i,
-  MOVE_IWDI_TO_I:
-    /move\.[A-Za-z]+ [0-9]+\(a[0-9]+,[A-Za-z]+[0-9]+\),\(a[0-9]+\)/i,
-  MOVE_IWDI_TO_IPI:
-    /move\.[A-Za-z]+ [0-9]+\(a[0-9]+,[A-Za-z]+[0-9]+\),\(a[0-9]+\)\+/i,
-  MOVE_IWDI_TO_IPD:
-    /move\.[A-Za-z]+ [0-9]+\(a[0-9]+,[A-Za-z]+[0-9]+\),-\(a[0-9]+\)/i,
-  MOVE_IWDI_TO_IWD:
-    /move\.[A-Za-z]+ [0-9]+\(a[0-9]+,[A-Za-z]+[0-9]+\),[0-9]+\(a[0-9]+\)/i,
-  MOVE_IWDI_TO_IWDI:
-    /move\.[A-Za-z]+ [0-9]+\(a[0-9]+,[A-Za-z]+[0-9]+\),[0-9]+\(a[0-9]+,[A-Za-z]+[0-9]+\)/i,
+const regToReg = (task: ITask, opBit: EnumOpBit, args: string) => {
+  return task;
 };
 
 export const exeMove = (task: ITask, asm: string) => {
-  asm = 'move.b 1(a0,d1),1(a0,d1)';
+  asm = 'move.b d0,d1';
   console.log(asm);
 
-  let state = 'unknown';
+  const { opBit, args, argSrcDst }: IExamineInstruction =
+    examineInstruction(asm);
 
-  /* Reg */
-  if (OPReg.MOVE_REG_TO_REG.test(asm)) state = 'MOVE_REG_TO_REG';
-  if (OPReg.MOVE_REG_TO_ABS.test(asm)) state = 'MOVE_REG_TO_ABS';
-  if (OPReg.MOVE_REG_TO_I.test(asm)) state = 'MOVE_REG_TO_I';
-  if (OPReg.MOVE_REG_TO_IPI.test(asm)) state = 'MOVE_REG_TO_IPI';
-  if (OPReg.MOVE_REG_TO_IPD.test(asm)) state = 'MOVE_REG_TO_IPD';
-  if (OPReg.MOVE_REG_TO_IWD.test(asm)) state = 'MOVE_REG_TO_IWD';
-  if (OPReg.MOVE_REG_TO_IWDI.test(asm)) state = 'MOVE_REG_TO_IWDI';
-
-  /* Abs */
-  if (OPReg.MOVE_ABS_TO_REG.test(asm)) state = 'MOVE_ABS_TO_REG';
-  if (OPReg.MOVE_ABS_TO_ABS.test(asm)) state = 'MOVE_ABS_TO_ABS';
-  if (OPReg.MOVE_ABS_TO_I.test(asm)) state = 'MOVE_ABS_TO_I';
-  if (OPReg.MOVE_ABS_TO_IPI.test(asm)) state = 'MOVE_ABS_TO_IPI';
-  if (OPReg.MOVE_ABS_TO_IPD.test(asm)) state = 'MOVE_ABS_TO_IPD';
-  if (OPReg.MOVE_ABS_TO_IWD.test(asm)) state = 'MOVE_ABS_TO_IWD';
-  if (OPReg.MOVE_ABS_TO_IWDI.test(asm)) state = 'MOVE_ABS_TO_IWDI';
-
-  /* I */
-  if (OPReg.MOVE_I_TO_REG.test(asm)) state = 'MOVE_I_TO_REG';
-  if (OPReg.MOVE_I_TO_ABS.test(asm)) state = 'MOVE_I_TO_ABS';
-  if (OPReg.MOVE_I_TO_I.test(asm)) state = 'MOVE_I_TO_I';
-  if (OPReg.MOVE_I_TO_IPI.test(asm)) state = 'MOVE_I_TO_IPI';
-  if (OPReg.MOVE_TO_IPD.test(asm)) state = 'MOVE_TO_IPD';
-  if (OPReg.MOVE_I_TO_IWD.test(asm)) state = 'MOVE_I_TO_IWD';
-  if (OPReg.MOVE_I_TO_IWDI.test(asm)) state = 'MOVE_I_TO_IWDI';
-
-  /* IPI */
-  if (OPReg.MOVE_IPI_TO_REG.test(asm)) state = 'MOVE_IPI_TO_REG';
-  if (OPReg.MOVE_IPI_TO_ABS.test(asm)) state = 'MOVE_IPI_TO_ABS';
-  if (OPReg.MOVE_IPI_TO_I.test(asm)) state = 'MOVE_IPI_TO_I';
-  if (OPReg.MOVE_IPI_TO_IPI.test(asm)) state = 'MOVE_IPI_TO_IPI';
-  if (OPReg.MOVE_IPI_TO_IPD.test(asm)) state = 'MOVE_IPI_TO_IPD';
-  if (OPReg.MOVE_IPI_TO_IWD.test(asm)) state = 'MOVE_IPI_TO_IWD';
-  if (OPReg.MOVE_IPI_TO_IWDI.test(asm)) state = 'MOVE_IPI_TO_IWDI';
-
-  /* IPD */
-  if (OPReg.MOVE_IPD_TO_REG.test(asm)) state = 'MOVE_IPD_TO_REG';
-  if (OPReg.MOVE_IPD_TO_ABS.test(asm)) state = 'MOVE_IPD_TO_ABS';
-  if (OPReg.MOVE_IPD_TO_I.test(asm)) state = 'MOVE_IPD_TO_I';
-  if (OPReg.MOVE_IPD_TO_IPI.test(asm)) state = 'MOVE_IPD_TO_IPI';
-  if (OPReg.MOVE_IPD_TO_IPD.test(asm)) state = 'MOVE_IPD_TO_IPD';
-  if (OPReg.MOVE_IPD_TO_IWD.test(asm)) state = 'MOVE_IPD_TO_IWD';
-  if (OPReg.MOVE_IPD_TO_IWDI.test(asm)) state = 'MOVE_IPD_TO_IWDI';
-
-  /* IWD */
-  if (OPReg.MOVE_IWD_TO_REG.test(asm)) state = 'MOVE_IWD_TO_REG';
-  if (OPReg.MOVE_IWD_TO_ABS.test(asm)) state = 'MOVE_IWD_TO_ABS';
-  if (OPReg.MOVE_IWD_TO_I.test(asm)) state = 'MOVE_IWD_TO_I';
-  if (OPReg.MOVE_IWD_TO_IPI.test(asm)) state = 'MOVE_IWD_TO_IPI';
-  if (OPReg.MOVE_IWD_TO_IPD.test(asm)) state = 'MOVE_IWD_TO_IPD';
-  if (OPReg.MOVE_IWD_TO_IWD.test(asm)) state = 'MOVE_IWD_TO_IWD';
-  if (OPReg.MOVE_IWD_TO_IWDI.test(asm)) state = 'MOVE_IWD_TO_IWDI';
-
-  /* IWDI */
-  if (OPReg.MOVE_IWDI_TO_REG.test(asm)) state = 'MOVE_IWDI_TO_REG';
-  if (OPReg.MOVE_IWDI_TO_ABS.test(asm)) state = 'MOVE_IWDI_TO_ABS';
-  if (OPReg.MOVE_IWDI_TO_I.test(asm)) state = 'MOVE_IWDI_TO_I';
-  if (OPReg.MOVE_IWDI_TO_IPI.test(asm)) state = 'MOVE_IWDI_TO_IPI';
-  if (OPReg.MOVE_IWDI_TO_IPD.test(asm)) state = 'MOVE_IWDI_TO_IPD';
-  if (OPReg.MOVE_IWDI_TO_IWD.test(asm)) state = 'MOVE_IWDI_TO_IWD';
-  if (OPReg.MOVE_IWDI_TO_IWDI.test(asm)) state = 'MOVE_IWDI_TO_IWDI';
-
-  /* PC
-
-  /* PCID */
-
-  console.log(state);
+  switch (argSrcDst) {
+    case EnumArgSrcDst.REG_TO_REG:
+      task = regToReg(task, opBit, args);
+      break;
+  }
 
   return task;
 };
 
-export const MOVE_ = (
+export const X = (
   task: ITask,
   i: string,
   data: string,
