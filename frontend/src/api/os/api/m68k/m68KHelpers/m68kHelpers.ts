@@ -171,7 +171,7 @@ export const calcArgs = (args: string) => {
     I_TO_ABW: /\(a[0-9]+\),[0-9]+.w/i,
     I_TO_I: /\(a[0-9]+\),\(a[0-9]+\)/i,
     I_TO_IPI: /\(a[0-9]+\),\(a[0-9]+\)\+/i,
-    TO_IPD: /\(a[0-9]+\),-\(a[0-9]+\)/i,
+    I_TO_IPD: /\(a[0-9]+\),-\(a[0-9]+\)/i,
     I_TO_IWD: /\(a[0-9]+\),[0-9]+\(a[0-9]+\)/i,
     I_TO_IWDI: /\(a[0-9]+\),[0-9]+\(a[0-9]+,[A-Za-z]+[0-9]+\)/i,
 
@@ -186,12 +186,12 @@ export const calcArgs = (args: string) => {
 
     /* IPD */
     IPD_TO_REG: /-\(a[0-9]+\),[A-Za-z]+[0-9]+/i,
-    IPD_TO_ABW: /-\(a[0-9]+\),[0-9]+/i,
+    IPD_TO_ABW: /-\(a[0-9]+\),[0-9]+.w/i,
     IPD_TO_I: /-\(a[0-9]+\),\(a[0-9]+\)/i,
     IPD_TO_IPI: /-\(a[0-9]+\),\(a[0-9]+\)\+/i,
     IPD_TO_IPD: /-\(a[0-9]+\),-\(a[0-9]+\)/i,
     IPD_TO_IWD: /-\(a[0-9]+\),[0-9]+\(a[0-9]+\)/i,
-    IPD_TO_IWDI: /-\(a[0-9]+\),[0-9]+\(a[0-9]+\.[A-Za-z]+[0-9]+\)/i,
+    IPD_TO_IWDI: /-\(a[0-9]+\),[0-9]+\(a[0-9]+,[A-Za-z]+[0-9]+\)/i,
 
     /* IWD */
     IWD_TO_REG: /[0-9]+\(a[0-9]+\),[A-Za-z]+[0-9]+/i,
@@ -255,7 +255,7 @@ export const calcArgs = (args: string) => {
   if (Args.I_TO_ABW.test(args)) state = EnumArgSrcDst.I_TO_ABW;
   if (Args.I_TO_I.test(args)) state = EnumArgSrcDst.I_TO_I;
   if (Args.I_TO_IPI.test(args)) state = EnumArgSrcDst.I_TO_IPI;
-  if (Args.TO_IPD.test(args)) state = EnumArgSrcDst.I_TO_IPD;
+  if (Args.I_TO_IPD.test(args)) state = EnumArgSrcDst.I_TO_IPD;
   if (Args.I_TO_IWD.test(args)) state = EnumArgSrcDst.I_TO_IWD;
   if (Args.I_TO_IWDI.test(args)) state = EnumArgSrcDst.I_TO_IWDI;
 
