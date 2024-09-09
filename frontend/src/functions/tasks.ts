@@ -75,27 +75,15 @@ const matchPattern = (pattern: string, value: string) => {
 };
 
 const execM68KInstruction = (self: ITask) => {
-  /* Instruction */
-  const ih = `${self.s.m[self.pos + 0].toString(16).padStart(2, '0')}${self.s.m[
-    self.pos + 1
-  ]
-    .toString(16)
-    .padStart(2, '0')}`;
-  const inst = hex2bin(ih);
-
-  /* Data0 */
-  const d0h = `${self.s.m[self.pos + 2]
-    .toString(16)
-    .padStart(2, '0')}${self.s.m[self.pos + 3].toString(16).padStart(2, '0')}`;
-  const d0 = hex2bin(d0h);
-
-  /* Data1 */
-  const d1h = `${self.s.m[self.pos + 4]
-    .toString(16)
-    .padStart(2, '0')}${self.s.m[self.pos + 5].toString(16).padStart(2, '0')}`;
-  const d1 = hex2bin(d1h);
-
-  const data = `${d0}${d1}`;
+  let dataW = [];
+  for (let i = 0; i < 5; i++) {
+    const d = `${self.s.m[self.pos + i * 2]
+      .toString(16)
+      .padStart(2, '0')}${self.s.m[self.pos + 1 + i * 2]
+      .toString(16)
+      .padStart(2, '0')}`;
+    dataW.push(hex2bin(d));
+  }
 
   let opName: string = EnumM68KOP.UNKNOWN;
   let found = false;
@@ -106,7 +94,7 @@ const execM68KInstruction = (self: ITask) => {
   };
 
   opTable.map((row: any) => {
-    if (matchPattern(row.pattern, inst)) {
+    if (matchPattern(row.pattern, dataW[0])) {
       opName = row.opName;
       found = true;
     }
@@ -115,7 +103,7 @@ const execM68KInstruction = (self: ITask) => {
   if (found) {
     switch (opName) {
       case EnumM68KOP.MOVE:
-        state = MOVE(self, inst, data, { verbose: true });
+        state = MOVE(self, dataW, { verbose: true });
         break;
     }
   } else {

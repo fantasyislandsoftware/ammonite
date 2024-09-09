@@ -2,7 +2,7 @@
 
 dat = 1
 
-test:   move.b 10000000,d0
+test:   move.l d0,10(a2,d3)
         bra test
 
 

@@ -60,11 +60,27 @@ export enum EnumLOCD2BIN {
 export interface IOperand {
   asmOperand: string;
   jsOperand: string;
-  ABS?: boolean;
-  ipi: boolean;
-  ipd: boolean;
-  iwd: boolean;
+  abw?: boolean;
+  abl?: boolean;
+  ipi?: boolean;
+  ipd?: boolean;
+  iwd?: boolean;
+  argType: EnumArgType;
   length: number;
+}
+
+export enum EnumArgType {
+  UNKNOWN = 'UNKNOWN',
+  REG = 'REG',
+  ABW = 'ABW',
+  ABL = 'ABL',
+  I = 'I',
+  IPI = 'IPI',
+  IPD = 'IPD',
+  IWD = 'IWD',
+  IWDI = 'IWDI',
+  PCD = 'PCD',
+  PCID = 'PCID',
 }
 
 export enum EnumArgSrcDst {
@@ -74,6 +90,7 @@ export enum EnumArgSrcDst {
   /* Reg */
   REG_TO_REG = 'REG_TO_REG',
   REG_TO_ABW = 'REG_TO_ABW',
+  REG_TO_ABL = 'REG_TO_ABL',
   REG_TO_I = 'REG_TO_I',
   REG_TO_IPI = 'REG_TO_IPI',
   REG_TO_IPD = 'REG_TO_IPD',
@@ -83,15 +100,27 @@ export enum EnumArgSrcDst {
   /* ABW */
   ABW_TO_REG = 'ABW_TO_REG',
   ABW_TO_ABW = 'ABW_TO_ABW',
+  ABW_TO_ABL = 'ABW_TO_ABL',
   ABW_TO_I = 'ABW_TO_I',
   ABW_TO_IPI = 'ABW_TO_IPI',
   ABW_TO_IPD = 'ABW_TO_IPD',
   ABW_TO_IWD = 'ABW_TO_IWD',
   ABW_TO_IWDI = 'ABW_TO_IWDI',
 
+  /* ABL */
+  ABL_TO_REG = 'ABL_TO_REG',
+  ABL_TO_ABW = 'ABL_TO_ABW',
+  ABL_TO_ABL = 'ABL_TO_ABL',
+  ABL_TO_I = 'ABL_TO_I',
+  ABL_TO_IPI = 'ABL_TO_IPI',
+  ABL_TO_IPD = 'ABL_TO_IPD',
+  ABL_TO_IWD = 'ABL_TO_IWD',
+  ABL_TO_IWDI = 'ABL_TO_IWDI',
+
   /* I */
   I_TO_REG = 'I_TO_REG',
   I_TO_ABW = 'I_TO_ABW',
+  I_TO_ABL = 'I_TO_ABL',
   I_TO_I = 'I_TO_I',
   I_TO_IPI = 'I_TO_IPI',
   I_TO_IPD = 'I_TO_IPD',
@@ -101,6 +130,7 @@ export enum EnumArgSrcDst {
   /* IPI */
   IPI_TO_REG = 'IPI_TO_REG',
   IPI_TO_ABW = 'IPI_TO_ABW',
+  IPI_TO_ABL = 'IPI_TO_ABL',
   IPI_TO_I = 'IPI_TO_I',
   IPI_TO_IPI = 'IPI_TO_IPI',
   IPI_TO_IPD = 'IPI_TO_IPD',
@@ -110,6 +140,7 @@ export enum EnumArgSrcDst {
   /* IPD */
   IPD_TO_REG = 'IPD_TO_REG',
   IPD_TO_ABW = 'IPD_TO_ABW',
+  IPD_TO_ABL = 'IPD_TO_ABL',
   IPD_TO_I = 'IPD_TO_I',
   IPD_TO_IPI = 'IPD_TO_IPI',
   IPD_TO_IPD = 'IPD_TO_IPD',
@@ -119,6 +150,7 @@ export enum EnumArgSrcDst {
   /* IWD */
   IWD_TO_REG = 'IWD_TO_REG',
   IWD_TO_ABW = 'IWD_TO_ABW',
+  IWD_TO_ABL = 'IWD_TO_ABL',
   IWD_TO_I = 'IWD_TO_I',
   IWD_TO_IPI = 'IWD_TO_IPI',
   IWD_TO_IPD = 'IWD_TO_IPD',
@@ -128,6 +160,7 @@ export enum EnumArgSrcDst {
   /* IWDI */
   IWDI_TO_REG = 'IWDI_TO_REG',
   IWDI_TO_ABW = 'IWDI_TO_ABW',
+  IWDI_TO_ABL = 'IWDI_TO_ABL',
   IWDI_TO_I = 'IWDI_TO_I',
   IWDI_TO_IPI = 'IWDI_TO_IPI',
   IWDI_TO_IPD = 'IWDI_TO_IPD',
@@ -137,6 +170,7 @@ export enum EnumArgSrcDst {
   /* PCD */
   PCD_TO_REG = 'PCD_TO_REG',
   PCD_TO_ABW = 'PCD_TO_ABW',
+  PCD_TO_ABL = 'PCD_TO_ABL',
   PCD_TO_I = 'PCD_TO_I',
   PCD_TO_IPI = 'PCD_TO_IPI',
   PCD_TO_IPD = 'PCD_TO_IPD',
@@ -146,6 +180,7 @@ export enum EnumArgSrcDst {
   /* PCID */
   PCID_TO_REG = 'PCID_TO_REG',
   PCID_TO_ABW = 'PCID_TO_ABW',
+  PCID_TO_ABL = 'PCID_TO_ABL',
   PCID_TO_I = 'PCID_TO_I',
   PCID_TO_IPI = 'PCID_TO_IPI',
   PCID_TO_IPD = 'PCID_TO_IPD',
@@ -158,4 +193,5 @@ export interface IExamineInstruction {
   opBit: EnumOpBit;
   args: string;
   argSrcDst: EnumArgSrcDst;
+  argArray: string[];
 }

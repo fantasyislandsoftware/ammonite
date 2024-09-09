@@ -1,6 +1,7 @@
 import { ITask } from 'stores/useTaskStore';
 import {
   EnumArgSrcDst,
+  EnumArgType,
   EnumASMType,
   EnumM68KOP,
   EnumOPAction,
@@ -8,6 +9,8 @@ import {
   IOperand,
 } from '../IM68k';
 import { EnumBit, EnumOpBit } from 'functions/dataHandling/IdataHandling';
+import { combine2WordsInto1Long, splitLongInto4Bytes } from 'functions/dataHandling/dataHandling';
+import { rp } from 'functions/string';
 
 export const processXNXT = (
   l: 'src' | 'dst',
@@ -15,70 +18,80 @@ export const processXNXT = (
   xn_bin: string
 ) => {
   const res: IOperand = {
+    argType: EnumArgType.UNKNOWN,
     asmOperand: '',
     jsOperand: '',
-    ipi: false,
-    ipd: false,
-    iwd: false,
     length: 0,
   };
 
   switch (xt_bin) {
     case '000':
+      res.argType = EnumArgType.REG;
       res.asmOperand = `d{${l}_n}`;
       res.jsOperand = `task.s.d{${l}_n}`;
       res.length = 2;
       break;
     case '001':
+      res.argType = EnumArgType.REG;
       res.asmOperand = `a{${l}_n}`;
       res.jsOperand = 'task.s.a{n}[i]';
       res.length = 2;
       break;
     case '010':
+      res.argType = EnumArgType.I;
       res.asmOperand = `(a{${l}_n})`;
       res.jsOperand = 'task.s.m[_4to1(task.s.a{n})+{i}-{s}]';
       res.length = 2;
       break;
     case '011':
-      res.asmOperand = '(a{n})+';
+      res.argType = EnumArgType.IPI;
+      res.asmOperand = `(a{${l}_n})+`;
       res.jsOperand = 'task.s.m[_4to1(task.s.a{n})+{i}-{s}]';
       res.ipi = true;
       res.length = 2;
       break;
     case '100':
-      res.asmOperand = '-(a{n})';
+      res.argType = EnumArgType.IPD;
+      res.asmOperand = `-(a{${l}_n})`;
       res.jsOperand = 'task.s.m[_4to1(task.s.a{n})+{i}-{s}]';
       res.ipd = true;
       res.length = 2;
       break;
     case '101':
+      res.argType = EnumArgType.IWD;
       res.asmOperand = `{${l}_d}(a{${l}_n})`;
       res.jsOperand = 'task.s.m[_4to1(task.s.a{n})+{di}+{i}-{s}]';
       res.iwd = true;
       res.length = 2;
       break;
     case '110':
-      res.asmOperand = '{d3}(a{n},{it}{in})';
+      res.argType = EnumArgType.IWDI;
+      res.asmOperand = `{${l}_d}(a{${l}_n},{it}{in})`;
       res.length = 2;
       break;
     case '111':
       switch (xn_bin) {
         case '000':
-          res.asmOperand = `{${l}_d}`;
-          res.ABS = true;
+          res.argType = EnumArgType.ABW;
+          res.asmOperand = `{${l}_d}.w`;
+          res.abw = true;
           res.jsOperand = 'task.s.m[{d}+{i}-{s}]';
           res.length = 4;
           break;
         case '001':
-          res.asmOperand = '{d}';
+          res.argType = EnumArgType.ABL;
+          res.asmOperand = `{${l}_d}.l`;
+          res.abl = true;
           res.jsOperand = 'task.s.m[{d}+{i}-{s}]';
           res.length = 4;
           break;
         case '010':
+          res.argType = EnumArgType.PCD;
           res.asmOperand = 'd16(pc)';
           res.length = 4;
           break;
         case '011':
+          res.argType = EnumArgType.PCID;
           res.asmOperand = 'd8(pc,xn)';
           res.length = 4;
           break;
@@ -138,37 +151,51 @@ export const examineInstruction = (i: string) => {
     inst: inst,
     opBit: opBitN,
     args: args,
-    argSrcDst: calcArgs(args),
+    argSrcDst: calcArgDir(args),
+    argArray: calcArgArray(args),
   };
 
   return result;
 };
 
-export const calcArgs = (args: string) => {
+export const calcArgDir = (args: string) => {
   let state = EnumArgSrcDst.UNKNOWN;
 
   const Args = {
     /* Reg */
     REG_TO_REG: /[A-Za-z]+[0-9]+,[A-Za-z]+[0-9]+/i,
-    REG_TO_ABW: /[A-Za-z]+[0-9]+,[0-9]+/i,
+    REG_TO_ABW: /[A-Za-z]+[0-9]+,[0-9]+.w/i,
+    REG_TO_ABL: /[A-Za-z]+[0-9]+,[0-9]+.l/i,
     REG_TO_I: /[A-Za-z]+[0-9]+,\(a[0-9]+\)/i,
     REG_TO_IPI: /[A-Za-z]+[0-9]+,\(a[0-9]+\)\+/i,
     REG_TO_IPD: /[A-Za-z]+[0-9]+,-\(a[0-9]+\)/i,
     REG_TO_IWD: /[A-Za-z]+[0-9]+,[0-9]+\(a[0-9]+\)/i,
     REG_TO_IWDI: /[A-Za-z]+[0-9]+,[0-9]+\(a[0-9]+,[A-Za-z]+[0-9]+\)/i,
 
-    /* Abs */
+    /* ABW */
     ABW_TO_REG: /[0-9]+\.w,[A-Za-z]+[0-9]+/i,
     ABW_TO_ABW: /[0-9]+\.w,[0-9]+\.w/i,
+    ABW_TO_ABL: /[0-9]+\.w,[0-9]+\.l/i,
     ABW_TO_I: /[0-9]+.w,\(a[0-9]+\)/i,
     ABW_TO_IPI: /[0-9]+.w,\(a[0-9]+\)\+/i,
     ABW_TO_IPD: /[0-9]+.w,-\(a[0-9]+\)/i,
     ABW_TO_IWD: /[0-9]+.w,[0-9]+\(a[0-9]+\)/i,
     ABW_TO_IWDI: /[0-9]+.w,[0-9]+\(a[0-9]+,[A-Za-z]+[0-9]+\)/i,
 
+    /* ABL */
+    ABL_TO_REG: /[0-9]+\.l,[A-Za-z]+[0-9]+/i,
+    ABL_TO_ABW: /[0-9]+\.l,[0-9]+\.w/i,
+    ABL_TO_ABL: /[0-9]+\.l,[0-9]+\.l/i,
+    ABL_TO_I: /[0-9]+.l,\(a[0-9]+\)/i,
+    ABL_TO_IPI: /[0-9]+.l,\(a[0-9]+\)\+/i,
+    ABL_TO_IPD: /[0-9]+.l,-\(a[0-9]+\)/i,
+    ABL_TO_IWD: /[0-9]+.l,[0-9]+\(a[0-9]+\)/i,
+    ABL_TO_IWDI: /[0-9]+.l,[0-9]+\(a[0-9]+,[A-Za-z]+[0-9]+\)/i,
+
     /* I */
     I_TO_REG: /\(a[0-9]+\),[A-Za-z]+[0-9]+/i,
     I_TO_ABW: /\(a[0-9]+\),[0-9]+.w/i,
+    I_TO_ABL: /\(a[0-9]+\),[0-9]+.l/i,
     I_TO_I: /\(a[0-9]+\),\(a[0-9]+\)/i,
     I_TO_IPI: /\(a[0-9]+\),\(a[0-9]+\)\+/i,
     I_TO_IPD: /\(a[0-9]+\),-\(a[0-9]+\)/i,
@@ -177,7 +204,8 @@ export const calcArgs = (args: string) => {
 
     /* IPI */
     IPI_TO_REG: /\(a[0-9]+\)\+,[A-Za-z]+[0-9]+/i,
-    IPI_TO_ABW: /\(a[0-9]+\)\+,[0-9]+/i,
+    IPI_TO_ABW: /\(a[0-9]+\)\+,[0-9]+.w/i,
+    IPI_TO_ABL: /\(a[0-9]+\)\+,[0-9]+.l/i,
     IPI_TO_I: /\(a[0-9]+\)\+,\([A-Za-z]+[0-9]+\)/i,
     IPI_TO_IPI: /\(a[0-9]+\)\+,\([A-Za-z]+[0-9]+\)\+/i,
     IPI_TO_IPD: /\(a[0-9]+\)\+,-\([A-Za-z]+[0-9]+\)/i,
@@ -187,6 +215,7 @@ export const calcArgs = (args: string) => {
     /* IPD */
     IPD_TO_REG: /-\(a[0-9]+\),[A-Za-z]+[0-9]+/i,
     IPD_TO_ABW: /-\(a[0-9]+\),[0-9]+.w/i,
+    IPD_TO_ABL: /-\(a[0-9]+\),[0-9]+.l/i,
     IPD_TO_I: /-\(a[0-9]+\),\(a[0-9]+\)/i,
     IPD_TO_IPI: /-\(a[0-9]+\),\(a[0-9]+\)\+/i,
     IPD_TO_IPD: /-\(a[0-9]+\),-\(a[0-9]+\)/i,
@@ -195,7 +224,8 @@ export const calcArgs = (args: string) => {
 
     /* IWD */
     IWD_TO_REG: /[0-9]+\(a[0-9]+\),[A-Za-z]+[0-9]+/i,
-    IWD_TO_ABW: /[0-9]+\(a[0-9]+\),[0-9]+/i,
+    IWD_TO_ABW: /[0-9]+\(a[0-9]+\),[0-9]+.w/i,
+    IWD_TO_ABL: /[0-9]+\(a[0-9]+\),[0-9]+.l/i,
     IWD_TO_I: /[0-9]+\(a[0-9]+\),\(a[0-9]+\)/i,
     IWD_TO_IPI: /[0-9]+\(a[0-9]+\),\(a[0-9]+\)\+/i,
     IWD_TO_IPD: /[0-9]+\(a[0-9]+\),-\(a[0-9]+\)/i,
@@ -204,7 +234,8 @@ export const calcArgs = (args: string) => {
 
     /* IWDI */
     IWDI_TO_REG: /[0-9]+\(a[0-9]+,[A-Za-z]+[0-9]+\),[A-Za-z]+[0-9]+/i,
-    IWDI_TO_ABW: /[0-9]+\(a[0-9]+,[A-Za-z]+[0-9]+\),[0-9]+/i,
+    IWDI_TO_ABW: /[0-9]+\(a[0-9]+,[A-Za-z]+[0-9]+\),[0-9]+.w/i,
+    IWDI_TO_ABL: /[0-9]+\(a[0-9]+,[A-Za-z]+[0-9]+\),[0-9]+.l/i,
     IWDI_TO_I: /[0-9]+\(a[0-9]+,[A-Za-z]+[0-9]+\),\(a[0-9]+\)/i,
     IWDI_TO_IPI: /[0-9]+\(a[0-9]+,[A-Za-z]+[0-9]+\),\(a[0-9]+\)\+/i,
     IWDI_TO_IPD: /[0-9]+\(a[0-9]+,[A-Za-z]+[0-9]+\),-\(a[0-9]+\)/i,
@@ -214,7 +245,8 @@ export const calcArgs = (args: string) => {
 
     /* PCD */
     PCD_TO_REG: /[0-9]+\(pc\),[A-Za-z]+[0-9]+/i,
-    PCD_TO_ABW: /[0-9]+\(pc\),[0-9]+/i,
+    PCD_TO_ABW: /[0-9]+\(pc\),[0-9]+.w/i,
+    PCD_TO_ABL: /[0-9]+\(pc\),[0-9]+.l/i,
     PCD_TO_I: /[0-9]+\(pc\),\(a[0-9]+\)/i,
     PCD_TO_IPI: /[0-9]+\(pc\),\(a[0-9]+\)\+/i,
     PCD_TO_IPD: /[0-9]+\(pc\),-\(a[0-9]+\)/i,
@@ -223,7 +255,8 @@ export const calcArgs = (args: string) => {
 
     /* PCID */
     PCID_TO_REG: /[0-9]+\(pc,[A-Za-z]+[0-9]+\),[A-Za-z]+[0-9]+/i,
-    PCID_TO_ABW: /[0-9]+\(pc,[A-Za-z]+[0-9]+\),[0-9]+/i,
+    PCID_TO_ABW: /[0-9]+\(pc,[A-Za-z]+[0-9]+\),[0-9]+.w/i,
+    PCID_TO_ABL: /[0-9]+\(pc,[A-Za-z]+[0-9]+\),[0-9]+.l/i,
     PCID_TO_I: /[0-9]+\(pc,[A-Za-z]+[0-9]+\),\(a[0-9]+\)/i,
     PCID_TO_IPI: /[0-9]+\(pc,[A-Za-z]+[0-9]+\),\(a[0-9]+\)\+/i,
     PCID_TO_IPD: /[0-9]+\(pc,[A-Za-z]+[0-9]+\),-\(a[0-9]+\)/i,
@@ -235,24 +268,37 @@ export const calcArgs = (args: string) => {
   /* Reg */
   if (Args.REG_TO_REG.test(args)) state = EnumArgSrcDst.REG_TO_REG;
   if (Args.REG_TO_ABW.test(args)) state = EnumArgSrcDst.REG_TO_ABW;
+  if (Args.REG_TO_ABL.test(args)) state = EnumArgSrcDst.REG_TO_ABL;
   if (Args.REG_TO_I.test(args)) state = EnumArgSrcDst.REG_TO_I;
   if (Args.REG_TO_IPI.test(args)) state = EnumArgSrcDst.REG_TO_IPI;
   if (Args.REG_TO_IPD.test(args)) state = EnumArgSrcDst.REG_TO_IPD;
   if (Args.REG_TO_IWD.test(args)) state = EnumArgSrcDst.REG_TO_IWD;
   if (Args.REG_TO_IWDI.test(args)) state = EnumArgSrcDst.REG_TO_IWDI;
 
-  /* Abs */
+  /* ABW */
   if (Args.ABW_TO_REG.test(args)) state = EnumArgSrcDst.ABW_TO_REG;
   if (Args.ABW_TO_ABW.test(args)) state = EnumArgSrcDst.ABW_TO_ABW;
+  if (Args.ABW_TO_ABL.test(args)) state = EnumArgSrcDst.ABW_TO_ABL;
   if (Args.ABW_TO_I.test(args)) state = EnumArgSrcDst.ABW_TO_I;
   if (Args.ABW_TO_IPI.test(args)) state = EnumArgSrcDst.ABW_TO_IPI;
   if (Args.ABW_TO_IPD.test(args)) state = EnumArgSrcDst.ABW_TO_IPD;
   if (Args.ABW_TO_IWD.test(args)) state = EnumArgSrcDst.ABW_TO_IWD;
   if (Args.ABW_TO_IWDI.test(args)) state = EnumArgSrcDst.ABW_TO_IWDI;
 
+  /* ABL */
+  if (Args.ABL_TO_REG.test(args)) state = EnumArgSrcDst.ABL_TO_REG;
+  if (Args.ABL_TO_ABW.test(args)) state = EnumArgSrcDst.ABL_TO_ABW;
+  if (Args.ABL_TO_ABL.test(args)) state = EnumArgSrcDst.ABL_TO_ABL;
+  if (Args.ABL_TO_I.test(args)) state = EnumArgSrcDst.ABL_TO_I;
+  if (Args.ABL_TO_IPI.test(args)) state = EnumArgSrcDst.ABL_TO_IPI;
+  if (Args.ABL_TO_IPD.test(args)) state = EnumArgSrcDst.ABL_TO_IPD;
+  if (Args.ABL_TO_IWD.test(args)) state = EnumArgSrcDst.ABL_TO_IWD;
+  if (Args.ABL_TO_IWDI.test(args)) state = EnumArgSrcDst.ABL_TO_IWDI;
+
   /* I */
   if (Args.I_TO_REG.test(args)) state = EnumArgSrcDst.I_TO_REG;
   if (Args.I_TO_ABW.test(args)) state = EnumArgSrcDst.I_TO_ABW;
+  if (Args.I_TO_ABL.test(args)) state = EnumArgSrcDst.I_TO_ABL;
   if (Args.I_TO_I.test(args)) state = EnumArgSrcDst.I_TO_I;
   if (Args.I_TO_IPI.test(args)) state = EnumArgSrcDst.I_TO_IPI;
   if (Args.I_TO_IPD.test(args)) state = EnumArgSrcDst.I_TO_IPD;
@@ -262,6 +308,7 @@ export const calcArgs = (args: string) => {
   /* IPI */
   if (Args.IPI_TO_REG.test(args)) state = EnumArgSrcDst.IPI_TO_REG;
   if (Args.IPI_TO_ABW.test(args)) state = EnumArgSrcDst.IPI_TO_ABW;
+  if (Args.IPI_TO_ABL.test(args)) state = EnumArgSrcDst.IPI_TO_ABL;
   if (Args.IPI_TO_I.test(args)) state = EnumArgSrcDst.IPI_TO_I;
   if (Args.IPI_TO_IPI.test(args)) state = EnumArgSrcDst.IPI_TO_IPI;
   if (Args.IPI_TO_IPD.test(args)) state = EnumArgSrcDst.IPI_TO_IPD;
@@ -271,6 +318,7 @@ export const calcArgs = (args: string) => {
   /* IPD */
   if (Args.IPD_TO_REG.test(args)) state = EnumArgSrcDst.IPD_TO_REG;
   if (Args.IPD_TO_ABW.test(args)) state = EnumArgSrcDst.IPD_TO_ABW;
+  if (Args.IPD_TO_ABL.test(args)) state = EnumArgSrcDst.IPD_TO_ABL;
   if (Args.IPD_TO_I.test(args)) state = EnumArgSrcDst.IPD_TO_I;
   if (Args.IPD_TO_IPI.test(args)) state = EnumArgSrcDst.IPD_TO_IPI;
   if (Args.IPD_TO_IPD.test(args)) state = EnumArgSrcDst.IPD_TO_IPD;
@@ -280,6 +328,7 @@ export const calcArgs = (args: string) => {
   /* IWD */
   if (Args.IWD_TO_REG.test(args)) state = EnumArgSrcDst.IWD_TO_REG;
   if (Args.IWD_TO_ABW.test(args)) state = EnumArgSrcDst.IWD_TO_ABW;
+  if (Args.IWD_TO_ABL.test(args)) state = EnumArgSrcDst.IWD_TO_ABL;
   if (Args.IWD_TO_I.test(args)) state = EnumArgSrcDst.IWD_TO_I;
   if (Args.IWD_TO_IPI.test(args)) state = EnumArgSrcDst.IWD_TO_IPI;
   if (Args.IWD_TO_IPD.test(args)) state = EnumArgSrcDst.IWD_TO_IPD;
@@ -289,6 +338,7 @@ export const calcArgs = (args: string) => {
   /* IWDI */
   if (Args.IWDI_TO_REG.test(args)) state = EnumArgSrcDst.IWDI_TO_REG;
   if (Args.IWDI_TO_ABW.test(args)) state = EnumArgSrcDst.IWDI_TO_ABW;
+  if (Args.IWDI_TO_ABL.test(args)) state = EnumArgSrcDst.IWDI_TO_ABL;
   if (Args.IWDI_TO_I.test(args)) state = EnumArgSrcDst.IWDI_TO_I;
   if (Args.IWDI_TO_IPI.test(args)) state = EnumArgSrcDst.IWDI_TO_IPI;
   if (Args.IWDI_TO_IPD.test(args)) state = EnumArgSrcDst.IWDI_TO_IPD;
@@ -298,6 +348,7 @@ export const calcArgs = (args: string) => {
   /* PCD */
   if (Args.PCD_TO_REG.test(args)) state = EnumArgSrcDst.PCD_TO_REG;
   if (Args.PCD_TO_ABW.test(args)) state = EnumArgSrcDst.PCD_TO_ABW;
+  if (Args.PCD_TO_ABL.test(args)) state = EnumArgSrcDst.PCD_TO_ABL;
   if (Args.PCD_TO_I.test(args)) state = EnumArgSrcDst.PCD_TO_I;
   if (Args.PCD_TO_IPI.test(args)) state = EnumArgSrcDst.PCD_TO_IPI;
   if (Args.PCD_TO_IPD.test(args)) state = EnumArgSrcDst.PCD_TO_IPD;
@@ -307,6 +358,7 @@ export const calcArgs = (args: string) => {
   /* PCID */
   if (Args.PCID_TO_REG.test(args)) state = EnumArgSrcDst.PCID_TO_REG;
   if (Args.PCID_TO_ABW.test(args)) state = EnumArgSrcDst.PCID_TO_ABW;
+  if (Args.PCID_TO_ABL.test(args)) state = EnumArgSrcDst.PCID_TO_ABL;
   if (Args.PCID_TO_I.test(args)) state = EnumArgSrcDst.PCID_TO_I;
   if (Args.PCID_TO_IPI.test(args)) state = EnumArgSrcDst.PCID_TO_IPI;
   if (Args.PCID_TO_IPD.test(args)) state = EnumArgSrcDst.PCID_TO_IPD;
@@ -314,4 +366,145 @@ export const calcArgs = (args: string) => {
   if (Args.PCID_TO_IWDI.test(args)) state = EnumArgSrcDst.PCID_TO_IWDI;
 
   return state;
+};
+
+export const calcArgArray = (args: string) => {
+  const a = args
+    .replaceAll(',', ';')
+    .replaceAll('(', ';')
+    .replaceAll(')', ';')
+    .split(';');
+
+  let b: string[] = [];
+  a.forEach((e) => {
+    if (e.length > 0) {
+      b.push(e);
+    }
+  });
+
+  return b;
+};
+
+export const fillArgData = (
+  argDir: string,
+  src: IOperand,
+  dst: IOperand,
+  xnSrcN: string,
+  xnDstN: string,
+  dataW: string[]
+) => {
+  let args = '';
+
+  const w0 = parseInt(dataW[1], 2);
+  const w1 = parseInt(dataW[2], 2);
+  const l0 = combine2WordsInto1Long(w0, w1);
+  const w2 = parseInt(dataW[3], 2);
+  const w3 = parseInt(dataW[4], 2);
+  const l1 = combine2WordsInto1Long(w2, w3);
+
+  const bArray0 = splitLongInto4Bytes(l0);
+  const bArray1 = splitLongInto4Bytes(l1);
+  console.log(bArray0);
+  console.log(bArray1);
+
+  switch (argDir) {
+    /******************** REG ********************/
+
+    /* REG_TO_REG */
+    case EnumArgSrcDst.REG_TO_REG:
+      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
+        { str: '{src_n}', with: xnSrcN },
+        { str: '{dst_n}', with: xnDstN },
+      ]);
+      break;
+
+    /* REG_TO_ABW */
+    case EnumArgSrcDst.REG_TO_ABW:
+      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
+        { str: '{src_n}', with: xnSrcN },
+        { str: '{dst_d}', with: w0.toString() },
+      ]);
+      break;
+
+    /* REG_TO_ABL */
+    case EnumArgSrcDst.REG_TO_ABL:
+      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
+        { str: '{src_n}', with: xnSrcN },
+        { str: '{dst_d}', with: l0.toString() },
+      ]);
+      break;
+
+    /* REG_TO_I */
+    case EnumArgSrcDst.REG_TO_I:
+      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
+        { str: '{src_n}', with: xnSrcN },
+        { str: '{dst_n}', with: xnDstN },
+      ]);
+      break;
+
+    /* REG_TO_IPI */
+    case EnumArgSrcDst.REG_TO_IPI:
+      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
+        { str: '{src_n}', with: xnSrcN },
+        { str: '{dst_n}', with: xnDstN },
+      ]);
+      break;
+
+    /* REG_TO_IPD */
+    case EnumArgSrcDst.REG_TO_IPD:
+      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
+        { str: '{src_n}', with: xnSrcN },
+        { str: '{dst_n}', with: xnDstN },
+      ]);
+      break;
+
+    /* REG_TO_IWD */
+    case EnumArgSrcDst.REG_TO_IWD:
+      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
+        { str: '{src_n}', with: xnSrcN },
+        { str: '{dst_d}', with: w0.toString() },
+        { str: '{dst_n}', with: xnDstN },
+      ]);
+      break;
+
+    /* REG_TO_IWDI */
+    case EnumArgSrcDst.REG_TO_IWDI:
+      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
+        { str: '{src_n}', with: xnSrcN },
+        { str: '{dst_d}', with: l1.toString() },
+        { str: '{dst_n}', with: xnDstN },
+      ]);
+      break;
+
+    /******************** ABW ********************/
+
+    /* ABW_TO_REG */
+    case EnumArgSrcDst.ABW_TO_REG:
+      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
+        { str: '{src_n}', with: xnSrcN },
+        { str: '{dst_n}', with: xnDstN },
+      ]);
+      break;
+
+    /* ABW_TO_ABW */
+    case EnumArgSrcDst.ABW_TO_ABW:
+      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
+        { str: '{src_n}', with: xnSrcN },
+        { str: '{dst_n}', with: xnDstN },
+      ]);
+      break;
+
+    /* ABW_TO_ABL */
+    case EnumArgSrcDst.ABW_TO_ABL:
+      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
+        { str: '{src_n}', with: xnSrcN },
+        { str: '{dst_n}', with: xnDstN },
+      ]);
+      break;
+
+    /* */
+    default:
+  }
+
+  return args;
 };
