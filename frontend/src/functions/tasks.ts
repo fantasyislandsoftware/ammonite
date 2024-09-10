@@ -75,7 +75,7 @@ const matchPattern = (pattern: string, value: string) => {
 };
 
 const execM68KInstruction = (self: ITask) => {
-  let dataW = [];
+  let dataW: string[] = [];
   for (let i = 0; i < 5; i++) {
     const d = `${self.s.m[self.pos + i * 2]
       .toString(16)

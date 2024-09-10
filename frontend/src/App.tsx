@@ -13,9 +13,11 @@ import { SYSTEM_API } from 'api/os/api/system';
 import { getExe, getMem } from 'api/http/fileIO';
 import { SYSTEM } from 'constants/globals/system';
 import { decode as base64_decode } from 'base-64';
+import { useTaskStore } from 'stores/useTaskStore';
 
 const App = () => {
   const { screens, setScreens } = useScreenStore();
+  const { tasks, setTasks } = useTaskStore();
   const [initBoot, setInitBoot] = useState(true);
   const { systemCrash } = useErrorStore();
   const [taskProcessor, setTaskProcessor] = useState<any>(null);
@@ -48,7 +50,7 @@ const App = () => {
   useEffect(() => {
     async function boot() {
       window.onerror = (message, source, lineno, colno, error) => {
-        console.log(message, source, lineno, colno, error);
+        setTaskProcessor([]);
       };
       system_api.exec('/home/node/app/src/jam/boot.js');
     }
@@ -83,6 +85,16 @@ const App = () => {
   } else {
     return (
       <>
+        <button
+          onClick={() => {
+            systemCrash.state = true;
+            setTasks([]);
+            clearInterval(taskProcessor);
+            throw new Error('Something went badly wrong!');
+          }}
+        >
+          test
+        </button>
         {screens.map((screen, index) => (
           <UIScreen key={index} screen={screen} />
         ))}

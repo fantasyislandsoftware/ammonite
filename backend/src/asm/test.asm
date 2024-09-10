@@ -2,7 +2,9 @@
 
 dat = 1
 
-test:   move.l d0,10(a2,d3)
+; word $7FFF
+
+test:   move.l a7,$7FFF
         bra test
 
 

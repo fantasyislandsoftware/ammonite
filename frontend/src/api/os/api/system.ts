@@ -45,7 +45,15 @@ interface IHunks {
 }
 
 export class SYSTEM_API {
-  constructor() {}
+  constructor() {
+    
+  }
+
+  /****************************************************/
+
+  systemCrash = (message: string) => {
+    
+  };
 
   /****************************************************/
 

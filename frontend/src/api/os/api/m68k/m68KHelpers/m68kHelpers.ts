@@ -9,8 +9,12 @@ import {
   IOperand,
 } from '../IM68k';
 import { EnumBit, EnumOpBit } from 'functions/dataHandling/IdataHandling';
-import { combine2WordsInto1Long, splitLongInto4Bytes } from 'functions/dataHandling/dataHandling';
-import { rp } from 'functions/string';
+import {
+  combine2WordsInto1Long,
+  splitLongInto4Bytes,
+} from 'functions/dataHandling/dataHandling';
+import { dec2bin, hex2bin, rp } from 'functions/string';
+import { settings } from 'cluster';
 
 export const processXNXT = (
   l: 'src' | 'dst',
@@ -66,7 +70,7 @@ export const processXNXT = (
       break;
     case '110':
       res.argType = EnumArgType.IWDI;
-      res.asmOperand = `{${l}_d}(a{${l}_n},{it}{in})`;
+      res.asmOperand = `{${l}_d}(a{${l}_n},{ir})`;
       res.length = 2;
       break;
     case '111':
@@ -391,21 +395,29 @@ export const fillArgData = (
   dst: IOperand,
   xnSrcN: string,
   xnDstN: string,
-  dataW: string[]
+  dataW: string[],
+  setting?: { verbose: boolean }
 ) => {
   let args = '';
 
-  const w0 = parseInt(dataW[1], 2);
-  const w1 = parseInt(dataW[2], 2);
-  const l0 = combine2WordsInto1Long(w0, w1);
-  const w2 = parseInt(dataW[3], 2);
-  const w3 = parseInt(dataW[4], 2);
-  const l1 = combine2WordsInto1Long(w2, w3);
+  let w: number[] = [];
+  let l: number[] = [];
+  let b: number[] = [];
 
-  const bArray0 = splitLongInto4Bytes(l0);
-  const bArray1 = splitLongInto4Bytes(l1);
-  console.log(bArray0);
-  console.log(bArray1);
+  w.push(parseInt(dataW[1], 2));
+  w.push(parseInt(dataW[2], 2));
+  w.push(parseInt(dataW[3], 2));
+  w.push(parseInt(dataW[4], 2));
+
+  l.push(combine2WordsInto1Long(w[0], w[1]));
+  l.push(combine2WordsInto1Long(w[1], w[2]));
+  l.push(combine2WordsInto1Long(w[2], w[3]));
+
+  b = splitLongInto4Bytes(l[0]).concat(splitLongInto4Bytes(l[1]));
+
+  if (setting?.verbose) {
+    console.log({ b: b, w: w, l: l });
+  }
 
   switch (argDir) {
     /******************** REG ********************/
@@ -422,7 +434,7 @@ export const fillArgData = (
     case EnumArgSrcDst.REG_TO_ABW:
       args = rp(`${src.asmOperand},${dst.asmOperand}`, [
         { str: '{src_n}', with: xnSrcN },
-        { str: '{dst_d}', with: w0.toString() },
+        { str: '{dst_d}', with: w[0].toString() },
       ]);
       break;
 
@@ -430,7 +442,7 @@ export const fillArgData = (
     case EnumArgSrcDst.REG_TO_ABL:
       args = rp(`${src.asmOperand},${dst.asmOperand}`, [
         { str: '{src_n}', with: xnSrcN },
-        { str: '{dst_d}', with: l0.toString() },
+        { str: '{dst_d}', with: l[0].toString() },
       ]);
       break;
 
@@ -462,7 +474,7 @@ export const fillArgData = (
     case EnumArgSrcDst.REG_TO_IWD:
       args = rp(`${src.asmOperand},${dst.asmOperand}`, [
         { str: '{src_n}', with: xnSrcN },
-        { str: '{dst_d}', with: w0.toString() },
+        { str: '{dst_d}', with: w[0].toString() },
         { str: '{dst_n}', with: xnDstN },
       ]);
       break;
@@ -471,8 +483,9 @@ export const fillArgData = (
     case EnumArgSrcDst.REG_TO_IWDI:
       args = rp(`${src.asmOperand},${dst.asmOperand}`, [
         { str: '{src_n}', with: xnSrcN },
-        { str: '{dst_d}', with: l1.toString() },
+        { str: '{dst_d}', with: b[1].toString() },
         { str: '{dst_n}', with: xnDstN },
+        { str: '{ir}', with: IWDI_B[dec2bin(b[0], 8)] },
       ]);
       break;
 
@@ -481,7 +494,7 @@ export const fillArgData = (
     /* ABW_TO_REG */
     case EnumArgSrcDst.ABW_TO_REG:
       args = rp(`${src.asmOperand},${dst.asmOperand}`, [
-        { str: '{src_n}', with: xnSrcN },
+        { str: '{src_d}', with: w[0].toString() },
         { str: '{dst_n}', with: xnDstN },
       ]);
       break;
@@ -489,16 +502,59 @@ export const fillArgData = (
     /* ABW_TO_ABW */
     case EnumArgSrcDst.ABW_TO_ABW:
       args = rp(`${src.asmOperand},${dst.asmOperand}`, [
-        { str: '{src_n}', with: xnSrcN },
-        { str: '{dst_n}', with: xnDstN },
+        { str: '{src_d}', with: w[0].toString() },
+        { str: '{dst_d}', with: w[1].toString() },
       ]);
       break;
 
     /* ABW_TO_ABL */
     case EnumArgSrcDst.ABW_TO_ABL:
       args = rp(`${src.asmOperand},${dst.asmOperand}`, [
-        { str: '{src_n}', with: xnSrcN },
+        { str: '{src_d}', with: w[0].toString() },
+        { str: '{dst_d}', with: l[1].toString() },
+      ]);
+      break;
+
+    /* ABW_TO_I */
+    case EnumArgSrcDst.ABW_TO_I:
+      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
+        { str: '{src_d}', with: w[0].toString() },
         { str: '{dst_n}', with: xnDstN },
+      ]);
+      break;
+
+    /* ABW_TO_IPI */
+    case EnumArgSrcDst.ABW_TO_IPI:
+      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
+        { str: '{src_d}', with: w[0].toString() },
+        { str: '{dst_n}', with: xnDstN },
+      ]);
+      break;
+
+    /* ABW_TO_IPD */
+    case EnumArgSrcDst.ABW_TO_IPD:
+      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
+        { str: '{src_d}', with: w[0].toString() },
+        { str: '{dst_n}', with: xnDstN },
+      ]);
+      break;
+
+    /* ABW_TO_IPD */
+    case EnumArgSrcDst.ABW_TO_IWD:
+      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
+        { str: '{src_d}', with: w[0].toString() },
+        { str: '{dst_d}', with: b[1].toString() },
+        { str: '{dst_n}', with: xnDstN },
+      ]);
+      break;
+
+    /* ABW_TO_IWDI */
+    case EnumArgSrcDst.ABW_TO_IWDI:
+      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
+        { str: '{src_d}', with: w[0].toString() },
+        { str: '{dst_d}', with: w[1].toString() },
+        { str: '{dst_n}', with: xnDstN },
+        { str: '{ir}', with: IWDI_B[dec2bin(b[0], 8)] },
       ]);
       break;
 
@@ -507,4 +563,23 @@ export const fillArgData = (
   }
 
   return args;
+};
+
+export const IWDI_B: { [key: string]: string } = {
+  '00000000': 'd0',
+  '00010000': 'd1',
+  '00100000': 'd2',
+  '00110000': 'd3',
+  '01000000': 'd4',
+  '01010000': 'd5',
+  '01100000': 'd6',
+  '01110000': 'd7',
+  '10000000': 'a0',
+  '10010000': 'a1',
+  '10100000': 'a2',
+  '10110000': 'a3',
+  '11000000': 'a4',
+  '11010000': 'a5',
+  '11100000': 'a6',
+  '11110000': 'a7',
 };

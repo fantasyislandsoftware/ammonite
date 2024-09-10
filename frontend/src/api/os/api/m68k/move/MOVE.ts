@@ -58,8 +58,6 @@ export const MOVE = (
     verbose: boolean;
   }
 ) => {
-  console.log(dataW);
-
   const i = dataW[0];
 
   /* Bit Size */
@@ -82,13 +80,17 @@ export const MOVE = (
 
   const argDir = `${src.argType}_TO_${dst.argType}`;
 
-  const args = fillArgData(argDir, src, dst, xnSrcN, xnDstN, dataW);
+  const args = fillArgData(argDir, src, dst, xnSrcN, xnDstN, dataW, setting);
 
-  console.log(args);
+  //const asm = 'move.l d0,d0';
+  const asm = `move.${opSizeChar} ${args}`;
 
-  const asm = 'move.l d0,d0';
+  /* Log */
 
-  //console.log(asm);
+  if (setting?.verbose) {
+    console.log(dataW);
+    console.log(asm);
+  }
 
   return { asm: asm, task: exeMove(task, asm), success: true, length: 0 };
 };
@@ -98,7 +100,7 @@ const regToReg = (task: ITask, opBit: EnumOpBit, args: string) => {
 };
 
 export const exeMove = (task: ITask, asm: string) => {
-  console.log(asm);
+  //console.log(asm);
 
   const { opBit, args, argSrcDst }: IExamineInstruction =
     examineInstruction(asm);
