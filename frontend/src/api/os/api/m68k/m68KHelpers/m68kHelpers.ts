@@ -10,7 +10,9 @@ import {
 } from '../IM68k';
 import { EnumBit, EnumOpBit } from 'functions/dataHandling/IdataHandling';
 import {
+  bin2hex,
   combine2WordsInto1Long,
+  int2hex,
   splitLongInto4Bytes,
 } from 'functions/dataHandling/dataHandling';
 import { dec2bin, hex2bin, rp } from 'functions/string';
@@ -401,8 +403,11 @@ export const fillArgData = (
   let args = '';
 
   let w: number[] = [];
+  let wh: string[] = [];
   let l: number[] = [];
+  let lh: string[] = [];
   let b: number[] = [];
+  let bh: string[] = [];
 
   w.push(parseInt(dataW[1], 2));
   w.push(parseInt(dataW[2], 2));
@@ -415,8 +420,23 @@ export const fillArgData = (
 
   b = splitLongInto4Bytes(l[0]).concat(splitLongInto4Bytes(l[1]));
 
+  /* Word */
+  for (let i = 0; i < 4; i++) {
+    wh.push(bin2hex(dataW[i + 1], 4));
+  }
+
+  /* Long */
+  for (let i = 0; i < 3; i++) {
+    lh.push(bin2hex(dataW[i + 1] + dataW[i + 2], 8));
+  }
+
+  /* Byte */
+  b.forEach((e) => {
+    bh.push(int2hex(e, 2));
+  });
+
   if (setting?.verbose) {
-    console.log({ b: b, w: w, l: l });
+    console.log({ b: b, w: w, l: l, wh: wh, lh: lh, bh: bh });
   }
 
   switch (argDir) {
@@ -434,7 +454,7 @@ export const fillArgData = (
     case EnumArgSrcDst.REG_TO_ABW:
       args = rp(`${src.asmOperand},${dst.asmOperand}`, [
         { str: '{src_n}', with: xnSrcN },
-        { str: '{dst_d}', with: w[0].toString() },
+        { str: '{dst_d}', with: `0x${wh[0]}` },
       ]);
       break;
 
@@ -442,7 +462,7 @@ export const fillArgData = (
     case EnumArgSrcDst.REG_TO_ABL:
       args = rp(`${src.asmOperand},${dst.asmOperand}`, [
         { str: '{src_n}', with: xnSrcN },
-        { str: '{dst_d}', with: l[0].toString() },
+        { str: '{dst_d}', with: `0x${lh[0]}` },
       ]);
       break;
 
@@ -474,7 +494,7 @@ export const fillArgData = (
     case EnumArgSrcDst.REG_TO_IWD:
       args = rp(`${src.asmOperand},${dst.asmOperand}`, [
         { str: '{src_n}', with: xnSrcN },
-        { str: '{dst_d}', with: w[0].toString() },
+        { str: '{dst_d}', with: `0x${wh[0]}` },
         { str: '{dst_n}', with: xnDstN },
       ]);
       break;
@@ -483,7 +503,7 @@ export const fillArgData = (
     case EnumArgSrcDst.REG_TO_IWDI:
       args = rp(`${src.asmOperand},${dst.asmOperand}`, [
         { str: '{src_n}', with: xnSrcN },
-        { str: '{dst_d}', with: b[1].toString() },
+        { str: '{dst_d}', with: `0x${bh[1]}` },
         { str: '{dst_n}', with: xnDstN },
         { str: '{ir}', with: IWDI_B[dec2bin(b[0], 8)] },
       ]);
@@ -494,7 +514,7 @@ export const fillArgData = (
     /* ABW_TO_REG */
     case EnumArgSrcDst.ABW_TO_REG:
       args = rp(`${src.asmOperand},${dst.asmOperand}`, [
-        { str: '{src_d}', with: w[0].toString() },
+        { str: '{src_d}', with: `0x${wh[0]}` },
         { str: '{dst_n}', with: xnDstN },
       ]);
       break;
@@ -502,23 +522,23 @@ export const fillArgData = (
     /* ABW_TO_ABW */
     case EnumArgSrcDst.ABW_TO_ABW:
       args = rp(`${src.asmOperand},${dst.asmOperand}`, [
-        { str: '{src_d}', with: w[0].toString() },
-        { str: '{dst_d}', with: w[1].toString() },
+        { str: '{src_d}', with: `0x${wh[0]}` },
+        { str: '{dst_d}', with: `0x${wh[1]}` },
       ]);
       break;
 
     /* ABW_TO_ABL */
     case EnumArgSrcDst.ABW_TO_ABL:
       args = rp(`${src.asmOperand},${dst.asmOperand}`, [
-        { str: '{src_d}', with: w[0].toString() },
-        { str: '{dst_d}', with: l[1].toString() },
+        { str: '{src_d}', with: `0x${wh[0]}` },
+        { str: '{dst_d}', with: `0x${lh[1]}` },
       ]);
       break;
 
     /* ABW_TO_I */
     case EnumArgSrcDst.ABW_TO_I:
       args = rp(`${src.asmOperand},${dst.asmOperand}`, [
-        { str: '{src_d}', with: w[0].toString() },
+        { str: '{src_d}', with: `0x${wh[0]}` },
         { str: '{dst_n}', with: xnDstN },
       ]);
       break;

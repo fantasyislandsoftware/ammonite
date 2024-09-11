@@ -100,6 +100,8 @@ const execM68KInstruction = (self: ITask) => {
     }
   });
 
+  console.log(found, opName);
+
   if (found) {
     switch (opName) {
       case EnumM68KOP.MOVE:
