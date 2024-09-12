@@ -592,7 +592,7 @@ export const fillArgData = (
     case EnumArgSrcDst.ABL_TO_ABW:
       args = rp(`${src.asmOperand},${dst.asmOperand}`, [
         { str: '{src_d}', with: `0x${lh[0]}` },
-        { str: '{dst_d}', with: `0x${wh[1]}` },
+        { str: '{dst_d}', with: `0x${wh[2]}` },
       ]);
       break;
 
@@ -632,7 +632,7 @@ export const fillArgData = (
     case EnumArgSrcDst.ABL_TO_IWD:
       args = rp(`${src.asmOperand},${dst.asmOperand}`, [
         { str: '{src_d}', with: `0x${lh[0]}` },
-        { str: '{dst_d}', with: `0x${wh[1]}` },
+        { str: '{dst_d}', with: `0x${wh[2]}` },
         { str: '{dst_n}', with: xnDstN },
       ]);
       break;
@@ -641,9 +641,9 @@ export const fillArgData = (
     case EnumArgSrcDst.ABL_TO_IWDI:
       args = rp(`${src.asmOperand},${dst.asmOperand}`, [
         { str: '{src_d}', with: `0x${lh[0]}` },
-        { str: '{dst_d}', with: `0x${bh[3]}` },
+        { str: '{dst_d}', with: `0x${bh[7]}` },
         { str: '{dst_n}', with: xnDstN },
-        { str: '{ir}', with: IWDI_B[dec2bin(b[2], 8)] },
+        { str: '{ir}', with: IWDI_B[dec2bin(b[6], 8)] },
       ]);
       break;
 

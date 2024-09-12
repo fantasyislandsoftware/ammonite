@@ -96,7 +96,7 @@ export const combine2WordsInto1Long = (
   const result = (word1 << 16) + word2;
   processConfig(result, config);
   const error = !is32bitSigned(result);
-  if (error) throw new Error('Error: Invalid 32bit number');
+  if (error) throw new Error(`Error: Invalid 32bit number: ${result}`);
   return result;
 };
 
@@ -111,7 +111,8 @@ export const combine2BytesInto1Word = (
 };
 
 export const is32bitSigned = (n: number) => {
-  return (Math.abs(n) & 0x7fffffff) === Math.abs(n);
+  //return (Math.abs(n) & 0x7fffffff) === Math.abs(n);
+  return n >= -2147483648 && n <= 2147483647;
 };
 
 export const copyLowLowByteToLongValue = (srcLong: number, dstLong: number) => {
