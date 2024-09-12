@@ -1,5 +1,5 @@
-export const hex2bin = (hex: string) => {
-  return parseInt(hex, 16).toString(2).padStart(16, '0');
+export const hex2bin = (hex: string, pad: number) => {
+  return parseInt(hex, 16).toString(2).padStart(pad, '0');
 };
 
 export const bin2int = (bin: string) => {

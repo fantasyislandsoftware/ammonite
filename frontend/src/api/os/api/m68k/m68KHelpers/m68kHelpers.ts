@@ -15,8 +15,7 @@ import {
   int2hex,
   splitLongInto4Bytes,
 } from 'functions/dataHandling/dataHandling';
-import { dec2bin, hex2bin, rp } from 'functions/string';
-import { settings } from 'cluster';
+import { argREG, argABW, argABL, IArgData } from './m68Args';
 
 export const processXNXT = (
   l: 'src' | 'dst',
@@ -400,8 +399,6 @@ export const fillArgData = (
   dataW: string[],
   setting?: { verbose: boolean }
 ) => {
-  let args = '';
-
   let w: number[] = [];
   let wh: string[] = [];
   let l: number[] = [];
@@ -435,221 +432,23 @@ export const fillArgData = (
     bh.push(int2hex(e, 2));
   });
 
+  const argData: IArgData = { w: wh, l: lh, b: bh };
+
   if (setting?.verbose) {
-    console.log({ w: wh, l: lh, b: bh });
+    console.log(argData);
   }
 
-  switch (argDir) {
-    /******************** REG ********************/
-
-    /* REG_TO_REG */
-    case EnumArgSrcDst.REG_TO_REG:
-      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
-        { str: '{src_n}', with: xnSrcN },
-        { str: '{dst_n}', with: xnDstN },
-      ]);
-      break;
-
-    /* REG_TO_ABW */
-    case EnumArgSrcDst.REG_TO_ABW:
-      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
-        { str: '{src_n}', with: xnSrcN },
-        { str: '{dst_d}', with: `0x${wh[0]}` },
-      ]);
-      break;
-
-    /* REG_TO_ABL */
-    case EnumArgSrcDst.REG_TO_ABL:
-      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
-        { str: '{src_n}', with: xnSrcN },
-        { str: '{dst_d}', with: `0x${lh[0]}` },
-      ]);
-      break;
-
-    /* REG_TO_I */
-    case EnumArgSrcDst.REG_TO_I:
-      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
-        { str: '{src_n}', with: xnSrcN },
-        { str: '{dst_n}', with: xnDstN },
-      ]);
-      break;
-
-    /* REG_TO_IPI */
-    case EnumArgSrcDst.REG_TO_IPI:
-      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
-        { str: '{src_n}', with: xnSrcN },
-        { str: '{dst_n}', with: xnDstN },
-      ]);
-      break;
-
-    /* REG_TO_IPD */
-    case EnumArgSrcDst.REG_TO_IPD:
-      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
-        { str: '{src_n}', with: xnSrcN },
-        { str: '{dst_n}', with: xnDstN },
-      ]);
-      break;
-
-    /* REG_TO_IWD */
-    case EnumArgSrcDst.REG_TO_IWD:
-      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
-        { str: '{src_n}', with: xnSrcN },
-        { str: '{dst_d}', with: `0x${wh[0]}` },
-        { str: '{dst_n}', with: xnDstN },
-      ]);
-      break;
-
-    /* REG_TO_IWDI */
-    case EnumArgSrcDst.REG_TO_IWDI:
-      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
-        { str: '{src_n}', with: xnSrcN },
-        { str: '{dst_d}', with: `0x${bh[1]}` },
-        { str: '{dst_n}', with: xnDstN },
-        { str: '{ir}', with: IWDI_B[dec2bin(b[0], 8)] },
-      ]);
-      break;
-
-    /******************** ABW ********************/
-
-    /* ABW_TO_REG */
-    case EnumArgSrcDst.ABW_TO_REG:
-      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
-        { str: '{src_d}', with: `0x${wh[0]}` },
-        { str: '{dst_n}', with: xnDstN },
-      ]);
-      break;
-
-    /* ABW_TO_ABW */
-    case EnumArgSrcDst.ABW_TO_ABW:
-      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
-        { str: '{src_d}', with: `0x${wh[0]}` },
-        { str: '{dst_d}', with: `0x${wh[1]}` },
-      ]);
-      break;
-
-    /* ABW_TO_ABL */
-    case EnumArgSrcDst.ABW_TO_ABL:
-      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
-        { str: '{src_d}', with: `0x${wh[0]}` },
-        { str: '{dst_d}', with: `0x${lh[1]}` },
-      ]);
-      break;
-
-    /* ABW_TO_I */
-    case EnumArgSrcDst.ABW_TO_I:
-      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
-        { str: '{src_d}', with: `0x${wh[0]}` },
-        { str: '{dst_n}', with: xnDstN },
-      ]);
-      break;
-
-    /* ABW_TO_IPI */
-    case EnumArgSrcDst.ABW_TO_IPI:
-      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
-        { str: '{src_d}', with: `0x${wh[0]}` },
-        { str: '{dst_n}', with: xnDstN },
-      ]);
-      break;
-
-    /* ABW_TO_IPD */
-    case EnumArgSrcDst.ABW_TO_IPD:
-      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
-        { str: '{src_d}', with: `0x${wh[0]}` },
-        { str: '{dst_n}', with: xnDstN },
-      ]);
-      break;
-
-    /* ABW_TO_IWD */
-    case EnumArgSrcDst.ABW_TO_IWD:
-      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
-        { str: '{src_d}', with: `0x${wh[0]}` },
-        { str: '{dst_d}', with: `0x${wh[1]}` },
-        { str: '{dst_n}', with: xnDstN },
-      ]);
-      break;
-
-    /* ABW_TO_IWDI */
-    case EnumArgSrcDst.ABW_TO_IWDI:
-      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
-        { str: '{src_d}', with: `0x${wh[0]}` },
-        { str: '{dst_d}', with: `0x${bh[3]}` },
-        { str: '{dst_n}', with: xnDstN },
-        { str: '{ir}', with: IWDI_B[dec2bin(b[2], 8)] },
-      ]);
-      break;
-
-    /******************** ABL ********************/
-
-    /* ABL_TO_REG */
-    case EnumArgSrcDst.ABL_TO_REG:
-      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
-        { str: '{src_d}', with: `0x${lh[0]}` },
-        { str: '{dst_n}', with: xnDstN },
-      ]);
-      break;
-
-    /* ABL_TO_ABW */
-    case EnumArgSrcDst.ABL_TO_ABW:
-      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
-        { str: '{src_d}', with: `0x${lh[0]}` },
-        { str: '{dst_d}', with: `0x${wh[2]}` },
-      ]);
-      break;
-
-    /* ABL_TO_ABL */
-    case EnumArgSrcDst.ABL_TO_ABL:
-      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
-        { str: '{src_d}', with: `0x${lh[0]}` },
-        { str: '{dst_d}', with: `0x${lh[1]}` },
-      ]);
-      break;
-
-    /* ABL_TO_I */
-    case EnumArgSrcDst.ABL_TO_I:
-      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
-        { str: '{src_d}', with: `0x${lh[0]}` },
-        { str: '{dst_n}', with: xnDstN },
-      ]);
-      break;
-
-    /* ABL_TO_IPI */
-    case EnumArgSrcDst.ABL_TO_IPI:
-      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
-        { str: '{src_d}', with: `0x${lh[0]}` },
-        { str: '{dst_n}', with: xnDstN },
-      ]);
-      break;
-
-    /* ABL_TO_IPD */
-    case EnumArgSrcDst.ABL_TO_IPD:
-      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
-        { str: '{src_d}', with: `0x${lh[0]}` },
-        { str: '{dst_n}', with: xnDstN },
-      ]);
-      break;
-
-    /* ABL_TO_IWD */
-    case EnumArgSrcDst.ABL_TO_IWD:
-      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
-        { str: '{src_d}', with: `0x${lh[0]}` },
-        { str: '{dst_d}', with: `0x${wh[2]}` },
-        { str: '{dst_n}', with: xnDstN },
-      ]);
-      break;
-
-    /* ABL_TO_IWDI */
-    case EnumArgSrcDst.ABL_TO_IWDI:
-      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
-        { str: '{src_d}', with: `0x${lh[0]}` },
-        { str: '{dst_d}', with: `0x${bh[7]}` },
-        { str: '{dst_n}', with: xnDstN },
-        { str: '{ir}', with: IWDI_B[dec2bin(b[6], 8)] },
-      ]);
-      break;
-
-    /* */
-    default:
-  }
+  let args = '';
+  let a: string[] = [];
+  a[0] = argREG(argDir, argData, src, dst, xnSrcN, xnDstN);
+  a[1] = argABW(argDir, argData, src, dst, xnSrcN, xnDstN);
+  a[2] = argABL(argDir, argData, src, dst, xnSrcN, xnDstN);
+  a.forEach((e) => {
+    if (e !== '') {
+      args = e;
+    }
+  });
+  console.log(args);
 
   return args;
 };
