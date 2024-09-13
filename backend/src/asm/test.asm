@@ -4,7 +4,7 @@ dat = 1
 
 ; word $7FFF
 
-test:   move.l $00008000.l,$01(a0,d0)
+test:   move.l (a7),$7fff(a7)
         bra test
 
 

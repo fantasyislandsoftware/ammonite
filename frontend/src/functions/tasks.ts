@@ -82,7 +82,7 @@ const execM68KInstruction = (self: ITask) => {
       .padStart(2, '0')}${self.s.m[self.pos + 1 + i * 2]
       .toString(16)
       .padStart(2, '0')}`;
-    dataW.push(hex2bin(d,16));
+    dataW.push(hex2bin(d, 16));
   }
 
   let opName: string = EnumM68KOP.UNKNOWN;

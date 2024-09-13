@@ -15,7 +15,7 @@ import {
   int2hex,
   splitLongInto4Bytes,
 } from 'functions/dataHandling/dataHandling';
-import { argREG, argABW, argABL, IArgData } from './m68Args';
+import { argREG, argABW, argABL, IArgData, argI } from './m68Args';
 
 export const processXNXT = (
   l: 'src' | 'dst',
@@ -439,10 +439,12 @@ export const fillArgData = (
   }
 
   let args = '';
-  let a: string[] = [];
-  a[0] = argREG(argDir, argData, src, dst, xnSrcN, xnDstN);
-  a[1] = argABW(argDir, argData, src, dst, xnSrcN, xnDstN);
-  a[2] = argABL(argDir, argData, src, dst, xnSrcN, xnDstN);
+  let a: string[] = [
+    argREG(argDir, argData, src, dst, xnSrcN, xnDstN),
+    argABW(argDir, argData, src, dst, xnSrcN, xnDstN),
+    argABL(argDir, argData, src, dst, xnSrcN, xnDstN),
+    argI(argDir, argData, src, dst, xnSrcN, xnDstN),
+  ];
   a.forEach((e) => {
     if (e !== '') {
       args = e;
