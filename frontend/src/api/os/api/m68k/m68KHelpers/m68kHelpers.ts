@@ -23,6 +23,7 @@ import {
   argI,
   argIPI,
   argIPD,
+  argIWD,
 } from './m68Args';
 
 export const processXNXT = (
@@ -454,6 +455,7 @@ export const fillArgData = (
     argI(argDir, argData, src, dst, xnSrcN, xnDstN),
     argIPI(argDir, argData, src, dst, xnSrcN, xnDstN),
     argIPD(argDir, argData, src, dst, xnSrcN, xnDstN),
+    argIWD(argDir, argData, src, dst, xnSrcN, xnDstN),
   ];
   a.forEach((e) => {
     if (e !== '') {

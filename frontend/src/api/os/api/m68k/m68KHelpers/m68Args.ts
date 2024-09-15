@@ -523,3 +523,97 @@ export const argIPD = (
 
   return args;
 };
+
+export const argIWD = (
+  argDir: string,
+  argData: IArgData,
+  src: IOperand,
+  dst: IOperand,
+  xnSrcN: string,
+  xnDstN: string
+) => {
+  let args = '';
+
+  const { w, l, b } = argData;
+
+  switch (argDir) {
+    /* IWD_TO_REG */
+    case EnumArgSrcDst.IWD_TO_REG:
+      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
+        { str: '{src_d}', with: `0x${w[0]}` },
+        { str: '{src_n}', with: xnSrcN },
+        { str: '{dst_n}', with: xnDstN },
+      ]);
+      break;
+
+    /* IWD_TO_ABW */
+    case EnumArgSrcDst.IWD_TO_ABW:
+      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
+        { str: '{src_d}', with: `0x${w[0]}` },
+        { str: '{src_n}', with: xnSrcN },
+        { str: '{dst_d}', with: `0x${w[1]}` },
+      ]);
+      break;
+
+    /* IWD_TO_ABL */
+    case EnumArgSrcDst.IWD_TO_ABL:
+      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
+        { str: '{src_d}', with: `0x${w[0]}` },
+        { str: '{src_n}', with: xnSrcN },
+        { str: '{dst_d}', with: `0x${l[1]}` },
+      ]);
+      break;
+
+    /* IWD_TO_I */
+    case EnumArgSrcDst.IWD_TO_I:
+      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
+        { str: '{src_d}', with: `0x${w[0]}` },
+        { str: '{src_n}', with: xnSrcN },
+        { str: '{dst_n}', with: xnDstN },
+      ]);
+      break;
+
+    /* IWD_TO_IPI */
+    case EnumArgSrcDst.IWD_TO_IPI:
+      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
+        { str: '{src_d}', with: `0x${w[0]}` },
+        { str: '{src_n}', with: xnSrcN },
+        { str: '{dst_n}', with: xnDstN },
+      ]);
+      break;
+
+    /* IWD_TO_IPD */
+    case EnumArgSrcDst.IWD_TO_IPD:
+      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
+        { str: '{src_d}', with: `0x${w[0]}` },
+        { str: '{src_n}', with: xnSrcN },
+        { str: '{dst_n}', with: xnDstN },
+      ]);
+      break;
+
+    /* IWD_TO_IWD */
+    case EnumArgSrcDst.IWD_TO_IWD:
+      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
+        { str: '{src_d}', with: `0x${w[0]}` },
+        { str: '{src_n}', with: xnSrcN },
+        { str: '{dst_d}', with: `0x${w[1]}` },
+        { str: '{dst_n}', with: xnDstN },
+      ]);
+      break;
+
+    /* IWD_TO_IWDI */
+    case EnumArgSrcDst.IWD_TO_IWDI:
+      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
+        { str: '{src_d}', with: `0x${w[0]}` },
+        { str: '{src_n}', with: xnSrcN },
+        { str: '{dst_d}', with: `0x${b[3]}` },
+        { str: '{dst_n}', with: xnDstN },
+        { str: '{ir}', with: IWDI_B[hex2bin(b[2], 8)] },
+      ]);
+      break;
+
+    /* */
+  }
+
+  return args;
+};
