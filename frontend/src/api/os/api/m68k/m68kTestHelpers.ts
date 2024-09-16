@@ -1,5 +1,5 @@
 import { EnumBit } from 'functions/dataHandling/IdataHandling';
-import { ICCR, ITask, TaskArch, TaskState } from 'stores/useTaskStore';
+import { ITask, TaskArch, TaskState } from 'stores/useTaskStore';
 
 export interface IMakeTestTaskParams {
   memoryBufferSize: number;
@@ -85,6 +85,7 @@ export const makeTestTask = (params: IMakeTestTaskParams) => {
         a7: a7 ? a7 : [0x0, 0x0, 0x0, 0x0],
         m: initM,
         c: [],
+        pc: 0,
       },
     };
   }

@@ -52,6 +52,7 @@ export interface ITask {
     a7: number[];
     c: number[];
     m: number[];
+    pc: number;
   };
 }
 

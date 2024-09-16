@@ -24,6 +24,8 @@ import {
   argIPI,
   argIPD,
   argIWD,
+  argIWDI,
+  argPCD,
 } from './m68Args';
 
 export const processXNXT = (
@@ -101,7 +103,7 @@ export const processXNXT = (
           break;
         case '010':
           res.argType = EnumArgType.PCD;
-          res.asmOperand = 'd16(pc)';
+          res.asmOperand = `{${l}_pc}(pc)`;
           res.length = 4;
           break;
         case '011':
@@ -400,6 +402,7 @@ export const calcArgArray = (args: string) => {
 };
 
 export const fillArgData = (
+  task: ITask,
   argDir: string,
   src: IOperand,
   dst: IOperand,
@@ -456,6 +459,8 @@ export const fillArgData = (
     argIPI(argDir, argData, src, dst, xnSrcN, xnDstN),
     argIPD(argDir, argData, src, dst, xnSrcN, xnDstN),
     argIWD(argDir, argData, src, dst, xnSrcN, xnDstN),
+    argIWDI(argDir, argData, src, dst, xnSrcN, xnDstN),
+    argPCD(task, argDir, argData, src, dst, xnSrcN, xnDstN),
   ];
   a.forEach((e) => {
     if (e !== '') {

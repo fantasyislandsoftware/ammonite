@@ -3,7 +3,7 @@ import { MOVE } from '../../MOVE';
 
 const task = makeTestTask({ memoryBufferSize: 100 });
 
-describe(`MOVE_I_TO_REG`, () => {
+describe(`MOVE_IWD_TO_REG`, () => {
   it(`MIN`, () => {
     expect(
       MOVE(task, [

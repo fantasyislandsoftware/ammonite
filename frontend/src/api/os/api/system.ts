@@ -243,6 +243,7 @@ export class SYSTEM_API {
           c: fillNumberArray(0, 2),
           //m: block.mem,
           m: test,
+          pc: block.pos,
         },
       });
     setTasks(tasks);

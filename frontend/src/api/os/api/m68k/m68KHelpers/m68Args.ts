@@ -1,6 +1,8 @@
 import { hex2bin, rp } from 'functions/string';
 import { EnumArgSrcDst, IOperand } from '../IM68k';
 import { IWDI_B } from './m68kHelpers';
+import { ITask } from 'stores/useTaskStore';
+import { bin2hex, int2hex } from 'functions/dataHandling/dataHandling';
 
 export interface IArgData {
   w: string[];
@@ -613,6 +615,138 @@ export const argIWD = (
       break;
 
     /* */
+  }
+
+  return args;
+};
+
+export const argIWDI = (
+  argDir: string,
+  argData: IArgData,
+  src: IOperand,
+  dst: IOperand,
+  xnSrcN: string,
+  xnDstN: string
+) => {
+  let args = '';
+
+  const { w, l, b } = argData;
+
+  switch (argDir) {
+    /* IWDI_TO_REG */
+    case EnumArgSrcDst.IWDI_TO_REG:
+      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
+        { str: '{src_d}', with: `0x${b[1]}` },
+        { str: '{src_n}', with: xnSrcN },
+        { str: '{dst_n}', with: xnDstN },
+        { str: '{ir}', with: IWDI_B[hex2bin(b[0], 8)] },
+      ]);
+      break;
+
+    /* IWDI_TO_ABW */
+    case EnumArgSrcDst.IWDI_TO_ABW:
+      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
+        { str: '{src_d}', with: `0x${b[1]}` },
+        { str: '{src_n}', with: xnSrcN },
+        { str: '{dst_d}', with: `0x${w[1]}` },
+        { str: '{ir}', with: IWDI_B[hex2bin(b[0], 8)] },
+      ]);
+      break;
+
+    /* IWDI_TO_ABL */
+    case EnumArgSrcDst.IWDI_TO_ABL:
+      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
+        { str: '{src_d}', with: `0x${b[1]}` },
+        { str: '{src_n}', with: xnSrcN },
+        { str: '{dst_d}', with: `0x${l[1]}` },
+        { str: '{ir}', with: IWDI_B[hex2bin(b[0], 8)] },
+      ]);
+      break;
+
+    /* IWDI_TO_I */
+    case EnumArgSrcDst.IWDI_TO_I:
+      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
+        { str: '{src_d}', with: `0x${b[1]}` },
+        { str: '{src_n}', with: xnSrcN },
+        { str: '{dst_n}', with: xnDstN },
+        { str: '{ir}', with: IWDI_B[hex2bin(b[0], 8)] },
+      ]);
+      break;
+
+    /* IWDI_TO_IPI */
+    case EnumArgSrcDst.IWDI_TO_IPI:
+      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
+        { str: '{src_d}', with: `0x${b[1]}` },
+        { str: '{src_n}', with: xnSrcN },
+        { str: '{dst_n}', with: xnDstN },
+        { str: '{ir}', with: IWDI_B[hex2bin(b[0], 8)] },
+      ]);
+      break;
+
+    /* IWDI_TO_IPD */
+    case EnumArgSrcDst.IWDI_TO_IPD:
+      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
+        { str: '{src_d}', with: `0x${b[1]}` },
+        { str: '{src_n}', with: xnSrcN },
+        { str: '{dst_n}', with: xnDstN },
+        { str: '{ir}', with: IWDI_B[hex2bin(b[0], 8)] },
+      ]);
+      break;
+
+    /* IWDI_TO_IWD */
+    case EnumArgSrcDst.IWDI_TO_IWD:
+      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
+        { str: '{src_d}', with: `0x${b[1]}` },
+        { str: '{src_n}', with: xnSrcN },
+        { str: '{dst_d}', with: `0x${w[1]}` },
+        { str: '{dst_n}', with: xnDstN },
+        { str: '{ir}', with: IWDI_B[hex2bin(b[0], 8)] },
+      ]);
+      break;
+
+    /* IWDI_TO_IWDI */
+    case EnumArgSrcDst.IWDI_TO_IWDI:
+      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
+        { str: '{src_d}', with: `0x${b[1]}` },
+        { str: '{src_n}', with: xnSrcN },
+        { str: '{dst_d}', with: `0x${b[3]}` },
+        { str: '{dst_n}', with: xnDstN },
+        { str: '{ir}', with: IWDI_B[hex2bin(b[0], 8)] },
+        { str: '{ir2}', with: IWDI_B[hex2bin(b[2], 8)] },
+      ]);
+      break;
+
+    /* */
+  }
+
+  return args;
+};
+
+export const argPCD = (
+  task: ITask,
+  argDir: string,
+  argData: IArgData,
+  src: IOperand,
+  dst: IOperand,
+  xnSrcN: string,
+  xnDstN: string
+) => {
+  let args = '';
+
+  const { w, l, b } = argData;
+
+  switch (argDir) {
+    /* PCD_TO_REG */
+    case EnumArgSrcDst.PCD_TO_REG:
+      console.log(task);
+      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
+        { str: '{src_d}', with: `0x${w[0]}` },
+        { str: '{src_pc}', with: `${int2hex(task.s.pc + 2, 4)}` },
+        { str: '{dst_n}', with: xnDstN },
+        { str: '{src_n}', with: xnSrcN },
+        { str: '{dst_n}', with: xnDstN },
+      ]);
+      break;
   }
 
   return args;

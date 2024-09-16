@@ -80,7 +80,16 @@ export const MOVE = (
 
   const argDir = `${src.argType}_TO_${dst.argType}`;
 
-  const args = fillArgData(argDir, src, dst, xnSrcN, xnDstN, dataW, setting);
+  const args = fillArgData(
+    task,
+    argDir,
+    src,
+    dst,
+    xnSrcN,
+    xnDstN,
+    dataW,
+    setting
+  );
 
   //const asm = 'move.l d0,d0';
   const asm = `move.${opSizeChar} ${args}`;
