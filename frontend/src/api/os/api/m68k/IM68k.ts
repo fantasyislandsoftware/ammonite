@@ -175,7 +175,7 @@ export enum EnumArgSrcDst {
   PCD_TO_IPI = 'PCD_TO_IPI',
   PCD_TO_IPD = 'PCD_TO_IPD',
   PCD_TO_IWD = 'PCD_TO_IWD',
-  PCD_TO_IWDI = 'CD_TO_IWDI',
+  PCD_TO_IWDI = 'PCD_TO_IWDI',
 
   /* PCID */
   PCID_TO_REG = 'PCID_TO_REG',

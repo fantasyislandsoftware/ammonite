@@ -16,6 +16,10 @@ export const int2hex = (int: number, length: number) => {
   return int.toString(16).padStart(length, '0');
 };
 
+export const hex2int = (hex: string) => {
+  return parseInt(hex, 16);
+};
+
 const processConfig = (result: number, config?: INumberCalcConfig) => {
   if (config?.log) {
     console.log(result.toString(16));

@@ -2,7 +2,7 @@ import { hex2bin, rp } from 'functions/string';
 import { EnumArgSrcDst, IOperand } from '../IM68k';
 import { IWDI_B } from './m68kHelpers';
 import { ITask } from 'stores/useTaskStore';
-import { bin2hex, int2hex } from 'functions/dataHandling/dataHandling';
+import { bin2hex, hex2int, int2hex } from 'functions/dataHandling/dataHandling';
 
 export interface IArgData {
   w: string[];
@@ -735,18 +735,110 @@ export const argPCD = (
 
   const { w, l, b } = argData;
 
+  const i = 2;
+
   switch (argDir) {
     /* PCD_TO_REG */
     case EnumArgSrcDst.PCD_TO_REG:
-      console.log(task);
       args = rp(`${src.asmOperand},${dst.asmOperand}`, [
-        { str: '{src_d}', with: `0x${w[0]}` },
-        { str: '{src_pc}', with: `${int2hex(task.s.pc + 2, 4)}` },
+        {
+          str: '{src_pc}',
+          with: `0x${int2hex(task.s.pc + i + hex2int(w[0]), 4)}`,
+        },
         { str: '{dst_n}', with: xnDstN },
+        { str: '{dst_n}', with: xnDstN },
+      ]);
+      break;
+
+    /* PCD_TO_ABW */
+    case EnumArgSrcDst.PCD_TO_ABW:
+      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
+        {
+          str: '{src_pc}',
+          with: `0x${int2hex(task.s.pc + i + hex2int(w[0]), 4)}`,
+        },
+        { str: '{dst_d}', with: `0x${w[1]}` },
+        { str: '{src_n}', with: xnSrcN },
+      ]);
+      break;
+
+    /* PCD_TO_ABL */
+    case EnumArgSrcDst.PCD_TO_ABL:
+      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
+        {
+          str: '{src_pc}',
+          with: `0x${int2hex(task.s.pc + i + hex2int(w[0]), 4)}`,
+        },
+        { str: '{dst_d}', with: `0x${l[1]}` },
+        { str: '{src_n}', with: xnSrcN },
+      ]);
+      break;
+
+    /* PCD_TO_I */
+    case EnumArgSrcDst.PCD_TO_I:
+      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
+        {
+          str: '{src_pc}',
+          with: `0x${int2hex(task.s.pc + i + hex2int(w[0]), 4)}`,
+        },
+        { str: '{dst_n}', with: xnDstN },
+        { str: '{src_n}', with: xnSrcN },
+      ]);
+      break;
+
+    /* PCD_TO_IPI */
+    case EnumArgSrcDst.PCD_TO_IPI:
+      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
+        {
+          str: '{src_pc}',
+          with: `0x${int2hex(task.s.pc + i + hex2int(w[0]), 4)}`,
+        },
+        { str: '{dst_n}', with: xnDstN },
+        { str: '{src_n}', with: xnSrcN },
+      ]);
+      break;
+
+    /* PCD_TO_IPD */
+    case EnumArgSrcDst.PCD_TO_IPD:
+      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
+        {
+          str: '{src_pc}',
+          with: `0x${int2hex(task.s.pc + i + hex2int(w[0]), 4)}`,
+        },
+        { str: '{dst_n}', with: xnDstN },
+        { str: '{src_n}', with: xnSrcN },
+      ]);
+      break;
+
+    /* PCD_TO_IWD */
+    case EnumArgSrcDst.PCD_TO_IWD:
+      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
+        {
+          str: '{src_pc}',
+          with: `0x${int2hex(task.s.pc + i + hex2int(w[0]), 4)}`,
+        },
+        { str: '{dst_d}', with: `0x${w[1]}` },
         { str: '{src_n}', with: xnSrcN },
         { str: '{dst_n}', with: xnDstN },
       ]);
       break;
+
+    /* PCD_TO_IWDI */
+    case EnumArgSrcDst.PCD_TO_IWDI:
+      console.log('test');
+      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
+        {
+          str: '{src_pc}',
+          with: `0x${int2hex(task.s.pc + i + hex2int(w[0]), 4)}`,
+        },
+        { str: '{dst_d}', with: `0x${b[3]}` },
+        { str: '{src_n}', with: xnSrcN },
+        { str: '{dst_n}', with: xnDstN },
+        { str: '{ir}', with: IWDI_B[hex2bin(b[2], 8)] },
+      ]);
+      break;
+
+    /* */
   }
 
   return args;

@@ -40,6 +40,8 @@ export const processXNXT = (
     length: 0,
   };
 
+  //console.log(xt_bin);
+
   switch (xt_bin) {
     case '000':
       res.argType = EnumArgType.REG;
@@ -467,7 +469,6 @@ export const fillArgData = (
       args = e;
     }
   });
-  console.log(args);
 
   return args;
 };
