@@ -85,16 +85,6 @@ const App = () => {
   } else {
     return (
       <>
-        <button
-          onClick={() => {
-            systemCrash.state = true;
-            setTasks([]);
-            clearInterval(taskProcessor);
-            throw new Error('Something went badly wrong!');
-          }}
-        >
-          test
-        </button>
         {screens.map((screen, index) => (
           <UIScreen key={index} screen={screen} />
         ))}

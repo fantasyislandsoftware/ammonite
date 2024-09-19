@@ -26,6 +26,7 @@ import {
   argIWD,
   argIWDI,
   argPCD,
+  argPCDI,
 } from './m68Args';
 
 export const processXNXT = (
@@ -39,8 +40,6 @@ export const processXNXT = (
     jsOperand: '',
     length: 0,
   };
-
-  //console.log(xt_bin);
 
   switch (xt_bin) {
     case '000':
@@ -110,7 +109,7 @@ export const processXNXT = (
           break;
         case '011':
           res.argType = EnumArgType.PCID;
-          res.asmOperand = 'd8(pc,xn)';
+          res.asmOperand = `{${l}_pc}(pc,{${l}_n})`;
           res.length = 4;
           break;
         case '100':
@@ -463,6 +462,7 @@ export const fillArgData = (
     argIWD(argDir, argData, src, dst, xnSrcN, xnDstN),
     argIWDI(argDir, argData, src, dst, xnSrcN, xnDstN),
     argPCD(task, argDir, argData, src, dst, xnSrcN, xnDstN),
+    argPCDI(task, argDir, argData, src, dst, xnSrcN, xnDstN),
   ];
   a.forEach((e) => {
     if (e !== '') {
