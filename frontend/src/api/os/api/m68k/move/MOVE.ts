@@ -91,7 +91,6 @@ export const MOVE = (
     setting
   );
 
-  //const asm = 'move.l d0,d0';
   const asm = `move.${opSizeChar} ${args}`;
 
   /* Log */

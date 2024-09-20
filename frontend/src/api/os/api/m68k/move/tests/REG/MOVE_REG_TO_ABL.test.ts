@@ -1,5 +1,7 @@
 import { makeTestTask } from 'api/os/api/m68k/m68kTestHelpers';
-import { MOVE } from '../../../MOVE';
+import { MOVE } from '../../MOVE';
+import { EnumArgSrcDst } from '../../../IM68k';
+import { examineInstruction } from '../../../m68KHelpers/m68kHelpers';
 
 const task = makeTestTask({ memoryBufferSize: 100 });
 

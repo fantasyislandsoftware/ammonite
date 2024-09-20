@@ -178,108 +178,152 @@ export const examineInstruction = (i: string) => {
 export const calcArgDir = (args: string) => {
   let state = EnumArgSrcDst.UNKNOWN;
 
+  const rx = (template: string, verbose?: boolean) => {
+    let result = '';
+    for (let i = 0; i < template.length; i++) {
+      const ch = template[i];
+      switch (ch) {
+        case 'c':
+          result += '[A-Za-z0-9]';
+          break;
+        case 'n':
+          result += '\\d';
+          break;
+        case '.':
+          result += '\\.';
+          break;
+        case '(':
+          result += '\\(';
+          break;
+        case ')':
+          result += '\\)';
+          break;
+        case '+':
+          result += '\\+';
+          break;
+        case '-':
+          result += '\\-';
+          break;
+        default:
+          result += ch;
+      }
+    }
+    verbose && console.log(result);
+    return new RegExp(result);
+  };
+
+  const REG = 'cn';
+  const ABW = '0xcccc.w';
+  const ABL = '0xcccccccc.l';
+  const I = '(cn)';
+  const IPI = '(cn)+';
+  const IPD = '-(cn)';
+  const IWD = '0xcccc(cn)';
+  const IWDI = '0xcc(cn,cn)';
+  const PCD = '0xcccc(pc)';
+  const PCID = '0xcc(pc,cn)';
+  const TO = ',';
+
   const Args = {
     /* Reg */
-    REG_TO_REG: /[A-Za-z]+[0-9]+,[A-Za-z]+[0-9]+/i,
-    REG_TO_ABW: /[A-Za-z]+[0-9]+,[0-9]+.w/i,
-    REG_TO_ABL: /[A-Za-z]+[0-9]+,[0-9]+.l/i,
-    REG_TO_I: /[A-Za-z]+[0-9]+,\(a[0-9]+\)/i,
-    REG_TO_IPI: /[A-Za-z]+[0-9]+,\(a[0-9]+\)\+/i,
-    REG_TO_IPD: /[A-Za-z]+[0-9]+,-\(a[0-9]+\)/i,
-    REG_TO_IWD: /[A-Za-z]+[0-9]+,[0-9]+\(a[0-9]+\)/i,
-    REG_TO_IWDI: /[A-Za-z]+[0-9]+,[0-9]+\(a[0-9]+,[A-Za-z]+[0-9]+\)/i,
+    REG_TO_REG: rx(`${REG}${TO}${REG}`),
+    REG_TO_ABW: rx(`${REG}${TO}${ABW}`),
+    REG_TO_ABL: rx(`${REG}${TO}${ABL}`),
+    REG_TO_I: rx(`${REG}${TO}${I}`),
+    REG_TO_IPI: rx(`${REG}${TO}${IPI}`),
+    REG_TO_IPD: rx(`${REG}${TO}${IPD}`),
+    REG_TO_IWD: rx(`${REG}${TO}${IWD}`),
+    REG_TO_IWDI: rx(`${REG}${TO}${IWDI}`),
 
     /* ABW */
-    ABW_TO_REG: /[0-9]+\.w,[A-Za-z]+[0-9]+/i,
-    ABW_TO_ABW: /[0-9]+\.w,[0-9]+\.w/i,
-    ABW_TO_ABL: /[0-9]+\.w,[0-9]+\.l/i,
-    ABW_TO_I: /[0-9]+.w,\(a[0-9]+\)/i,
-    ABW_TO_IPI: /[0-9]+.w,\(a[0-9]+\)\+/i,
-    ABW_TO_IPD: /[0-9]+.w,-\(a[0-9]+\)/i,
-    ABW_TO_IWD: /[0-9]+.w,[0-9]+\(a[0-9]+\)/i,
-    ABW_TO_IWDI: /[0-9]+.w,[0-9]+\(a[0-9]+,[A-Za-z]+[0-9]+\)/i,
+    ABW_TO_REG: rx(`${ABW}${TO}${REG}`),
+    ABW_TO_ABW: rx(`${ABW}${TO}${ABW}`),
+    ABW_TO_ABL: rx(`${ABW}${TO}${ABL}`),
+    ABW_TO_I: rx(`${ABW}${TO}${I}`),
+    ABW_TO_IPI: rx(`${ABW}${TO}${IPI}`),
+    ABW_TO_IPD: rx(`${ABW}${TO}${IPD}`),
+    ABW_TO_IWD: rx(`${ABW}${TO}${IWD}`),
+    ABW_TO_IWDI: rx(`${ABW}${TO}${IWDI}`),
 
     /* ABL */
-    ABL_TO_REG: /[0-9]+\.l,[A-Za-z]+[0-9]+/i,
-    ABL_TO_ABW: /[0-9]+\.l,[0-9]+\.w/i,
-    ABL_TO_ABL: /[0-9]+\.l,[0-9]+\.l/i,
-    ABL_TO_I: /[0-9]+.l,\(a[0-9]+\)/i,
-    ABL_TO_IPI: /[0-9]+.l,\(a[0-9]+\)\+/i,
-    ABL_TO_IPD: /[0-9]+.l,-\(a[0-9]+\)/i,
-    ABL_TO_IWD: /[0-9]+.l,[0-9]+\(a[0-9]+\)/i,
-    ABL_TO_IWDI: /[0-9]+.l,[0-9]+\(a[0-9]+,[A-Za-z]+[0-9]+\)/i,
+    ABL_TO_REG: rx(`${ABL}${TO}${REG}`),
+    ABL_TO_ABW: rx(`${ABL}${TO}${ABW}`),
+    ABL_TO_ABL: rx(`${ABL}${TO}${ABL}`),
+    ABL_TO_I: rx(`${ABL}${TO}${I}`),
+    ABL_TO_IPI: rx(`${ABL}${TO}${IPI}`),
+    ABL_TO_IPD: rx(`${ABL}${TO}${IPD}`),
+    ABL_TO_IWD: rx(`${ABL}${TO}${IWD}`),
+    ABL_TO_IWDI: rx(`${ABL}${TO}${IWDI}`),
 
     /* I */
-    I_TO_REG: /\(a[0-9]+\),[A-Za-z]+[0-9]+/i,
-    I_TO_ABW: /\(a[0-9]+\),[0-9]+.w/i,
-    I_TO_ABL: /\(a[0-9]+\),[0-9]+.l/i,
-    I_TO_I: /\(a[0-9]+\),\(a[0-9]+\)/i,
-    I_TO_IPI: /\(a[0-9]+\),\(a[0-9]+\)\+/i,
-    I_TO_IPD: /\(a[0-9]+\),-\(a[0-9]+\)/i,
-    I_TO_IWD: /\(a[0-9]+\),[0-9]+\(a[0-9]+\)/i,
-    I_TO_IWDI: /\(a[0-9]+\),[0-9]+\(a[0-9]+,[A-Za-z]+[0-9]+\)/i,
+    I_TO_REG: rx(`${I}${TO}${REG}`),
+    I_TO_ABW: rx(`${I}${TO}${ABW}`),
+    I_TO_ABL: rx(`${I}${TO}${ABL}`),
+    I_TO_I: rx(`${I}${TO}${I}`),
+    I_TO_IPI: rx(`${I}${TO}${IPI}`),
+    I_TO_IPD: rx(`${I}${TO}${IPD}`),
+    I_TO_IWD: rx(`${I}${TO}${IWD}`),
+    I_TO_IWDI: rx(`${I}${TO}${IWDI}`),
 
     /* IPI */
-    IPI_TO_REG: /\(a[0-9]+\)\+,[A-Za-z]+[0-9]+/i,
-    IPI_TO_ABW: /\(a[0-9]+\)\+,[0-9]+.w/i,
-    IPI_TO_ABL: /\(a[0-9]+\)\+,[0-9]+.l/i,
-    IPI_TO_I: /\(a[0-9]+\)\+,\([A-Za-z]+[0-9]+\)/i,
-    IPI_TO_IPI: /\(a[0-9]+\)\+,\([A-Za-z]+[0-9]+\)\+/i,
-    IPI_TO_IPD: /\(a[0-9]+\)\+,-\([A-Za-z]+[0-9]+\)/i,
-    IPI_TO_IWD: /\(a[0-9]+\)\+,[0-9]+\(a[0-9]+\)/i,
-    IPI_TO_IWDI: /\(a[0-9]+\)\+,[0-9]+\(a[0-9]+,[A-Za-z]+[0-9]+\)/i,
+    IPI_TO_REG: rx(`${IPI}${TO}${REG}`),
+    IPI_TO_ABW: rx(`${IPI}${TO}${ABW}`),
+    IPI_TO_ABL: rx(`${IPI}${TO}${ABL}`),
+    IPI_TO_I: rx(`${IPI}${TO}${I}`),
+    IPI_TO_IPI: rx(`${IPI}${TO}${IPI}`),
+    IPI_TO_IPD: rx(`${IPI}${TO}${IPD}`),
+    IPI_TO_IWD: rx(`${IPI}${TO}${IWD}`),
+    IPI_TO_IWDI: rx(`${IPI}${TO}${IWDI}`),
 
     /* IPD */
-    IPD_TO_REG: /-\(a[0-9]+\),[A-Za-z]+[0-9]+/i,
-    IPD_TO_ABW: /-\(a[0-9]+\),[0-9]+.w/i,
-    IPD_TO_ABL: /-\(a[0-9]+\),[0-9]+.l/i,
-    IPD_TO_I: /-\(a[0-9]+\),\(a[0-9]+\)/i,
-    IPD_TO_IPI: /-\(a[0-9]+\),\(a[0-9]+\)\+/i,
-    IPD_TO_IPD: /-\(a[0-9]+\),-\(a[0-9]+\)/i,
-    IPD_TO_IWD: /-\(a[0-9]+\),[0-9]+\(a[0-9]+\)/i,
-    IPD_TO_IWDI: /-\(a[0-9]+\),[0-9]+\(a[0-9]+,[A-Za-z]+[0-9]+\)/i,
+    IPD_TO_REG: rx(`${IPD}${TO}${REG}`),
+    IPD_TO_ABW: rx(`${IPD}${TO}${ABW}`),
+    IPD_TO_ABL: rx(`${IPD}${TO}${ABL}`),
+    IPD_TO_I: rx(`${IPD}${TO}${I}`),
+    IPD_TO_IPI: rx(`${IPD}${TO}${IPI}`),
+    IPD_TO_IPD: rx(`${IPD}${TO}${IPD}`),
+    IPD_TO_IWD: rx(`${IPD}${TO}${IWD}`),
+    IPD_TO_IWDI: rx(`${IPD}${TO}${IWDI}`),
 
     /* IWD */
-    IWD_TO_REG: /[0-9]+\(a[0-9]+\),[A-Za-z]+[0-9]+/i,
-    IWD_TO_ABW: /[0-9]+\(a[0-9]+\),[0-9]+.w/i,
-    IWD_TO_ABL: /[0-9]+\(a[0-9]+\),[0-9]+.l/i,
-    IWD_TO_I: /[0-9]+\(a[0-9]+\),\(a[0-9]+\)/i,
-    IWD_TO_IPI: /[0-9]+\(a[0-9]+\),\(a[0-9]+\)\+/i,
-    IWD_TO_IPD: /[0-9]+\(a[0-9]+\),-\(a[0-9]+\)/i,
-    IWD_TO_IWD: /[0-9]+\(a[0-9]+\),[0-9]+\(a[0-9]+\)/i,
-    IWD_TO_IWDI: /[0-9]+\(a[0-9]+\),[0-9]+\(a[0-9]+,[A-Za-z]+[0-9]+\)/i,
+    IWD_TO_REG: rx(`${IWD}${TO}${REG}`),
+    IWD_TO_ABW: rx(`${IWD}${TO}${ABW}`),
+    IWD_TO_ABL: rx(`${IWD}${TO}${ABL}`),
+    IWD_TO_I: rx(`${IWD}${TO}${I}`),
+    IWD_TO_IPI: rx(`${IWD}${TO}${IPI}`),
+    IWD_TO_IPD: rx(`${IWD}${TO}${IPD}`),
+    IWD_TO_IWD: rx(`${IWD}${TO}${IWD}`),
+    IWD_TO_IWDI: rx(`${IWD}${TO}${IWDI}`),
 
     /* IWDI */
-    IWDI_TO_REG: /[0-9]+\(a[0-9]+,[A-Za-z]+[0-9]+\),[A-Za-z]+[0-9]+/i,
-    IWDI_TO_ABW: /[0-9]+\(a[0-9]+,[A-Za-z]+[0-9]+\),[0-9]+.w/i,
-    IWDI_TO_ABL: /[0-9]+\(a[0-9]+,[A-Za-z]+[0-9]+\),[0-9]+.l/i,
-    IWDI_TO_I: /[0-9]+\(a[0-9]+,[A-Za-z]+[0-9]+\),\(a[0-9]+\)/i,
-    IWDI_TO_IPI: /[0-9]+\(a[0-9]+,[A-Za-z]+[0-9]+\),\(a[0-9]+\)\+/i,
-    IWDI_TO_IPD: /[0-9]+\(a[0-9]+,[A-Za-z]+[0-9]+\),-\(a[0-9]+\)/i,
-    IWDI_TO_IWD: /[0-9]+\(a[0-9]+,[A-Za-z]+[0-9]+\),[0-9]+\(a[0-9]+\)/i,
-    IWDI_TO_IWDI:
-      /[0-9]+\(a[0-9]+,[A-Za-z]+[0-9]+\),[0-9]+\(a[0-9]+,[A-Za-z]+[0-9]+\)/i,
+    IWDI_TO_REG: rx(`${IWDI}${TO}${REG}`, true),
+    IWDI_TO_ABW: rx(`${IWDI}${TO}${ABW}`),
+    IWDI_TO_ABL: rx(`${IWDI}${TO}${ABL}`),
+    IWDI_TO_I: rx(`${IWDI}${TO}${I}`),
+    IWDI_TO_IPI: rx(`${IWDI}${TO}${IPI}`),
+    IWDI_TO_IPD: rx(`${IWDI}${TO}${IPD}`),
+    IWDI_TO_IWD: rx(`${IWDI}${TO}${IWD}`),
+    IWDI_TO_IWDI: rx(`${IWDI}${TO}${IWDI}`),
 
     /* PCD */
-    PCD_TO_REG: /[0-9]+\(pc\),[A-Za-z]+[0-9]+/i,
-    PCD_TO_ABW: /[0-9]+\(pc\),[0-9]+.w/i,
-    PCD_TO_ABL: /[0-9]+\(pc\),[0-9]+.l/i,
-    PCD_TO_I: /[0-9]+\(pc\),\(a[0-9]+\)/i,
-    PCD_TO_IPI: /[0-9]+\(pc\),\(a[0-9]+\)\+/i,
-    PCD_TO_IPD: /[0-9]+\(pc\),-\(a[0-9]+\)/i,
-    PCD_TO_IWD: /[0-9]+\(pc\),[0-9]+\(a[0-9]+\)/i,
-    PCD_TO_IWDI: /[0-9]+\(pc\),[0-9]+\(a[0-9]+,[A-Za-z]+[0-9]+\)/i,
+    PCD_TO_REG: rx(`${PCD}${TO}${REG}`),
+    PCD_TO_ABW: rx(`${PCD}${TO}${ABW}`),
+    PCD_TO_ABL: rx(`${PCD}${TO}${ABL}`),
+    PCD_TO_I: rx(`${PCD}${TO}${I}`),
+    PCD_TO_IPI: rx(`${PCD}${TO}${IPI}`),
+    PCD_TO_IPD: rx(`${PCD}${TO}${IPD}`),
+    PCD_TO_IWD: rx(`${PCD}${TO}${IWD}`),
+    PCD_TO_IWDI: rx(`${PCD}${TO}${IWDI}`),
 
     /* PCID */
-    PCID_TO_REG: /[0-9]+\(pc,[A-Za-z]+[0-9]+\),[A-Za-z]+[0-9]+/i,
-    PCID_TO_ABW: /[0-9]+\(pc,[A-Za-z]+[0-9]+\),[0-9]+.w/i,
-    PCID_TO_ABL: /[0-9]+\(pc,[A-Za-z]+[0-9]+\),[0-9]+.l/i,
-    PCID_TO_I: /[0-9]+\(pc,[A-Za-z]+[0-9]+\),\(a[0-9]+\)/i,
-    PCID_TO_IPI: /[0-9]+\(pc,[A-Za-z]+[0-9]+\),\(a[0-9]+\)\+/i,
-    PCID_TO_IPD: /[0-9]+\(pc,[A-Za-z]+[0-9]+\),-\(a[0-9]+\)/i,
-    PCID_TO_IWD: /[0-9]+\(pc,[A-Za-z]+[0-9]+\),[0-9]+\(a[0-9]+\)/i,
-    PCID_TO_IWDI:
-      /[0-9]+\(pc,[A-Za-z]+[0-9]+\),[0-9]+\(a[0-9]+,[A-Za-z]+[0-9]+\)/i,
+    PCID_TO_REG: rx(`${PCID}${TO}${REG}`),
+    PCID_TO_ABW: rx(`${PCID}${TO}${ABW}`),
+    PCID_TO_ABL: rx(`${PCID}${TO}${ABL}`),
+    PCID_TO_I: rx(`${PCID}${TO}${I}`),
+    PCID_TO_IPI: rx(`${PCID}${TO}${IPI}`),
+    PCID_TO_IPD: rx(`${PCID}${TO}${IPD}`),
+    PCID_TO_IWD: rx(`${PCID}${TO}${IWD}`),
+    PCID_TO_IWDI: rx(`${PCID}${TO}${IWDI}`),
   };
 
   /* Reg */

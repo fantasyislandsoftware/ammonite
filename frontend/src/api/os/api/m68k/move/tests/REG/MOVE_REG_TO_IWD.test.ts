@@ -1,5 +1,5 @@
 import { makeTestTask } from 'api/os/api/m68k/m68kTestHelpers';
-import { MOVE } from '../../../MOVE';
+import { MOVE } from '../../MOVE';
 
 const task = makeTestTask({ memoryBufferSize: 100 });
 
