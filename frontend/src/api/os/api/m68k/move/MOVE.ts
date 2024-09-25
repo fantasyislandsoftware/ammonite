@@ -21,6 +21,7 @@ import {
   bin2hex,
   combine2BytesInto1Word,
   combine2WordsInto1Long,
+  hex2int,
 } from 'functions/dataHandling/dataHandling';
 import { join, parse } from 'path';
 import { rp } from 'functions/string';
@@ -103,19 +104,97 @@ export const MOVE = (
   return { asm: asm, task: exeMove(task, asm), success: true, length: 0 };
 };
 
-const regToReg = (task: ITask, opBit: EnumOpBit, args: string) => {
+const copy = (
+  task: ITask,
+  loc: {
+    src: { id: string; start: number };
+    dst: { id: string; start: number };
+  },
+  bit: EnumOpBit
+) => {
+  for (let i = 0; i < bit / 8; i++) {
+    task.s[loc.dst.id][i + loc.dst.start] =
+      task.s[loc.src.id][i + loc.src.start];
+  }
+  return task;
+};
+
+const regToReg = (task: ITask, opBit: EnumOpBit, args: string[]) => {
+  //console.log(args);
+
+  const src = args[0];
+  const dst = args[1];
+
+  switch (opBit) {
+    case EnumOpBit.BYTE:
+      task.s[dst][3] = task.s[src][3];
+      break;
+    case EnumOpBit.WORD:
+      task.s[dst][2] = task.s[src][2];
+      task.s[dst][3] = task.s[src][3];
+      break;
+    case EnumOpBit.LONG:
+      task.s[dst][0] = task.s[src][0];
+      task.s[dst][1] = task.s[src][1];
+      task.s[dst][2] = task.s[src][2];
+      task.s[dst][3] = task.s[src][3];
+      break;
+  }
+
+  return task;
+};
+
+const regToABW = (task: ITask, opBit: EnumOpBit, args: string[]) => {
+  console.log(args);
+
+  const src = args[0];
+  const loc = hex2int(args[1].replaceAll('0x', '').replaceAll('.w', ''));
+
+  switch (opBit) {
+    case EnumOpBit.BYTE:
+      task = copy(
+        task,
+        { src: { id: src, start: 3 }, dst: { id: 'm', start: loc } },
+        EnumOpBit.BYTE
+      );
+      //task = copy(task, }, 'm', EnumOpBit.BYTE, );
+      break;
+    case EnumOpBit.WORD:
+      //task = copy(task, src, 'm', EnumOpBit.WORD, 2, loc);
+      task = copy(
+        task,
+        { src: { id: src, start: 2 }, dst: { id: 'm', start: loc } },
+        EnumOpBit.WORD
+      );
+      break;
+    case EnumOpBit.LONG:
+      task = copy(
+        task,
+        { src: { id: src, start: 0 }, dst: { id: 'm', start: loc } },
+        EnumOpBit.LONG
+      );
+      //task = copy(task, src, 'm', EnumOpBit.LONG, 0, loc);
+      break;
+  }
+
   return task;
 };
 
 export const exeMove = (task: ITask, asm: string) => {
   //console.log(asm);
 
-  const { opBit, args, argSrcDst }: IExamineInstruction =
+  const { opBit, args, argSrcDst, argArray }: IExamineInstruction =
     examineInstruction(asm);
 
+  let length = 0;
+
   switch (argSrcDst) {
+    /* REG */
     case EnumArgSrcDst.REG_TO_REG:
-      task = regToReg(task, opBit, args);
+      task = regToReg(task, opBit, argArray);
+      break;
+    case EnumArgSrcDst.REG_TO_ABW:
+      task = regToABW(task, opBit, argArray);
       break;
   }
 

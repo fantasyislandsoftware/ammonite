@@ -743,7 +743,7 @@ export const argPCD = (
       args = rp(`${src.asmOperand},${dst.asmOperand}`, [
         {
           str: '{src_pc}',
-          with: `0x${int2hex(task.s.pc + i + hex2int(w[0]), 4)}`,
+          with: `0x${int2hex(task.pc + i + hex2int(w[0]), 4)}`,
         },
         { str: '{dst_n}', with: xnDstN },
         { str: '{dst_n}', with: xnDstN },
@@ -755,7 +755,7 @@ export const argPCD = (
       args = rp(`${src.asmOperand},${dst.asmOperand}`, [
         {
           str: '{src_pc}',
-          with: `0x${int2hex(task.s.pc + i + hex2int(w[0]), 4)}`,
+          with: `0x${int2hex(task.pc + i + hex2int(w[0]), 4)}`,
         },
         { str: '{dst_d}', with: `0x${w[1]}` },
         { str: '{src_n}', with: xnSrcN },
@@ -767,7 +767,7 @@ export const argPCD = (
       args = rp(`${src.asmOperand},${dst.asmOperand}`, [
         {
           str: '{src_pc}',
-          with: `0x${int2hex(task.s.pc + i + hex2int(w[0]), 4)}`,
+          with: `0x${int2hex(task.pc + i + hex2int(w[0]), 4)}`,
         },
         { str: '{dst_d}', with: `0x${l[1]}` },
         { str: '{src_n}', with: xnSrcN },
@@ -779,7 +779,7 @@ export const argPCD = (
       args = rp(`${src.asmOperand},${dst.asmOperand}`, [
         {
           str: '{src_pc}',
-          with: `0x${int2hex(task.s.pc + i + hex2int(w[0]), 4)}`,
+          with: `0x${int2hex(task.pc + i + hex2int(w[0]), 4)}`,
         },
         { str: '{dst_n}', with: xnDstN },
         { str: '{src_n}', with: xnSrcN },
@@ -791,7 +791,7 @@ export const argPCD = (
       args = rp(`${src.asmOperand},${dst.asmOperand}`, [
         {
           str: '{src_pc}',
-          with: `0x${int2hex(task.s.pc + i + hex2int(w[0]), 4)}`,
+          with: `0x${int2hex(task.pc + i + hex2int(w[0]), 4)}`,
         },
         { str: '{dst_n}', with: xnDstN },
         { str: '{src_n}', with: xnSrcN },
@@ -803,7 +803,7 @@ export const argPCD = (
       args = rp(`${src.asmOperand},${dst.asmOperand}`, [
         {
           str: '{src_pc}',
-          with: `0x${int2hex(task.s.pc + i + hex2int(w[0]), 4)}`,
+          with: `0x${int2hex(task.pc + i + hex2int(w[0]), 4)}`,
         },
         { str: '{dst_n}', with: xnDstN },
         { str: '{src_n}', with: xnSrcN },
@@ -815,7 +815,7 @@ export const argPCD = (
       args = rp(`${src.asmOperand},${dst.asmOperand}`, [
         {
           str: '{src_pc}',
-          with: `0x${int2hex(task.s.pc + i + hex2int(w[0]), 4)}`,
+          with: `0x${int2hex(task.pc + i + hex2int(w[0]), 4)}`,
         },
         { str: '{dst_d}', with: `0x${w[1]}` },
         { str: '{src_n}', with: xnSrcN },
@@ -825,11 +825,10 @@ export const argPCD = (
 
     /* PCD_TO_IWDI */
     case EnumArgSrcDst.PCD_TO_IWDI:
-      console.log('test');
       args = rp(`${src.asmOperand},${dst.asmOperand}`, [
         {
           str: '{src_pc}',
-          with: `0x${int2hex(task.s.pc + i + hex2int(w[0]), 4)}`,
+          with: `0x${int2hex(task.pc + i + hex2int(w[0]), 4)}`,
         },
         { str: '{dst_d}', with: `0x${b[3]}` },
         { str: '{src_n}', with: xnSrcN },
@@ -859,7 +858,7 @@ export const argPCDI = (
 
   const i = 2;
 
-  console.log(argDir);
+  //console.log(argDir);
 
   switch (argDir) {
     /* PCID_TO_REG */
@@ -867,7 +866,7 @@ export const argPCDI = (
       args = rp(`${src.asmOperand},${dst.asmOperand}`, [
         {
           str: '{src_pc}',
-          with: `0x${int2hex(task.s.pc + i + hex2int(b[1]), 2)}`,
+          with: `0x${int2hex(task.pc + i + hex2int(b[1]), 2)}`,
         },
         { str: '{src_n}', with: IWDI_B[hex2bin(b[0], 8)] },
         { str: '{dst_n}', with: xnDstN },
@@ -881,7 +880,7 @@ export const argPCDI = (
       args = rp(`${src.asmOperand},${dst.asmOperand}`, [
         {
           str: '{src_pc}',
-          with: `0x${int2hex(task.s.pc + i + hex2int(b[1]), 2)}`,
+          with: `0x${int2hex(task.pc + i + hex2int(b[1]), 2)}`,
         },
         { str: '{src_n}', with: IWDI_B[hex2bin(b[0], 8)] },
         { str: '{dst_d}', with: `0x${w[1]}` },
@@ -894,7 +893,7 @@ export const argPCDI = (
       args = rp(`${src.asmOperand},${dst.asmOperand}`, [
         {
           str: '{src_pc}',
-          with: `0x${int2hex(task.s.pc + i + hex2int(b[1]), 2)}`,
+          with: `0x${int2hex(task.pc + i + hex2int(b[1]), 2)}`,
         },
         { str: '{src_n}', with: IWDI_B[hex2bin(b[0], 8)] },
         { str: '{dst_d}', with: `0x${l[1]}` },
@@ -907,7 +906,7 @@ export const argPCDI = (
       args = rp(`${src.asmOperand},${dst.asmOperand}`, [
         {
           str: '{src_pc}',
-          with: `0x${int2hex(task.s.pc + i + hex2int(b[1]), 2)}`,
+          with: `0x${int2hex(task.pc + i + hex2int(b[1]), 2)}`,
         },
         { str: '{src_n}', with: IWDI_B[hex2bin(b[0], 8)] },
         { str: '{dst_n}', with: xnDstN },
@@ -920,7 +919,7 @@ export const argPCDI = (
       args = rp(`${src.asmOperand},${dst.asmOperand}`, [
         {
           str: '{src_pc}',
-          with: `0x${int2hex(task.s.pc + i + hex2int(b[1]), 2)}`,
+          with: `0x${int2hex(task.pc + i + hex2int(b[1]), 2)}`,
         },
         { str: '{src_n}', with: IWDI_B[hex2bin(b[0], 8)] },
         { str: '{dst_n}', with: xnDstN },
@@ -933,7 +932,7 @@ export const argPCDI = (
       args = rp(`${src.asmOperand},${dst.asmOperand}`, [
         {
           str: '{src_pc}',
-          with: `0x${int2hex(task.s.pc + i + hex2int(b[1]), 2)}`,
+          with: `0x${int2hex(task.pc + i + hex2int(b[1]), 2)}`,
         },
         { str: '{src_n}', with: IWDI_B[hex2bin(b[0], 8)] },
         { str: '{dst_n}', with: xnDstN },
@@ -946,7 +945,7 @@ export const argPCDI = (
       args = rp(`${src.asmOperand},${dst.asmOperand}`, [
         {
           str: '{src_pc}',
-          with: `0x${int2hex(task.s.pc + i + hex2int(b[1]), 2)}`,
+          with: `0x${int2hex(task.pc + i + hex2int(b[1]), 2)}`,
         },
         { str: '{src_n}', with: IWDI_B[hex2bin(b[0], 8)] },
         { str: '{dst_d}', with: `0x${w[1]}` },
@@ -959,7 +958,7 @@ export const argPCDI = (
       args = rp(`${src.asmOperand},${dst.asmOperand}`, [
         {
           str: '{src_pc}',
-          with: `0x${int2hex(task.s.pc + i + hex2int(b[1]), 2)}`,
+          with: `0x${int2hex(task.pc + i + hex2int(b[1]), 2)}`,
         },
         { str: '{src_n}', with: IWDI_B[hex2bin(b[0], 8)] },
         { str: '{dst_d}', with: `0x${b[3]}` },

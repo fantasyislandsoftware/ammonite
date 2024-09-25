@@ -75,7 +75,7 @@ const matchPattern = (pattern: string, value: string) => {
 };
 
 const execM68KInstruction = (self: ITask) => {
-  let dataW: string[] = [];
+  const dataW: string[] = [];
   for (let i = 0; i < 5; i++) {
     const d = `${self.s.m[self.pos + i * 2]
       .toString(16)
@@ -100,12 +100,12 @@ const execM68KInstruction = (self: ITask) => {
     }
   });
 
-  console.log(found, opName);
+  //console.log(found, opName);
 
   if (found) {
     switch (opName) {
       case EnumM68KOP.MOVE:
-        state = MOVE(self, dataW, { verbose: true });
+        state = MOVE(self, dataW, { verbose: false });
         break;
     }
   } else {

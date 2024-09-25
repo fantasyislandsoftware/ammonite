@@ -45,15 +45,11 @@ interface IHunks {
 }
 
 export class SYSTEM_API {
-  constructor() {
-    
-  }
+  constructor() {}
 
   /****************************************************/
 
-  systemCrash = (message: string) => {
-    
-  };
+  systemCrash = (message: string) => {};
 
   /****************************************************/
 
@@ -224,27 +220,27 @@ export class SYSTEM_API {
         promise: {},
         pos: block.pos,
         s: {
-          d0: fillNumberArray(0, 8),
-          d1: fillNumberArray(0, 8),
-          d2: fillNumberArray(0, 8),
-          d3: fillNumberArray(0, 8),
-          d4: fillNumberArray(0, 8),
-          d5: fillNumberArray(0, 8),
-          d6: fillNumberArray(0, 8),
-          d7: fillNumberArray(0, 8),
-          a0: fillNumberArray(0, 8),
-          a1: fillNumberArray(0, 8),
-          a2: fillNumberArray(0, 8),
-          a3: fillNumberArray(0, 8),
-          a4: fillNumberArray(0, 8),
-          a5: fillNumberArray(0, 8),
-          a6: fillNumberArray(0, 8),
-          a7: fillNumberArray(0, 8),
+          d0: fillNumberArray(0, 4),
+          d1: fillNumberArray(0, 4),
+          d2: fillNumberArray(0, 4),
+          d3: fillNumberArray(0, 4),
+          d4: fillNumberArray(0, 4),
+          d5: fillNumberArray(0, 4),
+          d6: fillNumberArray(0, 4),
+          d7: fillNumberArray(0, 4),
+          a0: fillNumberArray(0, 4),
+          a1: fillNumberArray(0, 4),
+          a2: fillNumberArray(0, 4),
+          a3: fillNumberArray(0, 4),
+          a4: fillNumberArray(0, 4),
+          a5: fillNumberArray(0, 4),
+          a6: fillNumberArray(0, 4),
+          a7: fillNumberArray(0, 4),
           c: fillNumberArray(0, 2),
           //m: block.mem,
           m: test,
-          pc: block.pos,
         },
+        pc: block.pos,
       });
     setTasks(tasks);
   };

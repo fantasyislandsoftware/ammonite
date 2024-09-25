@@ -51,9 +51,6 @@ export const makeTestTask = (params: IMakeTestTaskParams) => {
   for (let i = 0; i < memoryBufferSize; i++) {
     initM.push(0xff);
   }
-  m?.forEach((v, i) => {
-    initM[i] = v;
-  });
 
   class FreshTask {
     public task: ITask = {
@@ -85,8 +82,8 @@ export const makeTestTask = (params: IMakeTestTaskParams) => {
         a7: a7 ? a7 : [0x0, 0x0, 0x0, 0x0],
         m: initM,
         c: [],
-        pc: 0,
       },
+      pc: 0,
     };
   }
   const result = new FreshTask().task;

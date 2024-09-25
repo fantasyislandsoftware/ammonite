@@ -296,7 +296,7 @@ export const calcArgDir = (args: string) => {
     IWD_TO_IWDI: rx(`${IWD}${TO}${IWDI}`),
 
     /* IWDI */
-    IWDI_TO_REG: rx(`${IWDI}${TO}${REG}`, true),
+    IWDI_TO_REG: rx(`${IWDI}${TO}${REG}`),
     IWDI_TO_ABW: rx(`${IWDI}${TO}${ABW}`),
     IWDI_TO_ABL: rx(`${IWDI}${TO}${ABL}`),
     IWDI_TO_I: rx(`${IWDI}${TO}${I}`),
@@ -436,7 +436,7 @@ export const calcArgArray = (args: string) => {
     .replaceAll(')', ';')
     .split(';');
 
-  let b: string[] = [];
+  const b: string[] = [];
   a.forEach((e) => {
     if (e.length > 0) {
       b.push(e);
@@ -456,12 +456,12 @@ export const fillArgData = (
   dataW: string[],
   setting?: { verbose: boolean }
 ) => {
-  let w: number[] = [];
-  let wh: string[] = [];
-  let l: number[] = [];
-  let lh: string[] = [];
+  const w: number[] = [];
+  const wh: string[] = [];
+  const l: number[] = [];
+  const lh: string[] = [];
   let b: number[] = [];
-  let bh: string[] = [];
+  const bh: string[] = [];
 
   w.push(parseInt(dataW[1], 2));
   w.push(parseInt(dataW[2], 2));
@@ -496,7 +496,7 @@ export const fillArgData = (
   }
 
   let args = '';
-  let a: string[] = [
+  const a: string[] = [
     argREG(argDir, argData, src, dst, xnSrcN, xnDstN),
     argABW(argDir, argData, src, dst, xnSrcN, xnDstN),
     argABL(argDir, argData, src, dst, xnSrcN, xnDstN),
