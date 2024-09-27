@@ -3,7 +3,7 @@ import { EnumOpBit } from 'functions/dataHandling/IdataHandling';
 import { ITask } from 'stores/useTaskStore';
 import { byteCopy } from '../../../m68KHelpers/m68kHelpers';
 
-export const regToABL = (task: ITask, opBit: EnumOpBit, args: string[]) => {
+export const REG_TO_ABL = (task: ITask, opBit: EnumOpBit, args: string[]) => {
   const src = args[0];
   const loc = hex2int(args[1].replaceAll('0x', '').replaceAll('.l', ''));
 

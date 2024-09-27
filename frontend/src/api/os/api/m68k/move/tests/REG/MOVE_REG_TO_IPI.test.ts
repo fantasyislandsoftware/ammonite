@@ -1,7 +1,8 @@
 import { makeTestTask } from 'api/os/api/m68k/m68kTestHelpers';
 import { exeMove, MOVE } from '../../MOVE';
+import exp from 'constants';
 
-describe(`REG_TO_IPI`, () => {
+describe(`REG_TO_IPI CONV`, () => {
   const task = makeTestTask({ memoryBufferSize: 100 });
   it(`MIN`, () => {
     expect(
@@ -27,39 +28,32 @@ describe(`REG_TO_IPI`, () => {
   });
 });
 
-describe('Instruction', () => {
-  const setting = {
-    memoryBufferSize: 4,
-    d0: [0x12, 0x34, 0x56, 0x78],
-  };
-  test.each([
-    [
-      makeTestTask(setting),
-      'move.b d0,(a0)+',
-      [
-        [0x78, 0xff, 0xff, 0xff],
-        [0, 0, 0, 1],
-      ],
-    ],
-    [
-      makeTestTask(setting),
-      'move.w d0,(a0)+',
-      [
-        [0x56, 0x78, 0xff, 0xff],
-        [0, 0, 0, 2],
-      ],
-    ],
-    [
-      makeTestTask(setting),
-      'move.l d0,(a0)+',
-      [
-        [0x12, 0x34, 0x56, 0x78],
-        [0, 0, 0, 4],
-      ],
-    ],
-  ])('', (t, a, expected) => {
-    const { m, a0 } = exeMove(t, a).s;
-    expect(m).toEqual(expected[0]);
-    expect(a0).toEqual(expected[1]);
+describe('REG_TO_IPI EXE', () => {
+  const cmd = ['move.b d0,(a0)+', 'move.w d0,(a0)+', 'move.l d0,(a0)+'];
+  //
+  class S {
+    public setting = {
+      memoryBufferSize: 4,
+      d0: [0x12, 0x34, 0x56, 0x78],
+      a0: [0, 0, 0, 0],
+    };
+  }
+  //
+  it(cmd[0], () => {
+    const { m, a0 } = exeMove(makeTestTask(new S().setting), cmd[0]).s;
+    expect(m).toEqual([0x78, 0xff, 0xff, 0xff]);
+    expect(a0).toEqual([0, 0, 0, 1]);
+  });
+  //
+  it(cmd[1], () => {
+    const { m, a0 } = exeMove(makeTestTask(new S().setting), cmd[1]).s;
+    expect(m).toEqual([0x56, 0x78, 0xff, 0xff]);
+    expect(a0).toEqual([0, 0, 0, 2]);
+  });
+  //
+  it(cmd[2], () => {
+    const { m, a0 } = exeMove(makeTestTask(new S().setting), cmd[2]).s;
+    expect(m).toEqual([0x12, 0x34, 0x56, 0x78]);
+    expect(a0).toEqual([0, 0, 0, 4]);
   });
 });

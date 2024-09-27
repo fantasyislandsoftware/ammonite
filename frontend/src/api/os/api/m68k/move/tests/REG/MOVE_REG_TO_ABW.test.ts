@@ -3,7 +3,7 @@ import { exeMove, MOVE } from '../../MOVE';
 import { EnumArgSrcDst } from '../../../IM68k';
 import { examineInstruction } from '../../../m68KHelpers/m68kHelpers';
 
-describe(`REG_TO_ABW`, () => {
+describe(`REG_TO_ABW CONV`, () => {
   const task = makeTestTask({
     memoryBufferSize: 0x7fff,
     d0: [0x12, 0x34, 0x56, 0x78],
@@ -33,16 +33,32 @@ describe(`REG_TO_ABW`, () => {
   });
 });
 
-describe('Instruction', () => {
-  const task = makeTestTask({
-    memoryBufferSize: 4,
-    d0: [0x12, 0x34, 0x56, 0x78],
+describe('REG_TO_ABW EXE', () => {
+  const cmd = [
+    'move.b d0,0x0000.w',
+    'move.w d0,0x0000.w',
+    'move.l d0,0x0000.w',
+  ];
+  //
+  class S {
+    public setting = {
+      memoryBufferSize: 4,
+      d0: [0x12, 0x34, 0x56, 0x78],
+    };
+  }
+  //
+  it(cmd[0], () => {
+    const { m } = exeMove(makeTestTask(new S().setting), cmd[0]).s;
+    expect(m).toEqual([0x78, 0xff, 0xff, 0xff]);
   });
-  test.each([
-    ['move.b d0,0x0000.w', [0x78, 0xff, 0xff, 0xff]],
-    ['move.w d0,0x0000.w', [0x56, 0x78, 0xff, 0xff]],
-    ['move.l d0,0x0000.w', [0x12, 0x34, 0x56, 0x78]],
-  ])('', (a, expected) => {
-    expect(exeMove(task, a).s.m).toEqual(expected);
+  //
+  it(cmd[1], () => {
+    const { m } = exeMove(makeTestTask(new S().setting), cmd[1]).s;
+    expect(m).toEqual([0x56, 0x78, 0xff, 0xff]);
+  });
+  //
+  it(cmd[2], () => {
+    const { m } = exeMove(makeTestTask(new S().setting), cmd[2]).s;
+    expect(m).toEqual([0x12, 0x34, 0x56, 0x78]);
   });
 });

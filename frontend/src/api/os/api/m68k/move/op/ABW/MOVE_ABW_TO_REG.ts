@@ -1,8 +1,8 @@
 import { EnumOpBit } from 'functions/dataHandling/IdataHandling';
 import { ITask } from 'stores/useTaskStore';
 
-export const REG_TO_REG = (task: ITask, opBit: EnumOpBit, args: string[]) => {
-  const src = args[0];
+export const ABW_TO_REG = (task: ITask, opBit: EnumOpBit, args: string[]) => {
+  const src = 'm';
   const dst = args[1];
 
   switch (opBit) {

@@ -6,34 +6,24 @@ import {
   processOpSize,
   processXNXT,
 } from '../m68KHelpers/m68kHelpers';
-import {
-  EnumArgSrcDst,
-  EnumM68KOP,
-  IExamineInstruction,
-  IOperand,
-} from '../IM68k';
-import { EnumOpBit, opBitChar } from 'functions/dataHandling/IdataHandling';
+import { EnumArgSrcDst, IExamineInstruction } from '../IM68k';
+import { opBitChar } from 'functions/dataHandling/IdataHandling';
 import {
   _4to1 as __4to1,
   incReg,
   decReg,
-  splitLongInto4Bytes,
-  dec2bin,
-  bin2hex,
-  combine2BytesInto1Word,
-  combine2WordsInto1Long,
-  hex2int,
 } from 'functions/dataHandling/dataHandling';
-import { join, parse } from 'path';
-import { rp } from 'functions/string';
-import { regToReg } from './op/REG/MOVE_REG_TO_REG';
-import { regToABW } from './op/REG/MOVE_REG_TO_ABW';
-import { regToABL } from './op/REG/MOVE_REG_TO_ABL';
-import { regToI } from './op/REG/MOVE_REG_TO_I';
-import { regToIPI } from './op/REG/MOVE_REG_TO_IPI';
-import { regToIPD } from './op/REG/MOVE_REG_TO_IPD';
-import { regToIWD } from './op/REG/MOVE_REG_TO_IWD';
-import { regToIWDI } from './op/REG/MOVE_REG_TO_IWDI';
+import { REG_TO_REG } from './op/REG/MOVE_REG_TO_REG';
+import { REG_TO_ABW } from './op/REG/MOVE_REG_TO_ABW';
+import { REG_TO_ABL } from './op/REG/MOVE_REG_TO_ABL';
+import { REG_TO_I } from './op/REG/MOVE_REG_TO_I';
+import { REG_TO_IPI } from './op/REG/MOVE_REG_TO_IPI';
+import { REG_TO_IPD } from './op/REG/MOVE_REG_TO_IPD';
+import { REG_TO_IWD } from './op/REG/MOVE_REG_TO_IWD';
+import { REG_TO_IWDI } from './op/REG/MOVE_REG_TO_IWDI';
+import { ABW_TO_ABW } from './op/ABW/MOVE_ABW_TO_ABW';
+import { ABW_TO_I } from './op/ABW/MOVE_ABW_TO_I';
+import { ABW_TO_REG } from './op/ABW/MOVE_ABW_TO_REG';
 
 const _4to1 = __4to1;
 const _incReg = incReg;
@@ -114,7 +104,7 @@ export const MOVE = (
 };
 
 export const exeMove = (task: ITask, asm: string) => {
-  //console.log(asm);
+  console.log(asm);
 
   const { opBit, args, argSrcDst, argArray }: IExamineInstruction =
     examineInstruction(asm);
@@ -124,28 +114,41 @@ export const exeMove = (task: ITask, asm: string) => {
   switch (argSrcDst) {
     /* REG */
     case EnumArgSrcDst.REG_TO_REG:
-      task = regToReg(task, opBit, argArray);
+      task = REG_TO_REG(task, opBit, argArray);
       break;
     case EnumArgSrcDst.REG_TO_ABW:
-      task = regToABW(task, opBit, argArray);
+      task = REG_TO_ABW(task, opBit, argArray);
       break;
     case EnumArgSrcDst.REG_TO_ABL:
-      task = regToABL(task, opBit, argArray);
+      task = REG_TO_ABL(task, opBit, argArray);
       break;
     case EnumArgSrcDst.REG_TO_I:
-      task = regToI(task, opBit, argArray);
+      task = REG_TO_I(task, opBit, argArray);
       break;
     case EnumArgSrcDst.REG_TO_IPI:
-      task = regToIPI(task, opBit, argArray);
+      task = REG_TO_IPI(task, opBit, argArray);
       break;
     case EnumArgSrcDst.REG_TO_IPD:
-      task = regToIPD(task, opBit, argArray);
+      task = REG_TO_IPD(task, opBit, argArray);
       break;
     case EnumArgSrcDst.REG_TO_IWD:
-      task = regToIWD(task, opBit, argArray);
+      task = REG_TO_IWD(task, opBit, argArray);
       break;
     case EnumArgSrcDst.REG_TO_IWDI:
-      task = regToIWDI(task, opBit, argArray);
+      task = REG_TO_IWDI(task, opBit, argArray);
+      break;
+    /* ABW */
+    case EnumArgSrcDst.ABW_TO_REG:
+      task = ABW_TO_REG(task, opBit, argArray);
+      break;
+    case EnumArgSrcDst.ABW_TO_ABW:
+      task = ABW_TO_ABW(task, opBit, argArray);
+      break;
+    case EnumArgSrcDst.ABW_TO_ABL:
+      task = ABW_TO_ABW(task, opBit, argArray);
+      break;
+    case EnumArgSrcDst.ABW_TO_I:
+      task = ABW_TO_I(task, opBit, argArray);
       break;
   }
 

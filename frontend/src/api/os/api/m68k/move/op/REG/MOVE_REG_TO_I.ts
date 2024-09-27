@@ -2,7 +2,7 @@ import { EnumOpBit } from 'functions/dataHandling/IdataHandling';
 import { ITask } from 'stores/useTaskStore';
 import { join4BytesInto1Long } from 'functions/dataHandling/dataHandling';
 
-export const regToI = (task: ITask, opBit: EnumOpBit, args: string[]) => {
+export const REG_TO_I = (task: ITask, opBit: EnumOpBit, args: string[]) => {
   const src = args[0];
   const dst = args[1];
   const p = join4BytesInto1Long(

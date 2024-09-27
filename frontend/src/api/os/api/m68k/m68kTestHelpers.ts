@@ -80,7 +80,7 @@ export const makeTestTask = (params: IMakeTestTaskParams) => {
         a5: a5 ? a5 : [0x0, 0x0, 0x0, 0x0],
         a6: a6 ? a6 : [0x0, 0x0, 0x0, 0x0],
         a7: a7 ? a7 : [0x0, 0x0, 0x0, 0x0],
-        m: initM,
+        m: m ? m : initM,
         c: [],
       },
       pc: 0,

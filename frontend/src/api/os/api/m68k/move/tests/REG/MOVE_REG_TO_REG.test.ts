@@ -3,7 +3,7 @@ import { examineInstruction } from '../../../m68KHelpers/m68kHelpers';
 import { makeTestTask } from '../../../m68kTestHelpers';
 import { exeMove, MOVE } from '../../MOVE';
 
-describe(`MOVE_REG_TO_REG conversion`, () => {
+describe(`MOVE_REG_TO_REG CONV`, () => {
   const task = makeTestTask({
     memoryBufferSize: 100,
   });
@@ -39,27 +39,28 @@ describe(`MOVE_REG_TO_REG conversion`, () => {
   });
 });
 
-describe('MOVE_REG_TO_REG execution', () => {
+describe('REG_TO_REG EXE', () => {
   const cmd = ['move.b d0,d1', 'move.w d0,d1', 'move.l d0,d1'];
-  const setting = {
-    memoryBufferSize: 8,
-    d0: [0x12, 0x34, 0x56, 0x78],
-  };
+  //
+  class S {
+    public setting = {
+      memoryBufferSize: 0,
+      d0: [0x12, 0x34, 0x56, 0x78],
+    };
+  }
+  //
   it(cmd[0], () => {
-    const t = makeTestTask(setting);
-    const { d1 } = exeMove(t, cmd[0]).s;
+    const { d1 } = exeMove(makeTestTask(new S().setting), cmd[0]).s;
     expect(d1).toEqual([0x00, 0x00, 0x00, 0x78]);
   });
   //
   it(cmd[1], () => {
-    const t = makeTestTask(setting);
-    const { d1 } = exeMove(t, cmd[1]).s;
+    const { d1 } = exeMove(makeTestTask(new S().setting), cmd[1]).s;
     expect(d1).toEqual([0x00, 0x00, 0x56, 0x78]);
   });
   //
   it(cmd[2], () => {
-    const t = makeTestTask(setting);
-    const { d1 } = exeMove(t, cmd[2]).s;
+    const { d1 } = exeMove(makeTestTask(new S().setting), cmd[2]).s;
     expect(d1).toEqual([0x12, 0x34, 0x56, 0x78]);
   });
 });

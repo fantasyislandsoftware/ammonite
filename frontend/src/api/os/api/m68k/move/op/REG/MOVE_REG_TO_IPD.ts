@@ -5,7 +5,7 @@ import {
   splitLongInto4Bytes,
 } from 'functions/dataHandling/dataHandling';
 
-export const regToIPD = (task: ITask, opBit: EnumOpBit, args: string[]) => {
+export const REG_TO_IPD = (task: ITask, opBit: EnumOpBit, args: string[]) => {
   const src = args[0];
   const dst = args[2];
   let p = join4BytesInto1Long(
