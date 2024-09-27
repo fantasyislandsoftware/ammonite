@@ -876,7 +876,6 @@ export const argPCDI = (
 
     /* PCID_TO_ABW */
     case EnumArgSrcDst.PCID_TO_ABW:
-      console.log('test');
       args = rp(`${src.asmOperand},${dst.asmOperand}`, [
         {
           str: '{src_pc}',

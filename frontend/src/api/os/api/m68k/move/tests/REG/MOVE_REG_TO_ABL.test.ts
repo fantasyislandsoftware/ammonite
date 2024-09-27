@@ -1,11 +1,8 @@
 import { makeTestTask } from 'api/os/api/m68k/m68kTestHelpers';
-import { MOVE } from '../../MOVE';
-import { EnumArgSrcDst } from '../../../IM68k';
-import { examineInstruction } from '../../../m68KHelpers/m68kHelpers';
-
-const task = makeTestTask({ memoryBufferSize: 100 });
+import { exeMove, MOVE } from '../../MOVE';
 
 describe(`MOVE_REG_TO_ABL`, () => {
+  const task = makeTestTask({ memoryBufferSize: 100 });
   it(`MIN`, () => {
     expect(
       MOVE(task, [
@@ -27,5 +24,19 @@ describe(`MOVE_REG_TO_ABL`, () => {
         '0000000000000000',
       ]).asm
     ).toEqual('move.l a7,0x7fffffff.l');
+  });
+});
+
+describe('Instruction', () => {
+  const task = makeTestTask({
+    memoryBufferSize: 4,
+    d0: [0x12, 0x34, 0x56, 0x78],
+  });
+  test.each([
+    ['move.b d0,0x00000000.l', [0x78, 0xff, 0xff, 0xff]],
+    ['move.w d0,0x00000000.l', [0x56, 0x78, 0xff, 0xff]],
+    ['move.l d0,0x00000000.l', [0x12, 0x34, 0x56, 0x78]],
+  ])('', (a, expected) => {
+    expect(exeMove(task, a).s.m).toEqual(expected);
   });
 });

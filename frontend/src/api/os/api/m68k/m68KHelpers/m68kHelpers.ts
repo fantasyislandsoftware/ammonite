@@ -535,3 +535,18 @@ export const IWDI_B: { [key: string]: string } = {
   '11100000': 'a6',
   '11110000': 'a7',
 };
+
+export const byteCopy = (
+  task: ITask,
+  loc: {
+    src: { id: string; start: number };
+    dst: { id: string; start: number };
+  },
+  bit: EnumOpBit
+) => {
+  for (let i = 0; i < bit / 8; i++) {
+    task.s[loc.dst.id][i + loc.dst.start] =
+      task.s[loc.src.id][i + loc.src.start];
+  }
+  return task;
+};
