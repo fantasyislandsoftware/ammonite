@@ -1,3 +1,4 @@
+import { ITask } from 'stores/useTaskStore';
 import { EnumByteOrder, INumberCalcConfig } from './IdataHandling';
 
 export const bin2int = (bin: string) => {
@@ -174,21 +175,21 @@ export const join4BytesInto1Long = (
   return (byte1 << 24) + (byte2 << 16) + (byte3 << 8) + byte4;
 };
 
-export const _4to1 = (array: number[]) => {
+/*export const _4to1 = (array: number[]) => {
   return (array[0] << 24) + (array[1] << 16) + (array[2] << 8) + array[3];
-};
+};*/
 
-export const incReg = (reg: any, i: number) => {
+/*export const incReg = (reg: any, i: number) => {
   let n = _4to1(reg);
   n += i;
   return splitLongInto4Bytes(n);
-};
+};*/
 
-export const decReg = (reg: any, i: number) => {
+/*export const decReg = (reg: any, i: number) => {
   let n = _4to1(reg);
   n -= i;
   return splitLongInto4Bytes(n);
-};
+};*/
 
 export const genM68KAddrSpace = (allocatedMemory: number) => {
   let data: number[] = [];
@@ -238,4 +239,44 @@ export const fillNumberArray = (n: number, length: number) => {
 
 export const dec2bin = (dec: number, pad: number) => {
   return (dec >>> 0).toString(2).padStart(pad, '0');
+};
+
+export const incReg = (task: ITask, reg: string, n: number) => {
+  let r = join4BytesInto1Long(
+    task.s[reg][0],
+    task.s[reg][1],
+    task.s[reg][2],
+    task.s[reg][3]
+  );
+  r += n;
+  return splitLongInto4Bytes(r);
+};
+
+export const decReg = (task: ITask, reg: string, n: number) => {
+  let r = join4BytesInto1Long(
+    task.s[reg][0],
+    task.s[reg][1],
+    task.s[reg][2],
+    task.s[reg][3]
+  );
+  r -= n;
+  if (r < 0) {
+    r = 0x7fffffff - r;
+  }
+  return splitLongInto4Bytes(r);
+};
+
+export const getRegInfo = (task: ITask, reg: string) => {
+  const byteArray = task.s[reg];
+  const long = join4BytesInto1Long(
+    byteArray[0],
+    byteArray[1],
+    byteArray[2],
+    byteArray[3]
+  );
+  return { byteArray, long };
+};
+
+export const filterLoc = (loc: string) => {
+  return loc.replaceAll('0x', '').replaceAll('.w', '').replaceAll('.l', '');
 };

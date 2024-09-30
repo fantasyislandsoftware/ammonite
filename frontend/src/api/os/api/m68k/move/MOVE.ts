@@ -8,11 +8,11 @@ import {
 } from '../m68KHelpers/m68kHelpers';
 import { EnumArgSrcDst, IExamineInstruction } from '../IM68k';
 import { opBitChar } from 'functions/dataHandling/IdataHandling';
-import {
+/*import {
   _4to1 as __4to1,
   incReg,
   decReg,
-} from 'functions/dataHandling/dataHandling';
+} from 'functions/dataHandling/dataHandling';*/
 import { REG_TO_REG } from './op/REG/MOVE_REG_TO_REG';
 import { REG_TO_ABW } from './op/REG/MOVE_REG_TO_ABW';
 import { REG_TO_ABL } from './op/REG/MOVE_REG_TO_ABL';
@@ -24,10 +24,10 @@ import { REG_TO_IWDI } from './op/REG/MOVE_REG_TO_IWDI';
 import { ABW_TO_ABW } from './op/ABW/MOVE_ABW_TO_ABW';
 import { ABW_TO_I } from './op/ABW/MOVE_ABW_TO_I';
 import { ABW_TO_REG } from './op/ABW/MOVE_ABW_TO_REG';
-
-const _4to1 = __4to1;
-const _incReg = incReg;
-const _decReg = decReg;
+import { ABW_TO_IPI } from './op/ABW/MOVE_ABW_TO_IPI';
+import { ABW_TO_IPD } from './op/ABW/MOVE_ABW_TO_IPD';
+import { ABW_TO_IWD } from './op/ABW/MOVE_ABW_TO_IWD';
+import { ABW_TO_IWDI } from './op/ABW/MOVE_ABW_TO_IWDI';
 
 enum EnumLRB {
   N = 0,
@@ -149,6 +149,18 @@ export const exeMove = (task: ITask, asm: string) => {
       break;
     case EnumArgSrcDst.ABW_TO_I:
       task = ABW_TO_I(task, opBit, argArray);
+      break;
+    case EnumArgSrcDst.ABW_TO_IPI:
+      task = ABW_TO_IPI(task, opBit, argArray);
+      break;
+    case EnumArgSrcDst.ABW_TO_IPD:
+      task = ABW_TO_IPD(task, opBit, argArray);
+      break;
+    case EnumArgSrcDst.ABW_TO_IWD:
+      task = ABW_TO_IWD(task, opBit, argArray);
+      break;
+    case EnumArgSrcDst.ABW_TO_IWDI:
+      task = ABW_TO_IWDI(task, opBit, argArray);
       break;
   }
 
