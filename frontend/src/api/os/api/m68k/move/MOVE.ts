@@ -8,11 +8,6 @@ import {
 } from '../m68KHelpers/m68kHelpers';
 import { EnumArgSrcDst, IExamineInstruction } from '../IM68k';
 import { opBitChar } from 'functions/dataHandling/IdataHandling';
-/*import {
-  _4to1 as __4to1,
-  incReg,
-  decReg,
-} from 'functions/dataHandling/dataHandling';*/
 import { REG_TO_REG } from './op/REG/MOVE_REG_TO_REG';
 import { REG_TO_ABW } from './op/REG/MOVE_REG_TO_ABW';
 import { REG_TO_ABL } from './op/REG/MOVE_REG_TO_ABL';
@@ -21,13 +16,13 @@ import { REG_TO_IPI } from './op/REG/MOVE_REG_TO_IPI';
 import { REG_TO_IPD } from './op/REG/MOVE_REG_TO_IPD';
 import { REG_TO_IWD } from './op/REG/MOVE_REG_TO_IWD';
 import { REG_TO_IWDI } from './op/REG/MOVE_REG_TO_IWDI';
-import { ABW_TO_ABW } from './op/ABW/MOVE_ABW_TO_ABW';
-import { ABW_TO_I } from './op/ABW/MOVE_ABW_TO_I';
-import { ABW_TO_REG } from './op/ABW/MOVE_ABW_TO_REG';
-import { ABW_TO_IPI } from './op/ABW/MOVE_ABW_TO_IPI';
-import { ABW_TO_IPD } from './op/ABW/MOVE_ABW_TO_IPD';
-import { ABW_TO_IWD } from './op/ABW/MOVE_ABW_TO_IWD';
-import { ABW_TO_IWDI } from './op/ABW/MOVE_ABW_TO_IWDI';
+import { ABX_TO_I } from './op/SHARED/MOVE_ABX_TO_I';
+import { ABX_TO_REG } from './op/SHARED/MOVE_ABX_TO_REG';
+import { ABX_TO_IPI } from './op/SHARED/MOVE_ABX_TO_IPI';
+import { ABX_TO_IPD } from './op/SHARED/MOVE_ABX_TO_IPD';
+import { ABX_TO_IWD } from './op/SHARED/MOVE_ABX_TO_IWD';
+import { ABX_TO_IWDI } from './op/SHARED/MOVE_ABX_TO_IWDI';
+import { ABX_TO_ABX } from './op/SHARED/MOVE_ABX_TO_ABX';
 
 enum EnumLRB {
   N = 0,
@@ -58,6 +53,9 @@ export const MOVE = (
     verbose: boolean;
   }
 ) => {
+
+  console.log(dataW);
+
   const i = dataW[0];
 
   /* Bit Size */
@@ -139,28 +137,53 @@ export const exeMove = (task: ITask, asm: string) => {
       break;
     /* ABW */
     case EnumArgSrcDst.ABW_TO_REG:
-      task = ABW_TO_REG(task, opBit, argArray);
+      task = ABX_TO_REG(task, opBit, argArray);
       break;
     case EnumArgSrcDst.ABW_TO_ABW:
-      task = ABW_TO_ABW(task, opBit, argArray);
+      task = ABX_TO_ABX(task, opBit, argArray);
       break;
     case EnumArgSrcDst.ABW_TO_ABL:
-      task = ABW_TO_ABW(task, opBit, argArray);
+      task = ABX_TO_ABX(task, opBit, argArray);
       break;
     case EnumArgSrcDst.ABW_TO_I:
-      task = ABW_TO_I(task, opBit, argArray);
+      task = ABX_TO_I(task, opBit, argArray);
       break;
     case EnumArgSrcDst.ABW_TO_IPI:
-      task = ABW_TO_IPI(task, opBit, argArray);
+      task = ABX_TO_IPI(task, opBit, argArray);
       break;
     case EnumArgSrcDst.ABW_TO_IPD:
-      task = ABW_TO_IPD(task, opBit, argArray);
+      task = ABX_TO_IPD(task, opBit, argArray);
       break;
     case EnumArgSrcDst.ABW_TO_IWD:
-      task = ABW_TO_IWD(task, opBit, argArray);
+      task = ABX_TO_IWD(task, opBit, argArray);
       break;
     case EnumArgSrcDst.ABW_TO_IWDI:
-      task = ABW_TO_IWDI(task, opBit, argArray);
+      task = ABX_TO_IWDI(task, opBit, argArray);
+      break;
+    /* ABL */
+    case EnumArgSrcDst.ABL_TO_REG:
+      task = ABX_TO_REG(task, opBit, argArray);
+      break;
+    case EnumArgSrcDst.ABL_TO_ABW:
+      task = ABX_TO_ABX(task, opBit, argArray);
+      break;
+    case EnumArgSrcDst.ABL_TO_ABL:
+      task = ABX_TO_ABX(task, opBit, argArray);
+      break;
+    case EnumArgSrcDst.ABL_TO_I:
+      task = ABX_TO_I(task, opBit, argArray);
+      break;
+    case EnumArgSrcDst.ABL_TO_IPI:
+      task = ABX_TO_IPI(task, opBit, argArray);
+      break;
+    case EnumArgSrcDst.ABL_TO_IPD:
+      task = ABX_TO_IPD(task, opBit, argArray);
+      break;
+    case EnumArgSrcDst.ABL_TO_IWD:
+      task = ABX_TO_IWD(task, opBit, argArray);
+      break;
+    case EnumArgSrcDst.ABL_TO_IWDI:
+      task = ABX_TO_IWDI(task, opBit, argArray);
       break;
   }
 

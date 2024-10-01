@@ -194,6 +194,8 @@ export const argABL = (
 
   const { w, l, b } = argData;
 
+  //console.log(w, l, b);
+
   switch (argDir) {
     /* ABL_TO_REG */
     case EnumArgSrcDst.ABL_TO_REG:
@@ -215,7 +217,7 @@ export const argABL = (
     case EnumArgSrcDst.ABL_TO_ABL:
       args = rp(`${src.asmOperand},${dst.asmOperand}`, [
         { str: '{src_d}', with: `0x${l[0]}` },
-        { str: '{dst_d}', with: `0x${l[1]}` },
+        { str: '{dst_d}', with: `0x${l[2]}` },
       ]);
       break;
 

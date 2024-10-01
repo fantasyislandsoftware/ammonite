@@ -1,37 +1,37 @@
 import { makeTestTask } from 'api/os/api/m68k/m68kTestHelpers';
 import { exeMove, MOVE } from '../../MOVE';
 
-describe(`MOVE_ABW_TO_ABW CONV`, () => {
+describe(`MOVE_ABL_TO_ABL CONV`, () => {
   const task = makeTestTask({ memoryBufferSize: 100 });
   it(`MIN`, () => {
     expect(
       MOVE(task, [
-        '0010000111111000',
+        '0010001111111001',
         '0000000000000000',
+        '1000000000000000',
         '0000000000000000',
-        '0110000011111000',
-        '0000000000000000',
+        '1000000000000000',
       ]).asm
-    ).toEqual('move.l 0x0000.w,0x0000.w');
+    ).toEqual('move.l 0x00008000.l,0x00008000.l');
   });
   it(`MAX`, () => {
     expect(
       MOVE(task, [
-        '0010000111111000',
+        '0010001111111001',
         '0111111111111111',
+        '1111111111111111',
         '0111111111111111',
-        '0110000011111000',
-        '0000000000000000',
+        '1111111111111111',
       ]).asm
-    ).toEqual('move.l 0x7fff.w,0x7fff.w');
+    ).toEqual('move.l 0x7fffffff.l,0x7fffffff.l');
   });
 });
 
-describe('ABW_TO_ABW EXE', () => {
+describe('ABL_TO_ABL EXE', () => {
   const cmd = [
-    'move.b 0x0000.w,0x0004.w',
-    'move.w 0x0000.w,0x0004.w',
-    'move.l 0x0000.w,0x0004.w',
+    'move.b 0x00000000.l,0x00000004.l',
+    'move.w 0x00000000.l,0x00000004.l',
+    'move.l 0x00000000.l,0x00000004.l',
   ];
   //
   class S {
