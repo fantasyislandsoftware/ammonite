@@ -3,11 +3,9 @@ import { ITask } from 'stores/useTaskStore';
 import {
   hex2int,
   join4BytesInto1Long,
-  splitLongInto4Bytes,
 } from 'functions/dataHandling/dataHandling';
 
 export const REG_TO_IWDI = (task: ITask, opBit: EnumOpBit, args: string[]) => {
-  console.log(args);
   const src = args[0];
   const index = hex2int(args[1].replaceAll('0x', ''));
   const dst = args[2];

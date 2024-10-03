@@ -7,7 +7,7 @@ import {
   processXNXT,
 } from '../m68KHelpers/m68kHelpers';
 import { EnumArgSrcDst, IExamineInstruction } from '../IM68k';
-import { opBitChar } from 'functions/dataHandling/IdataHandling';
+import { EnumOpBit, opBitChar } from 'functions/dataHandling/IdataHandling';
 import { REG_TO_REG } from './op/REG/MOVE_REG_TO_REG';
 import { REG_TO_ABW } from './op/REG/MOVE_REG_TO_ABW';
 import { REG_TO_ABL } from './op/REG/MOVE_REG_TO_ABL';
@@ -23,6 +23,10 @@ import { ABX_TO_IPD } from './op/SHARED/MOVE_ABX_TO_IPD';
 import { ABX_TO_IWD } from './op/SHARED/MOVE_ABX_TO_IWD';
 import { ABX_TO_IWDI } from './op/SHARED/MOVE_ABX_TO_IWDI';
 import { ABX_TO_ABX } from './op/SHARED/MOVE_ABX_TO_ABX';
+import { I_TO_REG } from './op/I/MOVE_I_TO_REG';
+import { I_TO_ABX } from './op/I/MOVE_I_TO_ABX';
+import { I_TO_I } from './op/I/MOVE_I_TO_I';
+import { I_TO_IPD } from './op/I/MOVE_I_TO_IPD';
 
 enum EnumLRB {
   N = 0,
@@ -53,9 +57,6 @@ export const MOVE = (
     verbose: boolean;
   }
 ) => {
-
-  console.log(dataW);
-
   const i = dataW[0];
 
   /* Bit Size */
@@ -101,8 +102,41 @@ export const MOVE = (
   return { asm: asm, task: exeMove(task, asm), success: true, length: 0 };
 };
 
+const test = (
+  task: ITask,
+  opBit: EnumOpBit,
+  src: string,
+  dst: string,
+  js: string
+) => {
+  
+  let o = 0;
+  switch (opBit) {
+    case EnumOpBit.BYTE:
+      o = 0;
+      break;
+    case EnumOpBit.WORD:
+      o = 1;
+      break;
+    case EnumOpBit.LONG:
+      o = 3;
+      break;
+  }
+
+  for (let i = 0; i < opBit / 8; i++) {
+    const cmd = js
+      .replaceAll('{src}', `"${src}"`)
+      .replaceAll('{dst}', `"${dst}"`)
+      .replaceAll('${o}', o.toString());
+    console.log(cmd);
+    eval(cmd);
+  }
+
+  return task;
+};
+
 export const exeMove = (task: ITask, asm: string) => {
-  console.log(asm);
+  //console.log(asm);
 
   const { opBit, args, argSrcDst, argArray }: IExamineInstruction =
     examineInstruction(asm);
@@ -112,7 +146,13 @@ export const exeMove = (task: ITask, asm: string) => {
   switch (argSrcDst) {
     /* REG */
     case EnumArgSrcDst.REG_TO_REG:
-      task = REG_TO_REG(task, opBit, argArray);
+      task = test(
+        task,
+        opBit,
+        argArray[0],
+        argArray[1],
+        'task.s[{dst}][i+3-o] = task.s[{src}][i+3-o]'
+      );
       break;
     case EnumArgSrcDst.REG_TO_ABW:
       task = REG_TO_ABW(task, opBit, argArray);
@@ -184,6 +224,25 @@ export const exeMove = (task: ITask, asm: string) => {
       break;
     case EnumArgSrcDst.ABL_TO_IWDI:
       task = ABX_TO_IWDI(task, opBit, argArray);
+      break;
+    /* I */
+    case EnumArgSrcDst.I_TO_REG:
+      task = I_TO_REG(task, opBit, argArray);
+      break;
+    case EnumArgSrcDst.I_TO_ABW:
+      task = I_TO_ABX(task, opBit, argArray);
+      break;
+    case EnumArgSrcDst.I_TO_ABL:
+      task = I_TO_ABX(task, opBit, argArray);
+      break;
+    case EnumArgSrcDst.I_TO_I:
+      task = I_TO_I(task, opBit, argArray);
+      break;
+    case EnumArgSrcDst.I_TO_IPI:
+      task = I_TO_I(task, opBit, argArray, { inc: true });
+      break;
+    case EnumArgSrcDst.I_TO_IPD:
+      task = I_TO_IPD(task, opBit, argArray);
       break;
   }
 

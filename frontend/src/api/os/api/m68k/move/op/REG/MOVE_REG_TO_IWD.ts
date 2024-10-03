@@ -16,7 +16,6 @@ export const REG_TO_IWD = (task: ITask, opBit: EnumOpBit, args: string[]) => {
     task.s[dst][3]
   );
   p = p + index;
-  console.log({ index: args[1] });
 
   switch (opBit) {
     case EnumOpBit.BYTE:
