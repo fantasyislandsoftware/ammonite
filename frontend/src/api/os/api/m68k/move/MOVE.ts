@@ -8,8 +8,8 @@ import {
 } from '../m68KHelpers/m68kHelpers';
 import { EnumArgSrcDst, IExamineInstruction } from '../IM68k';
 import { EnumOpBit, opBitChar } from 'functions/dataHandling/IdataHandling';
-import { REG_TO_REG } from './op/REG/MOVE_REG_TO_REG';
-import { REG_TO_ABW } from './op/REG/MOVE_REG_TO_ABW';
+import REG_TO_REG from './op/REG/MOVE_REG_TO_REG';
+import REG_TO_ABW from './op/REG/MOVE_REG_TO_ABW';
 import { REG_TO_ABL } from './op/REG/MOVE_REG_TO_ABL';
 import { REG_TO_I } from './op/REG/MOVE_REG_TO_I';
 import { REG_TO_IPI } from './op/REG/MOVE_REG_TO_IPI';
@@ -102,14 +102,38 @@ export const MOVE = (
   return { asm: asm, task: exeMove(task, asm), success: true, length: 0 };
 };
 
-const test = (
+const cleanArg = (arg: string) => {
+  if (arg.startsWith('0x')) {
+    arg = arg.replaceAll('0x', '').replaceAll('.w', '').replaceAll('.l', '');
+    arg = parseInt(arg, 16).toString();
+  } else {
+    arg = `"${arg}"`;
+  }
+  return arg;
+};
+
+const crunch = (
   task: ITask,
   opBit: EnumOpBit,
   src: string,
   dst: string,
-  js: string
+  js: string,
+  setting?: { debug?: boolean; verbose?: boolean }
 ) => {
-  
+  /* CleanUp args */
+  src = cleanArg(src);
+  dst = cleanArg(dst);
+
+  /* */
+  js = js
+    .replaceAll('{src}', `${src}`)
+    .replaceAll('{dst}', `${dst}`)
+    .replaceAll('M', 'task.s.m')
+    .replaceAll('R', 'task.s');
+  if (setting?.verbose) {
+    console.log(js);
+  }
+
   let o = 0;
   switch (opBit) {
     case EnumOpBit.BYTE:
@@ -124,125 +148,145 @@ const test = (
   }
 
   for (let i = 0; i < opBit / 8; i++) {
-    const cmd = js
-      .replaceAll('{src}', `"${src}"`)
-      .replaceAll('{dst}', `"${dst}"`)
-      .replaceAll('${o}', o.toString());
-    console.log(cmd);
-    eval(cmd);
+    if (!setting?.debug) {
+      eval(js);
+    }
   }
 
   return task;
 };
 
+//*******************************************************/
+
+const REG_S = 'R[{src}][i+3-o]';
+const REG_D = 'R[{dst}][i+3-o]';
+
+const ABX_S = 'M[{src}+i]';
+const ABX_D = 'M[{dst}+i]';
+
+const TO = ' = ';
+
+//*******************************************************/
+
 export const exeMove = (task: ITask, asm: string) => {
   //console.log(asm);
 
-  const { opBit, args, argSrcDst, argArray }: IExamineInstruction =
-    examineInstruction(asm);
+  const {
+    opBit,
+    argSrcDst,
+    argArray: arg,
+  }: IExamineInstruction = examineInstruction(asm);
 
   let length = 0;
 
   switch (argSrcDst) {
     /* REG */
     case EnumArgSrcDst.REG_TO_REG:
-      task = test(
+      task = crunch(task, opBit, arg[0], arg[1], `${REG_D}${TO}${REG_S}`);
+      break;
+    /* */
+    case EnumArgSrcDst.REG_TO_ABW:
+      task = crunch(task, opBit, arg[0], arg[1], `${ABX_D}${TO}${REG_S}`, {
+        verbose: true,
+      });
+      break;
+    /* */
+    case EnumArgSrcDst.REG_TO_ABL:
+      task = crunch(task, opBit, arg[0], arg[1], `${ABX_D}${TO}${REG_S}`);
+      break;
+    /* */
+    case EnumArgSrcDst.REG_TO_I:
+      task = crunch(
         task,
         opBit,
-        argArray[0],
-        argArray[1],
-        'task.s[{dst}][i+3-o] = task.s[{src}][i+3-o]'
+        arg[0],
+        arg[1],
+        'T.s.m[l({dst})+i] = T.s[{src}][i+3-o]',
+        { debug: true, verbose: true }
       );
+      //task = REG_TO_I(task, opBit, arg);
       break;
-    case EnumArgSrcDst.REG_TO_ABW:
-      task = REG_TO_ABW(task, opBit, argArray);
-      break;
-    case EnumArgSrcDst.REG_TO_ABL:
-      task = REG_TO_ABL(task, opBit, argArray);
-      break;
-    case EnumArgSrcDst.REG_TO_I:
-      task = REG_TO_I(task, opBit, argArray);
-      break;
+    /* */
     case EnumArgSrcDst.REG_TO_IPI:
-      task = REG_TO_IPI(task, opBit, argArray);
+      task = REG_TO_IPI(task, opBit, arg);
       break;
     case EnumArgSrcDst.REG_TO_IPD:
-      task = REG_TO_IPD(task, opBit, argArray);
+      task = REG_TO_IPD(task, opBit, arg);
       break;
     case EnumArgSrcDst.REG_TO_IWD:
-      task = REG_TO_IWD(task, opBit, argArray);
+      task = REG_TO_IWD(task, opBit, arg);
       break;
     case EnumArgSrcDst.REG_TO_IWDI:
-      task = REG_TO_IWDI(task, opBit, argArray);
+      task = REG_TO_IWDI(task, opBit, arg);
       break;
     /* ABW */
     case EnumArgSrcDst.ABW_TO_REG:
-      task = ABX_TO_REG(task, opBit, argArray);
+      task = ABX_TO_REG(task, opBit, arg);
       break;
     case EnumArgSrcDst.ABW_TO_ABW:
-      task = ABX_TO_ABX(task, opBit, argArray);
+      task = ABX_TO_ABX(task, opBit, arg);
       break;
     case EnumArgSrcDst.ABW_TO_ABL:
-      task = ABX_TO_ABX(task, opBit, argArray);
+      task = ABX_TO_ABX(task, opBit, arg);
       break;
     case EnumArgSrcDst.ABW_TO_I:
-      task = ABX_TO_I(task, opBit, argArray);
+      task = ABX_TO_I(task, opBit, arg);
       break;
     case EnumArgSrcDst.ABW_TO_IPI:
-      task = ABX_TO_IPI(task, opBit, argArray);
+      task = ABX_TO_IPI(task, opBit, arg);
       break;
     case EnumArgSrcDst.ABW_TO_IPD:
-      task = ABX_TO_IPD(task, opBit, argArray);
+      task = ABX_TO_IPD(task, opBit, arg);
       break;
     case EnumArgSrcDst.ABW_TO_IWD:
-      task = ABX_TO_IWD(task, opBit, argArray);
+      task = ABX_TO_IWD(task, opBit, arg);
       break;
     case EnumArgSrcDst.ABW_TO_IWDI:
-      task = ABX_TO_IWDI(task, opBit, argArray);
+      task = ABX_TO_IWDI(task, opBit, arg);
       break;
     /* ABL */
     case EnumArgSrcDst.ABL_TO_REG:
-      task = ABX_TO_REG(task, opBit, argArray);
+      task = ABX_TO_REG(task, opBit, arg);
       break;
     case EnumArgSrcDst.ABL_TO_ABW:
-      task = ABX_TO_ABX(task, opBit, argArray);
+      task = ABX_TO_ABX(task, opBit, arg);
       break;
     case EnumArgSrcDst.ABL_TO_ABL:
-      task = ABX_TO_ABX(task, opBit, argArray);
+      task = ABX_TO_ABX(task, opBit, arg);
       break;
     case EnumArgSrcDst.ABL_TO_I:
-      task = ABX_TO_I(task, opBit, argArray);
+      task = ABX_TO_I(task, opBit, arg);
       break;
     case EnumArgSrcDst.ABL_TO_IPI:
-      task = ABX_TO_IPI(task, opBit, argArray);
+      task = ABX_TO_IPI(task, opBit, arg);
       break;
     case EnumArgSrcDst.ABL_TO_IPD:
-      task = ABX_TO_IPD(task, opBit, argArray);
+      task = ABX_TO_IPD(task, opBit, arg);
       break;
     case EnumArgSrcDst.ABL_TO_IWD:
-      task = ABX_TO_IWD(task, opBit, argArray);
+      task = ABX_TO_IWD(task, opBit, arg);
       break;
     case EnumArgSrcDst.ABL_TO_IWDI:
-      task = ABX_TO_IWDI(task, opBit, argArray);
+      task = ABX_TO_IWDI(task, opBit, arg);
       break;
     /* I */
     case EnumArgSrcDst.I_TO_REG:
-      task = I_TO_REG(task, opBit, argArray);
+      task = I_TO_REG(task, opBit, arg);
       break;
     case EnumArgSrcDst.I_TO_ABW:
-      task = I_TO_ABX(task, opBit, argArray);
+      task = I_TO_ABX(task, opBit, arg);
       break;
     case EnumArgSrcDst.I_TO_ABL:
-      task = I_TO_ABX(task, opBit, argArray);
+      task = I_TO_ABX(task, opBit, arg);
       break;
     case EnumArgSrcDst.I_TO_I:
-      task = I_TO_I(task, opBit, argArray);
+      task = I_TO_I(task, opBit, arg);
       break;
     case EnumArgSrcDst.I_TO_IPI:
-      task = I_TO_I(task, opBit, argArray, { inc: true });
+      task = I_TO_I(task, opBit, arg, { inc: true });
       break;
     case EnumArgSrcDst.I_TO_IPD:
-      task = I_TO_IPD(task, opBit, argArray);
+      task = I_TO_IPD(task, opBit, arg);
       break;
   }
 

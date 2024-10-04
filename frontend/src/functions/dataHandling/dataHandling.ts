@@ -175,6 +175,9 @@ export const join4BytesInto1Long = (
   return (byte1 << 24) + (byte2 << 16) + (byte3 << 8) + byte4;
 };
 
+//export const l = (task) => {
+//}
+
 /*export const _4to1 = (array: number[]) => {
   return (array[0] << 24) + (array[1] << 16) + (array[2] << 8) + array[3];
 };*/

@@ -5,7 +5,7 @@ dat = 1
 ; word $7FFF
 
 test:
-        move.l d0,d1
+        move.l d0,$0001
         bra test
 
 ; a0,d0 - 00000000
