@@ -27,6 +27,11 @@ import { I_TO_REG } from './op/I/MOVE_I_TO_REG';
 import { I_TO_ABX } from './op/I/MOVE_I_TO_ABX';
 import { I_TO_I } from './op/I/MOVE_I_TO_I';
 import { I_TO_IPD } from './op/I/MOVE_I_TO_IPD';
+import { l, b, splitLongInto4Bytes } from 'functions/dataHandling/dataHandling';
+import { join4BytesInto1Long } from 'functions/dataHandling/dataHandling';
+
+const _l = l;
+const _421 = join4BytesInto1Long;
 
 enum EnumLRB {
   N = 0,
@@ -93,7 +98,6 @@ export const MOVE = (
   const asm = `move.${opSizeChar} ${args}`;
 
   /* Log */
-
   if (setting?.verbose) {
     console.log(dataW);
     console.log(asm);
@@ -117,23 +121,27 @@ const crunch = (
   opBit: EnumOpBit,
   src: string,
   dst: string,
-  js: string,
+  js: { loop: string; preDec?: string[]; postInc?: string[] },
   setting?: { debug?: boolean; verbose?: boolean }
 ) => {
-  /* CleanUp args */
+  /* Clean up args */
   src = cleanArg(src);
   dst = cleanArg(dst);
 
-  /* */
-  js = js
-    .replaceAll('{src}', `${src}`)
-    .replaceAll('{dst}', `${dst}`)
-    .replaceAll('M', 'task.s.m')
-    .replaceAll('R', 'task.s');
   if (setting?.verbose) {
     console.log(js);
   }
 
+  /* Filter */
+  js.loop = js.loop
+    .replaceAll('{src}', `${src}`)
+    .replaceAll('{dst}', `${dst}`)
+    .replaceAll('l(', '_l(task,');
+  if (setting?.verbose) {
+    console.log(js);
+  }
+
+  /* Offset */
   let o = 0;
   switch (opBit) {
     case EnumOpBit.BYTE:
@@ -147,9 +155,30 @@ const crunch = (
       break;
   }
 
+  /* Pre Decrement */
+  if (js.preDec) {
+    for (let i = 0; i < js.preDec.length; i++) {
+      const reg = js.preDec[i];
+      let l = _l(task, reg);
+      l = l - opBit / 8;
+      task.s[reg] = splitLongInto4Bytes(l);
+    }
+  }
+
+  /* Main Loop */
   for (let i = 0; i < opBit / 8; i++) {
     if (!setting?.debug) {
-      eval(js);
+      eval(js.loop);
+    }
+  }
+
+  /* Post Increment */
+  if (js.postInc) {
+    for (let i = 0; i < js.postInc.length; i++) {
+      const reg = js.postInc[i];
+      let l = _l(task, reg);
+      l = l + opBit / 8;
+      task.s[reg] = splitLongInto4Bytes(l);
     }
   }
 
@@ -158,18 +187,21 @@ const crunch = (
 
 //*******************************************************/
 
-const REG_S = 'R[{src}][i+3-o]';
-const REG_D = 'R[{dst}][i+3-o]';
+const REG_S = 'task.s[{src}][i+3-o]';
+const REG_D = 'task.s[{dst}][i+3-o]';
 
-const ABX_S = 'M[{src}+i]';
-const ABX_D = 'M[{dst}+i]';
+const ABX_S = 'task.s.m[{src}+i]';
+const ABX_D = 'task.s.m[{dst}+i]';
+
+const I_S = 'task.s.m[l({src})+i]';
+const I_D = 'task.s.m[l({dst})+i]';
 
 const TO = ' = ';
 
 //*******************************************************/
 
 export const exeMove = (task: ITask, asm: string) => {
-  //console.log(asm);
+  console.log(asm);
 
   const {
     opBit,
@@ -182,37 +214,43 @@ export const exeMove = (task: ITask, asm: string) => {
   switch (argSrcDst) {
     /* REG */
     case EnumArgSrcDst.REG_TO_REG:
-      task = crunch(task, opBit, arg[0], arg[1], `${REG_D}${TO}${REG_S}`);
+      task = crunch(task, opBit, arg[0], arg[1], {
+        loop: `${REG_D}${TO}${REG_S}`,
+      });
       break;
     /* */
     case EnumArgSrcDst.REG_TO_ABW:
-      task = crunch(task, opBit, arg[0], arg[1], `${ABX_D}${TO}${REG_S}`, {
-        verbose: true,
+      task = crunch(task, opBit, arg[0], arg[1], {
+        loop: `${ABX_D}${TO}${REG_S}`,
       });
       break;
     /* */
     case EnumArgSrcDst.REG_TO_ABL:
-      task = crunch(task, opBit, arg[0], arg[1], `${ABX_D}${TO}${REG_S}`);
+      task = crunch(task, opBit, arg[0], arg[1], {
+        loop: `${ABX_D}${TO}${REG_S}`,
+      });
       break;
     /* */
     case EnumArgSrcDst.REG_TO_I:
-      task = crunch(
-        task,
-        opBit,
-        arg[0],
-        arg[1],
-        'T.s.m[l({dst})+i] = T.s[{src}][i+3-o]',
-        { debug: true, verbose: true }
-      );
-      //task = REG_TO_I(task, opBit, arg);
+      task = crunch(task, opBit, arg[0], arg[1], {
+        loop: `${I_D}${TO}${REG_S}`,
+      });
       break;
     /* */
     case EnumArgSrcDst.REG_TO_IPI:
-      task = REG_TO_IPI(task, opBit, arg);
+      task = crunch(task, opBit, arg[0], arg[1], {
+        loop: `${I_D}${TO}${REG_S}`,
+        postInc: [arg[1]],
+      });
       break;
+    /* */
     case EnumArgSrcDst.REG_TO_IPD:
-      task = REG_TO_IPD(task, opBit, arg);
+      task = crunch(task, opBit, arg[0], arg[2], {
+        loop: `${I_D}${TO}${REG_S}`,
+        preDec: [arg[2]],
+      });
       break;
+    /* */
     case EnumArgSrcDst.REG_TO_IWD:
       task = REG_TO_IWD(task, opBit, arg);
       break;

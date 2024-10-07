@@ -175,8 +175,23 @@ export const join4BytesInto1Long = (
   return (byte1 << 24) + (byte2 << 16) + (byte3 << 8) + byte4;
 };
 
-//export const l = (task) => {
-//}
+export const l = (task: ITask, reg: string) => {
+  return join4BytesInto1Long(
+    task.s[reg][0],
+    task.s[reg][1],
+    task.s[reg][2],
+    task.s[reg][3]
+  );
+};
+
+export const b = (task: ITask, reg: string) => {
+  return join4BytesInto1Long(
+    task.s[reg][0],
+    task.s[reg][1],
+    task.s[reg][2],
+    task.s[reg][3]
+  );
+};
 
 /*export const _4to1 = (array: number[]) => {
   return (array[0] << 24) + (array[1] << 16) + (array[2] << 8) + array[3];
