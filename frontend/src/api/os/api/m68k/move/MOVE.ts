@@ -116,27 +116,76 @@ const cleanArg = (arg: string) => {
   return arg;
 };
 
+//*******************************************************/
+
+const REG_S = 'task.s[ {SR0} ][ i + 3 - o ]';
+const REG_D = 'task.s[ {DR0} ][ i + 3 - o ]';
+
+const ABX_S = 'task.s.m[ {SR0} + i ]';
+const ABX_D = 'task.s.m[ {DR0} + i ]';
+
+const I_S = 'task.s.m[ _l(task,{SR0}) + i ]';
+const I_D = 'task.s.m[ _l(task,{DR0}) + i ]';
+
+const IWD_S = 'task.s.m[ _l(task,{SR0}) + i + {SD0} ]';
+const IWD_D = 'task.s.m[ _l(task,{DR0}) + i + {DD0} ]';
+
+const IWDI_S = 'task.s.m[ _l(task,{SR0}) + i + {SD0} + _l(task,{SR1}) ]';
+const IWDI_D = 'task.s.m[ _l(task,{DR0}) + i + {DD0} + _l(task,{DR1}) ]';
+
+const TO = ' = ';
+
+//*******************************************************/
+
 const crunch = (
   task: ITask,
   opBit: EnumOpBit,
-  src: string,
-  dst: string,
+  param: {
+    src?: { reg?: string[]; abs?: string[] };
+    dst?: { reg?: string[]; abs?: string[] };
+  },
   js: { loop: string; preDec?: string[]; postInc?: string[] },
   setting?: { debug?: boolean; verbose?: boolean }
 ) => {
-  /* Clean up args */
-  src = cleanArg(src);
-  dst = cleanArg(dst);
+  const srcReg = param.src?.reg;
+  const srcAbs = param.src?.abs;
+  const dstReg = param.dst?.reg;
+  const dstAbs = param.dst?.abs;
 
+  /* Clean up args */
+  srcReg?.forEach((v, i) => {
+    srcReg[i] = cleanArg(v);
+  });
+  srcAbs?.forEach((v, i) => {
+    srcAbs[i] = cleanArg(v);
+  });
+  dstReg?.forEach((v, i) => {
+    dstReg[i] = cleanArg(v);
+  });
+  dstAbs?.forEach((v, i) => {
+    dstAbs[i] = cleanArg(v);
+  });
+
+  /* */
   if (setting?.verbose) {
     console.log(js);
   }
 
-  /* Filter */
-  js.loop = js.loop
-    .replaceAll('{src}', `${src}`)
-    .replaceAll('{dst}', `${dst}`)
-    .replaceAll('l(', '_l(task,');
+  /* Replacers */
+  srcReg?.forEach((v, i) => {
+    js.loop = js.loop.replaceAll(`{SR${i}}`, `${srcReg[i]}`);
+  });
+  srcAbs?.forEach((v, i) => {
+    js.loop = js.loop.replaceAll(`{SD${i}}`, `${srcAbs[i]}`);
+  });
+  dstReg?.forEach((v, i) => {
+    js.loop = js.loop.replaceAll(`{DR${i}}`, `${dstReg[i]}`);
+  });
+  dstAbs?.forEach((v, i) => {
+    js.loop = js.loop.replaceAll(`{DD${i}}`, `${dstAbs[i]}`);
+  });
+
+  /* */
   if (setting?.verbose) {
     console.log(js);
   }
@@ -187,19 +236,6 @@ const crunch = (
 
 //*******************************************************/
 
-const REG_S = 'task.s[{src}][i+3-o]';
-const REG_D = 'task.s[{dst}][i+3-o]';
-
-const ABX_S = 'task.s.m[{src}+i]';
-const ABX_D = 'task.s.m[{dst}+i]';
-
-const I_S = 'task.s.m[l({src})+i]';
-const I_D = 'task.s.m[l({dst})+i]';
-
-const TO = ' = ';
-
-//*******************************************************/
-
 export const exeMove = (task: ITask, asm: string) => {
   console.log(asm);
 
@@ -214,48 +250,117 @@ export const exeMove = (task: ITask, asm: string) => {
   switch (argSrcDst) {
     /* REG */
     case EnumArgSrcDst.REG_TO_REG:
-      task = crunch(task, opBit, arg[0], arg[1], {
-        loop: `${REG_D}${TO}${REG_S}`,
-      });
+      task = crunch(
+        task,
+        opBit,
+        {
+          src: { reg: [arg[0]] },
+          dst: { reg: [arg[1]] },
+        },
+        {
+          loop: `${REG_D}${TO}${REG_S}`,
+        }
+      );
       break;
     /* */
     case EnumArgSrcDst.REG_TO_ABW:
-      task = crunch(task, opBit, arg[0], arg[1], {
-        loop: `${ABX_D}${TO}${REG_S}`,
-      });
+      task = crunch(
+        task,
+        opBit,
+        {
+          src: { reg: [arg[0]] },
+          dst: { reg: [arg[1]] },
+        },
+        {
+          loop: `${ABX_D}${TO}${REG_S}`,
+        }
+      );
       break;
     /* */
     case EnumArgSrcDst.REG_TO_ABL:
-      task = crunch(task, opBit, arg[0], arg[1], {
-        loop: `${ABX_D}${TO}${REG_S}`,
-      });
+      task = crunch(
+        task,
+        opBit,
+        {
+          src: { reg: [arg[0]] },
+          dst: { reg: [arg[1]] },
+        },
+        {
+          loop: `${ABX_D}${TO}${REG_S}`,
+        }
+      );
       break;
     /* */
     case EnumArgSrcDst.REG_TO_I:
-      task = crunch(task, opBit, arg[0], arg[1], {
-        loop: `${I_D}${TO}${REG_S}`,
-      });
+      task = crunch(
+        task,
+        opBit,
+        {
+          src: { reg: [arg[0]] },
+          dst: { reg: [arg[1]] },
+        },
+        {
+          loop: `${I_D}${TO}${REG_S}`,
+        }
+      );
       break;
     /* */
     case EnumArgSrcDst.REG_TO_IPI:
-      task = crunch(task, opBit, arg[0], arg[1], {
-        loop: `${I_D}${TO}${REG_S}`,
-        postInc: [arg[1]],
-      });
+      task = crunch(
+        task,
+        opBit,
+        {
+          src: { reg: [arg[0]] },
+          dst: { reg: [arg[1]] },
+        },
+        {
+          loop: `${I_D}${TO}${REG_S}`,
+          postInc: [arg[1]],
+        }
+      );
       break;
     /* */
     case EnumArgSrcDst.REG_TO_IPD:
-      task = crunch(task, opBit, arg[0], arg[2], {
-        loop: `${I_D}${TO}${REG_S}`,
-        preDec: [arg[2]],
-      });
+      task = crunch(
+        task,
+        opBit,
+        {
+          src: { reg: [arg[0]] },
+          dst: { reg: [arg[2]] },
+        },
+        {
+          loop: `${I_D}${TO}${REG_S}`,
+          preDec: [arg[2]],
+        }
+      );
       break;
     /* */
     case EnumArgSrcDst.REG_TO_IWD:
-      task = REG_TO_IWD(task, opBit, arg);
+      task = crunch(
+        task,
+        opBit,
+        {
+          src: { reg: [arg[0]] },
+          dst: { reg: [arg[2]], abs: [arg[1]] },
+        },
+        {
+          loop: `${IWD_D}${TO}${REG_S}`,
+        }
+      );
       break;
     case EnumArgSrcDst.REG_TO_IWDI:
-      task = REG_TO_IWDI(task, opBit, arg);
+      console.log(arg);
+      task = crunch(
+        task,
+        opBit,
+        {
+          src: { reg: [arg[0]] },
+          dst: { reg: [arg[2], arg[3]], abs: [arg[1]] },
+        },
+        {
+          loop: `${IWDI_D}${TO}${REG_S}`,
+        }
+      );
       break;
     /* ABW */
     case EnumArgSrcDst.ABW_TO_REG:
