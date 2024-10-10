@@ -1,5 +1,6 @@
 import { makeTestTask } from 'api/os/api/m68k/m68kTestHelpers';
 import { exeMove, MOVE } from '../../MOVE';
+import { examineInstruction } from '../../../m68KHelpers/m68kHelpers';
 
 describe(`MOVE_ABW_TO_REG CONV`, () => {
   const task = makeTestTask({ memoryBufferSize: 100 });
@@ -33,7 +34,7 @@ describe('MOVE_ABW_TO_REG EXE', () => {
     'move.w 0x0000.w,d0',
     'move.l 0x0000.w,d0',
   ];
-  //
+
   class S {
     public setting = {
       memoryBufferSize: 4,
@@ -44,12 +45,12 @@ describe('MOVE_ABW_TO_REG EXE', () => {
   //
   it(cmd[0], () => {
     const { d0 } = exeMove(makeTestTask(new S().setting), cmd[0]).s;
-    expect(d0).toEqual([0x00, 0x00, 0x00, 0x78]);
+    expect(d0).toEqual([0x00, 0x00, 0x00, 0x12]);
   });
   //
   it(cmd[1], () => {
     const { d0 } = exeMove(makeTestTask(new S().setting), cmd[1]).s;
-    expect(d0).toEqual([0x00, 0x00, 0x56, 0x78]);
+    expect(d0).toEqual([0x00, 0x00, 0x12, 0x34]);
   });
   //
   it(cmd[2], () => {

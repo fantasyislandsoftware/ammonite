@@ -7,15 +7,7 @@ import {
   processXNXT,
 } from '../m68KHelpers/m68kHelpers';
 import { EnumArgSrcDst, IExamineInstruction } from '../IM68k';
-import { EnumOpBit, opBitChar } from 'functions/dataHandling/IdataHandling';
-import REG_TO_REG from './op/REG/MOVE_REG_TO_REG';
-import REG_TO_ABW from './op/REG/MOVE_REG_TO_ABW';
-import { REG_TO_ABL } from './op/REG/MOVE_REG_TO_ABL';
-import { REG_TO_I } from './op/REG/MOVE_REG_TO_I';
-import { REG_TO_IPI } from './op/REG/MOVE_REG_TO_IPI';
-import { REG_TO_IPD } from './op/REG/MOVE_REG_TO_IPD';
-import { REG_TO_IWD } from './op/REG/MOVE_REG_TO_IWD';
-import { REG_TO_IWDI } from './op/REG/MOVE_REG_TO_IWDI';
+import { opBitChar } from 'functions/dataHandling/IdataHandling';
 import { ABX_TO_I } from './op/SHARED/MOVE_ABX_TO_I';
 import { ABX_TO_REG } from './op/SHARED/MOVE_ABX_TO_REG';
 import { ABX_TO_IPI } from './op/SHARED/MOVE_ABX_TO_IPI';
@@ -27,8 +19,10 @@ import { I_TO_REG } from './op/I/MOVE_I_TO_REG';
 import { I_TO_ABX } from './op/I/MOVE_I_TO_ABX';
 import { I_TO_I } from './op/I/MOVE_I_TO_I';
 import { I_TO_IPD } from './op/I/MOVE_I_TO_IPD';
-import { l, b, splitLongInto4Bytes } from 'functions/dataHandling/dataHandling';
+import { l } from 'functions/dataHandling/dataHandling';
 import { join4BytesInto1Long } from 'functions/dataHandling/dataHandling';
+import MOVE_REG from './op/REG';
+import MOVE_ABW from './op/ABW';
 
 const _l = l;
 const _421 = join4BytesInto1Long;
@@ -106,136 +100,6 @@ export const MOVE = (
   return { asm: asm, task: exeMove(task, asm), success: true, length: 0 };
 };
 
-const cleanArg = (arg: string) => {
-  if (arg.startsWith('0x')) {
-    arg = arg.replaceAll('0x', '').replaceAll('.w', '').replaceAll('.l', '');
-    arg = parseInt(arg, 16).toString();
-  } else {
-    arg = `"${arg}"`;
-  }
-  return arg;
-};
-
-//*******************************************************/
-
-const REG_S = 'task.s[ {SR0} ][ i + 3 - o ]';
-const REG_D = 'task.s[ {DR0} ][ i + 3 - o ]';
-
-const ABX_S = 'task.s.m[ {SR0} + i ]';
-const ABX_D = 'task.s.m[ {DR0} + i ]';
-
-const I_S = 'task.s.m[ _l(task,{SR0}) + i ]';
-const I_D = 'task.s.m[ _l(task,{DR0}) + i ]';
-
-const IWD_S = 'task.s.m[ _l(task,{SR0}) + i + {SD0} ]';
-const IWD_D = 'task.s.m[ _l(task,{DR0}) + i + {DD0} ]';
-
-const IWDI_S = 'task.s.m[ _l(task,{SR0}) + i + {SD0} + _l(task,{SR1}) ]';
-const IWDI_D = 'task.s.m[ _l(task,{DR0}) + i + {DD0} + _l(task,{DR1}) ]';
-
-const TO = ' = ';
-
-//*******************************************************/
-
-const crunch = (
-  task: ITask,
-  opBit: EnumOpBit,
-  param: {
-    src?: { reg?: string[]; abs?: string[] };
-    dst?: { reg?: string[]; abs?: string[] };
-  },
-  js: { loop: string; preDec?: string[]; postInc?: string[] },
-  setting?: { debug?: boolean; verbose?: boolean }
-) => {
-  const srcReg = param.src?.reg;
-  const srcAbs = param.src?.abs;
-  const dstReg = param.dst?.reg;
-  const dstAbs = param.dst?.abs;
-
-  /* Clean up args */
-  srcReg?.forEach((v, i) => {
-    srcReg[i] = cleanArg(v);
-  });
-  srcAbs?.forEach((v, i) => {
-    srcAbs[i] = cleanArg(v);
-  });
-  dstReg?.forEach((v, i) => {
-    dstReg[i] = cleanArg(v);
-  });
-  dstAbs?.forEach((v, i) => {
-    dstAbs[i] = cleanArg(v);
-  });
-
-  /* */
-  if (setting?.verbose) {
-    console.log(js);
-  }
-
-  /* Replacers */
-  srcReg?.forEach((v, i) => {
-    js.loop = js.loop.replaceAll(`{SR${i}}`, `${srcReg[i]}`);
-  });
-  srcAbs?.forEach((v, i) => {
-    js.loop = js.loop.replaceAll(`{SD${i}}`, `${srcAbs[i]}`);
-  });
-  dstReg?.forEach((v, i) => {
-    js.loop = js.loop.replaceAll(`{DR${i}}`, `${dstReg[i]}`);
-  });
-  dstAbs?.forEach((v, i) => {
-    js.loop = js.loop.replaceAll(`{DD${i}}`, `${dstAbs[i]}`);
-  });
-
-  /* */
-  if (setting?.verbose) {
-    console.log(js);
-  }
-
-  /* Offset */
-  let o = 0;
-  switch (opBit) {
-    case EnumOpBit.BYTE:
-      o = 0;
-      break;
-    case EnumOpBit.WORD:
-      o = 1;
-      break;
-    case EnumOpBit.LONG:
-      o = 3;
-      break;
-  }
-
-  /* Pre Decrement */
-  if (js.preDec) {
-    for (let i = 0; i < js.preDec.length; i++) {
-      const reg = js.preDec[i];
-      let l = _l(task, reg);
-      l = l - opBit / 8;
-      task.s[reg] = splitLongInto4Bytes(l);
-    }
-  }
-
-  /* Main Loop */
-  for (let i = 0; i < opBit / 8; i++) {
-    if (!setting?.debug) {
-      eval(js.loop);
-    }
-  }
-
-  /* Post Increment */
-  if (js.postInc) {
-    for (let i = 0; i < js.postInc.length; i++) {
-      const reg = js.postInc[i];
-      let l = _l(task, reg);
-      l = l + opBit / 8;
-      task.s[reg] = splitLongInto4Bytes(l);
-    }
-  }
-
-  return task;
-};
-
-//*******************************************************/
-
 export const exeMove = (task: ITask, asm: string) => {
   console.log(asm);
 
@@ -247,146 +111,10 @@ export const exeMove = (task: ITask, asm: string) => {
 
   let length = 0;
 
+  task = MOVE_REG(task, opBit, argSrcDst, arg);
+  task = MOVE_ABW(task, opBit, argSrcDst, arg);
+
   switch (argSrcDst) {
-    /* REG */
-    case EnumArgSrcDst.REG_TO_REG:
-      task = crunch(
-        task,
-        opBit,
-        {
-          src: { reg: [arg[0]] },
-          dst: { reg: [arg[1]] },
-        },
-        {
-          loop: `${REG_D}${TO}${REG_S}`,
-        }
-      );
-      break;
-    /* */
-    case EnumArgSrcDst.REG_TO_ABW:
-      task = crunch(
-        task,
-        opBit,
-        {
-          src: { reg: [arg[0]] },
-          dst: { reg: [arg[1]] },
-        },
-        {
-          loop: `${ABX_D}${TO}${REG_S}`,
-        }
-      );
-      break;
-    /* */
-    case EnumArgSrcDst.REG_TO_ABL:
-      task = crunch(
-        task,
-        opBit,
-        {
-          src: { reg: [arg[0]] },
-          dst: { reg: [arg[1]] },
-        },
-        {
-          loop: `${ABX_D}${TO}${REG_S}`,
-        }
-      );
-      break;
-    /* */
-    case EnumArgSrcDst.REG_TO_I:
-      task = crunch(
-        task,
-        opBit,
-        {
-          src: { reg: [arg[0]] },
-          dst: { reg: [arg[1]] },
-        },
-        {
-          loop: `${I_D}${TO}${REG_S}`,
-        }
-      );
-      break;
-    /* */
-    case EnumArgSrcDst.REG_TO_IPI:
-      task = crunch(
-        task,
-        opBit,
-        {
-          src: { reg: [arg[0]] },
-          dst: { reg: [arg[1]] },
-        },
-        {
-          loop: `${I_D}${TO}${REG_S}`,
-          postInc: [arg[1]],
-        }
-      );
-      break;
-    /* */
-    case EnumArgSrcDst.REG_TO_IPD:
-      task = crunch(
-        task,
-        opBit,
-        {
-          src: { reg: [arg[0]] },
-          dst: { reg: [arg[2]] },
-        },
-        {
-          loop: `${I_D}${TO}${REG_S}`,
-          preDec: [arg[2]],
-        }
-      );
-      break;
-    /* */
-    case EnumArgSrcDst.REG_TO_IWD:
-      task = crunch(
-        task,
-        opBit,
-        {
-          src: { reg: [arg[0]] },
-          dst: { reg: [arg[2]], abs: [arg[1]] },
-        },
-        {
-          loop: `${IWD_D}${TO}${REG_S}`,
-        }
-      );
-      break;
-    case EnumArgSrcDst.REG_TO_IWDI:
-      console.log(arg);
-      task = crunch(
-        task,
-        opBit,
-        {
-          src: { reg: [arg[0]] },
-          dst: { reg: [arg[2], arg[3]], abs: [arg[1]] },
-        },
-        {
-          loop: `${IWDI_D}${TO}${REG_S}`,
-        }
-      );
-      break;
-    /* ABW */
-    case EnumArgSrcDst.ABW_TO_REG:
-      task = ABX_TO_REG(task, opBit, arg);
-      break;
-    case EnumArgSrcDst.ABW_TO_ABW:
-      task = ABX_TO_ABX(task, opBit, arg);
-      break;
-    case EnumArgSrcDst.ABW_TO_ABL:
-      task = ABX_TO_ABX(task, opBit, arg);
-      break;
-    case EnumArgSrcDst.ABW_TO_I:
-      task = ABX_TO_I(task, opBit, arg);
-      break;
-    case EnumArgSrcDst.ABW_TO_IPI:
-      task = ABX_TO_IPI(task, opBit, arg);
-      break;
-    case EnumArgSrcDst.ABW_TO_IPD:
-      task = ABX_TO_IPD(task, opBit, arg);
-      break;
-    case EnumArgSrcDst.ABW_TO_IWD:
-      task = ABX_TO_IWD(task, opBit, arg);
-      break;
-    case EnumArgSrcDst.ABW_TO_IWDI:
-      task = ABX_TO_IWDI(task, opBit, arg);
-      break;
     /* ABL */
     case EnumArgSrcDst.ABL_TO_REG:
       task = ABX_TO_REG(task, opBit, arg);
