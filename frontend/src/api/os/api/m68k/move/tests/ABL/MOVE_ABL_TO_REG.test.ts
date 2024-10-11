@@ -44,12 +44,12 @@ describe('MOVE_ABL_TO_REG EXE', () => {
   //
   it(cmd[0], () => {
     const { d0 } = exeMove(makeTestTask(new S().setting), cmd[0]).s;
-    expect(d0).toEqual([0x00, 0x00, 0x00, 0x78]);
+    expect(d0).toEqual([0x00, 0x00, 0x00, 0x12]);
   });
   //
   it(cmd[1], () => {
     const { d0 } = exeMove(makeTestTask(new S().setting), cmd[1]).s;
-    expect(d0).toEqual([0x00, 0x00, 0x56, 0x78]);
+    expect(d0).toEqual([0x00, 0x00, 0x12, 0x34]);
   });
   //
   it(cmd[2], () => {

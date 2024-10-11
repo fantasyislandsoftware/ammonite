@@ -16,8 +16,8 @@ export const I_D = 'task.s.m[ _l(task,{DR0}) + i ]';
 export const IWD_S = 'task.s.m[ _l(task,{SR0}) + i + {SD0} ]';
 export const IWD_D = 'task.s.m[ _l(task,{DR0}) + i + {DD0} ]';
 
-export const IWDI_S = 'task.s.m[ _l(task,{SR0}) + i + {SD0} + _l(task,{SR1}) ]';
-export const IWDI_D = 'task.s.m[ _l(task,{DR0}) + i + {DD0} + _l(task,{DR1}) ]';
+export const IWDI_S = 'task.s.m[ {SD0} + i + _l(task,{SR0}) + _l(task,{SR1}) ]';
+export const IWDI_D = 'task.s.m[ {DD0} + i + _l(task,{DR0}) + _l(task,{DR1}) ]';
 
 export const EQU = ' = ';
 
@@ -52,11 +52,6 @@ export const crunch = (
 
   const debug = setting?.debug;
   const verbose = setting?.verbose;
-
-  /* */
-  //if (verbose) {
-  //  console.log(js);
-  //}
 
   /* Replacers */
   srcReg?.forEach((v, i) => {

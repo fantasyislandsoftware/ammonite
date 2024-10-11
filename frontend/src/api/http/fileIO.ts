@@ -32,7 +32,11 @@ export const getExe = async (path: string) => {
     method: 'GET',
   });
   const response = await request.json();
-  console.log(response);
+  if (response.type === 'amiga') {
+    response.hunks[1].hunkData.map((hunk: any) => {
+      console.log(hunk);
+    });
+  }
   return response;
 };
 
