@@ -32,6 +32,7 @@ const MOVE_I = (
           loop: `${REG_D}${EQU}${I_S}`,
         }
       );
+      length = 2;
       break;
     case EnumArgSrcDst.I_TO_ABW:
       task = crunch(
@@ -45,6 +46,7 @@ const MOVE_I = (
           loop: `${ABX_D}${EQU}${I_S}`,
         }
       );
+      length = 4;
       break;
     case EnumArgSrcDst.I_TO_ABL:
       task = crunch(
@@ -58,6 +60,7 @@ const MOVE_I = (
           loop: `${ABX_D}${EQU}${I_S}`,
         }
       );
+      length = 6;
       break;
     case EnumArgSrcDst.I_TO_I:
       task = crunch(
@@ -71,6 +74,7 @@ const MOVE_I = (
           loop: `${I_D}${EQU}${I_S}`,
         }
       );
+      length = 2;
       break;
     case EnumArgSrcDst.I_TO_IPI:
       task = crunch(
@@ -85,6 +89,7 @@ const MOVE_I = (
           postInc: [arg[1]],
         }
       );
+      length = 2;
       break;
     case EnumArgSrcDst.I_TO_IPD:
       task = crunch(
@@ -99,6 +104,7 @@ const MOVE_I = (
           preDec: [arg[2]],
         }
       );
+      length = 2;
       break;
     case EnumArgSrcDst.I_TO_IWD:
       task = crunch(
@@ -112,6 +118,7 @@ const MOVE_I = (
           loop: `${IWD_D}${EQU}${I_S}`,
         }
       );
+      length = 4;
       break;
     case EnumArgSrcDst.I_TO_IWDI:
       task = crunch(
@@ -125,6 +132,7 @@ const MOVE_I = (
           loop: `${IWDI_D}${EQU}${I_S}`,
         }
       );
+      length = 4;
       break;
   }
 

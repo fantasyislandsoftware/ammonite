@@ -1,6 +1,7 @@
 import BinaryStream from 'api/lib/data/binarystream';
 import { detectIFF, parseIFF } from 'api/lib/data/iff';
 import { ENV } from 'constants/globals/env';
+import { hex2int } from 'functions/dataHandling/dataHandling';
 import { EnumDataFormat } from 'interface/data';
 
 export const getDirList = async (path: string) => {
@@ -33,7 +34,22 @@ export const getExe = async (path: string) => {
   });
   const response = await request.json();
   if (response.type === 'amiga') {
-    response.hunks[1].hunkData.map((hunk: any) => {
+    let oldAddr = 0;
+    let newAddr = 0;
+    let length = 0;
+    let newHunk: any = {};
+    let oldHunk: any = {};
+
+    const hunkData = response.hunks[1].hunkData;
+
+    for (let i = 0; i < hunkData.length; i++) {
+      const addr1 = hex2int(hunkData[i].addr);
+      const addr2 = i + 1 < hunkData.length ? hex2int(hunkData[i + 1].addr) : 0;
+      const length = addr2 - addr1;
+      hunkData[i].length = length;
+    }
+
+    hunkData.map((hunk: any) => {
       console.log(hunk);
     });
   }

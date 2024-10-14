@@ -11,6 +11,7 @@ import {
   REG_D,
   EQU,
 } from '../MOVE_Helpers';
+import { l } from 'functions/dataHandling/dataHandling';
 
 const MOVE_ABW = (
   task: ITask,
@@ -33,6 +34,7 @@ const MOVE_ABW = (
           loop: `${REG_D}${EQU}${ABX_S}`,
         }
       );
+      length = 4;
       break;
     /* ABW_TO_ABW */
     case EnumArgSrcDst.ABW_TO_ABW:
@@ -47,6 +49,7 @@ const MOVE_ABW = (
           loop: `${ABX_D}${EQU}${ABX_S}`,
         }
       );
+      length = 6;
       break;
     /* ABW_TO_ABL */
     case EnumArgSrcDst.ABW_TO_ABL:
@@ -61,6 +64,7 @@ const MOVE_ABW = (
           loop: `${ABX_D}${EQU}${ABX_S}`,
         }
       );
+      length = 8;
       break;
     /* ABW_TO_I */
     case EnumArgSrcDst.ABW_TO_I:
@@ -75,6 +79,7 @@ const MOVE_ABW = (
           loop: `${I_D}${EQU}${ABX_S}`,
         }
       );
+      length = 4;
       break;
     /* ABW_TO_IPI */
     case EnumArgSrcDst.ABW_TO_IPI:
@@ -90,6 +95,7 @@ const MOVE_ABW = (
           postInc: [arg[1]],
         }
       );
+      length = 4;
       break;
     /* ABW_TO_IPD */
     case EnumArgSrcDst.ABW_TO_IPD:
@@ -105,6 +111,7 @@ const MOVE_ABW = (
           preDec: [arg[2]],
         }
       );
+      length = 4;
       break;
     /* ABW_TO_IWD */
     case EnumArgSrcDst.ABW_TO_IWD:
@@ -119,6 +126,7 @@ const MOVE_ABW = (
           loop: `${IWD_D}${EQU}${ABX_S}`,
         }
       );
+      length = 6;
       break;
     /* ABW_TO_IWDI */
     case EnumArgSrcDst.ABW_TO_IWDI:
@@ -134,6 +142,7 @@ const MOVE_ABW = (
           loop: `${IWDI_D}${EQU}${ABX_S}`,
         }
       );
+      length = 6;
       break;
   }
 

@@ -31,12 +31,9 @@ const MOVE_ABL = (
         },
         {
           loop: `${REG_D}${EQU}${ABX_S}`,
-        },
-        {
-          debug: false,
-          verbose: true,
         }
       );
+      length = 6;
       break;
     /* ABL_TO_ABW */
     case EnumArgSrcDst.ABL_TO_ABW:
@@ -51,6 +48,7 @@ const MOVE_ABL = (
           loop: `${ABX_D}${EQU}${ABX_S}`,
         }
       );
+      length = 8;
       break;
     /* ABL_TO_ABL */
     case EnumArgSrcDst.ABL_TO_ABL:
@@ -65,6 +63,7 @@ const MOVE_ABL = (
           loop: `${ABX_D}${EQU}${ABX_S}`,
         }
       );
+      length = 10;
       break;
     /* ABL_TO_I */
     case EnumArgSrcDst.ABL_TO_I:
@@ -79,6 +78,7 @@ const MOVE_ABL = (
           loop: `${I_D}${EQU}${ABX_S}`,
         }
       );
+      length = 6;
       break;
     /* ABL_TO_IPI */
     case EnumArgSrcDst.ABL_TO_IPI:
@@ -94,6 +94,7 @@ const MOVE_ABL = (
           postInc: [arg[1]],
         }
       );
+      length = 6;
       break;
     /* ABL_TO_IPD */
     case EnumArgSrcDst.ABL_TO_IPD:
@@ -109,6 +110,7 @@ const MOVE_ABL = (
           preDec: [arg[2]],
         }
       );
+      length = 6;
       break;
     /* ABL_TO_IWD */
     case EnumArgSrcDst.ABL_TO_IWD:
@@ -123,6 +125,7 @@ const MOVE_ABL = (
           loop: `${IWD_D}${EQU}${ABX_S}`,
         }
       );
+      length = 8;
       break;
     /* ABL_TO_IWDI */
     case EnumArgSrcDst.ABL_TO_IWDI:
@@ -138,6 +141,7 @@ const MOVE_ABL = (
           loop: `${IWDI_D}${EQU}${ABX_S}`,
         }
       );
+      length = 8;
       break;
   }
 

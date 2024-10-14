@@ -78,6 +78,7 @@ const MOVE_REG = (
           loop: `${I_D}${EQU}${REG_S}`,
         }
       );
+      length = 2;
       break;
     /* REG_TO_IPI */
     case EnumArgSrcDst.REG_TO_IPI:
@@ -93,6 +94,7 @@ const MOVE_REG = (
           postInc: [arg[1]],
         }
       );
+      length = 2;
       break;
     /* REG_TO_IPD */
     case EnumArgSrcDst.REG_TO_IPD:
@@ -108,6 +110,7 @@ const MOVE_REG = (
           preDec: [arg[2]],
         }
       );
+      length = 2;
       break;
     /* REG_TO_IWD */
     case EnumArgSrcDst.REG_TO_IWD:
@@ -122,6 +125,7 @@ const MOVE_REG = (
           loop: `${IWD_D}${EQU}${REG_S}`,
         }
       );
+      length = 4;
       break;
     /* REG_TO_IWDI */
     case EnumArgSrcDst.REG_TO_IWDI:
@@ -136,6 +140,7 @@ const MOVE_REG = (
           loop: `${IWDI_D}${EQU}${REG_S}`,
         }
       );
+      length = 4;
       break;
   }
 
