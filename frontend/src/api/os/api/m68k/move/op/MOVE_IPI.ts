@@ -20,20 +20,22 @@ const MOVE_IPI = (
   length: number
 ) => {
   switch (argSrcDst) {
-    case EnumArgSrcDst.I_TO_REG:
-      /*task = crunch(
+    case EnumArgSrcDst.IPI_TO_REG:
+      task = crunch(
         task,
         opBit,
         {
           src: { reg: [arg[0]] },
-          dst: { reg: [arg[1]] },
+          dst: { reg: [arg[2]] },
         },
         {
           loop: `${REG_D}${EQU}${I_S}`,
+          postInc: [arg[0]],
         }
-      );*/
+      );
+      length = 2;
       break;
-    case EnumArgSrcDst.I_TO_ABW:
+    case EnumArgSrcDst.IPI_TO_ABW:
       /*task = crunch(
         task,
         opBit,
@@ -46,7 +48,7 @@ const MOVE_IPI = (
         }
       );*/
       break;
-    case EnumArgSrcDst.I_TO_ABL:
+    case EnumArgSrcDst.IPI_TO_ABL:
       /*task = crunch(
         task,
         opBit,
@@ -59,7 +61,7 @@ const MOVE_IPI = (
         }
       );*/
       break;
-    case EnumArgSrcDst.I_TO_I:
+    case EnumArgSrcDst.IPI_TO_I:
       /*task = crunch(
         task,
         opBit,
@@ -72,7 +74,7 @@ const MOVE_IPI = (
         }
       );*/
       break;
-    case EnumArgSrcDst.I_TO_IPI:
+    case EnumArgSrcDst.IPI_TO_IPI:
       /*task = crunch(
         task,
         opBit,
@@ -86,7 +88,7 @@ const MOVE_IPI = (
         }
       );*/
       break;
-    case EnumArgSrcDst.I_TO_IPD:
+    case EnumArgSrcDst.IPI_TO_IPD:
       /*task = crunch(
         task,
         opBit,
@@ -100,7 +102,7 @@ const MOVE_IPI = (
         }
       );*/
       break;
-    case EnumArgSrcDst.I_TO_IWD:
+    case EnumArgSrcDst.IPI_TO_IWD:
       /*task = crunch(
         task,
         opBit,
@@ -113,7 +115,7 @@ const MOVE_IPI = (
         }
       );*/
       break;
-    case EnumArgSrcDst.I_TO_IWDI:
+    case EnumArgSrcDst.IPI_TO_IWDI:
       /*task = crunch(
         task,
         opBit,
