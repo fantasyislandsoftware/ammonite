@@ -61,11 +61,6 @@ const App = () => {
       renderLoop();
       initEventListeners();
       heartBeat();
-
-      const reg = new RegExp('[A-Za-z]\\d,[A-Za-z]\\d');
-      const asm = 'd0,d1';
-      const result = reg.test(asm);
-      console.log(result);
     }
   }, [initBoot]);
 

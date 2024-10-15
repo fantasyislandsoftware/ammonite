@@ -36,32 +36,34 @@ const MOVE_IPD = (
       length = 2;
       break;
     case EnumArgSrcDst.IPD_TO_ABW:
-      /*task = crunch(
+      task = crunch(
         task,
         opBit,
         {
-          src: { reg: [arg[0]] },
-          dst: { reg: [arg[1]] },
+          src: { reg: [arg[1]] },
+          dst: { reg: [arg[2]] },
         },
         {
           loop: `${ABX_D}${EQU}${I_S}`,
+          preDec: [arg[1]],
         }
-      );*/
-      //length = 4;
+      );
+      length = 4;
       break;
     case EnumArgSrcDst.IPD_TO_ABL:
-      /*task = crunch(
+      task = crunch(
         task,
         opBit,
         {
-          src: { reg: [arg[0]] },
-          dst: { reg: [arg[1]] },
+          src: { reg: [arg[1]] },
+          dst: { reg: [arg[2]] },
         },
         {
           loop: `${ABX_D}${EQU}${I_S}`,
+          preDec: [arg[1]],
         }
-      );*/
-      //length = 6;
+      );
+      length = 6;
       break;
     case EnumArgSrcDst.IPD_TO_I:
       /*task = crunch(
