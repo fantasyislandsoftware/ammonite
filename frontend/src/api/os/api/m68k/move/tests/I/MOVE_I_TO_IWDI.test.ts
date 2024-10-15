@@ -48,13 +48,13 @@ describe('I_TO_I IWDI', () => {
     expect(m).toEqual([0x12, 0x34, 0x56, 0x78, 0x12, 0xff, 0xff, 0xff]);
   });
   //
-  //it(cmd[1], () => {
-  //  const { m } = exeMove(makeTestTask(new S().setting), cmd[1]).s;
-  //  expect(m).toEqual([0x12, 0x34, 0x56, 0x78, 0x12, 0x34, 0xff, 0xff]);
-  //});
+  it(cmd[1], () => {
+    const { m } = exeMove(makeTestTask(new S().setting), cmd[1]).s;
+    expect(m).toEqual([0x12, 0x34, 0x56, 0x78, 0x12, 0x34, 0xff, 0xff]);
+  });
   //
-  //it(cmd[2], () => {
-  //  const { m } = exeMove(makeTestTask(new S().setting), cmd[2]).s;
-  //  expect(m).toEqual([0x12, 0x34, 0x56, 0x78, 0x12, 0x34, 0x56, 0x78]);
-  //});
+  it(cmd[2], () => {
+    const { m } = exeMove(makeTestTask(new S().setting), cmd[2]).s;
+    expect(m).toEqual([0x12, 0x34, 0x56, 0x78, 0x12, 0x34, 0x56, 0x78]);
+  });
 });

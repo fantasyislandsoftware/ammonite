@@ -3,7 +3,7 @@ import { exeMove, MOVE } from '../../MOVE';
 
 describe(`MOVE_I_TO_IPD CONV`, () => {
   const task = makeTestTask({ memoryBufferSize: 100 });
-  /*it(`MIN`, () => {
+  it(`MIN`, () => {
     expect(
       MOVE(task, [
         '0010000100010000',
@@ -24,7 +24,7 @@ describe(`MOVE_I_TO_IPD CONV`, () => {
         '0000000000000000',
       ]).asm
     ).toEqual('move.l (a7),-(a7)');
-  });*/
+  });
 });
 
 describe('I_TO_IPD EXE', () => {

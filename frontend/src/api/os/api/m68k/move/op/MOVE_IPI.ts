@@ -36,60 +36,37 @@ const MOVE_IPI = (
       length = 2;
       break;
     case EnumArgSrcDst.IPI_TO_ABW:
-      /*task = crunch(
+      task = crunch(
         task,
         opBit,
         {
           src: { reg: [arg[0]] },
-          dst: { reg: [arg[1]] },
+          dst: { reg: [arg[2]] },
         },
         {
           loop: `${ABX_D}${EQU}${I_S}`,
+          postInc: [arg[0]],
         }
-      );*/
+      );
+      length = 4;
       break;
     case EnumArgSrcDst.IPI_TO_ABL:
-      /*task = crunch(
+      task = crunch(
         task,
         opBit,
         {
           src: { reg: [arg[0]] },
-          dst: { reg: [arg[1]] },
+          dst: { reg: [arg[2]] },
         },
         {
           loop: `${ABX_D}${EQU}${I_S}`,
+          postInc: [arg[0]],
         }
-      );*/
+      );
+      length = 6;
       break;
     case EnumArgSrcDst.IPI_TO_I:
-      /*task = crunch(
-        task,
-        opBit,
-        {
-          src: { reg: [arg[0]] },
-          dst: { reg: [arg[1]] },
-        },
-        {
-          loop: `${I_D}${EQU}${I_S}`,
-        }
-      );*/
-      break;
-    case EnumArgSrcDst.IPI_TO_IPI:
-      /*task = crunch(
-        task,
-        opBit,
-        {
-          src: { reg: [arg[0]] },
-          dst: { reg: [arg[1]] },
-        },
-        {
-          loop: `${I_D}${EQU}${I_S}`,
-          postInc: [arg[1]],
-        }
-      );*/
-      break;
-    case EnumArgSrcDst.IPI_TO_IPD:
-      /*task = crunch(
+      task = crunch(
         task,
         opBit,
         {
@@ -98,35 +75,71 @@ const MOVE_IPI = (
         },
         {
           loop: `${I_D}${EQU}${I_S}`,
-          preDec: [arg[2]],
+          postInc: [arg[0]],
         }
-      );*/
+      );
+      length = 2;
       break;
-    case EnumArgSrcDst.IPI_TO_IWD:
-      /*task = crunch(
+    case EnumArgSrcDst.IPI_TO_IPI:
+      task = crunch(
         task,
         opBit,
         {
           src: { reg: [arg[0]] },
-          dst: { reg: [arg[2]], dis: [arg[1]] },
+          dst: { reg: [arg[2]] },
+        },
+        {
+          loop: `${I_D}${EQU}${I_S}`,
+          postInc: [arg[0], arg[2]],
+        }
+      );
+      length = 2;
+      break;
+    case EnumArgSrcDst.IPI_TO_IPD:
+      task = crunch(
+        task,
+        opBit,
+        {
+          src: { reg: [arg[0]] },
+          dst: { reg: [arg[3]] },
+        },
+        {
+          loop: `${I_D}${EQU}${I_S}`,
+          postInc: [arg[0]],
+          preDec: [arg[3]],
+        }
+      );
+      length = 2;
+      break;
+    case EnumArgSrcDst.IPI_TO_IWD:
+      task = crunch(
+        task,
+        opBit,
+        {
+          src: { reg: [arg[0]] },
+          dst: { reg: [arg[3]], dis: [arg[2]] },
         },
         {
           loop: `${IWD_D}${EQU}${I_S}`,
+          postInc: [arg[0]],
         }
-      );*/
+      );
+      length = 4;
       break;
     case EnumArgSrcDst.IPI_TO_IWDI:
-      /*task = crunch(
+      task = crunch(
         task,
         opBit,
         {
           src: { reg: [arg[0]] },
-          dst: { dis: [arg[1]], reg: [arg[2], arg[3]] },
+          dst: { dis: [arg[2]], reg: [arg[3], arg[4]] },
         },
         {
           loop: `${IWDI_D}${EQU}${I_S}`,
+          postInc: [arg[0]],
         }
-      );*/
+      );
+      length = 4;
       break;
   }
 

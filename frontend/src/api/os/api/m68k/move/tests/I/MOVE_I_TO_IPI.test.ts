@@ -1,10 +1,8 @@
 import { makeTestTask } from 'api/os/api/m68k/m68kTestHelpers';
 import { exeMove, MOVE } from '../../MOVE';
-import exp from 'constants';
 
 describe(`MOVE_I_TO_IPI CONV`, () => {
   const task = makeTestTask({ memoryBufferSize: 100 });
-
   it(`MIN`, () => {
     expect(
       MOVE(task, [
