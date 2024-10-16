@@ -1,9 +1,8 @@
 import { makeTestTask } from 'api/os/api/m68k/m68kTestHelpers';
 import { exeMove, MOVE } from '../../MOVE';
 
-const task = makeTestTask({ memoryBufferSize: 100 });
-
 describe(`MOVE_IWD_TO_ABW`, () => {
+  const task = makeTestTask({ memoryBufferSize: 100 });
   it(`MIN`, () => {
     expect(
       MOVE(task, [
