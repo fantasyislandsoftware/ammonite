@@ -110,7 +110,7 @@ export const exeMove = (task: ITask, asm: string) => {
   ({ task, length } = MOVE_IPI(task, opBit, argSrcDst, arg, length));
   ({ task, length } = MOVE_IPD(task, opBit, argSrcDst, arg, length));
 
-  console.log(length);
+  //console.log(length);
 
   return task;
 };

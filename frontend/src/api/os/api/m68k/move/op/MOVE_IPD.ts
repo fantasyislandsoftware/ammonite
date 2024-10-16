@@ -66,62 +66,68 @@ const MOVE_IPD = (
       length = 6;
       break;
     case EnumArgSrcDst.IPD_TO_I:
-      /*task = crunch(
+      task = crunch(
         task,
         opBit,
         {
-          src: { reg: [arg[0]] },
-          dst: { reg: [arg[1]] },
-        },
-        {
-          loop: `${I_D}${EQU}${I_S}`,
-        }
-      );*/
-      //length = 2;
-      break;
-    case EnumArgSrcDst.IPD_TO_IPI:
-      /*task = crunch(
-        task,
-        opBit,
-        {
-          src: { reg: [arg[0]] },
-          dst: { reg: [arg[1]] },
-        },
-        {
-          loop: `${I_D}${EQU}${I_S}`,
-          postInc: [arg[1]],
-        }
-      );*/
-      //length = 2;
-      break;
-    case EnumArgSrcDst.IPD_TO_IPD:
-      /*task = crunch(
-        task,
-        opBit,
-        {
-          src: { reg: [arg[0]] },
+          src: { reg: [arg[1]] },
           dst: { reg: [arg[2]] },
         },
         {
           loop: `${I_D}${EQU}${I_S}`,
-          preDec: [arg[2]],
+          preDec: [arg[1]],
         }
-      );*/
-      //length = 2;
+      );
+      length = 2;
       break;
-    case EnumArgSrcDst.IPD_TO_IWD:
-      /*task = crunch(
+    case EnumArgSrcDst.IPD_TO_IPI:
+      task = crunch(
         task,
         opBit,
         {
-          src: { reg: [arg[0]] },
-          dst: { reg: [arg[2]], dis: [arg[1]] },
+          src: { reg: [arg[1]] },
+          dst: { reg: [arg[2]] },
+        },
+        {
+          loop: `${I_D}${EQU}${I_S}`,
+          preDec: [arg[1]],
+          postInc: [arg[2]],
+        }
+      );
+      length = 2;
+      break;
+    case EnumArgSrcDst.IPD_TO_IPD:
+      task = crunch(
+        task,
+        opBit,
+        {
+          src: { reg: [arg[1]] },
+          dst: { reg: [arg[3]] },
+        },
+        {
+          loop: `${I_D}${EQU}${I_S}`,
+          preDec: [arg[1], arg[3]],
+        }
+      );
+      length = 2;
+      break;
+    case EnumArgSrcDst.IPD_TO_IWD:
+      task = crunch(
+        task,
+        opBit,
+        {
+          src: { reg: [arg[1]] },
+          dst: { reg: [arg[3]], dis: [arg[2]] },
         },
         {
           loop: `${IWD_D}${EQU}${I_S}`,
+          preDec: [arg[1]],
+        },
+        {
+          verbose: true,
         }
-      );*/
-      //length = 4;
+      );
+      length = 4;
       break;
     case EnumArgSrcDst.IPD_TO_IWDI:
       /*task = crunch(
