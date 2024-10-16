@@ -122,26 +122,24 @@ const MOVE_IPD = (
         {
           loop: `${IWD_D}${EQU}${I_S}`,
           preDec: [arg[1]],
-        },
-        {
-          verbose: true,
         }
       );
       length = 4;
       break;
     case EnumArgSrcDst.IPD_TO_IWDI:
-      /*task = crunch(
+      task = crunch(
         task,
         opBit,
         {
-          src: { reg: [arg[0]] },
-          dst: { dis: [arg[1]], reg: [arg[2], arg[3]] },
+          src: { reg: [arg[1]] },
+          dst: { dis: [arg[2]], reg: [arg[3], arg[4]] },
         },
         {
           loop: `${IWDI_D}${EQU}${I_S}`,
+          preDec: [arg[1]],
         }
-      );*/
-      //length = 4;
+      );
+      length = 4;
       break;
   }
 

@@ -10,9 +10,10 @@ import {
   REG_D,
   REG_S,
   EQU,
+  IWD_S,
 } from '../MOVE_Helpers';
 
-const MOVE_REG = (
+const MOVE_IWD = (
   task: ITask,
   opBit: EnumOpBit,
   argSrcDst: EnumArgSrcDst,
@@ -20,36 +21,36 @@ const MOVE_REG = (
   length: number
 ) => {
   switch (argSrcDst) {
-    case EnumArgSrcDst.REG_TO_REG:
+    case EnumArgSrcDst.IWD_TO_REG:
       task = crunch(
         task,
         opBit,
         {
-          src: { reg: [arg[0]] },
-          dst: { reg: [arg[1]] },
+          src: { dis: [arg[0]], reg: [arg[1]] },
+          dst: { reg: [arg[2]] },
         },
         {
-          loop: `${REG_D}${EQU}${REG_S}`,
-        }
-      );
-      length = 2;
-      break;
-    case EnumArgSrcDst.REG_TO_ABW:
-      task = crunch(
-        task,
-        opBit,
-        {
-          src: { reg: [arg[0]] },
-          dst: { reg: [arg[1]] },
-        },
-        {
-          loop: `${ABX_D}${EQU}${REG_S}`,
+          loop: `${REG_D}${EQU}${IWD_S}`,
         }
       );
       length = 4;
       break;
-    case EnumArgSrcDst.REG_TO_ABL:
+    case EnumArgSrcDst.IWD_TO_ABW:
       task = crunch(
+        task,
+        opBit,
+        {
+          src: { dis: [arg[0]], reg: [arg[1]] },
+          dst: { reg: [arg[2]] },
+        },
+        {
+          loop: `${ABX_D}${EQU}${IWD_S}`,
+        }
+      );
+      length = 6;
+      break;
+    case EnumArgSrcDst.IWD_TO_ABL:
+      /*task = crunch(
         task,
         opBit,
         {
@@ -60,10 +61,10 @@ const MOVE_REG = (
           loop: `${ABX_D}${EQU}${REG_S}`,
         }
       );
-      length = 6;
+      length = 6;*/
       break;
-    case EnumArgSrcDst.REG_TO_I:
-      task = crunch(
+    case EnumArgSrcDst.IWD_TO_I:
+      /*task = crunch(
         task,
         opBit,
         {
@@ -74,10 +75,10 @@ const MOVE_REG = (
           loop: `${I_D}${EQU}${REG_S}`,
         }
       );
-      length = 2;
+      length = 2;*/
       break;
-    case EnumArgSrcDst.REG_TO_IPI:
-      task = crunch(
+    case EnumArgSrcDst.IWD_TO_IPI:
+      /*task = crunch(
         task,
         opBit,
         {
@@ -89,10 +90,10 @@ const MOVE_REG = (
           postInc: [arg[1]],
         }
       );
-      length = 2;
+      length = 2;*/
       break;
-    case EnumArgSrcDst.REG_TO_IPD:
-      task = crunch(
+    case EnumArgSrcDst.IWD_TO_IPD:
+      /*task = crunch(
         task,
         opBit,
         {
@@ -104,10 +105,10 @@ const MOVE_REG = (
           preDec: [arg[2]],
         }
       );
-      length = 2;
+      length = 2;*/
       break;
-    case EnumArgSrcDst.REG_TO_IWD:
-      task = crunch(
+    case EnumArgSrcDst.IWD_TO_IWD:
+      /*task = crunch(
         task,
         opBit,
         {
@@ -118,10 +119,10 @@ const MOVE_REG = (
           loop: `${IWD_D}${EQU}${REG_S}`,
         }
       );
-      length = 4;
+      length = 4;*/
       break;
-    case EnumArgSrcDst.REG_TO_IWDI:
-      task = crunch(
+    case EnumArgSrcDst.IWD_TO_IWDI:
+      /*task = crunch(
         task,
         opBit,
         {
@@ -132,11 +133,11 @@ const MOVE_REG = (
           loop: `${IWDI_D}${EQU}${REG_S}`,
         }
       );
-      length = 4;
+      length = 4;*/
       break;
   }
 
   return { task, length };
 };
 
-export default MOVE_REG;
+export default MOVE_IWD;

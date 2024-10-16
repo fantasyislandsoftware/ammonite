@@ -15,6 +15,7 @@ import MOVE_ABL from './op/MOVE_ABL';
 import MOVE_I from './op/MOVE_I';
 import MOVE_IPI from './op/MOVE_IPI';
 import MOVE_IPD from './op/MOVE_IPD';
+import MOVE_IWD from './op/MOVE_IWD';
 
 const _l = l;
 const _421 = join4BytesInto1Long;
@@ -109,8 +110,9 @@ export const exeMove = (task: ITask, asm: string) => {
   ({ task, length } = MOVE_I(task, opBit, argSrcDst, arg, length));
   ({ task, length } = MOVE_IPI(task, opBit, argSrcDst, arg, length));
   ({ task, length } = MOVE_IPD(task, opBit, argSrcDst, arg, length));
+  ({ task, length } = MOVE_IWD(task, opBit, argSrcDst, arg, length));
 
-  //console.log(length);
+  console.log(length);
 
   return task;
 };
