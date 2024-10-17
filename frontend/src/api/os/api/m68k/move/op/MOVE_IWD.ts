@@ -72,13 +72,12 @@ const MOVE_IWD = (
           dst: { reg: [arg[2]] },
         },
         {
-          loop: `${I_D}${EQU}${REG_S}`,
+          loop: `${I_D}${EQU}${IWD_S}`,
         }
       );
       length = 4;
       break;
     case EnumArgSrcDst.IWD_TO_IPI:
-      // 1(a0),(a1)+
       task = crunch(
         task,
         opBit,
@@ -87,54 +86,57 @@ const MOVE_IWD = (
           dst: { reg: [arg[2]] },
         },
         {
-          loop: `${I_D}${EQU}${REG_S}`,
+          loop: `${I_D}${EQU}${IWD_S}`,
           postInc: [arg[2]],
         }
       );
       length = 4;
       break;
     case EnumArgSrcDst.IWD_TO_IPD:
-      /*task = crunch(
+      task = crunch(
         task,
         opBit,
         {
-          src: { reg: [arg[0]] },
-          dst: { reg: [arg[2]] },
+          src: { dis: [arg[0]], reg: [arg[1]] },
+          dst: { reg: [arg[3]] },
         },
         {
-          loop: `${I_D}${EQU}${REG_S}`,
-          preDec: [arg[2]],
+          loop: `${I_D}${EQU}${IWD_S}`,
+          preDec: [arg[3]],
         }
       );
-      length = 2;*/
+      length = 4;
       break;
     case EnumArgSrcDst.IWD_TO_IWD:
-      /*task = crunch(
+      // 1(a0),1(a1)
+      task = crunch(
         task,
         opBit,
         {
-          src: { reg: [arg[0]] },
-          dst: { reg: [arg[2]], dis: [arg[1]] },
+          src: { dis: [arg[0]], reg: [arg[1]] },
+          dst: { dis: [arg[2]], reg: [arg[3]] },
         },
         {
-          loop: `${IWD_D}${EQU}${REG_S}`,
+          loop: `${IWD_D}${EQU}${IWD_S}`,
         }
       );
-      length = 4;*/
+      length = 6;
       break;
     case EnumArgSrcDst.IWD_TO_IWDI:
-      /*task = crunch(
+      // 1(a0),1(a1,d0)
+      console.log(arg);
+      task = crunch(
         task,
         opBit,
         {
-          src: { reg: [arg[0]] },
-          dst: { reg: [arg[2], arg[3]], dis: [arg[1]] },
+          src: { dis: [arg[0]], reg: [arg[1]] },
+          dst: { dis: [arg[2]], reg: [arg[3], arg[4]] },
         },
         {
-          loop: `${IWDI_D}${EQU}${REG_S}`,
+          loop: `${IWDI_D}${EQU}${IWD_S}`,
         }
       );
-      length = 4;*/
+      length = 6;
       break;
   }
 
