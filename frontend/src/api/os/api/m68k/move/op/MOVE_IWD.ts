@@ -108,7 +108,6 @@ const MOVE_IWD = (
       length = 4;
       break;
     case EnumArgSrcDst.IWD_TO_IWD:
-      // 1(a0),1(a1)
       task = crunch(
         task,
         opBit,
@@ -123,8 +122,6 @@ const MOVE_IWD = (
       length = 6;
       break;
     case EnumArgSrcDst.IWD_TO_IWDI:
-      // 1(a0),1(a1,d0)
-      console.log(arg);
       task = crunch(
         task,
         opBit,
