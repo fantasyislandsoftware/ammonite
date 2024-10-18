@@ -21,13 +21,14 @@ const MOVE_PCD = (
   arg: string[],
   length: number
 ) => {
+  const src = { dis: [arg[0]], reg: [arg[1]] };
   switch (argSrcDst) {
     case EnumArgSrcDst.PCD_TO_REG:
       task = crunch(
         task,
         opBit,
         {
-          src: { dis: [arg[0]], reg: [arg[1]] },
+          src: src,
           dst: { reg: [arg[2]] },
         },
         {
@@ -41,7 +42,7 @@ const MOVE_PCD = (
         task,
         opBit,
         {
-          src: { dis: [arg[0]], reg: [arg[1]] },
+          src: src,
           dst: { reg: [arg[2]] },
         },
         {
@@ -55,7 +56,7 @@ const MOVE_PCD = (
         task,
         opBit,
         {
-          src: { dis: [arg[0]], reg: [arg[1]] },
+          src: src,
           dst: { reg: [arg[2]] },
         },
         {
@@ -65,25 +66,25 @@ const MOVE_PCD = (
       length = 8;
       break;
     case EnumArgSrcDst.PCD_TO_I:
-      /*task = crunch(
+      task = crunch(
         task,
         opBit,
         {
-          src: { dis: [arg[0]], reg: [arg[1]] },
+          src: src,
           dst: { reg: [arg[2]] },
         },
         {
           loop: `${I_D}${EQU}${PCD_S}`,
         }
       );
-      length = 4;*/
+      length = 4;
       break;
     case EnumArgSrcDst.PCD_TO_IPI:
-      /*task = crunch(
+      task = crunch(
         task,
         opBit,
         {
-          src: { dis: [arg[0]], reg: [arg[1]] },
+          src: src,
           dst: { reg: [arg[2]] },
         },
         {
@@ -91,14 +92,14 @@ const MOVE_PCD = (
           postInc: [arg[2]],
         }
       );
-      length = 4;*/
+      length = 4;
       break;
     case EnumArgSrcDst.PCD_TO_IPD:
-      /*task = crunch(
+      task = crunch(
         task,
         opBit,
         {
-          src: { dis: [arg[0]], reg: [arg[1]] },
+          src: src,
           dst: { reg: [arg[3]] },
         },
         {
@@ -106,35 +107,35 @@ const MOVE_PCD = (
           preDec: [arg[3]],
         }
       );
-      length = 4;*/
+      length = 4;
       break;
     case EnumArgSrcDst.PCD_TO_IWD:
-      /*task = crunch(
+      task = crunch(
         task,
         opBit,
         {
-          src: { dis: [arg[0]], reg: [arg[1]] },
+          src: src,
           dst: { dis: [arg[2]], reg: [arg[3]] },
         },
         {
           loop: `${IWD_D}${EQU}${PCD_S}`,
         }
       );
-      length = 6;*/
+      length = 6;
       break;
     case EnumArgSrcDst.PCD_TO_IWDI:
-      /*task = crunch(
+      task = crunch(
         task,
         opBit,
         {
-          src: { dis: [arg[0]], reg: [arg[1]] },
+          src: src,
           dst: { dis: [arg[2]], reg: [arg[3], arg[4]] },
         },
         {
           loop: `${IWDI_D}${EQU}${PCD_S}`,
         }
       );
-      length = 6;*/
+      length = 6;
       break;
   }
 
