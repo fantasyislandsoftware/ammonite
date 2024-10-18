@@ -737,6 +737,8 @@ export const argPCD = (
 
   const { w, l, b } = argData;
 
+  console.log(argData);
+
   const i = 2;
 
   switch (argDir) {
@@ -745,7 +747,7 @@ export const argPCD = (
       args = rp(`${src.asmOperand},${dst.asmOperand}`, [
         {
           str: '{src_pc}',
-          with: `0x${int2hex(task.pc + i + hex2int(w[0]), 4)}`,
+          with: `0x${int2hex(task.pc + hex2int(w[0]) + 2, 4)}`,
         },
         { str: '{dst_n}', with: xnDstN },
         { str: '{dst_n}', with: xnDstN },

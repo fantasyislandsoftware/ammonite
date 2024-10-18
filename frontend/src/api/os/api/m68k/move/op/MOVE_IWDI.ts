@@ -121,7 +121,6 @@ const MOVE_IWDI = (
       length = 6;
       break;
     case EnumArgSrcDst.IWDI_TO_IWDI:
-      // 1(a0,d0),1(a1,d1)
       task = crunch(
         task,
         opBit,

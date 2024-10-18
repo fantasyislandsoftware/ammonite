@@ -4,9 +4,11 @@ dat = 1
 
 ; word $7FFF
 
-test:
-        move.l 1(a0,d0),1(a1,d1)
+
+test:   move.l test3(PC),$7fffffff
         bra test
+test2:  bra test
+test3:  bra test
 
 ; a0,d0 - 00000000
 ; a0,d1 - 00010000
