@@ -5,7 +5,7 @@ dat = 1
 ; word $7FFF
 
 
-test:   move.l test3(PC),2(a0,d0)
+test:   move.l test3(PC,d0),$01(a0,d1)
         bra test
 test2:  bra test
 test3:  bra test

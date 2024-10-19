@@ -1,9 +1,8 @@
 import { makeTestTask } from 'api/os/api/m68k/m68kTestHelpers';
-import { MOVE } from '../../MOVE';
-
-const task = makeTestTask({ memoryBufferSize: 100 });
+import { exeMove, MOVE } from '../../MOVE';
 
 describe(`MOVE_PCID_TO_REG`, () => {
+  const task = makeTestTask({ memoryBufferSize: 100 });
   it(`MIN`, () => {
     expect(
       MOVE(task, [
@@ -25,5 +24,37 @@ describe(`MOVE_PCID_TO_REG`, () => {
         '0000000000000000',
       ]).asm
     ).toEqual('move.l 0x81(pc,a7),d7');
+  });
+});
+
+describe('PCID_TO_REG EXE', () => {
+  const cmd = [
+    'move.b 0x02(pc,d1),d0',
+    'move.w 0x02(pc,d1),d0',
+    'move.l 0x02(pc,d1),d0',
+  ];
+  //
+  class S {
+    public setting = {
+      memoryBufferSize: 0,
+      d0: [0x00, 0x00, 0x00, 0x00],
+      d1: [0x00, 0x00, 0x00, 0x02],
+      m: [0x00, 0x00, 0x00, 0x00, 0x12, 0x34, 0x56, 0x78],
+    };
+  }
+  //
+  it(cmd[0], () => {
+    const { d0 } = exeMove(makeTestTask(new S().setting), cmd[0]).s;
+    expect(d0).toEqual([0x00, 0x00, 0x00, 0x12]);
+  });
+  //
+  it(cmd[1], () => {
+    const { d0 } = exeMove(makeTestTask(new S().setting), cmd[1]).s;
+    expect(d0).toEqual([0x00, 0x00, 0x12, 0x34]);
+  });
+  //
+  it(cmd[2], () => {
+    const { d0 } = exeMove(makeTestTask(new S().setting), cmd[2]).s;
+    expect(d0).toEqual([0x12, 0x34, 0x56, 0x78]);
   });
 });
