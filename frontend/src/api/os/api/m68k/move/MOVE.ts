@@ -19,6 +19,7 @@ import MOVE_IWD from './op/MOVE_IWD';
 import MOVE_IWDI from './op/MOVE_IWDI';
 import MOVE_PCD from './op/MOVE_PCD';
 import MOVE_PCID from './op/MOVE_PCID';
+import MOVE_IMM from './op/MOVE_IMM';
 
 const _l = l;
 const _421 = join4BytesInto1Long;
@@ -53,6 +54,7 @@ export const MOVE = (
   }
 ) => {
   const i = dataW[0];
+  console.log(dataW);
 
   /* Bit Size */
   const opSize_bin = `${i[2]}${i[3]}`;
@@ -76,6 +78,7 @@ export const MOVE = (
 
   const args = fillArgData(
     task,
+    opSize,
     argDir,
     src,
     dst,
@@ -110,6 +113,7 @@ export const exeMove = (task: ITask, asm: string) => {
   ({ task, length } = MOVE_REG(task, opBit, argSrcDst, arg, length));
   ({ task, length } = MOVE_ABW(task, opBit, argSrcDst, arg, length));
   ({ task, length } = MOVE_ABL(task, opBit, argSrcDst, arg, length));
+  ({ task, length } = MOVE_IMM(task, opBit, argSrcDst, arg, length));
   ({ task, length } = MOVE_I(task, opBit, argSrcDst, arg, length));
   ({ task, length } = MOVE_IPI(task, opBit, argSrcDst, arg, length));
   ({ task, length } = MOVE_IPD(task, opBit, argSrcDst, arg, length));

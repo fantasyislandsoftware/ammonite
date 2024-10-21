@@ -59,14 +59,12 @@ export enum EnumLOCD2BIN {
 
 export interface IOperand {
   asmOperand: string;
-  jsOperand: string;
   abw?: boolean;
   abl?: boolean;
   ipi?: boolean;
   ipd?: boolean;
   iwd?: boolean;
   argType: EnumArgType;
-  length: number;
 }
 
 export enum EnumArgType {
@@ -81,6 +79,7 @@ export enum EnumArgType {
   IWDI = 'IWDI',
   PCD = 'PCD',
   PCID = 'PCID',
+  IMM = 'IMM',
 }
 
 export enum EnumArgSrcDst {
@@ -116,6 +115,16 @@ export enum EnumArgSrcDst {
   ABL_TO_IPD = 'ABL_TO_IPD',
   ABL_TO_IWD = 'ABL_TO_IWD',
   ABL_TO_IWDI = 'ABL_TO_IWDI',
+
+  /* IMM */
+  IMM_TO_REG = 'IMM_TO_REG',
+  IMM_TO_ABW = 'IMM_TO_ABW',
+  IMM_TO_ABL = 'IMM_TO_ABL',
+  IMM_TO_I = 'IMM_TO_I',
+  IMM_TO_IPI = 'IMM_TO_IPI',
+  IMM_TO_IPD = 'IMM_TO_IPD',
+  IMM_TO_IWD = 'IMM_TO_IWD',
+  IMM_TO_IWDI = 'IMM_TO_IWDI',
 
   /* I */
   I_TO_REG = 'I_TO_REG',

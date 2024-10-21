@@ -4,8 +4,9 @@ dat = 1
 
 ; word $7FFF
 
+mem:
 
-test:   move.l test3(PC,d0),$01(a0,d1)
+test:   move.l #$7fff,$7fffffff
         bra test
 test2:  bra test
 test3:  bra test

@@ -3,6 +3,7 @@ import { EnumArgSrcDst, IOperand } from '../IM68k';
 import { IWDI_B } from './m68kHelpers';
 import { ITask } from 'stores/useTaskStore';
 import { bin2hex, hex2int, int2hex } from 'functions/dataHandling/dataHandling';
+import { EnumBit, EnumOpBit } from 'functions/dataHandling/IdataHandling';
 
 export interface IArgData {
   w: string[];
@@ -194,8 +195,6 @@ export const argABL = (
 
   const { w, l, b } = argData;
 
-  //console.log(w, l, b);
-
   switch (argDir) {
     /* ABL_TO_REG */
     case EnumArgSrcDst.ABL_TO_REG:
@@ -258,6 +257,103 @@ export const argABL = (
     case EnumArgSrcDst.ABL_TO_IWDI:
       args = rp(`${src.asmOperand},${dst.asmOperand}`, [
         { str: '{src_d}', with: `0x${l[0]}` },
+        { str: '{dst_d}', with: `0x${b[7]}` },
+        { str: '{dst_n}', with: xnDstN },
+        { str: '{ir}', with: IWDI_B[hex2bin(b[6], 8)] },
+      ]);
+      break;
+
+    /* */
+  }
+
+  return args;
+};
+
+export const argIMM = (
+  opSize: EnumOpBit,
+  argDir: string,
+  argData: IArgData,
+  src: IOperand,
+  dst: IOperand,
+  xnSrcN: string,
+  xnDstN: string
+) => {
+  let args = '';
+
+  const { w, l, b } = argData;
+
+  let srcP = '';
+  switch (opSize) {
+    case EnumOpBit.WORD:
+      srcP = `#0x0000${w[0]}`;
+      break;
+    case EnumOpBit.LONG:
+      srcP = `#0x${l[0]}`;
+      break;
+  }
+
+  switch (argDir) {
+    /* IMM_TO_REG */
+    case EnumArgSrcDst.IMM_TO_REG:
+      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
+        { str: '{src_d}', with: srcP },
+        { str: '{dst_n}', with: xnDstN },
+      ]);
+      break;
+
+    /* IMM_TO_ABW */
+    case EnumArgSrcDst.IMM_TO_ABW:
+      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
+        { str: '{src_d}', with: srcP },
+        { str: '{dst_d}', with: `0x${w[2]}` },
+      ]);
+      break;
+
+    /* IMM_TO_ABL */
+    case EnumArgSrcDst.IMM_TO_ABL:
+      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
+        { str: '{src_d}', with: srcP },
+        { str: '{dst_d}', with: `0x${l[2]}` },
+      ]);
+      break;
+
+    /* IMM_TO_I */
+    case EnumArgSrcDst.IMM_TO_I:
+      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
+        { str: '{src_d}', with: srcP },
+        { str: '{dst_n}', with: xnDstN },
+      ]);
+      break;
+
+    /* IMM_TO_IPI */
+    case EnumArgSrcDst.IMM_TO_IPI:
+      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
+        { str: '{src_d}', with: srcP },
+        { str: '{dst_n}', with: xnDstN },
+      ]);
+      break;
+
+    /* IMM_TO_IPD */
+    case EnumArgSrcDst.IMM_TO_IPD:
+      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
+        { str: '{src_d}', with: srcP },
+        { str: '{dst_n}', with: xnDstN },
+      ]);
+      break;
+
+    /* IMM_TO_IWD */
+    case EnumArgSrcDst.IMM_TO_IWD:
+      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
+        { str: '{src_d}', with: srcP },
+        { str: '{dst_d}', with: `0x${w[2]}` },
+        { str: '{dst_n}', with: xnDstN },
+      ]);
+      break;
+
+    /* IMM_TO_IWDI */
+    case EnumArgSrcDst.IMM_TO_IWDI:
+      args = rp(`${src.asmOperand},${dst.asmOperand}`, [
+        { str: '{src_d}', with: srcP },
         { str: '{dst_d}', with: `0x${b[7]}` },
         { str: '{dst_n}', with: xnDstN },
         { str: '{ir}', with: IWDI_B[hex2bin(b[6], 8)] },
@@ -737,8 +833,6 @@ export const argPCD = (
 
   const { w, l, b } = argData;
 
-  console.log(argData);
-
   const i = 2;
 
   switch (argDir) {
@@ -861,8 +955,6 @@ export const argPCDI = (
   const { w, l, b } = argData;
 
   const i = 2;
-
-  //console.log(argDir);
 
   switch (argDir) {
     /* PCID_TO_REG */

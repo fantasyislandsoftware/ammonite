@@ -2,13 +2,10 @@ import { ITask } from 'stores/useTaskStore';
 import {
   EnumArgSrcDst,
   EnumArgType,
-  EnumASMType,
-  EnumM68KOP,
-  EnumOPAction,
   IExamineInstruction,
   IOperand,
 } from '../IM68k';
-import { EnumBit, EnumOpBit } from 'functions/dataHandling/IdataHandling';
+import { EnumOpBit } from 'functions/dataHandling/IdataHandling';
 import {
   bin2hex,
   combine2WordsInto1Long,
@@ -27,6 +24,7 @@ import {
   argIWDI,
   argPCD,
   argPCDI,
+  argIMM,
 } from './m68Args';
 
 export const processXNXT = (
@@ -37,54 +35,39 @@ export const processXNXT = (
   const res: IOperand = {
     argType: EnumArgType.UNKNOWN,
     asmOperand: '',
-    jsOperand: '',
-    length: 0,
   };
 
   switch (xt_bin) {
     case '000':
       res.argType = EnumArgType.REG;
       res.asmOperand = `d{${l}_n}`;
-      res.jsOperand = `task.s.d{${l}_n}`;
-      res.length = 2;
       break;
     case '001':
       res.argType = EnumArgType.REG;
       res.asmOperand = `a{${l}_n}`;
-      res.jsOperand = 'task.s.a{n}[i]';
-      res.length = 2;
       break;
     case '010':
       res.argType = EnumArgType.I;
       res.asmOperand = `(a{${l}_n})`;
-      res.jsOperand = 'task.s.m[_4to1(task.s.a{n})+{i}-{s}]';
-      res.length = 2;
       break;
     case '011':
       res.argType = EnumArgType.IPI;
       res.asmOperand = `(a{${l}_n})+`;
-      res.jsOperand = 'task.s.m[_4to1(task.s.a{n})+{i}-{s}]';
       res.ipi = true;
-      res.length = 2;
       break;
     case '100':
       res.argType = EnumArgType.IPD;
       res.asmOperand = `-(a{${l}_n})`;
-      res.jsOperand = 'task.s.m[_4to1(task.s.a{n})+{i}-{s}]';
       res.ipd = true;
-      res.length = 2;
       break;
     case '101':
       res.argType = EnumArgType.IWD;
       res.asmOperand = `{${l}_d}(a{${l}_n})`;
-      res.jsOperand = 'task.s.m[_4to1(task.s.a{n})+{di}+{i}-{s}]';
       res.iwd = true;
-      res.length = 2;
       break;
     case '110':
       res.argType = EnumArgType.IWDI;
       res.asmOperand = `{${l}_d}(a{${l}_n},{ir})`;
-      res.length = 2;
       break;
     case '111':
       switch (xn_bin) {
@@ -92,33 +75,27 @@ export const processXNXT = (
           res.argType = EnumArgType.ABW;
           res.asmOperand = `{${l}_d}.w`;
           res.abw = true;
-          res.jsOperand = 'task.s.m[{d}+{i}-{s}]';
-          res.length = 4;
           break;
         case '001':
           res.argType = EnumArgType.ABL;
           res.asmOperand = `{${l}_d}.l`;
           res.abl = true;
-          res.jsOperand = 'task.s.m[{d}+{i}-{s}]';
-          res.length = 4;
           break;
         case '010':
           res.argType = EnumArgType.PCD;
           res.asmOperand = `{${l}_pc}(pc)`;
-          res.length = 4;
           break;
         case '011':
           res.argType = EnumArgType.PCID;
           res.asmOperand = `{${l}_pc}(pc,{${l}_n})`;
-          res.length = 4;
           break;
         case '100':
-          res.asmOperand = '#imm';
-          res.length = 4;
+          res.argType = EnumArgType.IMM;
+          res.asmOperand = `{${l}_d}`;
           break;
         default:
-          res.asmOperand = '#imm';
-          res.length = 4;
+          res.argType = EnumArgType.IMM;
+          res.asmOperand = `{${l}_d}`;
       }
       break;
   }
@@ -215,6 +192,7 @@ export const calcArgDir = (args: string) => {
   const REG = 'cn';
   const ABW = '0xcccc.w';
   const ABL = '0xcccccccc.l';
+  const IMM = '#0xcccccccc';
   const I = '(cn)';
   const IPI = '(cn)+';
   const IPD = '-(cn)';
@@ -254,6 +232,16 @@ export const calcArgDir = (args: string) => {
     ABL_TO_IPD: rx(`${ABL}${TO}${IPD}`),
     ABL_TO_IWD: rx(`${ABL}${TO}${IWD}`),
     ABL_TO_IWDI: rx(`${ABL}${TO}${IWDI}`),
+
+    /* IMM */
+    IMM_TO_REG: rx(`${IMM}${TO}${REG}`),
+    IMM_TO_ABW: rx(`${IMM}${TO}${ABW}`),
+    IMM_TO_ABL: rx(`${IMM}${TO}${ABL}`),
+    IMM_TO_I: rx(`${IMM}${TO}${I}`),
+    IMM_TO_IPI: rx(`${IMM}${TO}${IPI}`),
+    IMM_TO_IPD: rx(`${IMM}${TO}${IPD}`),
+    IMM_TO_IWD: rx(`${IMM}${TO}${IWD}`),
+    IMM_TO_IWDI: rx(`${IMM}${TO}${IWDI}`),
 
     /* I */
     I_TO_REG: rx(`${I}${TO}${REG}`),
@@ -356,6 +344,16 @@ export const calcArgDir = (args: string) => {
   if (Args.ABL_TO_IWD.test(args)) state = EnumArgSrcDst.ABL_TO_IWD;
   if (Args.ABL_TO_IWDI.test(args)) state = EnumArgSrcDst.ABL_TO_IWDI;
 
+  /* IMM */
+  if (Args.IMM_TO_REG.test(args)) state = EnumArgSrcDst.IMM_TO_REG;
+  if (Args.IMM_TO_ABW.test(args)) state = EnumArgSrcDst.IMM_TO_ABW;
+  if (Args.IMM_TO_ABL.test(args)) state = EnumArgSrcDst.IMM_TO_ABL;
+  if (Args.IMM_TO_I.test(args)) state = EnumArgSrcDst.IMM_TO_I;
+  if (Args.IMM_TO_IPI.test(args)) state = EnumArgSrcDst.IMM_TO_IPI;
+  if (Args.IMM_TO_IPD.test(args)) state = EnumArgSrcDst.IMM_TO_IPD;
+  if (Args.IMM_TO_IWD.test(args)) state = EnumArgSrcDst.IMM_TO_IWD;
+  if (Args.IMM_TO_IWDI.test(args)) state = EnumArgSrcDst.IMM_TO_IWDI;
+
   /* I */
   if (Args.I_TO_REG.test(args)) state = EnumArgSrcDst.I_TO_REG;
   if (Args.I_TO_ABW.test(args)) state = EnumArgSrcDst.I_TO_ABW;
@@ -448,6 +446,7 @@ export const calcArgArray = (args: string) => {
 
 export const fillArgData = (
   task: ITask,
+  opSize: EnumOpBit,
   argDir: string,
   src: IOperand,
   dst: IOperand,
@@ -500,6 +499,7 @@ export const fillArgData = (
     argREG(argDir, argData, src, dst, xnSrcN, xnDstN),
     argABW(argDir, argData, src, dst, xnSrcN, xnDstN),
     argABL(argDir, argData, src, dst, xnSrcN, xnDstN),
+    argIMM(opSize, argDir, argData, src, dst, xnSrcN, xnDstN),
     argI(argDir, argData, src, dst, xnSrcN, xnDstN),
     argIPI(argDir, argData, src, dst, xnSrcN, xnDstN),
     argIPD(argDir, argData, src, dst, xnSrcN, xnDstN),

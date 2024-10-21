@@ -130,7 +130,6 @@ const MOVE_ABW = (
       break;
     /* ABW_TO_IWDI */
     case EnumArgSrcDst.ABW_TO_IWDI:
-      console.log(arg);
       task = crunch(
         task,
         opBit,

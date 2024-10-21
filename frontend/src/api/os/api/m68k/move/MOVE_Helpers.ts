@@ -10,6 +10,8 @@ export const REG_D = 'task.s[ {DR0} ][ i + 3 - o ]';
 export const ABX_S = 'task.s.m[ {SR0} + i ]';
 export const ABX_D = 'task.s.m[ {DR0} + i ]';
 
+export const IMM_S = 'immA[ i + 3 - o ]';
+
 export const I_S = 'task.s.m[ _l(task,{SR0}) + i ]';
 export const I_D = 'task.s.m[ _l(task,{DR0}) + i ]';
 
@@ -34,13 +36,18 @@ export const crunch = (
     src?: { reg?: string[]; dis?: string[] };
     dst?: { reg?: string[]; dis?: string[] };
   },
-  js: { loop: string; preDec?: string[]; postInc?: string[] },
+  js: { loop: string; preDec?: string[]; postInc?: string[]; imm?: string },
   setting?: { debug?: boolean; verbose?: boolean }
 ) => {
   const srcReg = param.src?.reg;
   const srcDis = param.src?.dis;
   const dstReg = param.dst?.reg;
   const dstDis = param.dst?.dis;
+
+  let immA = [0, 0, 0, 0];
+  if (js.imm) {
+    immA = splitLongInto4Bytes(parseInt(js.imm.replace('#', '')));
+  }
 
   /* Clean up args */
   srcReg?.forEach((v, i) => {

@@ -10,9 +10,10 @@ import {
   IWDI_D,
   REG_D,
   EQU,
+  IMM_S,
 } from '../MOVE_Helpers';
 
-const MOVE_ABL = (
+const MOVE_IMM = (
   task: ITask,
   opBit: EnumOpBit,
   argSrcDst: EnumArgSrcDst,
@@ -20,131 +21,127 @@ const MOVE_ABL = (
   length: number
 ) => {
   switch (argSrcDst) {
-    /* ABL_TO_REG */
-    case EnumArgSrcDst.ABL_TO_REG:
+    /* IMM_TO_REG */
+    case EnumArgSrcDst.IMM_TO_REG:
       task = crunch(
         task,
         opBit,
         {
-          src: { reg: [arg[0]] },
           dst: { reg: [arg[1]] },
         },
         {
-          loop: `${REG_D}${EQU}${ABX_S}`,
+          loop: `${REG_D}${EQU}${IMM_S}`,
+          imm: arg[0],
         }
       );
-      length = 6;
+      length = 2 + opBit / 8;
       break;
-    /* ABL_TO_ABW */
-    case EnumArgSrcDst.ABL_TO_ABW:
+    /* IMM_TO_ABW */
+    case EnumArgSrcDst.IMM_TO_ABW:
       task = crunch(
         task,
         opBit,
         {
-          src: { reg: [arg[0]] },
           dst: { reg: [arg[1]] },
         },
         {
-          loop: `${ABX_D}${EQU}${ABX_S}`,
+          loop: `${ABX_D}${EQU}${IMM_S}`,
+          imm: arg[0],
         }
       );
-      length = 8;
+      length = 4 + opBit / 8;
       break;
-    /* ABL_TO_ABL */
-    case EnumArgSrcDst.ABL_TO_ABL:
+    /* IMM_TO_ABL */
+    case EnumArgSrcDst.IMM_TO_ABL:
       task = crunch(
         task,
         opBit,
         {
-          src: { reg: [arg[0]] },
           dst: { reg: [arg[1]] },
         },
         {
-          loop: `${ABX_D}${EQU}${ABX_S}`,
+          loop: `${ABX_D}${EQU}${IMM_S}`,
+          imm: arg[0],
         }
       );
-      length = 10;
+      length = 6 + opBit / 8;
       break;
-    /* ABL_TO_I */
-    case EnumArgSrcDst.ABL_TO_I:
+    /* IMM_TO_I */
+    case EnumArgSrcDst.IMM_TO_I:
       task = crunch(
         task,
         opBit,
         {
-          src: { reg: [arg[0]] },
           dst: { reg: [arg[1]] },
         },
         {
-          loop: `${I_D}${EQU}${ABX_S}`,
+          loop: `${I_D}${EQU}${IMM_S}`,
+          imm: arg[0],
         }
       );
-      length = 6;
+      length = 4;
       break;
-    /* ABL_TO_IPI */
-    case EnumArgSrcDst.ABL_TO_IPI:
+    /* IMM_TO_IPI */
+    case EnumArgSrcDst.IMM_TO_IPI:
       task = crunch(
         task,
         opBit,
         {
-          src: { reg: [arg[0]] },
           dst: { reg: [arg[1]] },
         },
         {
-          loop: `${I_D}${EQU}${ABX_S}`,
+          loop: `${I_D}${EQU}${IMM_S}`,
           postInc: [arg[1]],
         }
       );
-      length = 6;
+      length = 4;
       break;
-    /* ABL_TO_IPD */
-    case EnumArgSrcDst.ABL_TO_IPD:
+    /* IMM_TO_IPD */
+    case EnumArgSrcDst.IMM_TO_IPD:
       task = crunch(
         task,
         opBit,
         {
-          src: { reg: [arg[0]] },
           dst: { reg: [arg[2]] },
         },
         {
-          loop: `${I_D}${EQU}${ABX_S}`,
+          loop: `${I_D}${EQU}${IMM_S}`,
           preDec: [arg[2]],
+        }
+      );
+      length = 4;
+      break;
+    /* IMM_TO_IWD */
+    case EnumArgSrcDst.IMM_TO_IWD:
+      task = crunch(
+        task,
+        opBit,
+        {
+          dst: { reg: [arg[2]], dis: [arg[1]] },
+        },
+        {
+          loop: `${IWD_D}${EQU}${IMM_S}`,
         }
       );
       length = 6;
       break;
-    /* ABL_TO_IWD */
-    case EnumArgSrcDst.ABL_TO_IWD:
+    /* IMM_TO_IWDI */
+    case EnumArgSrcDst.IMM_TO_IWDI:
       task = crunch(
         task,
         opBit,
         {
-          src: { reg: [arg[0]] },
-          dst: { reg: [arg[2]], dis: [arg[1]] },
-        },
-        {
-          loop: `${IWD_D}${EQU}${ABX_S}`,
-        }
-      );
-      length = 8;
-      break;
-    /* ABL_TO_IWDI */
-    case EnumArgSrcDst.ABL_TO_IWDI:
-      task = crunch(
-        task,
-        opBit,
-        {
-          src: { reg: [arg[0]] },
           dst: { dis: [arg[1]], reg: [arg[2], arg[3]] },
         },
         {
-          loop: `${IWDI_D}${EQU}${ABX_S}`,
+          loop: `${IWDI_D}${EQU}${IMM_S}`,
         }
       );
-      length = 8;
+      length = 6;
       break;
   }
 
   return { task, length };
 };
 
-export default MOVE_ABL;
+export default MOVE_IMM;
