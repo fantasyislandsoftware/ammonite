@@ -107,6 +107,10 @@ const execM68KInstruction = (self: ITask) => {
       case EnumM68KOP.MOVE:
         state = MOVE(self, dataW, { verbose: false });
         break;
+      case EnumM68KOP.RTS:
+        console.log('rts');
+        killTask(self.id);
+        break;
     }
   } else {
     console.log('unknown');
@@ -118,9 +122,10 @@ const execM68KInstruction = (self: ITask) => {
     killTask(self.id);
   }
 
-  self.pos += state.length;
+  //self.pos += state.length;
 
-  killTask(self.id);
+  //console.log('ended');
+  //killTask(self.id);
 
   return self;
 };

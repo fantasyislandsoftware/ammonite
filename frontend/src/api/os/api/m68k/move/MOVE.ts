@@ -54,7 +54,6 @@ export const MOVE = (
   }
 ) => {
   const i = dataW[0];
-  console.log(dataW);
 
   /* Bit Size */
   const opSize_bin = `${i[2]}${i[3]}`;
@@ -123,6 +122,8 @@ export const exeMove = (task: ITask, asm: string) => {
   ({ task, length } = MOVE_PCID(task, opBit, argSrcDst, arg, length));
 
   console.log(length);
+
+  task.pos += length;
 
   return task;
 };
