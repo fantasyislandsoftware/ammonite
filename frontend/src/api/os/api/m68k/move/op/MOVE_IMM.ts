@@ -123,9 +123,10 @@ const MOVE_IMM = (
         },
         {
           loop: `${IWD_D}${EQU}${IMM_S}`,
+          imm: arg[0],
         }
       );
-      length = 6;
+      length = 4 + opBit / 8;
       break;
     /* IMM_TO_IWDI */
     case EnumArgSrcDst.IMM_TO_IWDI:
@@ -137,9 +138,10 @@ const MOVE_IMM = (
         },
         {
           loop: `${IWDI_D}${EQU}${IMM_S}`,
+          imm: arg[0],
         }
       );
-      length = 6;
+      length = 4 + opBit / 8;
       break;
   }
 
