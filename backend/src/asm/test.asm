@@ -6,7 +6,7 @@ dat = 1
 
 mem:
 
-test:   move.l #$7fff,$7fffffff
+test:   move.l #$7fffffff,-(a0)
         bra test
 test2:  bra test
 test3:  bra test

@@ -79,7 +79,7 @@ const MOVE_IMM = (
           imm: arg[0],
         }
       );
-      length = 4;
+      length = 2 + opBit / 8;
       break;
     /* IMM_TO_IPI */
     case EnumArgSrcDst.IMM_TO_IPI:
@@ -91,10 +91,11 @@ const MOVE_IMM = (
         },
         {
           loop: `${I_D}${EQU}${IMM_S}`,
+          imm: arg[0],
           postInc: [arg[1]],
         }
       );
-      length = 4;
+      length = 2 + opBit / 8;
       break;
     /* IMM_TO_IPD */
     case EnumArgSrcDst.IMM_TO_IPD:
@@ -106,10 +107,11 @@ const MOVE_IMM = (
         },
         {
           loop: `${I_D}${EQU}${IMM_S}`,
+          imm: arg[0],
           preDec: [arg[2]],
         }
       );
-      length = 4;
+      length = 2 + opBit / 8;
       break;
     /* IMM_TO_IWD */
     case EnumArgSrcDst.IMM_TO_IWD:
