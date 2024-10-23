@@ -6,8 +6,7 @@ dat = 1
 
 mem:
 
-test:   move.l  d0,d1
-        move.l  d1,d2
+test:   move.w  #$0000ffff,d0
         rts
 
 ; a0,d0 - 00000000

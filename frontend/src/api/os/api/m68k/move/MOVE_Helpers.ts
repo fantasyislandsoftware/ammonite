@@ -1,6 +1,12 @@
-import { l, splitLongInto4Bytes } from 'functions/dataHandling/dataHandling';
+import {
+  hex2int,
+  join2BytesInto1Word,
+  join4BytesInto1Long,
+  l,
+  splitLongInto4Bytes,
+} from 'functions/dataHandling/dataHandling';
 import { EnumOpBit } from 'functions/dataHandling/IdataHandling';
-import { ITask } from 'stores/useTaskStore';
+import { EnumCCR, ITask } from 'stores/useTaskStore';
 
 const _l = l;
 
@@ -123,6 +129,31 @@ export const crunch = (
       let l = _l(task, reg);
       l = l + opBit / 8;
       task.s[reg] = splitLongInto4Bytes(l);
+    }
+  }
+
+  /* CCR */
+  const r = param.dst?.reg?.[0].replaceAll('"', '') || undefined;
+  if (r) {
+    if (r.startsWith('d') || r.startsWith('a')) {
+      const bytes = task.s[r];
+      switch (opBit) {
+        case EnumOpBit.BYTE:
+          const b = bytes[3];
+          if (b === 0) task.s.ccr[EnumCCR.Z] = 1;
+          if (b > 0x7f) task.s.ccr[EnumCCR.N] = 1;
+          break;
+        case EnumOpBit.WORD:
+          const w = join2BytesInto1Word(bytes[2], bytes[3]);
+          if (w === 0) task.s.ccr[EnumCCR.Z] = 1;
+          if (w > 0x7fff) task.s.ccr[EnumCCR.N] = 1;
+          break;
+        case EnumOpBit.LONG:
+          const l = join4BytesInto1Long(bytes[0], bytes[1], bytes[2], bytes[3]);
+          if (l === 0) task.s.ccr[EnumCCR.Z] = 1;
+          if (l < 0) task.s.ccr[EnumCCR.N] = 1;
+          break;
+      }
     }
   }
 

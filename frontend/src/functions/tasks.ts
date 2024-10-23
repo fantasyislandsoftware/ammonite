@@ -1,5 +1,4 @@
 import { ITask, TaskArch, TaskState, useTaskStore } from 'stores/useTaskStore';
-
 import { SYSTEM_API as system_api } from 'api/os/api/system';
 import { LOGIC_API as logic_api } from 'api/os/api/logic';
 import { FONT_API as font_api } from 'api/os/api/font';
@@ -7,7 +6,6 @@ import { SCREEN_API as screen_api } from 'api/os/api/screen';
 import { WINDOW_API as window_api } from 'api/os/api/window';
 import { ICON_API as icon_api } from 'api/os/api/icon';
 import { EnumM68KOP } from 'api/os/api/m68k/IM68k';
-
 import { opTable } from 'api/os/api/m68k/opTable';
 import { hex2bin } from './string';
 import { MOVE } from 'api/os/api/m68k/MOVE/MOVE';
@@ -26,7 +24,7 @@ export const startTaskProcessor = () => {
       task = execInstruction(task);
     });
     setTasks(tasks);
-  }, 1);
+  });
 };
 
 const execJamInstruction = (self: ITask) => {

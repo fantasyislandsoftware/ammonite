@@ -9,7 +9,7 @@ import {
 import { EnumDataFormat } from 'interface/data';
 import { TaskState, TaskArch, useTaskStore } from 'stores/useTaskStore';
 import { v4 as uuidv4 } from 'uuid';
-var Buffer = require('buffer/').Buffer;
+const Buffer = require('buffer/').Buffer;
 
 enum ENUM_HUNK_FILE_TYPE {
   JAM = 'jam',
@@ -236,10 +236,10 @@ export class SYSTEM_API {
           a5: fillNumberArray(0, 4),
           a6: fillNumberArray(0, 4),
           a7: fillNumberArray(0, 4),
-          c: fillNumberArray(0, 2),
-          //m: block.mem,
+          ccr: fillNumberArray(0, 5),
           m: test,
         },
+
         pc: block.pos,
       });
     setTasks(tasks);

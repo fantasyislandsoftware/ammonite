@@ -121,8 +121,6 @@ export const exeMove = (task: ITask, asm: string) => {
   ({ task, length } = MOVE_PCD(task, opBit, argSrcDst, arg, length));
   ({ task, length } = MOVE_PCID(task, opBit, argSrcDst, arg, length));
 
-  console.log(length);
-
   task.pos += length;
 
   return task;

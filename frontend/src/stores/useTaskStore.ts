@@ -23,6 +23,14 @@ export interface ICCR {
   c: number;
 }
 
+export enum EnumCCR {
+  X = 0,
+  N = 1,
+  Z = 2,
+  V = 3,
+  C = 4,
+}
+
 export interface ITask {
   id: string;
   name: string;
