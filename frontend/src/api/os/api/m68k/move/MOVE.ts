@@ -24,28 +24,6 @@ import MOVE_IMM from './op/MOVE_IMM';
 const _l = l;
 const _421 = join4BytesInto1Long;
 
-enum EnumLRB {
-  N = 0,
-  L = 1,
-  R = 2,
-  B = 3,
-}
-
-const lrb = (v0: boolean | undefined, v1: boolean | undefined) => {
-  let result: EnumLRB = EnumLRB.N;
-
-  if (v0 === true && v1 === undefined) {
-    result = EnumLRB.L;
-  }
-  if (v0 === undefined && v1 === true) {
-    result = EnumLRB.R;
-  }
-  if (v0 === true && v1 === true) {
-    result = EnumLRB.B;
-  }
-  return result;
-};
-
 export const MOVE = (
   task: ITask,
   dataW: string[],
@@ -95,12 +73,10 @@ export const MOVE = (
     console.log(asm);
   }
 
-  return { asm: asm, task: exeMove(task, asm), success: true, length: 0 };
+  return { asm: asm, task: exeMove(task, asm), success: true };
 };
 
 export const exeMove = (task: ITask, asm: string) => {
-  console.log(asm);
-
   const {
     opBit,
     argSrcDst,

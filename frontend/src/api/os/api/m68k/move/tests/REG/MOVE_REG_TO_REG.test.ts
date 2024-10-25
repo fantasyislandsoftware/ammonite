@@ -1,5 +1,3 @@
-import { EnumArgSrcDst } from '../../../IM68k';
-import { examineInstruction } from '../../../m68KHelpers/m68kHelpers';
 import { makeTestTask } from '../../../m68kTestHelpers';
 import { exeMove, MOVE } from '../../MOVE';
 

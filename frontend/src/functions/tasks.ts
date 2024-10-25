@@ -9,6 +9,7 @@ import { EnumM68KOP } from 'api/os/api/m68k/IM68k';
 import { opTable } from 'api/os/api/m68k/opTable';
 import { hex2bin } from './string';
 import { MOVE } from 'api/os/api/m68k/MOVE/MOVE';
+import { BRA } from 'api/os/api/m68k/BRA/BRA';
 
 const SYSTEM_API = new system_api();
 const LOGIC_API = new logic_api();
@@ -86,11 +87,6 @@ const execM68KInstruction = (self: ITask) => {
   let opName: string = EnumM68KOP.UNKNOWN;
   let found = false;
 
-  let state = {
-    length: 0,
-    success: true,
-  };
-
   opTable.map((row: any) => {
     if (matchPattern(row.pattern, dataW[0])) {
       opName = row.opName;
@@ -100,10 +96,15 @@ const execM68KInstruction = (self: ITask) => {
 
   //console.log(found, opName);
 
+  let state = { success: false, task: self };
+
   if (found) {
     switch (opName) {
       case EnumM68KOP.MOVE:
         state = MOVE(self, dataW, { verbose: false });
+        break;
+      case EnumM68KOP.BRA:
+        state = BRA(self, dataW, { verbose: false });
         break;
       case EnumM68KOP.RTS:
         console.log('rts');
@@ -115,15 +116,12 @@ const execM68KInstruction = (self: ITask) => {
     killTask(self.id);
   }
 
-  if (!state.success) {
+  self = state.task;
+
+  /*if (!state.success) {
     console.log('command not found');
     killTask(self.id);
-  }
-
-  //self.pos += state.length;
-
-  //console.log('ended');
-  //killTask(self.id);
+  }*/
 
   return self;
 };

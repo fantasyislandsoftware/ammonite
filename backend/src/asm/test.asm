@@ -7,6 +7,7 @@ dat = 1
 mem:
 
 test:   move.w  #$0000ffff,d0
+        bra.w   test
         rts
 
 ; a0,d0 - 00000000
