@@ -5,11 +5,15 @@ import { FONT_API as font_api } from 'api/os/api/font';
 import { SCREEN_API as screen_api } from 'api/os/api/screen';
 import { WINDOW_API as window_api } from 'api/os/api/window';
 import { ICON_API as icon_api } from 'api/os/api/icon';
+import { JAM_SYSTEM as jam_system } from 'api/os/api/jam/system';
+import { JAM_FONT as jam_font } from 'api/os/api/jam/font';
+import { JAM_LOGIC as jam_logic } from 'api/os/api/jam/logic';
 import { EnumM68KOP } from 'api/os/api/m68k/IM68k';
 import { opTable } from 'api/os/api/m68k/opTable';
 import { hex2bin } from './string';
 import { MOVE } from 'api/os/api/m68k/MOVE/MOVE';
 import { BRA } from 'api/os/api/m68k/BRA/BRA';
+import { makeQuerablePromise } from 'api/http/promiseHandling';
 
 const SYSTEM_API = new system_api();
 const LOGIC_API = new logic_api();
@@ -17,6 +21,10 @@ const FONT_API = new font_api();
 const SCREEN_API = new screen_api();
 const WINDOW_API = new window_api();
 const ICON_API = new icon_api();
+//
+const JAM_SYSTEM = new jam_system();
+const JAM_FONT = new jam_font();
+const JAM_LOGIC = new jam_logic();
 
 export const startTaskProcessor = () => {
   const { tasks, setTasks } = useTaskStore.getState();
@@ -31,7 +39,12 @@ export const startTaskProcessor = () => {
 const execJamInstruction = (self: ITask) => {
   const line = self.code[self.pos];
   try {
-    eval(line);
+    if (line !== self.promise.name) {
+      self.promise = {
+        name: line,
+        state: makeQuerablePromise(eval(line)),
+      };
+    }
   } catch (e) {
     console.log(e);
     console.log(line);
@@ -39,7 +52,17 @@ const execJamInstruction = (self: ITask) => {
   }
 
   if (self.state === TaskState.RUNNING) {
-    self.pos++;
+    if (self.promise.state.isFulfilled()) {
+      const info = self.promise.state.getData();
+      if (info) {
+        const { data, v } = info;
+        if (v !== undefined) {
+          self.var[v] = data;
+        }
+      }
+      self.promise = { name: '', state: null };
+      self.pos++;
+    }
   }
   if (self.pos >= self.code.length) {
     killTask(self.id);

@@ -5,7 +5,7 @@ export class FONT_API {
 
   /****************************************************/
 
-  getFontList = async () => {
+  getFontList = async (v: string) => {
     const request = await fetch(`${ENV.api}/getFontList`, {
       method: 'GET',
       headers: {
@@ -13,7 +13,7 @@ export class FONT_API {
       },
     });
     const response = await request.json();
-    return response;
+    return { data: response, v: v };
   };
 
   /****************************************************/

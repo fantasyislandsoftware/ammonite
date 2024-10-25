@@ -36,6 +36,7 @@ jpif(self, "ICONS_LOADING", self.p.isFulfilled(), false);
 */
 
 /* Start workbench */
+exec("/home/node/app/src/jam/test.js");
 //exec("/home/node/app/src/jam/workbench.js");
-exec("/home/node/app/src/asm/test");
+//exec("/home/node/app/src/asm/test");
 //exec("/home/node/app/src/exe/calc", true);

@@ -52,7 +52,7 @@ const App = () => {
       window.onerror = (message, source, lineno, colno, error) => {
         setTaskProcessor([]);
       };
-      system_api.exec('/home/node/app/src/jam/boot.js');
+      system_api.exec('/home/node/app/src/jam/test.js');
     }
     if (initBoot) {
       boot();
