@@ -5,9 +5,13 @@ import { FONT_API as font_api } from 'api/os/api/font';
 import { SCREEN_API as screen_api } from 'api/os/api/screen';
 import { WINDOW_API as window_api } from 'api/os/api/window';
 import { ICON_API as icon_api } from 'api/os/api/icon';
-import { JAM_SYSTEM as jam_system } from 'api/os/api/jam/system';
+import { JAM_SYSTEM } from 'api/os/api/jam/system';
 import { JAM_FONT as jam_font } from 'api/os/api/jam/font';
 import { JAM_LOGIC as jam_logic } from 'api/os/api/jam/logic';
+import { JAM_ICON as jam_icon } from 'api/os/api/jam/icon';
+import { JAM_SCREEN as jam_screen } from 'api/os/api/jam/screen';
+import { JAM_WINDOW as jam_window } from 'api/os/api/jam/window';
+import { JAM_DATETIME as jam_datetime } from 'api/os/api/jam/datetime';
 import { EnumM68KOP } from 'api/os/api/m68k/IM68k';
 import { opTable } from 'api/os/api/m68k/opTable';
 import { hex2bin } from './string';
@@ -22,9 +26,6 @@ const SCREEN_API = new screen_api();
 const WINDOW_API = new window_api();
 const ICON_API = new icon_api();
 //
-const JAM_SYSTEM = new jam_system();
-const JAM_FONT = new jam_font();
-const JAM_LOGIC = new jam_logic();
 
 export const startTaskProcessor = () => {
   const { tasks, setTasks } = useTaskStore.getState();
@@ -37,6 +38,22 @@ export const startTaskProcessor = () => {
 };
 
 const execJamInstruction = (self: ITask) => {
+  const jam_system = new JAM_SYSTEM(self);
+  //const JAM_LOGIC = new jam_logic(self);
+  //const JAM_FONT = new jam_font();
+  //const JAM_ICON = new jam_icon();
+  //const JAM_SCREEN = new jam_screen(self);
+  //const JAM_WINDOW = new jam_window(self);
+  //const JAM_DATETIME = new jam_datetime(self);
+
+  const lib = [jam_system];
+
+  lib.map((l, index) => {
+    Object.getOwnPropertyNames(lib[index]).map((key) => {
+      eval(`window["${key}"] = ${lib[index].name}.${key};`);
+    });
+  });
+
   const line = self.code[self.pos];
   try {
     if (line !== self.promise.name) {

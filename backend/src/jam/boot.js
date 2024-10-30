@@ -1,42 +1,25 @@
 /* @JAM */
 
-import { getPromise, exec } from "SYSTEM_API";
-import { label, jpif } from "LOGIC_API";
-import { getFontList, loadFont } from "FONT_API";
-import { loadIcons } from "ICON_API";
+import { exec, log } from "JAM_SYSTEM";
+import { label, jpif, def } from "JAM_LOGIC";
+import { getFontList, loadFont } from "JAM_FONT";
+import { loadIcons } from "JAM_ICON";
+
+log("test");
 
 /* Load font list */
-self.p = getPromise(getFontList());
-label("FONT_LIST_LOADING");
-jpif(self, "FONT_LIST_LOADING", self.p.isFulfilled(), false);
-self.fontList = self.p.getData();
+//getFontList("fontList");
 
 /* Load fonts */
-self.l = self.fontList.length;
-self.n = 0;
-label("FONT_ARRAY_LOOP");
-self.font = self.fontList[self.n];
-
-/* Load font */
-self.p = getPromise(loadFont(self.font.name, self.font.path));
-label("FONT_LOADING");
-jpif(self, "FONT_LOADING", self.p.isFulfilled(), false);
-
-/* Next font or end loop */
-self.n++;
-jpif(self, "FONT_ARRAY_LOOP", self.n < self.l, true);
+//def("i", 0);
+//label("TEST");
+//def("fontName", $fontList[$i].name);
+//def("fontPath", $fontList[$i].path);
+//loadFont($fontName, $fontPath);
+//jpif("TEST", $i < $fontList.length - 1, "i", 1);
 
 /* Load icons */
-self.p = getPromise(loadIcons());
-label("ICONS_LOADING");
-jpif(self, "ICONS_LOADING", self.p.isFulfilled(), false);
+//loadIcons();
 
-/*
-    console.log('test');
-*/
-
-/* Start workbench */
-exec("/home/node/app/src/jam/test.js");
-//exec("/home/node/app/src/jam/workbench.js");
-//exec("/home/node/app/src/asm/test");
-//exec("/home/node/app/src/exe/calc", true);
+/* */
+//exec("/home/node/app/src/jam/wb.js");

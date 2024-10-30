@@ -84,6 +84,8 @@ export class SYSTEM_API {
       if (hunk.type === ENUM_HUNK_TYPE.HUNK_CODE) {
         const imports: { name: string; file: string | undefined }[] = [];
         hunk.hunkData.map((data) => {
+          data.command = data.command.replaceAll('$', 'self.var.');
+
           /* Squash */
           data.command = this.squash(data.command);
 
@@ -95,8 +97,16 @@ export class SYSTEM_API {
             write = true;
           }
 
+          /* Remove curly braces */
+          if (data.command.startsWith('{') || data.command.endsWith('}')) {
+            data.command = '{remove}';
+          }
+
           /* Process imports */
           if (data.command.startsWith('import')) {
+            data.command = '{remove}';
+          }
+          /*if (data.command.startsWith('import')) {
             let importLine = data.command.split(' ');
             data.command = '{remove}';
             importLine = importLine.filter((part) => {
@@ -116,7 +126,7 @@ export class SYSTEM_API {
             importLine.forEach((part) => {
               imports.push({ name: part.replace(',', ''), file: importFile });
             });
-          }
+          }*/
 
           /* Add Command */
           if (
@@ -148,7 +158,7 @@ export class SYSTEM_API {
         });
 
         /* Process Labels */
-        const LABEL_CMD = 'LOGIC_API.label';
+        const LABEL_CMD = 'JAM_LOGIC.label';
         code.map((line, index) => {
           if (line.startsWith(LABEL_CMD)) {
             const label = line
@@ -162,6 +172,8 @@ export class SYSTEM_API {
         });
       }
     });
+
+    console.log(code);
 
     return { arch: TaskArch.JS, code, labels, mem: [], pos: 0 };
   };
@@ -293,12 +305,20 @@ export class SYSTEM_API {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   }
 
+  /****************************************************/
+
   getMem = () => {
     return {
       total: SYSTEM.memory.total,
       free: SYSTEM.memory.free,
       freeStr: this.numberWithCommas(SYSTEM.memory.free),
     };
+  };
+
+  /****************************************************/
+
+  log = async (value: string) => {
+    console.log(value);
   };
 
   /****************************************************/
