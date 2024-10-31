@@ -16,19 +16,22 @@ import { initPixelArray } from 'api/lib/graphics/pixelArray';
 import { ScreenColour } from 'Objects/UIScreen/_props/screenColour';
 import { generateDefaultColorPalette } from 'Objects/UIScreen/_props/palettes';
 import { STATE } from 'constants/globals/state';
+import { processScreenChange } from 'functions/events';
 
 export class JAM_SCREEN {
-  private self: ITask;
+  private self: ITask | undefined;
   public low: IScreenMode = low;
   public screens: IScreen[] = [];
   public setScreens: (screens: IScreen[]) => void;
-  constructor(self: ITask) {
+  constructor(self?: ITask) {
     this.self = self;
     const { screens, setScreens } = useScreenStore.getState();
     this.screens = screens;
     this.setScreens = setScreens;
   }
-  /* */
+
+  /****************************************************/
+
   openScreen = async (
     parentTaskId: string,
     width: number,
@@ -37,6 +40,7 @@ export class JAM_SCREEN {
     title: string | null,
     returnId: string
   ) => {
+    if (!this.self) return;
     const { screens, setScreens } = useScreenStore.getState();
 
     const nextScreenIndex = screens.length ? getHighestScreenZIndex() + 1 : 100;
@@ -128,15 +132,87 @@ export class JAM_SCREEN {
 
     this.self.var[returnId] = screenId;
   };
-  /* */
+
+  /****************************************************/
+
+  maximizeScreen = (screenId: string) => {
+    const screenIndex = this.findScreenIndex(screenId);
+    this.screens[screenIndex].position.y = 0;
+    setScreen(this.screens[screenIndex]);
+  };
+
+  /****************************************************/
+
+  bringToFront = (screenId: string) => {
+    const screenIndex = this.findScreenIndex(screenId);
+    let pos = 100;
+    if (this.isTopScreen(screenId)) return;
+    this.screens.map((_screen) => {
+      if (_screen.screenId !== screenId) {
+        _screen.zIndex = pos;
+        pos++;
+        processScreenChange();
+      }
+    });
+    this.screens[screenIndex].zIndex = pos;
+    this.setScreens(this.screens);
+  };
+
+  /****************************************************/
+
+  sendToBack = (screenId: string) => {
+    const screenIndex = this.findScreenIndex(screenId);
+    let pos = getHighestScreenZIndex();
+    this.screens.map((_screen) => {
+      if (_screen.screenId !== screenId) {
+        _screen.zIndex = pos;
+        pos--;
+      }
+    });
+    this.screens[screenIndex].zIndex = pos;
+    this.setScreens(this.screens);
+    processScreenChange();
+  };
+
+  /****************************************************/
+
+  isTopScreen = (screenId: string) => {
+    const screenIndex = this.findScreenIndex(screenId);
+    return this.screens[screenIndex].zIndex === getHighestScreenZIndex();
+  };
+
+  /****************************************************/
+
+  reorderScreen = (screenId: string) => {
+    if (STATE.screenChangeMode === 'changing') return;
+    const screenIndex = this.findScreenIndex(screenId);
+    if (this.screens[screenIndex].zIndex === getHighestScreenZIndex()) {
+      this.sendToBack(screenId);
+    }
+  };
+
+  /****************************************************/
+
+  findScreenIndex = (id: string) => {
+    const { screens } = useScreenStore.getState();
+    return screens.findIndex((s) => s.screenId === id);
+  };
+
+  /****************************************************/
+
   setTitle = async (screenId: string, title: string) => {
     const screenIndex = this.findScreenIndex(screenId);
     this.screens[screenIndex].titleBar!.title = title;
     setScreen(this.screens[screenIndex]);
   };
-  /* */
-  findScreenIndex = (id: string) => {
-    const { screens } = useScreenStore.getState();
-    return screens.findIndex((s) => s.screenId === id);
+
+  /****************************************************/
+
+  setSelectedWindow = (screenId: string, windowId: string | undefined) => {
+    const screenIndex = this.findScreenIndex(screenId);
+    this.screens[screenIndex].selectedWindowId = windowId;
+    setScreen(this.screens[screenIndex]);
   };
+
+  /****************************************************/
 }

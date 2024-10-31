@@ -1,5 +1,5 @@
 import { ENV } from 'constants/globals/env';
-import { getVarName } from './jamHelpers';
+import { getVarName } from './helpers';
 
 export class JAM_FONT {
   /* */

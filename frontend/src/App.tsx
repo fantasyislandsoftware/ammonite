@@ -9,11 +9,10 @@ import './css/base.css';
 import { screenContainerRender } from 'Objects/UIScreen/container/screenContainerRender';
 import { baseContainerBuildEvents } from 'Objects/UIBase/container/eventHandlers/baseContainerBuildEvents';
 import { getHighestScreenZIndex } from 'Objects/UIScreen/_props/screenFunctions';
-import { SYSTEM_API } from 'api/os/api/system';
-import { getExe, getMem } from 'api/http/fileIO';
+import { getMem } from 'api/http/fileIO';
 import { SYSTEM } from 'constants/globals/system';
-import { decode as base64_decode } from 'base-64';
 import { useTaskStore } from 'stores/useTaskStore';
+import { JAM_SYSTEM } from 'api/os/api/jam/system';
 
 const App = () => {
   const { screens, setScreens } = useScreenStore();
@@ -21,7 +20,7 @@ const App = () => {
   const [initBoot, setInitBoot] = useState(true);
   const { systemCrash } = useErrorStore();
   const [taskProcessor, setTaskProcessor] = useState<any>(null);
-  const system_api = new SYSTEM_API();
+  const jam_system = new JAM_SYSTEM(tasks[0]);
 
   const initEventListeners = () => {
     window.addEventListener('resize', (e) => {
@@ -52,7 +51,7 @@ const App = () => {
       window.onerror = (message, source, lineno, colno, error) => {
         setTaskProcessor([]);
       };
-      system_api.exec('/home/node/app/src/jam/boot.js');
+      jam_system.exec('/home/node/app/src/jam/boot.js');
     }
     if (initBoot) {
       boot();

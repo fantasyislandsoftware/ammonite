@@ -4,11 +4,12 @@ import { EnumMouseButton } from 'functions/mouse';
 import { IEvent, EnumOSEventType } from 'interface/event';
 import { useScreenStore } from 'stores/useScreenStore';
 import { screenContainerDrag } from '../../screenContainerFunc';
-import { SCREEN_API } from 'api/os/api/screen';
+import { JAM_SCREEN } from 'api/os/api/jam/screen';
+
+const jam_screen = new JAM_SCREEN();
 
 export const screenTitleBarProcessEvents = (event: IEvent) => {
   const { screens } = useScreenStore.getState();
-  const screenAPI = new SCREEN_API();
 
   const mouseDown = () => {
     switch (event.event.button) {
@@ -32,7 +33,7 @@ export const screenTitleBarProcessEvents = (event: IEvent) => {
   const mouseDoubleClick = () => {
     if (event.event.button === EnumMouseButton.Left) {
       if (!event.objects.screen) return;
-      screenAPI.maximizeScreen(event.objects.screen.screenId);
+      jam_screen.maximizeScreen(event.objects.screen.screenId);
     }
   };
 

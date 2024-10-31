@@ -1,12 +1,13 @@
 import { setButtonDown } from 'Objects/UIButton/props/buttonFunc';
 import { screenContainerDrag } from 'Objects/UIScreen/container/screenContainerFunc';
-import { SCREEN_API } from 'api/os/api/screen';
+import { JAM_SCREEN } from 'api/os/api/jam/screen';
 import { WINDOW_API } from 'api/os/api/window';
 import { STATE } from 'constants/globals/state';
 import { EnumMouseButton, EnumOSEventType, IEvent } from 'interface/event';
 
+const jam_screen = new JAM_SCREEN();
+
 export const buttonContainerProcessEvents = (event: IEvent) => {
-  const screenAPI = new SCREEN_API();
   const windowAPI = new WINDOW_API();
 
   const mouseDown = () => {

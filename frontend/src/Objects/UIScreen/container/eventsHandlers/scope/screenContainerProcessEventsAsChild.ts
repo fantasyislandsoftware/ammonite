@@ -1,15 +1,15 @@
-import { SCREEN_API } from 'api/os/api/screen';
+import { JAM_SCREEN } from 'api/os/api/jam/screen';
 import { EnumScreenChangeMode } from 'constants/globals/interface';
 import { STATE } from 'constants/globals/state';
 import { EnumOSEventType, IEvent } from 'interface/event';
 
-export const screenContainerProcessEventsAsParent = (event: IEvent) => {
-  const screenAPI = new SCREEN_API();
+const jam_screen = new JAM_SCREEN();
 
+export const screenContainerProcessEventsAsParent = (event: IEvent) => {
   const mouseDown = () => {
     if (!event.objects.screen) return;
     const screenId = event.objects.screen.screenId;
-    screenAPI.bringToFront(screenId);
+    jam_screen.bringToFront(screenId);
   };
 
   const mouseUp = () => {

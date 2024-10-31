@@ -5,7 +5,6 @@ import {
   IWindowTitleBar,
 } from 'Objects/UIWindow/_props/windowInterface';
 import { useScreenStore } from 'stores/useScreenStore';
-import { SCREEN_API } from './screen';
 import { measureText } from 'api/lib/graphics/text';
 import { windowDefault } from 'Objects/UIWindow/_props/windowDefault';
 import { generateBarIcons } from 'Objects/UIButton/props/buttonFunc';
@@ -17,9 +16,9 @@ import {
 import { WindowColour } from 'Objects/UIWindow/_props/windowColour';
 import { v4 as uuidv4 } from 'uuid';
 import { screenContainerRender } from 'Objects/UIScreen/container/screenContainerRender';
-import { get } from 'http';
+import { JAM_SCREEN } from './jam/screen';
 
-const screen_api = new SCREEN_API();
+const jam_screen = new JAM_SCREEN();
 
 export class WINDOW_API {
   public screens: IScreen[] = [];
@@ -43,14 +42,13 @@ export class WINDOW_API {
   ) => {
     const { screens, setScreens } = useScreenStore.getState();
 
-    const screenAPI = new SCREEN_API();
     const windowAPI = new WINDOW_API();
 
     const windowId = id ? id : uuidv4();
 
     const z =
       windowAPI.getHighestWindowZIndex(
-        screens[screenAPI.findScreenIndex(parentScreenId)]
+        screens[jam_screen.findScreenIndex(parentScreenId)]
       ) + 1;
 
     let { height: titleBarHeight } = measureText(
@@ -117,7 +115,7 @@ export class WINDOW_API {
       pixels: initPixelArray(width, height, WindowColour.BORDER),
       client: client,
     };
-    const screenIndex = screenAPI.findScreenIndex(parentScreenId);
+    const screenIndex = jam_screen.findScreenIndex(parentScreenId);
 
     if (!id) {
       screens[screenIndex].windows.push(data);
@@ -148,8 +146,7 @@ export class WINDOW_API {
 
   findWindowIndex = (screenid: string, windowId: string) => {
     const { screens } = useScreenStore.getState();
-    const screenAPI = new SCREEN_API();
-    const screenIndex = screenAPI.findScreenIndex(screenid);
+    const screenIndex = jam_screen.findScreenIndex(screenid);
     return screens[screenIndex].windows.findIndex(
       (w) => w.windowId === windowId
     );
@@ -168,7 +165,7 @@ export class WINDOW_API {
   resize = (windowId: string, width: number, height: number) => {
     const screenId = this.getWindowParentScreen(windowId);
     if (screenId === undefined) return;
-    const screenIndex = screen_api.findScreenIndex(screenId);
+    const screenIndex = jam_screen.findScreenIndex(screenId);
     const windowIndex = this.findWindowIndex(screenId, windowId);
 
     const id = this.screens[screenIndex].windows[windowIndex].windowId;
@@ -193,7 +190,7 @@ export class WINDOW_API {
   maximize = (windowId: string) => {
     const screenId = this.getWindowParentScreen(windowId);
     if (screenId === undefined) return;
-    const screenIndex = screen_api.findScreenIndex(screenId);
+    const screenIndex = jam_screen.findScreenIndex(screenId);
     const windowIndex = this.findWindowIndex(screenId, windowId);
     const { width: clientWidth, height: clientHeight } =
       getPixelArrayDimensions(this.screens[screenIndex].client.pixels);
@@ -221,7 +218,7 @@ export class WINDOW_API {
   bringToFront = (windowId: string) => {
     const screenId = this.getWindowParentScreen(windowId);
     if (screenId === undefined) return;
-    const screenIndex = screen_api.findScreenIndex(screenId);
+    const screenIndex = jam_screen.findScreenIndex(screenId);
     const windowIndex = this.findWindowIndex(screenId, windowId);
     const pos = this.getHighestWindowZIndex(this.screens[screenIndex]);
     this.screens[screenIndex].windows[windowIndex].position.z = pos + 1;
@@ -232,7 +229,7 @@ export class WINDOW_API {
   sendToBack = (windowId: string) => {
     const screenId = this.getWindowParentScreen(windowId);
     if (screenId === undefined) return;
-    const screenIndex = screen_api.findScreenIndex(screenId);
+    const screenIndex = jam_screen.findScreenIndex(screenId);
     const windowIndex = this.findWindowIndex(screenId, windowId);
     const pos = this.getLowestWindowZIndex(this.screens[screenIndex]);
     this.screens[screenIndex].windows[windowIndex].position.z = pos - 1;
@@ -243,7 +240,7 @@ export class WINDOW_API {
   sortOrder = (windowId: string) => {
     const screenId = this.getWindowParentScreen(windowId);
     if (screenId === undefined) return;
-    const screenIndex = screen_api.findScreenIndex(screenId);
+    const screenIndex = jam_screen.findScreenIndex(screenId);
     const windowIndex = this.findWindowIndex(screenId, windowId);
     const lowestIndex = this.getLowestWindowZIndex(this.screens[screenIndex]);
     if (
@@ -258,9 +255,8 @@ export class WINDOW_API {
   /****************************************************/
 
   setPosition = (screenId: string, windowId: string, x: number, y: number) => {
-    const screenAPI = new SCREEN_API();
     const windowAPI = new WINDOW_API();
-    const screenIndex = screenAPI.findScreenIndex(screenId);
+    const screenIndex = jam_screen.findScreenIndex(screenId);
     const windowIndex = windowAPI.findWindowIndex(screenId, windowId);
     const { pixels: screenPixels } = this.screens[screenIndex].client;
     const { width: clientWidth, height: clientHeight } =

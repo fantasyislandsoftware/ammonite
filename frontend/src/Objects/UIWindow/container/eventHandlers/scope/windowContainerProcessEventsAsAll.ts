@@ -1,16 +1,15 @@
-import { SCREEN_API } from 'api/os/api/screen';
-import { WINDOW_API } from 'api/os/api/window';
+import { JAM_SCREEN } from 'api/os/api/jam/screen';
 import { EnumMouseButton } from 'functions/mouse';
 import { EnumOSEventType, IEvent } from 'interface/event';
 
-const screen_api = new SCREEN_API();
+const jam_screen = new JAM_SCREEN();
 
 export const windowContainerProcessEventsAsAll = (event: IEvent) => {
   const mouseDownLeft = () => {
     const screenId = event.objects.window?.parentScreenId;
     const windowId = event.objects.window?.windowId;
     if (screenId && windowId) {
-      screen_api.setSelectedWindow(screenId, windowId);
+      jam_screen.setSelectedWindow(screenId, windowId);
     }
   };
 

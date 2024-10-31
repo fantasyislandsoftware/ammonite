@@ -11,10 +11,12 @@ import {
   IWindowTitleBar,
 } from 'Objects/UIWindow/_props/windowInterface';
 import { useScreenStore } from 'stores/useScreenStore';
-import { SCREEN_API } from '../screen';
 import { WINDOW_API } from '../window';
 import { v4 as uuidv4 } from 'uuid';
 import { ITask } from 'stores/useTaskStore';
+import { JAM_SCREEN } from './screen';
+
+const jam_screen = new JAM_SCREEN();
 
 export class JAM_WINDOW {
   private self: ITask;
@@ -34,14 +36,13 @@ export class JAM_WINDOW {
   ) => {
     const { screens, setScreens } = useScreenStore.getState();
 
-    const screenAPI = new SCREEN_API();
     const windowAPI = new WINDOW_API();
 
     const windowId = uuidv4();
 
     const z =
       windowAPI.getHighestWindowZIndex(
-        screens[screenAPI.findScreenIndex(parentScreenId)]
+        screens[jam_screen.findScreenIndex(parentScreenId)]
       ) + 1;
 
     let { height: titleBarHeight } = measureText(
@@ -108,7 +109,7 @@ export class JAM_WINDOW {
       pixels: initPixelArray(width, height, WindowColour.BORDER),
       client: client,
     };
-    const screenIndex = screenAPI.findScreenIndex(parentScreenId);
+    const screenIndex = jam_screen.findScreenIndex(parentScreenId);
 
     screens[screenIndex].windows.push(data);
 

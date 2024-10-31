@@ -1,6 +1,6 @@
 import { get } from 'http';
 import { ITask } from 'stores/useTaskStore';
-import { getVarName } from './jamHelpers';
+import { getVarName } from './helpers';
 
 export class JAM_LOGIC {
   private self: ITask;

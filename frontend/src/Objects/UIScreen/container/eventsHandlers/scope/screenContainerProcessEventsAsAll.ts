@@ -1,12 +1,13 @@
-import { SCREEN_API } from 'api/os/api/screen';
+import { JAM_SCREEN } from 'api/os/api/jam/screen';
 import { EnumOSEventType, IEvent } from 'interface/event';
-const screenAPI = new SCREEN_API();
+
+const jam_screen = new JAM_SCREEN();
 
 export const screenContainerProcessEventsAsAll = (event: IEvent) => {
   const mouseDown = () => {
     const screenId = event.objects.screen?.screenId;
     if (screenId) {
-      screenAPI.setSelectedWindow(screenId, undefined);
+      jam_screen.setSelectedWindow(screenId, undefined);
     }
   };
 
