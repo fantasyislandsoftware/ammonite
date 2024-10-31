@@ -40,7 +40,6 @@ export interface ITask {
   var: any;
   label: any;
   promise: any;
-  func: any;
   pos: number;
   s: { [key: string]: number[] };
   pc: number;

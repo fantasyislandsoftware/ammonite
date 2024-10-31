@@ -1,8 +1,9 @@
 import { ENV } from 'constants/globals/env';
+import { getVarName } from './jamHelpers';
 
 export class JAM_FONT {
   /* */
-  getFontList = async (v: string) => {
+  getFontList = async (v: any) => {
     const request = await fetch(`${ENV.api}/getFontList`, {
       method: 'GET',
       headers: {

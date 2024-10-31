@@ -36,7 +36,9 @@ export const pixelMerge = (
         if (from[y][x] === transparentIndex) {
           continue;
         }
-        to[y + offsetY][x + offsetX] = from[y][x];
+        if (to[y + offsetY][x + offsetX] !== from[y][x]) {
+          to[y + offsetY][x + offsetX] = from[y][x];
+        }
       } catch (error) {
         () => {};
       }

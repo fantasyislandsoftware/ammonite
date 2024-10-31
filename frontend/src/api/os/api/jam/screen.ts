@@ -129,4 +129,14 @@ export class JAM_SCREEN {
     this.self.var[returnId] = screenId;
   };
   /* */
+  setTitle = async (screenId: string, title: string) => {
+    const screenIndex = this.findScreenIndex(screenId);
+    this.screens[screenIndex].titleBar!.title = title;
+    setScreen(this.screens[screenIndex]);
+  };
+  /* */
+  findScreenIndex = (id: string) => {
+    const { screens } = useScreenStore.getState();
+    return screens.findIndex((s) => s.screenId === id);
+  };
 }

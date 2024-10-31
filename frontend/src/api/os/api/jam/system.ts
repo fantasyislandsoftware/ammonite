@@ -1,9 +1,9 @@
 import { ITask } from 'stores/useTaskStore';
 import { SYSTEM_API } from '../system';
 import { SYSTEM } from 'constants/globals/system';
+import { getVarName } from './jamHelpers';
 
 export class JAM_SYSTEM {
-  public name: string = 'jam_system';
   private self: ITask;
   constructor(self: ITask) {
     this.self = self;
@@ -26,8 +26,12 @@ export class JAM_SYSTEM {
     };
   };
   /* */
-  numberWithCommas = async (x: number) => {
+  numberWithCommas = (x: number) => {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  };
+  /* */
+  test = async (v: any) => {
+    console.log(getVarName(v));
   };
   /* */
 }

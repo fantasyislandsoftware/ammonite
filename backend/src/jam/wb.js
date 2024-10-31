@@ -1,8 +1,8 @@
 /* @JAM */
 
 import { log, getMem } from "JAM_SYSTEM";
-import { def, label, jp } from "JAM_LOGIC";
-import { openScreen, low } from "JAM_SCREEN";
+import { def, label, jp, jpIfElse } from "JAM_LOGIC";
+import { openScreen, setTitle, low } from "JAM_SCREEN";
 import { openWindow } from "JAM_WINDOW";
 import { getUnixDateTime, HOURS, MINITES, SECONDS } from "JAM_DATETIME";
 
@@ -15,15 +15,23 @@ openScreen($taskId, 320, 256, low, "Workbench", "wbScreenId");
 openWindow($taskId, $wbScreenId, 10, 10, 100, 50, "Window 1");
 openWindow($taskId, $wbScreenId, 50, 50, 100, 50, "Window 2");
 
-
+def("newTime");
+def("oldTime");
+def("interval", 5);
 
 label("MAIN_LOOP");
-label("TEST");
 
-getUnixDateTime("newTime", SECONDS);
+getUnixDateTime("newTime", SECONDS * $interval);
 
-jpif("TEST", $oldTime === $newTime);
+jpIfElse("MAIN", "UPDATE_BAR", $oldTime === $newTime);
 
-getUnixDateTime("oldTime", SECONDS);
+label("MAIN");
+jp("MAIN_LOOP");
+
+label("UPDATE_BAR");
+getMem("mem");
+setTitle($wbScreenId, "Workbench " + $mem.freeStr + " free");
+
+getUnixDateTime("oldTime", SECONDS * $interval);
 
 jp("MAIN_LOOP");

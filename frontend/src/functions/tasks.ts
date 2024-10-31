@@ -1,17 +1,4 @@
 import { ITask, TaskArch, TaskState, useTaskStore } from 'stores/useTaskStore';
-import { SYSTEM_API as system_api } from 'api/os/api/system';
-import { LOGIC_API as logic_api } from 'api/os/api/logic';
-import { FONT_API as font_api } from 'api/os/api/font';
-import { SCREEN_API as screen_api } from 'api/os/api/screen';
-import { WINDOW_API as window_api } from 'api/os/api/window';
-import { ICON_API as icon_api } from 'api/os/api/icon';
-import { JAM_SYSTEM } from 'api/os/api/jam/system';
-import { JAM_FONT as jam_font } from 'api/os/api/jam/font';
-import { JAM_LOGIC as jam_logic } from 'api/os/api/jam/logic';
-import { JAM_ICON as jam_icon } from 'api/os/api/jam/icon';
-import { JAM_SCREEN as jam_screen } from 'api/os/api/jam/screen';
-import { JAM_WINDOW as jam_window } from 'api/os/api/jam/window';
-import { JAM_DATETIME as jam_datetime } from 'api/os/api/jam/datetime';
 import { EnumM68KOP } from 'api/os/api/m68k/IM68k';
 import { opTable } from 'api/os/api/m68k/opTable';
 import { hex2bin } from './string';
@@ -19,13 +6,14 @@ import { MOVE } from 'api/os/api/m68k/MOVE/MOVE';
 import { BRA } from 'api/os/api/m68k/BRA/BRA';
 import { makeQuerablePromise } from 'api/http/promiseHandling';
 
-const SYSTEM_API = new system_api();
-const LOGIC_API = new logic_api();
-const FONT_API = new font_api();
-const SCREEN_API = new screen_api();
-const WINDOW_API = new window_api();
-const ICON_API = new icon_api();
-//
+/* JAM API */
+import { JAM_SYSTEM } from 'api/os/api/jam/system';
+import { JAM_LOGIC } from 'api/os/api/jam/logic';
+import { JAM_SCREEN } from 'api/os/api/jam/screen';
+import { JAM_WINDOW } from 'api/os/api/jam/window';
+import { JAM_DATETIME } from 'api/os/api/jam/datetime';
+import { JAM_FONT } from 'api/os/api/jam/font';
+import { JAM_ICON } from 'api/os/api/jam/icon';
 
 export const startTaskProcessor = () => {
   const { tasks, setTasks } = useTaskStore.getState();
@@ -39,18 +27,24 @@ export const startTaskProcessor = () => {
 
 const execJamInstruction = (self: ITask) => {
   const jam_system = new JAM_SYSTEM(self);
-  //const JAM_LOGIC = new jam_logic(self);
-  //const JAM_FONT = new jam_font();
-  //const JAM_ICON = new jam_icon();
-  //const JAM_SCREEN = new jam_screen(self);
-  //const JAM_WINDOW = new jam_window(self);
-  //const JAM_DATETIME = new jam_datetime(self);
+  const jam_logic = new JAM_LOGIC(self);
+  const jam_datetime = new JAM_DATETIME(self);
+  const jam_screen = new JAM_SCREEN(self);
+  const jam_window = new JAM_WINDOW(self);
+  const jam_font = new JAM_FONT();
+  const jam_icon = new JAM_ICON();
 
-  const lib = [jam_system];
-
-  lib.map((l, index) => {
-    Object.getOwnPropertyNames(lib[index]).map((key) => {
-      eval(`window["${key}"] = ${lib[index].name}.${key};`);
+  [
+    jam_system,
+    jam_logic,
+    jam_datetime,
+    jam_screen,
+    jam_window,
+    jam_font,
+    jam_icon,
+  ].map((lib) => {
+    Object.getOwnPropertyNames(lib).map((key) => {
+      eval(`window["${key}"] = ${lib.constructor.name.toLowerCase()}.${key};`);
     });
   });
 

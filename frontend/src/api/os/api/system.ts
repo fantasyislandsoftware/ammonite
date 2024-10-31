@@ -1,15 +1,9 @@
-import { getExe, getFile } from 'api/http/fileIO';
-import { ENV } from 'constants/globals/env';
-import { BREAK, DO_NOT_PROCESS } from 'constants/globals/misc';
+import { getExe } from 'api/http/fileIO';
 import { SYSTEM } from 'constants/globals/system';
-import {
-  fillNumberArray,
-  genM68KAddrSpace,
-} from 'functions/dataHandling/dataHandling';
-import { EnumDataFormat } from 'interface/data';
+import { fillNumberArray } from 'functions/dataHandling/dataHandling';
 import { TaskState, TaskArch, useTaskStore } from 'stores/useTaskStore';
 import { v4 as uuidv4 } from 'uuid';
-const Buffer = require('buffer/').Buffer;
+import { Buffer } from 'buffer';
 
 enum ENUM_HUNK_FILE_TYPE {
   JAM = 'jam',
@@ -158,7 +152,7 @@ export class SYSTEM_API {
         });
 
         /* Process Labels */
-        const LABEL_CMD = 'JAM_LOGIC.label';
+        const LABEL_CMD = 'label';
         code.map((line, index) => {
           if (line.startsWith(LABEL_CMD)) {
             const label = line
@@ -173,7 +167,7 @@ export class SYSTEM_API {
       }
     });
 
-    console.log(code);
+    //console.log(code);
 
     return { arch: TaskArch.JS, code, labels, mem: [], pos: 0 };
   };
@@ -249,7 +243,7 @@ export class SYSTEM_API {
           a6: fillNumberArray(0, 4),
           a7: fillNumberArray(0, 4),
           ccr: fillNumberArray(0, 5),
-          m: test,
+          m: test as any,
         },
 
         pc: block.pos,

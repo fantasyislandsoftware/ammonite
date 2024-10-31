@@ -1,4 +1,6 @@
+import { get } from 'http';
 import { ITask } from 'stores/useTaskStore';
+import { getVarName } from './jamHelpers';
 
 export class JAM_LOGIC {
   private self: ITask;
@@ -10,22 +12,25 @@ export class JAM_LOGIC {
     this.self.var[v] = value;
   };
   /* */
-  forLoop = async (start: number, interation: number, v: string) => {};
+  label = async (label: string) => {
+    /* dummy */
+  };
   /* */
-  forNext = async (v: string) => {};
-  /* */
-  label = async (label: string) => {};
-  /* */
-  jpif = async (label: string, condition: any, v: string, inc: number) => {
-    if (v) {
-      this.self.var[v] += inc;
-    }
+  jp = async (jmplabel: string) => {
+    this.self.pos = this.self.label[jmplabel];
+  };
+  jpIfElse = async (jmplabel1: string, jmplabel2: string, condition: any) => {
     if (condition) {
-      this.self.pos = this.self.label[label];
+      this.self.pos = this.self.label[jmplabel1];
+    } else {
+      this.self.pos = this.self.label[jmplabel2];
     }
   };
   /* */
-  jp = async (label: string) => {
-    this.self.pos = this.self.label[label];
+  forLoop = async (jmpLabel: string, v: string, count: number, inc: number) => {
+    this.self.var[v] += inc;
+    if (this.self.var[v] < count) {
+      this.self.pos = this.self.label[jmpLabel];
+    }
   };
 }
