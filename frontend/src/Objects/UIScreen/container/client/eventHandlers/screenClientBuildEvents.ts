@@ -1,18 +1,18 @@
-import { IClientMouse, IMouse } from 'functions/mouse';
-import { EnumOSEventObjectType, EnumOSEventType } from 'interface/event';
-import { screenContainerDrag } from '../../screenContainerFunc';
+import { IMouse } from 'functions/mouse';
+import { EnumOSEventObjectType } from 'interface/event';
 import { IScreen } from '../../../_props/screenInterface';
 import { addEvent, eventLog } from 'functions/events';
 import { windowContainerBuildEvents } from 'Objects/UIWindow/container/eventHandlers/windowContainerBuildEvents';
 import { IWindow } from 'Objects/UIWindow/_props/windowInterface';
-import { WINDOW_API } from 'api/os/api/window';
+import { JAM_WINDOW } from 'api/os/api/jam/window';
+
+const jam_window = new JAM_WINDOW();
 
 export const screenClientBuildEvents = (
   event: any,
   screen: IScreen,
   screenMouse: IMouse
 ) => {
-  const windowAPI = new WINDOW_API();
   eventLog(event, EnumOSEventObjectType.ScreenClient);
 
   const screenClientMouse = screenMouse;
@@ -22,7 +22,7 @@ export const screenClientBuildEvents = (
     screen: screen,
   });
 
-  const windows = windowAPI.sortWindowsByZIndex(screen.windows);
+  const windows = jam_window.sortWindowsByZIndex(screen.windows);
   windows.map((window: IWindow) => {
     windowContainerBuildEvents(
       event,

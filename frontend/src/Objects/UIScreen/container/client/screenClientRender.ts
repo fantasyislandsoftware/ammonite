@@ -6,19 +6,18 @@ import {
   getPixelArrayDimensions,
   pixelMerge,
 } from 'api/lib/graphics/pixelArray';
-import { WINDOW_API } from 'api/os/api/window';
-import { get } from 'http';
+import { JAM_WINDOW } from 'api/os/api/jam/window';
 import { IPixelArray } from 'interface/graphics';
 
 export const screenClientRender = (
   clientPixels: IPixelArray,
   screen: IScreen
 ) => {
-  const windowAPI = new WINDOW_API();
+  const jam_window = new JAM_WINDOW();
 
   const { width, height } = getPixelArrayDimensions(clientPixels);
 
-  const windows = windowAPI.sortWindowsByZIndex(screen.windows);
+  const windows = jam_window.sortWindowsByZIndex(screen.windows);
 
   drawFillRect(clientPixels, 0, 0, width, height, ScreenColour.CLIENT);
 

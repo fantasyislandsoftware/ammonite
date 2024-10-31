@@ -1,8 +1,8 @@
-import { WINDOW_API } from 'api/os/api/window';
+import { JAM_WINDOW } from 'api/os/api/jam/window';
 import { STATE } from 'constants/globals/state';
 import { EnumOSEventType, IEvent } from 'interface/event';
 
-const window_api = new WINDOW_API();
+const jam_window = new JAM_WINDOW();
 
 export const screenClientProcessEventsAsAll = (event: IEvent) => {
   const mouseDown = () => {};
@@ -18,7 +18,7 @@ export const screenClientProcessEventsAsAll = (event: IEvent) => {
       STATE.dragWindow &&
       event.objects.screen?.screenId === STATE.dragWindow.screenId
     ) {
-      window_api.setPosition(
+      jam_window.setPosition(
         STATE.dragWindow.screenId,
         STATE.dragWindow.windowId,
         STATE.screenClientMouse.x - STATE.dragWindow.offset.x,

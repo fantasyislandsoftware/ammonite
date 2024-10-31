@@ -1,15 +1,14 @@
 import { setButtonDown } from 'Objects/UIButton/props/buttonFunc';
 import { screenContainerDrag } from 'Objects/UIScreen/container/screenContainerFunc';
 import { JAM_SCREEN } from 'api/os/api/jam/screen';
-import { WINDOW_API } from 'api/os/api/window';
+import { JAM_WINDOW } from 'api/os/api/jam/window';
 import { STATE } from 'constants/globals/state';
 import { EnumMouseButton, EnumOSEventType, IEvent } from 'interface/event';
 
 const jam_screen = new JAM_SCREEN();
+const jam_window = new JAM_WINDOW();
 
 export const buttonContainerProcessEvents = (event: IEvent) => {
-  const windowAPI = new WINDOW_API();
-
   const mouseDown = () => {
     if (event.objects.button && event.event.button === EnumMouseButton.Left) {
       setButtonDown(event.objects.button.id);

@@ -1,5 +1,5 @@
 import { IMouse, inBoundary } from 'functions/mouse';
-import { IWindow, IWindowEvent } from '../../_props/windowInterface';
+import { IWindow } from '../../_props/windowInterface';
 import { IScreen } from 'Objects/UIScreen/_props/screenInterface';
 import { addEvent } from 'functions/events';
 import { EnumOSEventObjectType, IBaseEvent } from 'interface/event';

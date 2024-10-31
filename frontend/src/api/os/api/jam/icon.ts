@@ -7,11 +7,9 @@ import { IPixelArray } from 'interface/graphics';
 import { useIconStore } from 'stores/useIconStore';
 
 export class JAM_ICON {
-  constructor() {}
-
   /****************************************************/
 
-  loadIcons = () => {
+  loadIcons = async () => {
     const { icons, setIcons } = useIconStore.getState();
     const p = getFile(
       `${ENV.baseDir}resource/icons.iff`,

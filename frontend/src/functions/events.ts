@@ -19,7 +19,6 @@ import { IMouse } from './mouse';
 import { windowClientProcessEvents } from 'Objects/UIWindow/container/client/eventHandlers/WindowClientProcessEvents';
 import { ENV } from 'constants/globals/env';
 import { EnumScreenChangeMode } from 'constants/globals/interface';
-import { WINDOW_API } from 'api/os/api/window';
 import { buttonContainerProcessEvents } from 'Objects/UIButton/container/eventHandlers/buttonContainerProcessEvents';
 
 export const eventLog = (event: IBaseEvent, name: string) => {
@@ -45,8 +44,6 @@ export const addEvent = (
 };
 
 export const processEvents = () => {
-  const window_api = new WINDOW_API();
-
   if (STATE.events.length === 0) {
     return;
   }

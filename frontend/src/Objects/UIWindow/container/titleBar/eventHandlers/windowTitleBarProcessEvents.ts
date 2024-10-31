@@ -1,14 +1,8 @@
-import { windowContainerDrag } from 'Objects/UIWindow/windowContainerFunc';
-import { WINDOW_API } from 'api/os/api/window';
+import { JAM_WINDOW } from 'api/os/api/jam/window';
 import { STATE } from 'constants/globals/state';
-import {
-  EnumMouseButton,
-  EnumOSEventObjectType,
-  EnumOSEventType,
-  IEvent,
-} from 'interface/event';
+import { EnumMouseButton, EnumOSEventType, IEvent } from 'interface/event';
 
-const window_api = new WINDOW_API();
+const jam_window = new JAM_WINDOW();
 
 export const windowTitleBarProcessEvents = (event: IEvent) => {
   const mouseDown = (event: IEvent) => {
@@ -30,13 +24,11 @@ export const windowTitleBarProcessEvents = (event: IEvent) => {
 
   const mouseUp = () => {};
 
-  const mouseMove = () => {
-    event.mouse && windowContainerDrag(event.mouse);
-  };
+  const mouseMove = () => {};
 
   const mouseDbClick = (event: IEvent) => {
     if (event.mouse?.button === EnumMouseButton.Left) {
-      window_api.maximize(event.objects.window?.windowId || '');
+      jam_window.maximize(event.objects.window?.windowId || '');
     }
   };
 

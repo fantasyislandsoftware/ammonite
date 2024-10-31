@@ -193,26 +193,10 @@ export const b = (task: ITask, reg: string) => {
   );
 };
 
-/*export const _4to1 = (array: number[]) => {
-  return (array[0] << 24) + (array[1] << 16) + (array[2] << 8) + array[3];
-};*/
-
-/*export const incReg = (reg: any, i: number) => {
-  let n = _4to1(reg);
-  n += i;
-  return splitLongInto4Bytes(n);
-};*/
-
-/*export const decReg = (reg: any, i: number) => {
-  let n = _4to1(reg);
-  n -= i;
-  return splitLongInto4Bytes(n);
-};*/
-
 export const genM68KAddrSpace = (allocatedMemory: number) => {
-  let data: number[] = [];
+  const data: number[] = [];
 
-  let map: {
+  const map: {
     [key: string]: number;
   } = {};
 
@@ -248,7 +232,7 @@ export const genM68KAddrSpace = (allocatedMemory: number) => {
 };
 
 export const fillNumberArray = (n: number, length: number) => {
-  let arr = [];
+  const arr = [];
   for (let i = 0; i < length; i++) {
     arr.push(n);
   }
@@ -297,4 +281,8 @@ export const getRegInfo = (task: ITask, reg: string) => {
 
 export const filterLoc = (loc: string) => {
   return loc.replaceAll('0x', '').replaceAll('.w', '').replaceAll('.l', '');
+};
+
+export const numberWithCommas = (x: number) => {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 };

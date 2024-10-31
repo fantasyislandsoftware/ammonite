@@ -1,13 +1,15 @@
 import { ITask, TaskState, useTaskStore } from 'stores/useTaskStore';
 import { SYSTEM } from 'constants/globals/system';
-import { getVarName } from './helpers';
 import { v4 as uuidv4 } from 'uuid';
 import { getExe } from 'api/http/fileIO';
 import {
   ENUM_HUNK_FILE_TYPE,
   IHunks,
 } from 'functions/fileProcessing/IFileProcessing';
-import { fillNumberArray } from 'functions/dataHandling/dataHandling';
+import {
+  fillNumberArray,
+  numberWithCommas,
+} from 'functions/dataHandling/dataHandling';
 import {
   processJamHunks,
   processAmigaHunks,
@@ -16,14 +18,21 @@ import { Buffer } from 'buffer';
 
 export class JAM_SYSTEM {
   private self: ITask;
+
+  /****************************************************/
+
   constructor(self: ITask) {
     this.self = self;
   }
-  /* */
+
+  /****************************************************/
+
   log = async (value: string) => {
     console.log(value);
   };
-  /* */
+
+  /****************************************************/
+
   exec = async (path: string, debug?: true) => {
     const name = path.substring(path.lastIndexOf('/') + 1);
     const { tasks, setTasks } = useTaskStore.getState();
@@ -78,21 +87,16 @@ export class JAM_SYSTEM {
       });
     setTasks(tasks);
   };
-  /* */
+
+  /****************************************************/
+
   getMem = async (returnVar: string) => {
     this.self.var[returnVar] = {
       total: SYSTEM.memory.total,
       free: SYSTEM.memory.free,
-      freeStr: this.numberWithCommas(SYSTEM.memory.free),
+      freeStr: numberWithCommas(SYSTEM.memory.free),
     };
   };
-  /* */
-  numberWithCommas = (x: number) => {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-  };
-  /* */
-  test = async (v: any) => {
-    console.log(getVarName(v));
-  };
-  /* */
+
+  /****************************************************/
 }

@@ -5,11 +5,11 @@ import { JAM_SCREEN } from 'api/os/api/jam/screen';
 
 const jam_screen = new JAM_SCREEN();
 
-export const screenContainerDrag = () => {
+export const screenContainerDrag = async () => {
   const { screens } = useScreenStore.getState();
 
   if (STATE.dragScreen === undefined) return;
-  const screenIndex = jam_screen.findScreenIndex(STATE.dragScreen.id);
+  const screenIndex = await jam_screen.findScreenIndex(STATE.dragScreen.id);
   const selected = screens[screenIndex];
   let newPos = STATE.clientMouse.y - STATE.dragScreen.offset.y;
   if (newPos < 0) newPos = 0;
