@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { baseContainerBuildEvents } from 'Objects/UIBase/container/eventHandlers/baseContainerBuildEvents';
 import { IScreen } from '../../_props/screenInterface';
-import { EnumOSEventObjectType } from 'interface/event';
+import { EnumOSEventObjectType } from 'functions/events/IEvents';
 
 interface IProps {
   screen: IScreen;

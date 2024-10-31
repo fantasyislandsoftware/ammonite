@@ -1,5 +1,8 @@
-import { EnumOSEventObjectType, IBaseEvent } from '../../../../interface/event';
-import { addEvent, eventLog } from 'functions/events';
+import { eventLog, addEvent } from 'functions/events/events';
+import {
+  EnumOSEventObjectType,
+  IBaseEvent,
+} from '../../../../functions/events/IEvents';
 
 export const backdropContainerBuildEvents = (event: IBaseEvent) => {
   eventLog(event, EnumOSEventObjectType.Backdrop);

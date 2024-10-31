@@ -1,7 +1,7 @@
 import { IScreen } from 'Objects/UIScreen/_props/screenInterface';
-import { IClientMouse, IMouse } from '../functions/mouse';
-import { IButton } from '../Objects/UIButton/props/buttonInterface';
+import { IButton } from '../../Objects/UIButton/props/buttonInterface';
 import { IWindow } from 'Objects/UIWindow/_props/windowInterface';
+import { IClientMouse, IMouse } from 'functions/mouse/IMouse';
 
 export interface IBaseEvent {
   type: string;

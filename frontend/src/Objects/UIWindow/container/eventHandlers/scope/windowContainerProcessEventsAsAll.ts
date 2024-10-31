@@ -1,6 +1,9 @@
 import { JAM_SCREEN } from 'api/os/api/jam/screen';
-import { EnumMouseButton } from 'functions/mouse';
-import { EnumOSEventType, IEvent } from 'interface/event';
+import {
+  EnumMouseButton,
+  EnumOSEventType,
+  IEvent,
+} from 'functions/events/IEvents';
 
 const jam_screen = new JAM_SCREEN();
 

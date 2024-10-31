@@ -1,6 +1,6 @@
 import React from 'react';
 import { baseContainerBuildEvents } from 'Objects/UIBase/container/eventHandlers/baseContainerBuildEvents';
-import { EnumOSEventObjectType } from 'interface/event';
+import { EnumOSEventObjectType } from 'functions/events/IEvents';
 import { TaskState, useTaskStore } from 'stores/useTaskStore';
 
 export const Backdrop = () => {

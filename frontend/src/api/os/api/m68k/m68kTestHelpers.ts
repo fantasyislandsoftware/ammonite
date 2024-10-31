@@ -1,5 +1,5 @@
 import { fillNumberArray } from 'functions/dataHandling/dataHandling';
-import { EnumBit } from 'functions/dataHandling/IdataHandling';
+import { EnumBit } from 'functions/dataHandling/IDataHandling';
 import { ITask, TaskArch, TaskState } from 'stores/useTaskStore';
 
 export interface IMakeTestTaskParams {

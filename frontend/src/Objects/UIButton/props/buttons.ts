@@ -1,9 +1,9 @@
-import { initPixelArray } from 'api/lib/graphics/pixelArray';
+import { initPixelArray } from 'functions/graphics/pixelArray';
 import {
   EnumVectorShapeType,
   VectorCanvas,
   renderVectorCanvas,
-} from 'api/lib/graphics/vector';
+} from 'functions/graphics/vector';
 import { EnumButtonState } from './buttonInterface';
 import { ButtonColour } from './buttonColour';
 

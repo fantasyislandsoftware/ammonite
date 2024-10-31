@@ -1,5 +1,5 @@
-import { IClientMouse } from 'functions/mouse';
-import { IEvent } from 'interface/event';
+import { IEvent } from 'functions/events/IEvents';
+import { IClientMouse } from 'functions/mouse/IMouse';
 
 export interface Environment {
   eventDebug: boolean;

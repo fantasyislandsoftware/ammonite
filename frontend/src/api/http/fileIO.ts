@@ -1,8 +1,8 @@
-import BinaryStream from 'api/lib/data/binarystream';
-import { detectIFF, parseIFF } from 'api/lib/data/iff';
+import BinaryStream from 'functions/dataHandling/binarystream';
+import { detectIFF, parseIFF } from 'functions/graphics/iff';
 import { ENV } from 'constants/globals/env';
 import { hex2int } from 'functions/dataHandling/dataHandling';
-import { EnumDataFormat } from 'interface/data';
+import { EnumDataFormat } from 'functions/dataHandling/IDataHandling';
 
 export const getDirList = async (path: string) => {
   const request = await fetch(`${ENV.api}/getDirList?path=${path}`, {
@@ -34,11 +34,11 @@ export const getExe = async (path: string) => {
   });
   const response = await request.json();
   if (response.type === 'amiga') {
-    let oldAddr = 0;
-    let newAddr = 0;
-    let length = 0;
-    let newHunk: any = {};
-    let oldHunk: any = {};
+    const oldAddr = 0;
+    const newAddr = 0;
+    const length = 0;
+    const newHunk: any = {};
+    const oldHunk: any = {};
 
     const hunkData = response.hunks[1].hunkData;
 

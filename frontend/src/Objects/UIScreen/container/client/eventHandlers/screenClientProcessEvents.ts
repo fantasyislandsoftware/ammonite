@@ -1,5 +1,9 @@
 import { STATE } from 'constants/globals/state';
-import { EnumOSEventScope, EnumOSEventType, IEvent } from 'interface/event';
+import {
+  EnumOSEventScope,
+  EnumOSEventType,
+  IEvent,
+} from 'functions/events/IEvents';
 import { screenContainerDrag } from '../../screenContainerFunc';
 import { screenClientProcessEventsAsChild } from './scope/screenClientProcessEventsAsChild';
 import { screenClientProcessEventsAsAll } from './scope/screenClientProcessEventsAsAll';

@@ -1,32 +1,8 @@
 import {
   EnumScreenModeType,
   IScreen,
-} from '../Objects/UIScreen/_props/screenInterface';
-
-export interface IClientMouse {
-  x: number;
-  y: number;
-}
-
-export interface IMouse {
-  position: {
-    x: number;
-    y: number;
-  };
-  button: EnumMouseButton;
-}
-
-export interface IWindowMouse {
-  x: number;
-  y: number;
-  button: EnumMouseButton;
-}
-
-export enum EnumMouseButton {
-  Left = 0,
-  Middle = 1,
-  Right = 2,
-}
+} from '../../Objects/UIScreen/_props/screenInterface';
+import { IClientMouse, IMouse } from './IMouse';
 
 export const getClientMouse = (e: any): IClientMouse => {
   return {

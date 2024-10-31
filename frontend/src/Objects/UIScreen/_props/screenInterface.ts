@@ -1,7 +1,7 @@
 import { IWindow } from 'Objects/UIWindow/_props/windowInterface';
 import { IButton } from 'Objects/UIButton/props/buttonInterface';
 import { EnumUIObjectType } from 'Objects/UIObject/objectInterface';
-import { IPixelArray } from 'interface/graphics';
+import { IPixelArray } from 'functions/graphics/IGraphics';
 
 export interface IScreen {
   screenId: string;

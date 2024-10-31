@@ -3,14 +3,14 @@ import { backdropContainerBuildEvents } from '../../../UIBackdrop/container/even
 import { screenContainerBuildEvents } from '../../../UIScreen/container/eventsHandlers/screenContainerBuildEvents';
 import { IScreen } from '../../../UIScreen/_props/screenInterface';
 import { viewportContainerEvents } from '../../../UIViewport/container/viewportContainerEvents';
-import { getClientMouse, getScreenMouse } from 'functions/mouse';
 import {
   EnumOSEventObjectType,
   EnumOSEventType,
   IBaseEvent,
-} from 'interface/event';
-import { addEvent, eventLog, processEvents } from 'functions/events';
+} from 'functions/events/IEvents';
 import { STATE } from 'constants/globals/state';
+import { addEvent, processEvents } from 'functions/events/events';
+import { getClientMouse, getScreenMouse } from 'functions/mouse/mouse';
 
 export const baseContainerBuildEvents = (
   _event: IBaseEvent,

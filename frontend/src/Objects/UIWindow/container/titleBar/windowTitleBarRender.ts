@@ -6,13 +6,13 @@ import {
 import { IScreen } from 'Objects/UIScreen/_props/screenInterface';
 import { WindowColour } from 'Objects/UIWindow/_props/windowColour';
 import { IWindow } from 'Objects/UIWindow/_props/windowInterface';
-import { drawFillRect } from 'api/lib/graphics/draw';
+import { drawFillRect } from 'functions/graphics/draw';
 import {
   getPixelArrayDimensions,
   pixelMerge,
-} from 'api/lib/graphics/pixelArray';
-import { textOut } from 'api/lib/graphics/text';
-import { VectorShape, drawVector } from 'api/lib/graphics/vector';
+} from 'functions/graphics/pixelArray';
+import { textOut } from 'functions/graphics/text';
+import { VectorShape, drawVector } from 'functions/graphics/vector';
 import { STATE } from 'constants/globals/state';
 
 export const windowTitleBarRender = (screen: IScreen, window: IWindow) => {

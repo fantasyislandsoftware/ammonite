@@ -1,10 +1,11 @@
 import { buttonContainerBuildEvents } from 'Objects/UIButton/container/eventHandlers/buttonContainerBuildEvents';
 import { IScreen } from 'Objects/UIScreen/_props/screenInterface';
 import { IWindow } from 'Objects/UIWindow/_props/windowInterface';
-import { getPixelArrayDimensions } from 'api/lib/graphics/pixelArray';
-import { addEvent } from 'functions/events';
-import { IMouse, inBoundary } from 'functions/mouse';
-import { EnumOSEventObjectType, IBaseEvent } from 'interface/event';
+import { getPixelArrayDimensions } from 'functions/graphics/pixelArray';
+import { addEvent } from 'functions/events/events';
+import { EnumOSEventObjectType, IBaseEvent } from 'functions/events/IEvents';
+import { IMouse } from 'functions/mouse/IMouse';
+import { inBoundary } from 'functions/mouse/mouse';
 
 export const windowTitleBarBuildEvents = (
   event: IBaseEvent,

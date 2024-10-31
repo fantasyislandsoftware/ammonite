@@ -1,6 +1,6 @@
 import { JAM_WINDOW } from 'api/os/api/jam/window';
 import { STATE } from 'constants/globals/state';
-import { EnumOSEventType, IEvent } from 'interface/event';
+import { EnumOSEventType, IEvent } from 'functions/events/IEvents';
 
 const jam_window = new JAM_WINDOW();
 

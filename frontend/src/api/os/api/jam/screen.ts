@@ -6,17 +6,17 @@ import {
   getHighestScreenZIndex,
   setScreen,
 } from 'Objects/UIScreen/_props/screenFunctions';
-import { measureText } from 'api/lib/graphics/text';
+import { measureText } from 'functions/graphics/text';
 import { screenDefault } from 'Objects/UIScreen/_props/screenDefault';
 import { v4 as uuidv4 } from 'uuid';
 import { generateBarIcons } from 'Objects/UIButton/props/buttonFunc';
 import { EnumButtonType } from 'Objects/UIButton/props/buttonInterface';
 import { EnumUIObjectType } from 'Objects/UIObject/objectInterface';
-import { initPixelArray } from 'api/lib/graphics/pixelArray';
+import { initPixelArray } from 'functions/graphics/pixelArray';
 import { ScreenColour } from 'Objects/UIScreen/_props/screenColour';
 import { generateDefaultColorPalette } from 'Objects/UIScreen/_props/palettes';
 import { STATE } from 'constants/globals/state';
-import { processScreenChange } from 'functions/events';
+import { processScreenChange } from 'functions/events/events';
 
 export class JAM_SCREEN {
   private self: ITask | undefined;

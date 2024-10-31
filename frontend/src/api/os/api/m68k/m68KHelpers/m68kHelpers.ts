@@ -5,7 +5,7 @@ import {
   IExamineInstruction,
   IOperand,
 } from '../IM68k';
-import { EnumOpBit } from 'functions/dataHandling/IdataHandling';
+import { EnumOpBit } from 'functions/dataHandling/IDataHandling';
 import {
   bin2hex,
   combine2WordsInto1Long,

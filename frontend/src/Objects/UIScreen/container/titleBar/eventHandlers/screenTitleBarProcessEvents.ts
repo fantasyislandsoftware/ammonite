@@ -1,7 +1,10 @@
 import { screenIdToIndex } from 'Objects/UIScreen/_props/screenFunctions';
 import { STATE } from 'constants/globals/state';
-import { EnumMouseButton } from 'functions/mouse';
-import { IEvent, EnumOSEventType } from 'interface/event';
+import {
+  IEvent,
+  EnumOSEventType,
+  EnumMouseButton,
+} from 'functions/events/IEvents';
 import { useScreenStore } from 'stores/useScreenStore';
 import { screenContainerDrag } from '../../screenContainerFunc';
 import { JAM_SCREEN } from 'api/os/api/jam/screen';

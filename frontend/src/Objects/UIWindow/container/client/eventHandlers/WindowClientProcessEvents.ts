@@ -1,3 +1,3 @@
-import { IEvent } from 'interface/event';
+import { IEvent } from 'functions/events/IEvents';
 
 export const windowClientProcessEvents = (event: IEvent) => {};

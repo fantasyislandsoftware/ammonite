@@ -1,4 +1,4 @@
-import { IPixelArray } from 'interface/graphics';
+import { IPixelArray } from 'functions/graphics/IGraphics';
 import { drawFillRect, plot } from './draw';
 
 export interface VectorRect {

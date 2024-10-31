@@ -1,4 +1,4 @@
-import { IPixelArray } from 'interface/graphics';
+import { IPixelArray } from 'functions/graphics/IGraphics';
 
 export const plot = (
   pixels: IPixelArray,

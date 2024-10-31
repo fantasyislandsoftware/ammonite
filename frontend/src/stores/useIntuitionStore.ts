@@ -1,4 +1,4 @@
-import { IBrush } from '../interface/graphics';
+import { IBrush } from '../functions/graphics/IGraphics';
 import { create } from 'zustand';
 
 export interface IntuitionStore {

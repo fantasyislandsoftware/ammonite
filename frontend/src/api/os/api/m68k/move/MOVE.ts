@@ -6,7 +6,7 @@ import {
   processXNXT,
 } from '../m68KHelpers/m68kHelpers';
 import { IExamineInstruction } from '../IM68k';
-import { opBitChar } from 'functions/dataHandling/IdataHandling';
+import { opBitChar } from 'functions/dataHandling/IDataHandling';
 import { l } from 'functions/dataHandling/dataHandling';
 import { join4BytesInto1Long } from 'functions/dataHandling/dataHandling';
 import MOVE_REG from './op/MOVE_REG';

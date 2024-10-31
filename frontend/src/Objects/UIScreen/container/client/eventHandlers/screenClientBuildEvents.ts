@@ -1,10 +1,10 @@
-import { IMouse } from 'functions/mouse';
-import { EnumOSEventObjectType } from 'interface/event';
+import { EnumOSEventObjectType } from 'functions/events/IEvents';
 import { IScreen } from '../../../_props/screenInterface';
-import { addEvent, eventLog } from 'functions/events';
 import { windowContainerBuildEvents } from 'Objects/UIWindow/container/eventHandlers/windowContainerBuildEvents';
 import { IWindow } from 'Objects/UIWindow/_props/windowInterface';
 import { JAM_WINDOW } from 'api/os/api/jam/window';
+import { addEvent, eventLog } from 'functions/events/events';
+import { IMouse } from 'functions/mouse/IMouse';
 
 const jam_window = new JAM_WINDOW();
 

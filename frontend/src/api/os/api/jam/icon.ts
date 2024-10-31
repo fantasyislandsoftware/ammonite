@@ -1,10 +1,10 @@
 import { getFile } from 'api/http/fileIO';
-import BinaryStream from 'api/lib/data/binarystream';
-import { detectIFF, parseIFF } from 'api/lib/data/iff';
+import BinaryStream from 'functions/dataHandling/binarystream';
+import { detectIFF, parseIFF } from 'functions/graphics/iff';
 import { ENV } from 'constants/globals/env';
-import { EnumDataFormat } from 'interface/data';
-import { IPixelArray } from 'interface/graphics';
+import { IPixelArray } from 'functions/graphics/IGraphics';
 import { useIconStore } from 'stores/useIconStore';
+import { EnumDataFormat } from 'functions/dataHandling/IDataHandling';
 
 export class JAM_ICON {
   /****************************************************/

@@ -1,4 +1,4 @@
-import { EnumOpBit } from 'functions/dataHandling/IdataHandling';
+import { EnumOpBit } from 'functions/dataHandling/IDataHandling';
 
 export enum EnumASMType {
   ABW_W = 'ABW.w',

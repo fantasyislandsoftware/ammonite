@@ -3,7 +3,7 @@ import { UIScreen } from './Objects/UIScreen';
 import { useScreenStore } from './stores/useScreenStore';
 import ShadowBuffer from 'Objects/UIScreen/container/jsx/ShadowBuffer';
 import { Backdrop } from 'Objects/UIBackdrop/container/jsx/Backdrop';
-import { startTaskProcessor } from 'functions/tasks';
+import { startTaskProcessor } from 'functions/tasks/tasks';
 import { useErrorStore } from 'stores/useErrorStore';
 import './css/base.css';
 import { screenContainerRender } from 'Objects/UIScreen/container/screenContainerRender';

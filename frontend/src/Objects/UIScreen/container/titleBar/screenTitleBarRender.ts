@@ -1,10 +1,10 @@
 import { IScreen } from 'Objects/UIScreen/_props/screenInterface';
-import { textOut } from 'api/lib/graphics/text';
-import { drawFillRect, drawLine } from 'api/lib/graphics/draw';
+import { textOut } from 'functions/graphics/text';
+import { drawFillRect, drawLine } from 'functions/graphics/draw';
 import { maximizeButton, orderButton } from 'Objects/UIButton/props/buttons';
-import { pixelMerge } from 'api/lib/graphics/pixelArray';
+import { pixelMerge } from 'functions/graphics/pixelArray';
 import { ScreenColour } from 'Objects/UIScreen/_props/screenColour';
-import { IPixelArray } from 'interface/graphics';
+import { IPixelArray } from 'functions/graphics/IGraphics';
 import { EnumButtonType } from 'Objects/UIButton/props/buttonInterface';
 
 export const screenTitleBarRender = (pixels: IPixelArray, screen: IScreen) => {

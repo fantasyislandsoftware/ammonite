@@ -1,11 +1,12 @@
-import { IMouse, inBoundary } from 'functions/mouse';
 import { IWindow } from '../../_props/windowInterface';
 import { IScreen } from 'Objects/UIScreen/_props/screenInterface';
-import { addEvent } from 'functions/events';
-import { EnumOSEventObjectType, IBaseEvent } from 'interface/event';
+import { EnumOSEventObjectType, IBaseEvent } from 'functions/events/IEvents';
 import { windowTitleBarBuildEvents } from '../titleBar/eventHandlers/windowTitleBarBuildEvents';
-import { getPixelArrayDimensions } from 'api/lib/graphics/pixelArray';
+import { getPixelArrayDimensions } from 'functions/graphics/pixelArray';
 import { windowClientBuildEvents } from '../client/eventHandlers/windowClientBuildEvents';
+import { addEvent } from 'functions/events/events';
+import { IMouse } from 'functions/mouse/IMouse';
+import { inBoundary } from 'functions/mouse/mouse';
 
 export const windowContainerBuildEvents = (
   event: IBaseEvent,

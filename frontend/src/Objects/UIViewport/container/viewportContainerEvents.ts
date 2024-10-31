@@ -1,5 +1,5 @@
 import { resetAllButtons } from 'Objects/UIButton/props/buttonFunc';
-import { EnumOSEventType, IBaseEvent } from 'interface/event';
+import { EnumOSEventType, IBaseEvent } from 'functions/events/IEvents';
 import { useScreenStore } from 'stores/useScreenStore';
 
 export const viewportContainerEvents = (event: IBaseEvent) => {

@@ -14,12 +14,12 @@ import {
   EnumOSEventScope,
   IBaseEvent,
   IEvent,
-} from 'interface/event';
-import { IMouse } from './mouse';
+} from 'functions/events/IEvents';
 import { windowClientProcessEvents } from 'Objects/UIWindow/container/client/eventHandlers/WindowClientProcessEvents';
 import { ENV } from 'constants/globals/env';
 import { EnumScreenChangeMode } from 'constants/globals/interface';
 import { buttonContainerProcessEvents } from 'Objects/UIButton/container/eventHandlers/buttonContainerProcessEvents';
+import { IMouse } from 'functions/mouse/IMouse';
 
 export const eventLog = (event: IBaseEvent, name: string) => {
   ENV.eventDebug && console.log(`evt_${name} {${event.type}}`);

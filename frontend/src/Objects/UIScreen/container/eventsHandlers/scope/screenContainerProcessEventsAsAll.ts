@@ -1,5 +1,5 @@
 import { JAM_SCREEN } from 'api/os/api/jam/screen';
-import { EnumOSEventType, IEvent } from 'interface/event';
+import { EnumOSEventType, IEvent } from 'functions/events/IEvents';
 
 const jam_screen = new JAM_SCREEN();
 

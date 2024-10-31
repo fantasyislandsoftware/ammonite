@@ -1,4 +1,4 @@
-import { IPixelArray } from 'interface/graphics';
+import { IPixelArray } from 'functions/graphics/IGraphics';
 import { useBufferStore } from 'stores/useBufferStore';
 
 export const measureText = (text: string, font: string, size: number) => {

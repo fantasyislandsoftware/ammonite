@@ -1,7 +1,7 @@
 import React from 'react';
 import { FC } from 'react';
 import { canvasRenderStyle } from '../../_props/styles';
-import { EnumOSEventObjectType } from 'interface/event';
+import { EnumOSEventObjectType } from 'functions/events/IEvents';
 import { baseContainerBuildEvents } from 'Objects/UIBase/container/eventHandlers/baseContainerBuildEvents';
 import { EnumScreenModeType, IScreen } from '../../_props/screenInterface';
 import { getHighestScreenZIndex } from '../../_props/screenFunctions';

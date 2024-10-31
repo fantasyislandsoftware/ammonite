@@ -1,9 +1,9 @@
-import { IMouse } from 'functions/mouse';
-import { EnumOSEventObjectType, IBaseEvent } from 'interface/event';
+import { EnumOSEventObjectType, IBaseEvent } from 'functions/events/IEvents';
 import { screenClientBuildEvents } from '../client/eventHandlers/screenClientBuildEvents';
 import { screenTitleBarBuildEvents } from '../titleBar/eventHandlers/screenTitleBarBuildEvents';
 import { IScreen } from '../../_props/screenInterface';
-import { addEvent, eventLog } from 'functions/events';
+import { eventLog, addEvent } from 'functions/events/events';
+import { IMouse } from 'functions/mouse/IMouse';
 
 export const screenContainerBuildEvents = (
   event: IBaseEvent,

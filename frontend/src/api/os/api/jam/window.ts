@@ -1,8 +1,8 @@
 import {
   getPixelArrayDimensions,
   initPixelArray,
-} from 'api/lib/graphics/pixelArray';
-import { measureText } from 'api/lib/graphics/text';
+} from 'functions/graphics/pixelArray';
+import { measureText } from 'functions/graphics/text';
 import { generateBarIcons } from 'Objects/UIButton/props/buttonFunc';
 import { EnumButtonType } from 'Objects/UIButton/props/buttonInterface';
 import { screenContainerRender } from 'Objects/UIScreen/container/screenContainerRender';

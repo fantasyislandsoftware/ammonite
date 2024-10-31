@@ -26,3 +26,8 @@ export enum EnumBit {
   WORD = 16,
   LONG = 32,
 }
+
+export enum EnumDataFormat {
+  TEXT = 'text',
+  ARRAY_BUFFER = 'arrayBuffer',
+}

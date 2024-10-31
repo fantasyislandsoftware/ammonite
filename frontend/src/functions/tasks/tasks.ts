@@ -1,7 +1,7 @@
 import { ITask, TaskArch, TaskState, useTaskStore } from 'stores/useTaskStore';
 import { EnumM68KOP } from 'api/os/api/m68k/IM68k';
 import { opTable } from 'api/os/api/m68k/opTable';
-import { hex2bin } from './string';
+import { hex2bin } from '../string/string';
 import { MOVE } from 'api/os/api/m68k/MOVE/MOVE';
 import { BRA } from 'api/os/api/m68k/BRA/BRA';
 import { makeQuerablePromise } from 'api/http/promiseHandling';

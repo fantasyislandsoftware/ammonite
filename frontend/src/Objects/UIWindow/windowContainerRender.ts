@@ -1,7 +1,7 @@
 import { windowClientRender } from './container/client/windowClientRender';
 import { IWindow } from 'Objects/UIWindow/_props/windowInterface';
 import { windowTitleBarRender } from './container/titleBar/windowTitleBarRender';
-import { IPixelArray } from 'interface/graphics';
+import { IPixelArray } from 'functions/graphics/IGraphics';
 import { IScreen } from 'Objects/UIScreen/_props/screenInterface';
 
 export const windowContainerRender = (

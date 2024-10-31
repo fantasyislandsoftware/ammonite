@@ -1,6 +1,6 @@
 import { IButton } from 'Objects/UIButton/props/buttonInterface';
-import { EnumMouseButton } from 'functions/mouse';
-import { IPixelArray } from 'interface/graphics';
+import { EnumMouseButton } from 'functions/events/IEvents';
+import { IPixelArray } from 'functions/graphics/IGraphics';
 
 export interface IWindowEvent {
   x: number;

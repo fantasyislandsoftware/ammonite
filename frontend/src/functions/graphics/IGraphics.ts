@@ -11,3 +11,9 @@ export interface IBrush {
   height: number;
   pixels: IPixelArray;
 }
+
+export interface ICanvasTextInfo {
+  width: number;
+  height: number;
+  top: number;
+}

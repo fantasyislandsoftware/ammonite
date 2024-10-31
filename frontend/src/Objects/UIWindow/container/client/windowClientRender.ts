@@ -1,6 +1,6 @@
 import { IWindow } from 'Objects/UIWindow/_props/windowInterface';
-import { plot } from 'api/lib/graphics/draw';
-import { pixelMerge } from 'api/lib/graphics/pixelArray';
+import { plot } from 'functions/graphics/draw';
+import { pixelMerge } from 'functions/graphics/pixelArray';
 
 export const windowClientRender = (window: IWindow) => {
   const { pixels: windowPixels, client } = window;

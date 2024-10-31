@@ -1,7 +1,7 @@
 import { JAM_SCREEN } from 'api/os/api/jam/screen';
 import { EnumScreenChangeMode } from 'constants/globals/interface';
 import { STATE } from 'constants/globals/state';
-import { EnumOSEventType, IEvent } from 'interface/event';
+import { EnumOSEventType, IEvent } from 'functions/events/IEvents';
 
 const jam_screen = new JAM_SCREEN();
 

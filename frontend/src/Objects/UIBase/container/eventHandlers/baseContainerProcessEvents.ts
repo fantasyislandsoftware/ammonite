@@ -1,5 +1,5 @@
 import { STATE } from 'constants/globals/state';
-import { EnumOSEventType, IEvent } from 'interface/event';
+import { EnumOSEventType, IEvent } from 'functions/events/IEvents';
 
 export const baseContainerProcessEvents = (event: IEvent) => {
   const mouseLeave = () => {};

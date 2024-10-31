@@ -1,4 +1,4 @@
-import { EnumOSEventScope, IEvent } from 'interface/event';
+import { EnumOSEventScope, IEvent } from 'functions/events/IEvents';
 import { screenContainerProcessEventsAsParent } from './scope/screenContainerProcessEventsAsChild';
 import { screenContainerProcessEventsAsAll } from './scope/screenContainerProcessEventsAsAll';
 

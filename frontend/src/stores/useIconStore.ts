@@ -1,4 +1,4 @@
-import { IPixelArray } from 'interface/graphics';
+import { IPixelArray } from 'functions/graphics/IGraphics';
 import { create } from 'zustand';
 
 export interface IconStore {

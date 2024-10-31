@@ -1,4 +1,4 @@
-import { EnumOSEventScope, IEvent } from 'interface/event';
+import { EnumOSEventScope, IEvent } from 'functions/events/IEvents';
 import { windowContainerProcessEventsAsAll } from './scope/windowContainerProcessEventsAsAll';
 
 export const windowContainerProcessEvents = (

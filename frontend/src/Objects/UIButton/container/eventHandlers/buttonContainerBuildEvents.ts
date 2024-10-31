@@ -1,9 +1,10 @@
-import { EnumOSEventObjectType, IBaseEvent } from 'interface/event';
+import { EnumOSEventObjectType, IBaseEvent } from 'functions/events/IEvents';
 import { IScreen } from 'Objects/UIScreen/_props/screenInterface';
-import { addEvent, eventLog } from 'functions/events';
 import { IButton } from 'Objects/UIButton/props/buttonInterface';
-import { IMouse, inBoundary } from 'functions/mouse';
 import { IWindow } from 'Objects/UIWindow/_props/windowInterface';
+import { addEvent } from 'functions/events/events';
+import { IMouse } from 'functions/mouse/IMouse';
+import { inBoundary } from 'functions/mouse/mouse';
 
 export const buttonContainerBuildEvents = (
   event: IBaseEvent,

@@ -1,5 +1,5 @@
 import { ITask } from 'stores/useTaskStore';
-import { EnumByteOrder, INumberCalcConfig } from './IdataHandling';
+import { EnumByteOrder, INumberCalcConfig } from './IDataHandling';
 
 export const bin2int = (bin: string) => {
   return parseInt(bin, 16);
