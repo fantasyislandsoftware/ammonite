@@ -16,7 +16,7 @@ import { JAM_SYSTEM } from 'api/os/api/jam/system';
 
 const App = () => {
   const { screens, setScreens } = useScreenStore();
-  const { tasks, setTasks } = useTaskStore();
+  const { tasks } = useTaskStore();
   const [initBoot, setInitBoot] = useState(true);
   const { systemCrash } = useErrorStore();
   const [taskProcessor, setTaskProcessor] = useState<any>(null);
@@ -48,9 +48,6 @@ const App = () => {
 
   useEffect(() => {
     async function boot() {
-      window.onerror = (message, source, lineno, colno, error) => {
-        setTaskProcessor([]);
-      };
       jam_system.exec('/home/node/app/src/jam/boot.js');
     }
     if (initBoot) {

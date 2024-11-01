@@ -19,7 +19,10 @@ export const startTaskProcessor = () => {
   const { tasks, setTasks } = useTaskStore.getState();
   return setInterval(() => {
     tasks.map((task) => {
-      task = execInstruction(task);
+      const result = execInstruction(task);
+      if (result) {
+        task = result;
+      }
     });
     setTasks(tasks);
   });
@@ -49,17 +52,13 @@ const execJamInstruction = (self: ITask) => {
   });
 
   const line = self.code[self.pos];
-  try {
-    if (line !== self.promise.name) {
-      self.promise = {
-        name: line,
-        state: makeQuerablePromise(eval(line)),
-      };
-    }
-  } catch (e) {
-    console.log(e);
-    console.log(line);
-    killTask(self.id);
+  if (line !== self.promise.name) {
+    self.promise = {
+      name: line,
+      state: makeQuerablePromise(eval(line), (e) => {
+        killTask(self.id, e);
+      }),
+    };
   }
 
   if (self.state === TaskState.RUNNING) {
@@ -75,6 +74,7 @@ const execJamInstruction = (self: ITask) => {
       self.pos++;
     }
   }
+
   if (self.pos >= self.code.length) {
     killTask(self.id);
   }
@@ -146,8 +146,7 @@ const execM68KInstruction = (self: ITask) => {
         break;
     }
   } else {
-    console.log('unknown');
-    killTask(self.id);
+    killTask(self.id, 'unknown instruction');
   }
 
   self = state.task;
@@ -161,20 +160,38 @@ const execM68KInstruction = (self: ITask) => {
 };
 
 export const execInstruction = (task: ITask) => {
-  switch (task.arch) {
-    case TaskArch.JS:
-      return execJamInstruction(task);
-    case TaskArch.M68K:
-      return execM68KInstruction(task);
+  try {
+    switch (task.arch) {
+      case TaskArch.JS:
+        return execJamInstruction(task);
+      case TaskArch.M68K:
+        return execM68KInstruction(task);
+    }
+  } catch (e) {
+    killTask(task.id, e);
   }
 };
 
-const killTask = (id: string) => {
+const killTask = (id: string, e?: any) => {
+  /* Remove screens */
+  const jam_screen = new JAM_SCREEN();
+  const task = useTaskStore.getState().tasks.find((task) => task.id === id);
+  if (task) {
+    const { screens } = task.res;
+    screens.map((id) => {
+      jam_screen.closeScreen(id);
+    });
+  }
+
+  /* Remove task */
   const { tasks, setTasks } = useTaskStore.getState();
   tasks.map((task, index) => {
     if (task.id === id) {
       tasks.splice(index, 1);
     }
   });
+  if (e) {
+    console.log({ task: id, error: e });
+  }
   setTasks(tasks);
 };

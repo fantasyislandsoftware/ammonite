@@ -82,8 +82,8 @@ export class JAM_SYSTEM {
           ccr: fillNumberArray(0, 5),
           m: test as any,
         },
-
         pc: block.pos,
+        res: { screens: [] },
       });
     setTasks(tasks);
   };

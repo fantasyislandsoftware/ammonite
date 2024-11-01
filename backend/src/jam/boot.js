@@ -5,6 +5,8 @@ import { label, def, forLoop } from "JAM_LOGIC";
 import { getFontList, loadFont } from "JAM_FONT";
 import { loadIcons } from "JAM_ICON";
 
+log("test");
+
 /* Load font list */
 getFontList("fontList");
 
@@ -20,4 +22,6 @@ forLoop("loadFontsLoop", "i", $fontList.length, 1);
 loadIcons();
 
 /* */
-exec("/home/node/app/src/jam/wb.js");
+//exec("/home/node/app/src/jam/wb.js");
+//exec("/home/node/app/src/jam/test.js");
+exec("/home/node/app/src/asm/test");

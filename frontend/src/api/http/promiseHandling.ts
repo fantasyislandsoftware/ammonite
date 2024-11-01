@@ -1,4 +1,7 @@
-export function makeQuerablePromise(promise: any) {
+export function makeQuerablePromise(
+  promise: any,
+  handleError: (e: any) => void
+) {
   // Don't modify any promise that has been already modified.
   if (promise.isFulfilled) return promise;
 
@@ -19,7 +22,7 @@ export function makeQuerablePromise(promise: any) {
     function (e: any) {
       isRejected = true;
       isPending = false;
-      throw e;
+      handleError(e);
     }
   );
 

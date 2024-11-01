@@ -44,6 +44,7 @@ export class JAM_SCREEN {
     returnId: string
   ) => {
     if (!this.self) return;
+
     const { screens, setScreens } = useScreenStore.getState();
 
     const nextScreenIndex = screens.length ? getHighestScreenZIndex() + 1 : 100;
@@ -57,6 +58,8 @@ export class JAM_SCREEN {
     titleBarHeight += 1;
 
     const screenId = uuidv4();
+
+    this.self.res.screens.push(screenId);
 
     /* Buttons */
     const buttonSize = Math.round(titleBarHeight / 2) * 2 - 2;
@@ -134,6 +137,14 @@ export class JAM_SCREEN {
     STATE.currentScreenId = screenId;
 
     this.self.var[returnId] = screenId;
+  };
+
+  /****************************************************/
+
+  closeScreen = async (screenId: string) => {
+    const screenIndex = await this.findScreenIndex(screenId);
+    this.screens.splice(screenIndex, 1);
+    this.setScreens(this.screens);
   };
 
   /****************************************************/
