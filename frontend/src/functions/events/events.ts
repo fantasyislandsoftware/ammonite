@@ -20,6 +20,9 @@ import { ENV } from 'constants/globals/env';
 import { EnumScreenChangeMode } from 'constants/globals/interface';
 import { buttonContainerProcessEvents } from 'Objects/UIButton/container/eventHandlers/buttonContainerProcessEvents';
 import { IMouse } from 'functions/mouse/IMouse';
+import { useErrorStore } from 'stores/useErrorStore';
+import { useTaskStore } from 'stores/useTaskStore';
+import { SYSTEM } from 'constants/globals/system';
 
 export const eventLog = (event: IBaseEvent, name: string) => {
   ENV.eventDebug && console.log(`evt_${name} {${event.type}}`);
@@ -121,4 +124,18 @@ export const processEvents = () => {
 
 export const processScreenChange = () => {
   STATE.screenChangeMode = EnumScreenChangeMode.CHANGING;
+};
+
+export const crash = (message: string) => {
+  const { setSystemCrash } = useErrorStore.getState();
+  const { setTasks } = useTaskStore.getState();
+
+  setTasks([]);
+
+  SYSTEM.heartbeat && clearInterval(SYSTEM.heartbeat);
+
+  setSystemCrash({
+    state: true,
+    message: message,
+  });
 };

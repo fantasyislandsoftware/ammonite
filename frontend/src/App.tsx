@@ -13,6 +13,7 @@ import { getMem } from 'api/http/fileIO';
 import { SYSTEM } from 'constants/globals/system';
 import { useTaskStore } from 'stores/useTaskStore';
 import { JAM_SYSTEM } from 'api/os/api/jam/system';
+import SystemCrash from 'SystemCrash';
 
 const App = () => {
   const { screens, setScreens } = useScreenStore();
@@ -23,6 +24,9 @@ const App = () => {
   const jam_system = new JAM_SYSTEM(tasks[0]);
 
   const initEventListeners = () => {
+    window.addEventListener('error', (e) => {
+      console.log('hello');
+    });
     window.addEventListener('resize', (e) => {
       setScreens(screens);
     });
@@ -41,7 +45,7 @@ const App = () => {
 
   const heartBeat = () => {
     updateMem();
-    setInterval(() => {
+    SYSTEM.heartbeat = setInterval(() => {
       updateMem();
     }, 8000);
   };
@@ -70,14 +74,8 @@ const App = () => {
     window.requestAnimationFrame(renderLoop);
   };
 
-  useEffect(() => {
-    if (systemCrash.state) {
-      clearInterval(taskProcessor);
-    }
-  }, [systemCrash.state]);
-
   if (systemCrash.state) {
-    return <div>{systemCrash.message}</div>;
+    return <SystemCrash />;
   } else {
     return (
       <>

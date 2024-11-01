@@ -11,7 +11,7 @@
         "@types/jest": "^29.5.12",
         "@types/uuid": "^9.0.6",
         "@typescript-eslint/parser": "^6.2.1",
-        "axios": "0.27.2",
+        "axios": "^1.7.7",
         "base-64": "^1.0.0",
         "buffer": "^6.0.3",
         "enzyme": "^3.11.0",
@@ -24,7 +24,6 @@
         "react-query": "^3.39.1",
         "react-router-dom": "5.1.2",
         "semantic-ui-react": "^2.1.4",
-        "socket.io-client": "^4.7.5",
         "ts-node": "^10.8.1",
         "uuid": "^9.0.1",
         "zustand": "^4.4.1"

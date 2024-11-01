@@ -43,6 +43,7 @@ export interface ITask {
   pos: number;
   s: { [key: string]: number[] };
   pc: number;
+  res: { screens: string[] };
 }
 
 export interface TaskStore {

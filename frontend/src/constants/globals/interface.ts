@@ -41,12 +41,9 @@ export enum EnumScreenChangeMode {
   CHANGING = 'changing',
 }
 
-export interface INetwork {
-  socket: any;
-}
-
 export interface ISYSTEM {
   memory: IDeviceMemory;
+  heartbeat: NodeJS.Timeout | null;
 }
 
 export interface IDeviceMemory {

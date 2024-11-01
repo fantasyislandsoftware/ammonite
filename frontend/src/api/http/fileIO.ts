@@ -3,36 +3,29 @@ import { detectIFF, parseIFF } from 'functions/graphics/iff';
 import { ENV } from 'constants/globals/env';
 import { hex2int } from 'functions/dataHandling/dataHandling';
 import { EnumDataFormat } from 'functions/dataHandling/IDataHandling';
+import http from 'agent';
 
 export const getDirList = async (path: string) => {
-  const request = await fetch(`${ENV.api}/getDirList?path=${path}`, {
+  const request = await http.get(`/getDirList?path=${path}`, {
     method: 'GET',
   });
-  const response = await request.json();
+  const response = await request.data;
   return response;
 };
 
 export const getFile = async (path: string, format: EnumDataFormat) => {
-  const request = await fetch(`${ENV.api}/getFile?path=${path}`, {
-    method: 'GET',
+  const request = await http.get(`/getFile?path=${path}`, {
+    responseType:
+      format === EnumDataFormat.ARRAY_BUFFER ? 'arraybuffer' : 'text',
   });
   let result = null;
-  switch (format) {
-    case EnumDataFormat.ARRAY_BUFFER:
-      result = await request.arrayBuffer();
-      break;
-    case EnumDataFormat.TEXT:
-      result = await request.text();
-      break;
-  }
-  return result as any;
+  result = await request.data;
+  return result;
 };
 
 export const getExe = async (path: string) => {
-  const request = await fetch(`${ENV.api}/getExe?path=${path}`, {
-    method: 'GET',
-  });
-  const response = await request.json();
+  const request = await http.get(`${ENV.api}/getExe?path=${path}`);
+  const response = await request.data;
   if (response.type === 'amiga') {
     const oldAddr = 0;
     const newAddr = 0;
@@ -57,18 +50,16 @@ export const getExe = async (path: string) => {
 };
 
 export const getMem = async () => {
-  const request = await fetch(`${ENV.api}/getMem`, {
+  const request = await http.get(`${ENV.api}/getMem`, {
     method: 'GET',
   });
-  const response = await request.json();
+  const response = await request.data;
   return response;
 };
 
 export const getTest = async (path: string) => {
-  const request = await fetch(`${ENV.api}/getTest?path=${path}`, {
-    method: 'GET',
-  });
-  const data = await request.arrayBuffer();
+  const request = await http.get(`${ENV.api}/getTest?path=${path}`);
+  const data = await request.data;
 
   const stream = BinaryStream(data.slice(0, data.byteLength), true);
   //console.log(stream);

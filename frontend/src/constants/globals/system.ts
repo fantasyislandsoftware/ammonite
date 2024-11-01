@@ -5,4 +5,5 @@ export const SYSTEM: ISYSTEM = {
     total: 0,
     free: 0,
   },
+  heartbeat: null,
 };
