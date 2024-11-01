@@ -17,8 +17,5 @@ export const useErrorStore = create<ErrorStore>((set) => ({
   },
   setSystemCrash: (systemCrash: ISystemCrash) => {
     set({ systemCrash });
-    if (systemCrash.state) {
-      console.log(systemCrash.message);
-    }
   },
 }));

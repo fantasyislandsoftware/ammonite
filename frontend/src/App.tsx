@@ -14,6 +14,7 @@ import { SYSTEM } from 'constants/globals/system';
 import { useTaskStore } from 'stores/useTaskStore';
 import { JAM_SYSTEM } from 'api/os/api/jam/system';
 import SystemCrash from 'SystemCrash';
+import { crash } from 'functions/events/events';
 
 const App = () => {
   const { screens, setScreens } = useScreenStore();
@@ -25,7 +26,9 @@ const App = () => {
 
   const initEventListeners = () => {
     window.addEventListener('error', (e) => {
-      console.log('hello');
+      if (e.error.message !== 'self.postMessage is not a function') {
+        crash(e.error.message);
+      }
     });
     window.addEventListener('resize', (e) => {
       setScreens(screens);
