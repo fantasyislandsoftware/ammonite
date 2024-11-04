@@ -8,8 +8,6 @@ const SystemCrash = () => {
 
   const { systemCrash, setSystemCrash } = useErrorStore();
 
-  (window as any).x = 1;
-
   useEffect(() => {
     if (init) {
       setInterval(() => {
