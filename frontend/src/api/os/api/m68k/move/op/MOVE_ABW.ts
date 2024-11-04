@@ -1,6 +1,6 @@
 import { ITask } from 'stores/useTaskStore';
 import { EnumArgSrcDst } from '../../IM68k';
-import { EnumOpBit } from 'functions/dataHandling/IDataHandling';
+import { EnumOpBit } from 'functions/dataHandling/IntDataHandling';
 import {
   ABX_D,
   ABX_S,

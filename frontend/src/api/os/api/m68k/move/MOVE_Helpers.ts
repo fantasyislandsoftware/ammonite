@@ -5,7 +5,7 @@ import {
   l,
   splitLongInto4Bytes,
 } from 'functions/dataHandling/dataHandling';
-import { EnumOpBit } from 'functions/dataHandling/IDataHandling';
+import { EnumOpBit } from 'functions/dataHandling/IntDataHandling';
 import { EnumCCR, ITask } from 'stores/useTaskStore';
 
 const _l = l;

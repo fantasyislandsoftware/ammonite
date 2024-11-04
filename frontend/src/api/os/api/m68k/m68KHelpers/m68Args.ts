@@ -3,7 +3,7 @@ import { EnumArgSrcDst, IOperand } from '../IM68k';
 import { IWDI_B } from './m68kHelpers';
 import { ITask } from 'stores/useTaskStore';
 import { bin2hex, hex2int, int2hex } from 'functions/dataHandling/dataHandling';
-import { EnumBit, EnumOpBit } from 'functions/dataHandling/IDataHandling';
+import { EnumBit, EnumOpBit } from 'functions/dataHandling/IntDataHandling';
 
 export interface IArgData {
   w: string[];

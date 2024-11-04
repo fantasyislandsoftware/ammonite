@@ -4,7 +4,7 @@ import { detectIFF, parseIFF } from 'functions/graphics/iff';
 import { ENV } from 'constants/globals/env';
 import { IPixelArray } from 'functions/graphics/IGraphics';
 import { useIconStore } from 'stores/useIconStore';
-import { EnumDataFormat } from 'functions/dataHandling/IDataHandling';
+import { EnumDataFormat } from 'functions/dataHandling/IntDataHandling';
 
 export class JAM_ICON {
   /****************************************************/

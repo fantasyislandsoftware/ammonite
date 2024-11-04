@@ -2,7 +2,7 @@ import BinaryStream from 'functions/dataHandling/binarystream';
 import { detectIFF, parseIFF } from 'functions/graphics/iff';
 import { ENV } from 'constants/globals/env';
 import { hex2int } from 'functions/dataHandling/dataHandling';
-import { EnumDataFormat } from 'functions/dataHandling/IDataHandling';
+import { EnumDataFormat } from 'functions/dataHandling/IntDataHandling';
 import http from 'agent';
 
 export const getDirList = async (path: string) => {

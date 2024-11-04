@@ -13,7 +13,7 @@ import {
   join2BytesInto1Word,
   join4BytesInto1Long,
 } from './dataHandling';
-import { EnumByteOrder } from './IDataHandling';
+import { EnumByteOrder } from './IntDataHandling';
 
 it(`test`, () => {
   const word = 0x1234;
