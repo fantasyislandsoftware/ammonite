@@ -1,18 +1,22 @@
-FROM i386/alpine as backend
+FROM archlinux as backend
 
 ARG HOME_PATH=/home/node
 ARG APP_PATH=${HOME_PATH}/app
 ARG TOOLS_PATH=${APP_PATH}/tools
 
-RUN apk add --update npm nano git wget tar build-base fontconfig
+RUN pacman -Syu pnpm nano gcc fontconfig --noconfirm
 
-COPY ./backend/package.json ./
-COPY ./backend/src ./
+#RUN apk add --update pnpm nano git wget tar build-base fontconfig
+
+COPY ./backend/package.json ${APP_PATH}/
+COPY ./backend/tsconfig.json ${APP_PATH}/
+COPY ./backend/src ${APP_PATH}/src
+COPY ./backend/tsconfig.json ${APP_PATH}/
 COPY ./backend/fonts/ /usr/share/fonts/truetype/
 
 COPY ./backend/tools/hunkinfo ${TOOLS_PATH}/hunkinfo
 WORKDIR ${TOOLS_PATH}/hunkinfo
-RUN make hunkinfo
+RUN gcc hunkinfo.c -o hunkinfo
 
 ENV PATH="${TOOLS_PATH}/hunkinfo:$PATH"
 ENV PATH="${TOOLS_PATH}/hunkdump:$PATH"
@@ -20,4 +24,5 @@ ENV PATH="${TOOLS_PATH}/vasm:$PATH"
 ENV PATH="${TOOLS_PATH}/vda:$PATH"
 
 WORKDIR ${APP_PATH}
-RUN npm install
+
+RUN pnpm install

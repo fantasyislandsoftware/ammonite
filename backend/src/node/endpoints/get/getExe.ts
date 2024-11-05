@@ -1,7 +1,6 @@
-import { Express, raw } from "express";
-import fs, { readFileSync } from "fs";
+import { Express } from "express";
+import { readFileSync } from "fs";
 const { spawnSync } = require("node:child_process");
-//const ls = spawn('ls', ['-lh', '/usr']);
 
 const examineHeader = (data: Buffer) => {
   const jam = [47, 42, 32, 64, 74, 65, 77, 32, 42, 47];
@@ -37,10 +36,6 @@ const examineHeader = (data: Buffer) => {
   }
 
   return result;
-};
-
-const padZeros = (str: string) => {
-  return "00000000".substring(str.length - 1) + str.replace("x", "");
 };
 
 const hunkTypes: any = {
@@ -118,11 +113,6 @@ const getJamHunks = (data: string) => {
   const hunkType = "HUNK_CODE";
   let hunkData: any = [];
   let hunks: any = [];
-
-  let addr = "";
-  let hex = "";
-  let op = "";
-  let arg = "";
 
   lines.map((line, index) => {
     hunkData.push({ line: index, command: line });

@@ -3,8 +3,12 @@ import { Express } from "express";
 
 const getFontList = async (app: Express) => {
   app.get("/getFontList", async (req, res) => {
-    const { stdout, stderr } = spawn("fc-list");
-    const list = (await new Response(stdout).text()).split("\n");
+    const { stdout } = spawn("fc-list");
+    let stdoutStr = '';
+    for await (const chunk of stdout) {
+      stdoutStr += chunk;
+    }
+    const list = stdoutStr.split("\n");
     let data: any = [];
     list.map((font) => {
       if (font === "") return;
