@@ -55,7 +55,7 @@ const App = () => {
 
   useEffect(() => {
     async function boot() {
-      jam_system.exec('/home/node/app/src/jam/boot.js');
+      jam_system.exec('src/jam/boot.js');
     }
     if (initBoot) {
       boot();
