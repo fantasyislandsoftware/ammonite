@@ -8,21 +8,36 @@ const getFontList = async (app: Express) => {
     for await (const chunk of stdout) {
       stdoutStr += chunk;
     }
+    //console.log(stdoutStr);
     const list = stdoutStr.split("\n");
+    //console.log(list);
     let data: any = [];
     list.map((font) => {
       if (font === "") return;
       const items = font.split(":");
-      const path = items[0];
-      const name = items[1];
-      const style = items[2].replace("style=", "").toLowerCase();
+      let name = '';
+      let style = '';
+      let path = '';
+      items.map((item) => {
+        if (item.includes('/')) {
+          path = item;
+        }
+        if (item.includes('style=')) {
+          style = item.replace("style=", "");
+        }
+      });
+      if (items.length === 2) {
+        name = items[1];
+      } else {
+        name = items[1];
+      }
+
       data.push({
         name: name,
         style: style,
         path: path,
       });
     });
-
     res.send(data);
   });
 };
