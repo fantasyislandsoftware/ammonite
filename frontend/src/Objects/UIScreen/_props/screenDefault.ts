@@ -1,9 +1,8 @@
 export const screenDefault = {
   titleBar: {
     font: {
-      //name: 'Amiga Forever',
-      name: 'Arial',
-      size: 12,
+      name: 'Amiga Forever',
+      size: 8,
     },
   },
 };

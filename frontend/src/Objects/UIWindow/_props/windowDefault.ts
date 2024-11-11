@@ -3,8 +3,8 @@ import { WindowColour } from './windowColour';
 export const windowDefault = {
   titleBar: {
     font: {
-      name: 'Arial',
-      size: 12,
+      name: 'Amiga Forever',
+      size: 8,
     },
   },
   border: {
