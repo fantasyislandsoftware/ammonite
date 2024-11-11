@@ -11,6 +11,5 @@ export const windowContainerRender = (
 ) => {
   windowTitleBarRender(screen, window);
   windowClientRender(window);
-
   return window.pixels;
 };

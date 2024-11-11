@@ -12,7 +12,6 @@ export const windowClientBuildEvents = (
     screen?: IScreen;
     window?: IWindow;
   },
-
   windowMouse: IMouse
 ) => {
   const { screen, window } = objects;

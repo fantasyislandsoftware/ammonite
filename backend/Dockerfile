@@ -4,9 +4,7 @@ ARG HOME_PATH=/home/node
 ARG APP_PATH=${HOME_PATH}/app
 ARG TOOLS_PATH=${APP_PATH}/tools
 
-RUN pacman -Syu pnpm nano gcc make fontconfig --noconfirm
-
-#RUN apk add --update pnpm nano git wget tar build-base fontconfig
+RUN pacman -Syu pnpm nano gcc make python python-pip fontconfig --noconfirm
 
 COPY ./backend/package.json ${APP_PATH}/
 COPY ./backend/tsconfig.json ${APP_PATH}/

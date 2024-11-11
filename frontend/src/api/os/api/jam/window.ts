@@ -196,9 +196,9 @@ export class JAM_WINDOW {
     const windowIndex = await this.findWindowIndex(screenId, windowId);
     const { width: clientWidth, height: clientHeight } =
       await getPixelArrayDimensions(this.screens[screenIndex].client.pixels);
-    this.screens[screenIndex].windows[windowIndex].position.x = 0;
-    this.screens[screenIndex].windows[windowIndex].position.y = 0;
-    this.resize(windowId, clientWidth, clientHeight);
+    this.screens[screenIndex].windows[windowIndex].position.x = 1;
+    this.screens[screenIndex].windows[windowIndex].position.y = 1;
+    this.resize(windowId, clientWidth - 2, clientHeight - 2);
   };
 
   /****************************************************/
@@ -279,19 +279,19 @@ export class JAM_WINDOW {
       getPixelArrayDimensions(windowPixels);
 
     /* Position */
-    if (x < 0) x = 0;
-    if (y < 0) y = 0;
+    if (x < 1) x = 1;
+    if (y < 1) y = 1;
 
     /* Width */
     const maxX = clientWidth - windowWidth;
-    if (x > maxX) {
-      x = maxX;
+    if (x > maxX - 1) {
+      x = maxX - 1;
     }
 
     /* Height */
     const maxY = clientHeight - windowHeight;
-    if (y > maxY) {
-      y = maxY;
+    if (y > maxY - 1) {
+      y = maxY - 1;
     }
     this.screens[screenIndex].windows[windowIndex].position.x = x;
     this.screens[screenIndex].windows[windowIndex].position.y = y;
