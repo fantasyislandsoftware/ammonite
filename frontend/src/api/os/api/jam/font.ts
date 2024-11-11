@@ -33,4 +33,17 @@ export class JAM_FONT {
   };
 
   /****************************************************/
+
+  loadFonts = async () => {
+    const list = await this.getFontList('loadFonts');
+    list.data.map((font: any) => {
+      const { name, path } = font;
+      const fontFace = new FontFace(
+        name,
+        `url(${ENV.api}/getFile?path=${path})`
+      );
+    });
+  };
+
+  /****************************************************/
 }

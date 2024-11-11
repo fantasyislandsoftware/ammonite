@@ -4,25 +4,23 @@ import { Express } from "express";
 const getFontList = async (app: Express) => {
   app.get("/getFontList", async (req, res) => {
     const { stdout } = spawn("fc-list");
-    let stdoutStr = '';
+    let stdoutStr = "";
     for await (const chunk of stdout) {
       stdoutStr += chunk;
     }
-    //console.log(stdoutStr);
     const list = stdoutStr.split("\n");
-    //console.log(list);
     let data: any = [];
     list.map((font) => {
       if (font === "") return;
       const items = font.split(":");
-      let name = '';
-      let style = '';
-      let path = '';
+      let name = "";
+      let style = "";
+      let path = "";
       items.map((item) => {
-        if (item.includes('/')) {
+        if (item.includes("/")) {
           path = item;
         }
-        if (item.includes('style=')) {
+        if (item.includes("style=")) {
           style = item.replace("style=", "");
         }
       });
