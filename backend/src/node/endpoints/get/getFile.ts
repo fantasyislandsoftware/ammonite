@@ -7,8 +7,9 @@ const getFile = async (app: Express) => {
     fs.readFile(path as string, (err, data) => {
       if (err) {
         res.send(err);
+      } else {
+        res.send(data);
       }
-      res.send(data);
     });
   });
 };
