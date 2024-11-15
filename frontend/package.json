@@ -23,6 +23,7 @@
         "react-dom": "16.13.1",
         "react-query": "^3.39.1",
         "react-router-dom": "5.1.2",
+        "react-use-websocket": "^4.10.1",
         "semantic-ui-react": "^2.1.4",
         "ts-node": "^10.8.1",
         "uuid": "^9.0.1",

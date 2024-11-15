@@ -1,23 +1,45 @@
-import express from "express";
+import initRestServer from "./restServer";
+import initSocketServer from "./webSocketServer";
 
-import getFile from "./endpoints/get/getFile";
-import getDirList from "./endpoints/get/getDirList";
-import getFontList from "./endpoints/get/getFontList";
-import getMem from "./endpoints/get/getMem";
-import getExe from "./endpoints/get/getExe";
+initRestServer();
+initSocketServer();
 
-const app = express();
-var cors = require("cors");
-app.use(cors());
+//import express from "express";
+//import { WebSocketServer } from "ws";
 
-const restPort = 1234;
+//const http = require("http");
+//const url = require("url");
+//var cors = require("cors");
 
-getDirList(app);
-getFile(app);
-getExe(app);
-getFontList(app);
-getMem(app);
+//import getFile from "./endpoints/get/getFile";
+//import getDirList from "./endpoints/get/getDirList";
+//import getFontList from "./endpoints/get/getFontList";
+//import getMem from "./endpoints/get/getMem";
+//import getExe from "./endpoints/get/getExe";
 
-app.listen(restPort, () => {
-  console.log(`Listening on port ${restPort}...`);
-});
+//const rest = express();
+//rest.use(cors());
+
+//const restPort = 1234;
+//const socketPort = 1235;
+
+//getDirList(rest);
+//getFile(rest);
+//getExe(rest);
+//getFontList(rest);
+//getMem(rest);
+
+//rest.listen(restPort, () => {
+//  console.log(`Listening on port ${restPort}...`);
+//});
+
+//const server = http.createServer();
+//const wsServer = new WebSocketServer({ server });
+
+//wsServer.on("connection", (connection, request) => {
+//  console.log("Connection established");
+//});
+
+//server.listen(socketPort, () => {
+//  console.log(`Listening on port ${socketPort}...`);
+//});

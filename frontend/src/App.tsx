@@ -15,6 +15,7 @@ import { useTaskStore } from 'stores/useTaskStore';
 import { JAM_SYSTEM } from 'api/os/api/jam/system';
 import SystemCrash from 'SystemCrash';
 import { crash } from 'functions/events/events';
+import useWebSocket from 'react-use-websocket';
 
 const App = () => {
   const { screens, setScreens } = useScreenStore();
@@ -53,6 +54,13 @@ const App = () => {
     }, 8000);
   };
 
+  const initWebSocket = () => {
+    const WS_URL = 'ws://localhost:1235';
+    const useTest = useWebSocket(WS_URL, {
+      queryParams: { username: 'test' },
+    });
+  };
+
   useEffect(() => {
     async function boot() {
       jam_system.exec('src/jam/boot.js');
@@ -64,6 +72,7 @@ const App = () => {
       renderLoop();
       initEventListeners();
       heartBeat();
+      initWebSocket();
     }
   }, [initBoot]);
 

@@ -32,7 +32,10 @@ export const screenContainerRender = (screen: IScreen): IScreen => {
       const pixelIndex = screen.pixels[y][x];
       const color = screen.palette[pixelIndex];
       for (let i = 0; i < 4; i++) {
-        imgData.data[n * 4 + i] = color[i];
+        const p = n * 4 + i;
+        if (imgData.data[p] !== color[i]) {
+          imgData.data[p] = color[i];
+        }
       }
       n++;
     }
