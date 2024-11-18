@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { UIScreen } from './Objects/UIScreen';
-import { useScreenStore } from './stores/useScreenStore';
+import { UIScreen } from '../Objects/UIScreen';
+import { useScreenStore } from '../stores/useScreenStore';
 import ShadowBuffer from 'Objects/UIScreen/container/jsx/ShadowBuffer';
 import { Backdrop } from 'Objects/UIBackdrop/container/jsx/Backdrop';
 import { startTaskProcessor } from 'functions/tasks/tasks';
 import { useErrorStore } from 'stores/useErrorStore';
-import './css/base.css';
+import '../css/base.css';
 import { screenContainerRender } from 'Objects/UIScreen/container/screenContainerRender';
 import { baseContainerBuildEvents } from 'Objects/UIBase/container/eventHandlers/baseContainerBuildEvents';
 import { getHighestScreenZIndex } from 'Objects/UIScreen/_props/screenFunctions';
@@ -13,7 +13,7 @@ import { getMem } from 'api/http/fileIO';
 import { SYSTEM } from 'constants/globals/system';
 import { useTaskStore } from 'stores/useTaskStore';
 import { JAM_SYSTEM } from 'api/os/api/jam/system';
-import SystemCrash from 'SystemCrash';
+import SystemCrash from 'BaseComponents/SystemCrash';
 import { crash } from 'functions/events/events';
 import useWebSocket from 'react-use-websocket';
 
@@ -42,24 +42,7 @@ const App = () => {
     });
   };
 
-  const updateMem = async () => {
-    const mem = await getMem();
-    SYSTEM.memory = mem;
-  };
-
-  const heartBeat = () => {
-    updateMem();
-    SYSTEM.heartbeat = setInterval(() => {
-      updateMem();
-    }, 8000);
-  };
-
-  const initWebSocket = () => {
-    const WS_URL = 'ws://localhost:1235';
-    const useTest = useWebSocket(WS_URL, {
-      queryParams: { username: 'test' },
-    });
-  };
+  const initSocket = () => {};
 
   useEffect(() => {
     async function boot() {
@@ -71,8 +54,7 @@ const App = () => {
       setTaskProcessor(startTaskProcessor());
       renderLoop();
       initEventListeners();
-      heartBeat();
-      initWebSocket();
+      initSocket();
     }
   }, [initBoot]);
 

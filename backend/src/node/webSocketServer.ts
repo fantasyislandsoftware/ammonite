@@ -1,3 +1,5 @@
+import os from "os";
+
 const initWebSocketServer = () => {
   const http = require("http");
   const { WebSocketServer } = require("ws");
@@ -6,8 +8,35 @@ const initWebSocketServer = () => {
   const wsServer = new WebSocketServer({ server });
   const port = 1235;
 
+  enum Request {
+    MEMORY = "REQUEST_MEMORY",
+  }
+
   wsServer.on("connection", (connection: any, request: any) => {
-    console.log(connection, request);
+    connection.send(
+      JSON.stringify({
+        total: os.totalmem(),
+        free: os.freemem(),
+      })
+    );
+
+    connection.on("message", (message: any) => {
+      const messageString = Buffer.from(message).toString();
+      switch (messageString) {
+        case Request.MEMORY:
+          connection.send(
+            JSON.stringify({
+              total: os.totalmem(),
+              free: os.freemem(),
+            })
+          );
+          break;
+        default:
+          console.log("Unknown request");
+          break;
+      }
+      //console.log(Buffer.from(message).toString());
+    });
   });
 
   server.listen(port, () => {

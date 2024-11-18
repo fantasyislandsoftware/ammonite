@@ -1,5 +1,6 @@
 import { ITask, TaskState, useTaskStore } from 'stores/useTaskStore';
 import { SYSTEM } from 'constants/globals/system';
+import { SOCKET } from 'constants/globals/socket';
 import { v4 as uuidv4 } from 'uuid';
 import { getExe } from 'api/http/fileIO';
 import {
@@ -91,10 +92,15 @@ export class JAM_SYSTEM {
   /****************************************************/
 
   getMem = async (returnVar: string) => {
-    this.self.var[returnVar] = {
-      total: SYSTEM.memory.total,
-      free: SYSTEM.memory.free,
-      freeStr: numberWithCommas(SYSTEM.memory.free),
+    SOCKET.NODE.send('REQUEST_MEMORY');
+    SOCKET.NODE.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      this.self.var[returnVar] = {
+        total: data.total,
+        free: data.free,
+        freeStr: numberWithCommas(data.free),
+      };
+      return;
     };
   };
 

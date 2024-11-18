@@ -4,7 +4,7 @@ import { exec } from "JAM_SYSTEM";
 import { loadFonts } from "JAM_FONT";
 import { loadIcons } from "JAM_ICON";
 
-/* Liad Resources */
+/* Load Resources */
 loadFonts();
 loadIcons();
 
