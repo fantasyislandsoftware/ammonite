@@ -4,6 +4,8 @@ import {
   EnumOSEventType,
   IEvent,
 } from 'functions/events/IEvents';
+import { screenContainerDrag } from 'Objects/UIScreen/container/screenContainerFunc';
+import { STATE } from 'constants/globals/state';
 
 const jam_screen = new JAM_SCREEN();
 
@@ -25,6 +27,11 @@ export const windowContainerProcessEventsAsAll = (event: IEvent) => {
     }
   };
 
+  const mouseMove = () => {
+    if (!STATE.dragScreen) return;
+    screenContainerDrag();
+  };
+
   switch (event.event.type) {
     case EnumOSEventType.None:
       break;
@@ -36,6 +43,7 @@ export const windowContainerProcessEventsAsAll = (event: IEvent) => {
     case EnumOSEventType.MouseDoubleClick:
       break;
     case EnumOSEventType.MouseMove:
+      mouseMove();
       break;
     default:
       break;

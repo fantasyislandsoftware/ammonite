@@ -35,7 +35,6 @@ const initWebSocketServer = () => {
           console.log("Unknown request");
           break;
       }
-      //console.log(Buffer.from(message).toString());
     });
   });
 

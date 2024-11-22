@@ -4,12 +4,7 @@ import { EnumOSEventType, IEvent } from 'functions/events/IEvents';
 const jam_screen = new JAM_SCREEN();
 
 export const screenContainerProcessEventsAsAll = (event: IEvent) => {
-  const mouseDown = () => {
-    const screenId = event.objects.screen?.screenId;
-    if (screenId) {
-      jam_screen.setSelectedWindow(screenId, undefined);
-    }
-  };
+  const mouseDown = () => {};
 
   const mouseUp = () => {};
 

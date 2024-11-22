@@ -38,6 +38,7 @@ export class JAM_WINDOW {
   /****************************************************/
 
   openWindow = async (
+    id: string | null,
     parentTaskId: string,
     parentScreenId: string,
     x: number,
@@ -45,11 +46,11 @@ export class JAM_WINDOW {
     width: number,
     height: number,
     title: string,
-    returnId: string
+    returnId?: string
   ) => {
     const { screens, setScreens } = useScreenStore.getState();
 
-    const windowId = uuidv4();
+    const windowId = id === null ? uuidv4() : id;
 
     const parentScreenIndex = await jam_screen.findScreenIndex(parentScreenId);
     const z =
@@ -170,18 +171,17 @@ export class JAM_WINDOW {
     const screenIndex = await jam_screen.findScreenIndex(screenId);
     const windowIndex = await this.findWindowIndex(screenId, windowId);
 
-    const id = this.screens[screenIndex].windows[windowIndex].windowId;
     const z = this.screens[screenIndex].windows[windowIndex].position.z;
 
     const clone = await this.openWindow(
+      windowId,
       this.screens[screenIndex].windows[windowIndex].parentTaskId,
       this.screens[screenIndex].windows[windowIndex].parentScreenId,
       this.screens[screenIndex].windows[windowIndex].position.x,
       this.screens[screenIndex].windows[windowIndex].position.y,
       width,
       height,
-      this.screens[screenIndex].windows[windowIndex].titleBar!.title,
-      id
+      this.screens[screenIndex].windows[windowIndex].titleBar!.title
     );
     clone.position.z = z;
     this.screens[screenIndex].windows[windowIndex] = clone;
@@ -198,6 +198,7 @@ export class JAM_WINDOW {
       await getPixelArrayDimensions(this.screens[screenIndex].client.pixels);
     this.screens[screenIndex].windows[windowIndex].position.x = 1;
     this.screens[screenIndex].windows[windowIndex].position.y = 1;
+    this.screens[screenIndex].selectedWindowId = windowId;
     this.resize(windowId, clientWidth - 2, clientHeight - 2);
   };
 

@@ -9,11 +9,11 @@ import { getUnixDateTime, HOURS, MINITES, SECONDS } from "JAM_DATETIME";
 def("taskId", self.id);
 
 openScreen($taskId, 320, 256, low, "Test", "testScreenId");
-openWindow($taskId, $testScreenId, 10, 10, 100, 50, "Window 1");
+openWindow(null, $taskId, $testScreenId, 10, 10, 100, 50, "Window 1");
 
 openScreen($taskId, 320, 256, low, "Workbench", "wbScreenId");
-openWindow($taskId, $wbScreenId, 10, 10, 100, 50, "Window 1");
-openWindow($taskId, $wbScreenId, 50, 50, 100, 50, "Window 2");
+openWindow(null, $taskId, $wbScreenId, 10, 10, 100, 50, "Window 1");
+openWindow(null, $taskId, $wbScreenId, 50, 50, 100, 50, "Window 2");
 
 def("newTime");
 def("oldTime");
