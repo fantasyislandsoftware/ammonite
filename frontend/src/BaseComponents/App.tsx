@@ -42,19 +42,17 @@ const App = () => {
     });
   };
 
-  const initSocket = () => {};
+  async function boot() {
+    jam_system.exec('src/jam/boot.js');
+  }
 
   useEffect(() => {
-    async function boot() {
-      jam_system.exec('src/jam/boot.js');
-    }
     if (initBoot) {
-      boot();
       setInitBoot(false);
-      setTaskProcessor(startTaskProcessor());
+      boot();
+      startTaskProcessor();
       renderLoop();
       initEventListeners();
-      initSocket();
     }
   }, [initBoot]);
 

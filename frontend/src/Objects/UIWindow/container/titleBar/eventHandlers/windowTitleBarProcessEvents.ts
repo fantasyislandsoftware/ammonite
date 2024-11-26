@@ -32,7 +32,7 @@ export const windowTitleBarProcessEvents = (event: IEvent) => {
 
   const mouseDbClick = (event: IEvent) => {
     if (event.mouse?.button === EnumMouseButton.Left) {
-      jam_window.maximize(event.objects.window?.windowId || '');
+      jam_window.toggleState(event.objects.window?.windowId || '');
     }
   };
 

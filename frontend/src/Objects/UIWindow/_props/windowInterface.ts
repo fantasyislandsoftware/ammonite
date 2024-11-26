@@ -13,15 +13,28 @@ export interface IWindow {
   windowId: string;
   parentTaskId: string;
   parentScreenId: string;
+  state: EWindowState;
   position: {
     x: number;
     y: number;
     z: number;
   };
-  titleBar: IWindowTitleBar | null;
+  width: number;
+  height: number;
+  savedDimensions?: {
+    width: number;
+    height: number;
+  };
+  titleBar: IWindowTitleBar | undefined;
   border: IWindowBorder;
   pixels: IPixelArray;
   client: IWindowClient;
+}
+
+export enum EWindowState {
+  DEFAULT = 'DEFAULT',
+  MAXIMIZED = 'MAXIMIZED',
+  MINIMIZED = 'MINIMIZED',
 }
 
 export interface IWindowBorder {

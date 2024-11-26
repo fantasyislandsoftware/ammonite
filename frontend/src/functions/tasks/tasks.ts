@@ -20,12 +20,9 @@ export const startTaskProcessor = () => {
   return setInterval(() => {
     tasks.map((task) => {
       const result = execInstruction(task);
-      if (result) {
-        task = result;
-      }
     });
     setTasks(tasks);
-  });
+  }, 100);
 };
 
 const execJamInstruction = (self: ITask) => {

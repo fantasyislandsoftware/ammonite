@@ -9,6 +9,7 @@ import { screenContainerRender } from 'Objects/UIScreen/container/screenContaine
 import { WindowColour } from 'Objects/UIWindow/_props/windowColour';
 import { windowDefault } from 'Objects/UIWindow/_props/windowDefault';
 import {
+  EWindowState,
   IWindow,
   IWindowClient,
   IWindowTitleBar,
@@ -18,12 +19,16 @@ import { v4 as uuidv4 } from 'uuid';
 import { ITask } from 'stores/useTaskStore';
 import { JAM_SCREEN } from './screen';
 import { IScreen } from 'Objects/UIScreen/_props/screenInterface';
+import { get } from 'http';
 
 const jam_screen = new JAM_SCREEN();
 
 export class JAM_WINDOW {
   private self: ITask | undefined;
   public screens: IScreen[] = [];
+  public DEFAULT = EWindowState.DEFAULT;
+  public MAXIMIZED = EWindowState.MAXIMIZED;
+  public MINIMIZED = EWindowState.MINIMIZED;
   public setScreens: (screens: IScreen[]) => void;
 
   /****************************************************/
@@ -41,6 +46,7 @@ export class JAM_WINDOW {
     id: string | null,
     parentTaskId: string,
     parentScreenId: string,
+    state: EWindowState,
     x: number,
     y: number,
     width: number,
@@ -61,7 +67,10 @@ export class JAM_WINDOW {
       windowDefault.titleBar.font.name,
       windowDefault.titleBar.font.size
     );
-    titleBarHeight--;
+
+    titleBarHeight = Math.round(titleBarHeight / 2) * 2;
+
+    if (titleBarHeight < 10) titleBarHeight = 10;
 
     /* Buttons */
     const buttonSize = Math.round(titleBarHeight / 2) * 2 - 1;
@@ -73,7 +82,7 @@ export class JAM_WINDOW {
         },
         {
           type: EnumButtonType.MAXIMIZE,
-          func: `jam_window.maximize('${windowId}')`,
+          func: `jam_window.toggleState('${windowId}')`,
         },
       ],
       buttonSize,
@@ -111,7 +120,10 @@ export class JAM_WINDOW {
       windowId: windowId,
       parentTaskId: parentTaskId,
       parentScreenId: parentScreenId,
+      state: state,
       position: { x, y, z },
+      width: width,
+      height: height,
       titleBar: titleBar,
       border: {
         thickness: windowDefault.border.thickness,
@@ -120,7 +132,10 @@ export class JAM_WINDOW {
       pixels: initPixelArray(width, height, WindowColour.BORDER),
       client: client,
     };
-    screens[parentScreenIndex].windows.push(data);
+
+    if (!id) {
+      screens[parentScreenIndex].windows.push(data);
+    }
 
     setScreens(screens);
     screenContainerRender(screens[parentScreenIndex]);
@@ -164,9 +179,15 @@ export class JAM_WINDOW {
 
   /****************************************************/
 
-  resize = async (windowId: string, width: number, height: number) => {
+  recreate = async (
+    windowId: string,
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+    state: EWindowState
+  ) => {
     const screenId = await this.getWindowParentScreen(windowId);
-    if (screenId === undefined) return;
     if (screenId === undefined) return;
     const screenIndex = await jam_screen.findScreenIndex(screenId);
     const windowIndex = await this.findWindowIndex(screenId, windowId);
@@ -177,8 +198,9 @@ export class JAM_WINDOW {
       windowId,
       this.screens[screenIndex].windows[windowIndex].parentTaskId,
       this.screens[screenIndex].windows[windowIndex].parentScreenId,
-      this.screens[screenIndex].windows[windowIndex].position.x,
-      this.screens[screenIndex].windows[windowIndex].position.y,
+      state,
+      x,
+      y,
       width,
       height,
       this.screens[screenIndex].windows[windowIndex].titleBar!.title
@@ -189,17 +211,51 @@ export class JAM_WINDOW {
 
   /****************************************************/
 
-  maximize = async (windowId: string) => {
-    const screenId = await this.getWindowParentScreen(windowId);
-    if (screenId === undefined) return;
-    const screenIndex = await jam_screen.findScreenIndex(screenId);
-    const windowIndex = await this.findWindowIndex(screenId, windowId);
-    const { width: clientWidth, height: clientHeight } =
-      await getPixelArrayDimensions(this.screens[screenIndex].client.pixels);
-    this.screens[screenIndex].windows[windowIndex].position.x = 1;
-    this.screens[screenIndex].windows[windowIndex].position.y = 1;
-    this.screens[screenIndex].selectedWindowId = windowId;
-    this.resize(windowId, clientWidth - 2, clientHeight - 2);
+  getWindow = async (windowId: string): Promise<IWindow | undefined> => {
+    let result = undefined;
+    this.screens.map((screen) => {
+      screen.windows.map((window) => {
+        if (window.windowId === windowId) {
+          result = window;
+        }
+      });
+    });
+    return result;
+  };
+
+  /****************************************************/
+
+  toggleState = async (windowId: string) => {
+    const window = await this.getWindow(windowId);
+    if (!window) return;
+    const screenIndex = await jam_screen.findScreenIndex(window.parentScreenId);
+    const screen = this.screens[screenIndex];
+    const windowIndex = await this.findWindowIndex(
+      window.parentScreenId,
+      windowId
+    );
+    const newState =
+      window.state === EWindowState.DEFAULT
+        ? EWindowState.MAXIMIZED
+        : EWindowState.DEFAULT;
+    window.state = newState;
+    let newWidth = window.width;
+    let newHeight = window.height;
+    if (newState === EWindowState.MAXIMIZED) {
+      window.savedDimensions = { width: window.width, height: window.height };
+      const { width: screenWidth, height: screenHeight } =
+        getPixelArrayDimensions(screen.client.pixels);
+      newWidth = screenWidth - 2;
+      newHeight = screenHeight - 2;
+      window.savedDimensions = { width: window.width, height: window.height };
+    }
+    if (newState === EWindowState.DEFAULT) {
+      newWidth = window.savedDimensions!.width;
+      newHeight = window.savedDimensions!.height;
+    }
+    this.screens[screenIndex].windows[windowIndex] = window;
+    this.setScreens(this.screens);
+    this.recreate(window.windowId, 1, 1, newWidth, newHeight, newState);
   };
 
   /****************************************************/

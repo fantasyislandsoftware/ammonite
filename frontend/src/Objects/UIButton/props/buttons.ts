@@ -69,6 +69,50 @@ export const makeMaximizeButton = (state: EnumButtonState) => {
   ];
 };
 
+export const makeDefaultButton = (state: EnumButtonState) => {
+  return [
+    {
+      type: EnumVectorShapeType.RECT,
+      data: {
+        px1: 10,
+        py1: 10,
+        px2: 90,
+        py2: 90,
+        colorIndex:
+          state === EnumButtonState.UP
+            ? ButtonColour.PRIMARY
+            : ButtonColour.SECONDARY,
+      },
+    },
+    {
+      type: EnumVectorShapeType.RECT,
+      data: {
+        px1: 20,
+        py1: 20,
+        px2: 80,
+        py2: 80,
+        colorIndex:
+          state === EnumButtonState.DOWN
+            ? ButtonColour.PRIMARY
+            : ButtonColour.SECONDARY,
+      },
+    },
+    {
+      type: EnumVectorShapeType.RECT,
+      data: {
+        px1: 40,
+        py1: 40,
+        px2: 80,
+        py2: 80,
+        colorIndex:
+          state === EnumButtonState.UP
+            ? ButtonColour.PRIMARY
+            : ButtonColour.SECONDARY,
+      },
+    },
+  ];
+};
+
 export const orderButton = (
   w: number,
   h: number,

@@ -1,11 +1,12 @@
 import { EnumButtonType } from 'Objects/UIButton/props/buttonInterface';
 import {
+  makeDefaultButton,
   makeMaximizeButton,
   makeOrderButton,
 } from 'Objects/UIButton/props/buttons';
 import { IScreen } from 'Objects/UIScreen/_props/screenInterface';
 import { WindowColour } from 'Objects/UIWindow/_props/windowColour';
-import { IWindow } from 'Objects/UIWindow/_props/windowInterface';
+import { EWindowState, IWindow } from 'Objects/UIWindow/_props/windowInterface';
 import { drawFillRect } from 'functions/graphics/draw';
 import {
   getPixelArrayDimensions,
@@ -51,7 +52,10 @@ export const windowTitleBarRender = (screen: IScreen, window: IWindow) => {
         vectorData = makeOrderButton(button.state);
         break;
       case EnumButtonType.MAXIMIZE:
-        vectorData = makeMaximizeButton(button.state);
+        vectorData =
+          window.state === EWindowState.DEFAULT
+            ? makeMaximizeButton(button.state)
+            : makeDefaultButton(button.state);
         break;
     }
     drawVector(
