@@ -1,5 +1,6 @@
 import { IEvent } from 'functions/events/IEvents';
 import { IClientMouse } from 'functions/mouse/IMouse';
+import { EWindowState } from 'Objects/UIWindow/_props/windowInterface';
 
 export interface Environment {
   eventDebug: boolean;
@@ -34,6 +35,14 @@ export interface IState {
   screenChangeMode: EnumScreenChangeMode;
   dragWindow: IScreenClientDrag | undefined;
   screenClientMouse: IClientMouse;
+  windowState: {
+    [key: string]: {
+      x: number;
+      y: number;
+      width: number;
+      height: number;
+    };
+  };
 }
 
 export enum EnumScreenChangeMode {

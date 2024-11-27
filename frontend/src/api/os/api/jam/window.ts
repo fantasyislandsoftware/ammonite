@@ -20,6 +20,7 @@ import { ITask } from 'stores/useTaskStore';
 import { JAM_SCREEN } from './screen';
 import { IScreen } from 'Objects/UIScreen/_props/screenInterface';
 import { get } from 'http';
+import { STATE } from 'constants/globals/state';
 
 const jam_screen = new JAM_SCREEN();
 
@@ -136,10 +137,6 @@ export class JAM_WINDOW {
     if (!id) {
       screens[parentScreenIndex].windows.push(data);
     }
-
-    setScreens(screens);
-    screenContainerRender(screens[parentScreenIndex]);
-
     return data;
   };
 
@@ -179,33 +176,25 @@ export class JAM_WINDOW {
 
   /****************************************************/
 
-  recreate = async (
-    windowId: string,
-    x: number,
-    y: number,
-    width: number,
-    height: number,
-    state: EWindowState
-  ) => {
+  recreate = async (window: IWindow, windowId: string) => {
     const screenId = await this.getWindowParentScreen(windowId);
     if (screenId === undefined) return;
     const screenIndex = await jam_screen.findScreenIndex(screenId);
     const windowIndex = await this.findWindowIndex(screenId, windowId);
 
-    const z = this.screens[screenIndex].windows[windowIndex].position.z;
-
     const clone = await this.openWindow(
-      windowId,
-      this.screens[screenIndex].windows[windowIndex].parentTaskId,
-      this.screens[screenIndex].windows[windowIndex].parentScreenId,
-      state,
-      x,
-      y,
-      width,
-      height,
-      this.screens[screenIndex].windows[windowIndex].titleBar!.title
+      window.windowId,
+      window.parentTaskId,
+      window.parentScreenId,
+      window.state,
+      window.position.x,
+      window.position.y,
+      window.width,
+      window.height,
+      window.titleBar!.title
     );
-    clone.position.z = z;
+    clone.position.z = window.position.z;
+
     this.screens[screenIndex].windows[windowIndex] = clone;
   };
 
@@ -234,28 +223,34 @@ export class JAM_WINDOW {
       window.parentScreenId,
       windowId
     );
+    const { width, height } = window;
     const newState =
       window.state === EWindowState.DEFAULT
         ? EWindowState.MAXIMIZED
         : EWindowState.DEFAULT;
     window.state = newState;
-    let newWidth = window.width;
-    let newHeight = window.height;
     if (newState === EWindowState.MAXIMIZED) {
-      window.savedDimensions = { width: window.width, height: window.height };
+      STATE.windowState[windowId] = {
+        x: window.position.x,
+        y: window.position.y,
+        width: window.width,
+        height: window.height,
+      };
       const { width: screenWidth, height: screenHeight } =
         getPixelArrayDimensions(screen.client.pixels);
-      newWidth = screenWidth - 2;
-      newHeight = screenHeight - 2;
-      window.savedDimensions = { width: window.width, height: window.height };
+      window.position.x = 1;
+      window.position.y = 1;
+      window.width = screenWidth - 2;
+      window.height = screenHeight - 2;
     }
     if (newState === EWindowState.DEFAULT) {
-      newWidth = window.savedDimensions!.width;
-      newHeight = window.savedDimensions!.height;
+      const { x, y, width, height } = STATE.windowState[windowId];
+      window.position.x = x;
+      window.position.y = y;
+      window.width = width;
+      window.height = height;
     }
-    this.screens[screenIndex].windows[windowIndex] = window;
-    this.setScreens(this.screens);
-    this.recreate(window.windowId, 1, 1, newWidth, newHeight, newState);
+    this.recreate(window, window.windowId);
   };
 
   /****************************************************/

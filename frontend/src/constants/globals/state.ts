@@ -10,4 +10,5 @@ export const STATE: IState = {
   screenChangeMode: EnumScreenChangeMode.DONE,
   dragWindow: undefined,
   screenClientMouse: { x: 0, y: 0 },
+  windowState: {},
 };

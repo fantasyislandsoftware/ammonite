@@ -21,10 +21,6 @@ export interface IWindow {
   };
   width: number;
   height: number;
-  savedDimensions?: {
-    width: number;
-    height: number;
-  };
   titleBar: IWindowTitleBar | undefined;
   border: IWindowBorder;
   pixels: IPixelArray;
