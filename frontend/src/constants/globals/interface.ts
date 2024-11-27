@@ -3,7 +3,8 @@ import { IClientMouse } from 'functions/mouse/IMouse';
 import { EWindowState } from 'Objects/UIWindow/_props/windowInterface';
 
 export interface Environment {
-  eventDebug: boolean;
+  consoleEvents: boolean;
+  showEventModal: boolean;
   api: string;
   baseDir: string;
 }

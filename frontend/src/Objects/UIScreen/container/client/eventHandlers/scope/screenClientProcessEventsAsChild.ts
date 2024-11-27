@@ -5,7 +5,11 @@ import { EnumOSEventType, IEvent } from 'functions/events/IEvents';
 export const screenClientProcessEventsAsChild = (event: IEvent) => {
   const mouseDown = () => {};
 
-  const mouseUp = () => {};
+  const mouseUp = () => {
+    if (event.objects.screen) {
+      event.objects.screen.selectedWindowId = undefined;
+    }
+  };
 
   const mouseMove = () => {
     if (!STATE.dragScreen) return;

@@ -23,7 +23,9 @@ export const baseContainerBuildEvents = (
   const event = _event;
 
   if (event.detail === 2) {
-    event.type = EnumOSEventType.MouseDoubleClick;
+    if (event.type === EnumOSEventType.MouseDown) {
+      event.type = EnumOSEventType.MouseDoubleClick;
+    }
   }
 
   STATE.clientMouse = getClientMouse(event);

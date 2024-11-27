@@ -25,7 +25,7 @@ import { useTaskStore } from 'stores/useTaskStore';
 import { SYSTEM } from 'constants/globals/system';
 
 export const eventLog = (event: IBaseEvent, name: string) => {
-  ENV.eventDebug && console.log(`evt_${name} {${event.type}}`);
+  ENV.consoleEvents && console.log(`evt_${name} {${event.type}}`);
 };
 
 export const addEvent = (

@@ -9,20 +9,18 @@ import '../css/base.css';
 import { screenContainerRender } from 'Objects/UIScreen/container/screenContainerRender';
 import { baseContainerBuildEvents } from 'Objects/UIBase/container/eventHandlers/baseContainerBuildEvents';
 import { getHighestScreenZIndex } from 'Objects/UIScreen/_props/screenFunctions';
-import { getMem } from 'api/http/fileIO';
-import { SYSTEM } from 'constants/globals/system';
 import { useTaskStore } from 'stores/useTaskStore';
 import { JAM_SYSTEM } from 'api/os/api/jam/system';
 import SystemCrash from 'BaseComponents/SystemCrash';
 import { crash } from 'functions/events/events';
-import useWebSocket from 'react-use-websocket';
+import DebugEvents from './DebugEvents';
+import { ENV } from 'constants/globals/env';
 
 const App = () => {
   const { screens, setScreens } = useScreenStore();
   const { tasks } = useTaskStore();
   const [initBoot, setInitBoot] = useState(true);
   const { systemCrash } = useErrorStore();
-  const [taskProcessor, setTaskProcessor] = useState<any>(null);
   const jam_system = new JAM_SYSTEM(tasks[0]);
 
   const initEventListeners = () => {
@@ -71,6 +69,7 @@ const App = () => {
   } else {
     return (
       <>
+        {ENV.showEventModal && <DebugEvents />}
         {screens.map((screen, index) => (
           <UIScreen key={index} screen={screen} />
         ))}

@@ -137,6 +137,9 @@ export class JAM_WINDOW {
     if (!id) {
       screens[parentScreenIndex].windows.push(data);
     }
+
+    screens[parentScreenIndex].selectedWindowId = windowId;
+
     return data;
   };
 
