@@ -1,5 +1,6 @@
 import { EnumButtonType } from 'Objects/UIButton/props/buttonInterface';
 import {
+  makeCloseButton,
   makeDefaultButton,
   makeMaximizeButton,
   makeOrderButton,
@@ -48,6 +49,9 @@ export const windowTitleBarRender = (screen: IScreen, window: IWindow) => {
   buttons.map((button) => {
     let vectorData: VectorShape[] = [];
     switch (button.type) {
+      case EnumButtonType.CLOSE:
+        vectorData = makeCloseButton(button.state);
+        break;
       case EnumButtonType.ORDER:
         vectorData = makeOrderButton(button.state);
         break;

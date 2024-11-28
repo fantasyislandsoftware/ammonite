@@ -2,7 +2,7 @@
 
 import { log, getMem } from "JAM_SYSTEM";
 import { def, label, jp, jpIfElse } from "JAM_LOGIC";
-import { openScreen, setTitle, low } from "JAM_SCREEN";
+import { openScreen, setTitle, low, hi } from "JAM_SCREEN";
 import { openWindow, DEFAULT } from "JAM_WINDOW";
 import { getUnixDateTime, HOURS, MINITES, SECONDS } from "JAM_DATETIME";
 

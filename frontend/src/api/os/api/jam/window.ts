@@ -78,6 +78,10 @@ export class JAM_WINDOW {
     const buttons = generateBarIcons(
       [
         {
+          type: EnumButtonType.CLOSE,
+          func: `jam_window.close('${windowId}')`,
+        },
+        {
           type: EnumButtonType.ORDER,
           func: `jam_window.sortOrder('${windowId}')`,
         },
@@ -222,11 +226,6 @@ export class JAM_WINDOW {
     if (!window) return;
     const screenIndex = await jam_screen.findScreenIndex(window.parentScreenId);
     const screen = this.screens[screenIndex];
-    const windowIndex = await this.findWindowIndex(
-      window.parentScreenId,
-      windowId
-    );
-    const { width, height } = window;
     const newState =
       window.state === EWindowState.DEFAULT
         ? EWindowState.MAXIMIZED
@@ -254,6 +253,20 @@ export class JAM_WINDOW {
       window.height = height;
     }
     this.recreate(window, window.windowId);
+  };
+
+  /****************************************************/
+
+  close = async (windowId: string) => {
+    const window = await this.getWindow(windowId);
+    if (!window) return;
+    const screenIndex = await jam_screen.findScreenIndex(window.parentScreenId);
+    const screen = this.screens[screenIndex];
+    const windowIndex = await this.findWindowIndex(
+      window.parentScreenId,
+      windowId
+    );
+    screen.windows.splice(windowIndex, 1);
   };
 
   /****************************************************/

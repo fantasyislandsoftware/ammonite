@@ -11,8 +11,8 @@ const DebugEvents = () => {
         bottom: 0,
         right: 0,
         zIndex: 9999,
-        color: 'white',
-        backgroundColor: 'black',
+        color: 'black',
+        backgroundColor: 'white',
         pointerEvents: 'none',
         userSelect: 'none',
       }}

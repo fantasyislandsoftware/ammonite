@@ -1,7 +1,13 @@
 import { IScreen, IScreenMode } from 'Objects/UIScreen/_props/screenInterface';
 import { useScreenStore } from 'stores/useScreenStore';
 import { ITask } from 'stores/useTaskStore';
-import { low } from 'Objects/UIScreen/_props/screenModes';
+import {
+  low,
+  med,
+  hi,
+  interlaced,
+  full,
+} from 'Objects/UIScreen/_props/screenModes';
 import {
   getHighestScreenZIndex,
   setScreen,
@@ -21,6 +27,10 @@ import { processScreenChange } from 'functions/events/events';
 export class JAM_SCREEN {
   private self: ITask | undefined;
   public low: IScreenMode = low;
+  public med: IScreenMode = med;
+  public hi: IScreenMode = hi;
+  public interlaced: IScreenMode = interlaced;
+  public full: IScreenMode = full;
   public screens: IScreen[] = [];
   public setScreens: (screens: IScreen[]) => void;
 

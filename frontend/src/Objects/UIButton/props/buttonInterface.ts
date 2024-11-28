@@ -13,6 +13,7 @@ export interface IButton {
 }
 
 export enum EnumButtonType {
+  CLOSE = 'close',
   ORDER = 'order',
   MAXIMIZE = 'maximize',
 }
