@@ -5,15 +5,7 @@ import { hex2bin } from '../string/string';
 import { MOVE } from 'api/os/api/m68k/opMOVE/MOVE';
 import { BRA } from 'api/os/api/m68k/BRA/BRA';
 import { makeQuerablePromise } from 'api/http/promiseHandling';
-
-/* JAM API */
-import { JAM_SYSTEM } from 'api/os/api/jam/system';
-import { JAM_LOGIC } from 'api/os/api/jam/logic';
 import { JAM_SCREEN } from 'api/os/api/jam/screen';
-import { JAM_WINDOW } from 'api/os/api/jam/window';
-import { JAM_DATETIME } from 'api/os/api/jam/datetime';
-import { JAM_FONT } from 'api/os/api/jam/font';
-import { JAM_ICON } from 'api/os/api/jam/icon';
 
 export const startTaskProcessor = () => {
   const { tasks, setTasks } = useTaskStore.getState();
@@ -21,15 +13,15 @@ export const startTaskProcessor = () => {
     tasks.map((task) => {
       execInstruction(task);
     });
-    setTasks(tasks);
-  }, 1);
+    //setTasks(tasks);
+  });
 };
 
 const execJamInstruction = (self: ITask) => {
   const line = self.code[self.pos];
-  if (line !== self.promise.name) {
+  if (self.pos !== self.promise.name) {
     self.promise = {
-      name: line,
+      name: self.pos,
       state: makeQuerablePromise(eval(line), (e) => {
         killTask(self.id, e);
       }),

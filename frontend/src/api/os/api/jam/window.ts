@@ -331,7 +331,7 @@ export class JAM_WINDOW {
 
   /****************************************************/
 
-  sortOrder = async (windowId: string) => {
+  sortOrder = async (task = null, windowId: string) => {
     const screenId = await this.getWindowParentScreen(null, windowId);
     if (screenId === undefined) return;
     const screenIndex = await jam_screen.findScreenIndex(null, screenId);
