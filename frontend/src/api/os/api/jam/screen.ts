@@ -25,19 +25,17 @@ import { STATE } from 'constants/globals/state';
 import { processScreenChange } from 'functions/events/events';
 
 export class JAM_SCREEN {
-  private self: ITask | undefined;
-  public low: IScreenMode = low;
-  public med: IScreenMode = med;
-  public hi: IScreenMode = hi;
-  public interlaced: IScreenMode = interlaced;
-  public full: IScreenMode = full;
+  public LOW: IScreenMode = low;
+  public MED: IScreenMode = med;
+  public HI: IScreenMode = hi;
+  public INTERLACED: IScreenMode = interlaced;
+  public FULL: IScreenMode = full;
   public screens: IScreen[] = [];
   public setScreens: (screens: IScreen[]) => void;
 
   /****************************************************/
 
-  constructor(self?: ITask) {
-    this.self = self;
+  constructor() {
     const { screens, setScreens } = useScreenStore.getState();
     this.screens = screens;
     this.setScreens = setScreens;
@@ -46,6 +44,7 @@ export class JAM_SCREEN {
   /****************************************************/
 
   openScreen = async (
+    task: ITask,
     parentTaskId: string,
     width: number,
     height: number,
@@ -53,7 +52,7 @@ export class JAM_SCREEN {
     title: string | null,
     returnId: string
   ) => {
-    if (!this.self) return;
+    if (!task || !task.res) return;
 
     const { screens, setScreens } = useScreenStore.getState();
 
@@ -68,8 +67,7 @@ export class JAM_SCREEN {
     titleBarHeight += 1;
 
     const screenId = uuidv4();
-
-    this.self.res.screens.push(screenId);
+    task.res.screens.push(screenId);
 
     /* Buttons */
     const buttonSize = Math.round(titleBarHeight / 2) * 2 - 2;
@@ -77,11 +75,11 @@ export class JAM_SCREEN {
       [
         {
           type: EnumButtonType.ORDER,
-          func: `jam_screen.reorderScreen('${screenId}')`,
+          func: `jam_screen.reorderScreen(null,'${screenId}')`,
         },
         {
           type: EnumButtonType.MAXIMIZE,
-          func: `jam_screen.maximizeScreen('${screenId}')`,
+          func: `jam_screen.maximizeScreen(null,'${screenId}')`,
         },
       ],
       buttonSize,
@@ -146,31 +144,31 @@ export class JAM_SCREEN {
 
     STATE.currentScreenId = screenId;
 
-    this.self.var[returnId] = screenId;
+    task.var[returnId] = screenId;
   };
 
   /****************************************************/
 
-  closeScreen = async (screenId: string) => {
-    const screenIndex = await this.findScreenIndex(screenId);
+  closeScreen = async (task = null, screenId: string) => {
+    const screenIndex = await this.findScreenIndex(null, screenId);
     this.screens.splice(screenIndex, 1);
     this.setScreens(this.screens);
   };
 
   /****************************************************/
 
-  maximizeScreen = async (screenId: string) => {
-    const screenIndex = await this.findScreenIndex(screenId);
+  maximizeScreen = async (task = null, screenId: string) => {
+    const screenIndex = await this.findScreenIndex(null, screenId);
     this.screens[screenIndex].position.y = 0;
     setScreen(this.screens[screenIndex]);
   };
 
   /****************************************************/
 
-  bringToFront = async (screenId: string) => {
-    const screenIndex = await this.findScreenIndex(screenId);
+  bringToFront = async (task = null, screenId: string) => {
+    const screenIndex = await this.findScreenIndex(null, screenId);
     let pos = 100;
-    if (await this.isTopScreen(screenId)) return;
+    if (await this.isTopScreen(null, screenId)) return;
     this.screens.map((_screen) => {
       if (_screen.screenId !== screenId) {
         _screen.zIndex = pos;
@@ -184,8 +182,8 @@ export class JAM_SCREEN {
 
   /****************************************************/
 
-  sendToBack = async (screenId: string) => {
-    const screenIndex = await this.findScreenIndex(screenId);
+  sendToBack = async (task = null, screenId: string) => {
+    const screenIndex = await this.findScreenIndex(null, screenId);
     let pos = getHighestScreenZIndex();
     this.screens.map((_screen) => {
       if (_screen.screenId !== screenId) {
@@ -200,34 +198,34 @@ export class JAM_SCREEN {
 
   /****************************************************/
 
-  isTopScreen = async (screenId: string) => {
-    const screenIndex = await this.findScreenIndex(screenId);
+  isTopScreen = async (task = null, screenId: string) => {
+    const screenIndex = await this.findScreenIndex(null, screenId);
     const highestZIndex = await getHighestScreenZIndex();
     return this.screens[screenIndex].zIndex === highestZIndex;
   };
 
   /****************************************************/
 
-  reorderScreen = async (screenId: string) => {
+  reorderScreen = async (task = null, screenId: string) => {
     if (STATE.screenChangeMode === 'changing') return;
-    const screenIndex = await this.findScreenIndex(screenId);
+    const screenIndex = await this.findScreenIndex(null, screenId);
     const highestZIndex = await getHighestScreenZIndex();
     if (this.screens[screenIndex].zIndex === (await highestZIndex)) {
-      this.sendToBack(screenId);
+      this.sendToBack(null, screenId);
     }
   };
 
   /****************************************************/
 
-  findScreenIndex = async (id: string) => {
+  findScreenIndex = async (task = null, id: string) => {
     const { screens } = useScreenStore.getState();
     return screens.findIndex((s) => s.screenId === id);
   };
 
   /****************************************************/
 
-  setTitle = async (screenId: string, title: string) => {
-    const screenIndex = await this.findScreenIndex(screenId);
+  setTitle = async (task = null, screenId: string, title: string) => {
+    const screenIndex = await this.findScreenIndex(null, screenId);
     this.screens[screenIndex].titleBar!.title = title;
     setScreen(this.screens[screenIndex]);
   };
@@ -238,7 +236,7 @@ export class JAM_SCREEN {
     screenId: string,
     windowId: string | undefined
   ) => {
-    const screenIndex = await this.findScreenIndex(screenId);
+    const screenIndex = await this.findScreenIndex(null, screenId);
     this.screens[screenIndex].selectedWindowId = windowId;
     setScreen(this.screens[screenIndex]);
   };

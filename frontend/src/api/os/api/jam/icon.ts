@@ -5,11 +5,14 @@ import { ENV } from 'constants/globals/env';
 import { IPixelArray } from 'functions/graphics/IGraphics';
 import { useIconStore } from 'stores/useIconStore';
 import { EnumDataFormat } from 'functions/dataHandling/IntDataHandling';
+import { ITask } from 'stores/useTaskStore';
 
 export class JAM_ICON {
   /****************************************************/
 
-  loadIcons = async () => {
+  loadIcons = async (task: ITask | null) => {
+    task = null;
+
     const { icons, setIcons } = useIconStore.getState();
     const p = getFile(
       `${ENV.baseDir}resource/icons.iff`,

@@ -9,7 +9,7 @@ export const screenContainerProcessEventsAsParent = (event: IEvent) => {
   const mouseDown = () => {
     if (!event.objects.screen) return;
     const screenId = event.objects.screen.screenId;
-    jam_screen.bringToFront(screenId);
+    jam_screen.bringToFront(null, screenId);
   };
 
   const mouseUp = () => {

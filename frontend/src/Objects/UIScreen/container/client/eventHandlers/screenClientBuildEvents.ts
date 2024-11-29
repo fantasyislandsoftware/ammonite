@@ -22,7 +22,7 @@ export const screenClientBuildEvents = (
     screen: screen,
   });
 
-  const windows = jam_window.sortWindowsByZIndex(screen.windows);
+  const windows = jam_window.sortWindowsByZIndex(null, screen.windows);
   windows.map((window: IWindow) => {
     windowContainerBuildEvents(
       event,

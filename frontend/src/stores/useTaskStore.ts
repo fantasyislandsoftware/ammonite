@@ -32,6 +32,7 @@ export enum EnumCCR {
 }
 
 export interface ITask {
+  init: boolean;
   id: string;
   name: string;
   arch: TaskArch;
@@ -44,6 +45,7 @@ export interface ITask {
   s: { [key: string]: number[] };
   pc: number;
   res: { screens: string[] };
+  lib: any;
 }
 
 export interface TaskStore {

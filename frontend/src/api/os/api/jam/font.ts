@@ -1,9 +1,11 @@
 import { ENV } from 'constants/globals/env';
+import { ITask } from 'stores/useTaskStore';
 
 export class JAM_FONT {
   /****************************************************/
 
-  getFontList = async (v: any) => {
+  getFontList = async (task: ITask | null, v: any) => {
+    task = null;
     const request = await fetch(`${ENV.api}/getFontList`, {
       method: 'GET',
       headers: {
@@ -16,7 +18,8 @@ export class JAM_FONT {
 
   /****************************************************/
 
-  loadFont = async (name: string, path: string) => {
+  loadFont = async (task: ITask | null, name: string, path: string) => {
+    task = null;
     if (path === 'NaN') {
       return {
         load: async () => {
@@ -34,8 +37,9 @@ export class JAM_FONT {
 
   /****************************************************/
 
-  loadFonts = async () => {
-    const list = await this.getFontList('loadFonts');
+  loadFonts = async (task: ITask | null) => {
+    task = null;
+    const list = await this.getFontList(null, 'loadFonts');
     list.data.map((font: any) => {
       const { name, path } = font;
       const fontFace = new FontFace(

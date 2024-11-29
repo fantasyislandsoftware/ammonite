@@ -21,7 +21,7 @@ const App = () => {
   const { tasks } = useTaskStore();
   const [initBoot, setInitBoot] = useState(true);
   const { systemCrash } = useErrorStore();
-  const jam_system = new JAM_SYSTEM(tasks[0]);
+  const jam_system = new JAM_SYSTEM();
 
   const initEventListeners = () => {
     window.addEventListener('error', (e) => {
@@ -41,7 +41,7 @@ const App = () => {
   };
 
   async function boot() {
-    jam_system.exec('src/jam/boot.js');
+    jam_system.exec(null, 'src/jam/boot.js');
   }
 
   useEffect(() => {

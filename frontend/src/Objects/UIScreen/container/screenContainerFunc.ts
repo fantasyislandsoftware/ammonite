@@ -9,7 +9,10 @@ export const screenContainerDrag = async () => {
   const { screens } = useScreenStore.getState();
 
   if (STATE.dragScreen === undefined) return;
-  const screenIndex = await jam_screen.findScreenIndex(STATE.dragScreen.id);
+  const screenIndex = await jam_screen.findScreenIndex(
+    null,
+    STATE.dragScreen.id
+  );
   const selected = screens[screenIndex];
   let newPos = STATE.clientMouse.y - STATE.dragScreen.offset.y;
   if (newPos < 0) newPos = 0;

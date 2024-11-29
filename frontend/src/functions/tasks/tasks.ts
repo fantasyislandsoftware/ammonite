@@ -19,35 +19,13 @@ export const startTaskProcessor = () => {
   const { tasks, setTasks } = useTaskStore.getState();
   return setInterval(() => {
     tasks.map((task) => {
-      const result = execInstruction(task);
+      execInstruction(task);
     });
     setTasks(tasks);
-  }, 100);
+  }, 1);
 };
 
 const execJamInstruction = (self: ITask) => {
-  const jam_system = new JAM_SYSTEM(self);
-  const jam_logic = new JAM_LOGIC(self);
-  const jam_datetime = new JAM_DATETIME(self);
-  const jam_screen = new JAM_SCREEN(self);
-  const jam_window = new JAM_WINDOW(self);
-  const jam_font = new JAM_FONT();
-  const jam_icon = new JAM_ICON();
-
-  [
-    jam_system,
-    jam_logic,
-    jam_datetime,
-    jam_screen,
-    jam_window,
-    jam_font,
-    jam_icon,
-  ].map((lib) => {
-    Object.getOwnPropertyNames(lib).map((key) => {
-      eval(`window["${key}"] = ${lib.constructor.name.toLowerCase()}.${key};`);
-    });
-  });
-
   const line = self.code[self.pos];
   if (line !== self.promise.name) {
     self.promise = {
@@ -176,7 +154,7 @@ const killTask = (id: string, e?: any) => {
   if (task) {
     const { screens } = task.res;
     screens.map((id) => {
-      jam_screen.closeScreen(id);
+      jam_screen.closeScreen(null, id);
     });
   }
 

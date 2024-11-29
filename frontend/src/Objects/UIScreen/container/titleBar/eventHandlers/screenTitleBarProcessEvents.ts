@@ -36,7 +36,7 @@ export const screenTitleBarProcessEvents = (event: IEvent) => {
   const mouseDoubleClick = () => {
     if (event.event.button === EnumMouseButton.Left) {
       if (!event.objects.screen) return;
-      jam_screen.maximizeScreen(event.objects.screen.screenId);
+      jam_screen.maximizeScreen(null, event.objects.screen.screenId);
     }
   };
 

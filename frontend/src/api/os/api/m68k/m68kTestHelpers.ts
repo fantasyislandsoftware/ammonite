@@ -55,6 +55,7 @@ export const makeTestTask = (params: IMakeTestTaskParams) => {
 
   class FreshTask {
     public task: ITask = {
+      init: false,
       id: '1',
       code: [],
       pos: 0,
@@ -86,6 +87,7 @@ export const makeTestTask = (params: IMakeTestTaskParams) => {
       },
       pc: 0,
       res: { screens: [] },
+      lib: {},
     };
   }
   const result = new FreshTask().task;
