@@ -45,7 +45,7 @@ export class JAM_SCREEN {
 
   openScreen = async (
     task: ITask,
-    parentTaskId: string,
+    id: string | null,
     width: number,
     height: number,
     mode: IScreenMode,
@@ -66,7 +66,7 @@ export class JAM_SCREEN {
 
     titleBarHeight += 1;
 
-    const screenId = uuidv4();
+    const screenId = !id ? uuidv4() : id;
     task.res.screens.push(screenId);
 
     /* Buttons */
@@ -88,7 +88,7 @@ export class JAM_SCREEN {
 
     const data: IScreen = {
       screenId: screenId,
-      parentTaskId: parentTaskId,
+      parentTaskId: task.id,
       object: EnumUIObjectType.SCREEN,
       position: {
         y: 0,

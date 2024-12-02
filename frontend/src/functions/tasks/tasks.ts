@@ -9,12 +9,14 @@ import { JAM_SCREEN } from 'api/os/api/jam/screen';
 
 export const startTaskProcessor = () => {
   const { tasks, setTasks } = useTaskStore.getState();
-  return setInterval(() => {
+  setInterval(() => {
     tasks.map((task) => {
       execInstruction(task);
     });
-    //setTasks(tasks);
   });
+  setInterval(() => {
+    setTasks(tasks);
+  }, 500);
 };
 
 const execJamInstruction = (self: ITask) => {

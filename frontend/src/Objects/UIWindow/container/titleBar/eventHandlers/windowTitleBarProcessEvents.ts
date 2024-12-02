@@ -1,3 +1,4 @@
+import { JAM_TASK } from 'api/os/api/jam/task';
 import { JAM_WINDOW } from 'api/os/api/jam/window';
 import { STATE } from 'constants/globals/state';
 import {
@@ -7,6 +8,7 @@ import {
 } from 'functions/events/IEvents';
 
 const jam_window = new JAM_WINDOW();
+const jam_task = new JAM_TASK();
 
 export const windowTitleBarProcessEvents = (event: IEvent) => {
   const mouseDown = (event: IEvent) => {
@@ -30,9 +32,12 @@ export const windowTitleBarProcessEvents = (event: IEvent) => {
 
   const mouseMove = () => {};
 
-  const mouseDbClick = (event: IEvent) => {
+  const mouseDbClick = async (event: IEvent) => {
     if (event.mouse?.button === EnumMouseButton.Left) {
-      jam_window.toggleState(null, event.objects.window?.windowId || '');
+      const taskId = event.objects.window?.parentTaskId;
+      const task = await jam_task.getTaskById(taskId);
+      task &&
+        jam_window.toggleState(task, event.objects.window?.windowId || '');
     }
   };
 

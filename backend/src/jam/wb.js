@@ -6,14 +6,14 @@ import { openScreen, setTitle, LOW, HI } from "JAM_SCREEN";
 import { openWindow, DEFAULT } from "JAM_WINDOW";
 import { getUnixDateTime, HOURS, MINITES, SECONDS } from "JAM_DATETIME";
 
-def("taskId", self.id);
+/* Get global wb screen id */
+getEnv("WB_SCREEN_ID", "wbScreenId");
 
-//openScreen($taskId, 320, 256, LOW, "Test", "testScreenId");
-//openWindow($taskId, $testScreenId, DEFAULT, 10, 10, 100, 50, "Window 2");
+openScreen($wbScreenId, 320, 256, LOW, "Workbench", null);
+openWindow(NEW_ID, $wbScreenId, DEFAULT, 10, 10, 100, 50, "Window 1");
+//openWindow(NEW_ID, $wbScreenId, DEFAULT, 50, 50, 100, 50, "Window 2");
 
-openScreen($taskId, 320, 256, LOW, "Workbench", "wbScreenId");
-openWindow(NEW_ID, $taskId, $wbScreenId, DEFAULT, 10, 10, 100, 50, "Window 1");
-openWindow(NEW_ID, $taskId, $wbScreenId, DEFAULT, 50, 50, 100, 50, "Window 2");
+exec("src/jam/taskManager.js");
 
 def("newTime");
 def("oldTime");

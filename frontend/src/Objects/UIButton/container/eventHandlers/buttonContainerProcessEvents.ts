@@ -21,7 +21,8 @@ export const buttonContainerProcessEvents = (event: IEvent) => {
 
   const mouseUp = () => {
     if (event.objects.button?.id === STATE.buttonDownId) {
-      eval(event.objects.button?.func);
+      //eval(event.objects.button?.func);
+      event.objects.button?.func();
       STATE.buttonDownId = undefined;
     }
   };

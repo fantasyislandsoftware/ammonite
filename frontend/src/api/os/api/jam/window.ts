@@ -43,9 +43,8 @@ export class JAM_WINDOW {
   /****************************************************/
 
   openWindow = async (
-    task = null,
+    task: ITask,
     id: string | null,
-    parentTaskId: string,
     parentScreenId: string,
     state: EWindowState,
     x: number,
@@ -55,8 +54,6 @@ export class JAM_WINDOW {
     title: string,
     returnId?: string
   ) => {
-    //const { screens, setScreens } = useScreenStore.getState();
-
     const windowId = id === null ? uuidv4() : id;
 
     const parentScreenIndex = await jam_screen.findScreenIndex(
@@ -82,19 +79,26 @@ export class JAM_WINDOW {
 
     /* Buttons */
     const buttonSize = Math.round(titleBarHeight / 2) * 2 - 1;
+
     const buttons = generateBarIcons(
       [
         {
           type: EnumButtonType.CLOSE,
-          func: `jam_window.close(null,'${windowId}')`,
+          func: () => {
+            this.close(null, windowId);
+          },
         },
         {
           type: EnumButtonType.ORDER,
-          func: `jam_window.sortOrder(null,'${windowId}')`,
+          func: () => {
+            this.sortOrder(null, windowId);
+          },
         },
         {
           type: EnumButtonType.MAXIMIZE,
-          func: `jam_window.toggleState(null,'${windowId}')`,
+          func: () => {
+            this.toggleState(task, windowId);
+          },
         },
       ],
       buttonSize,
@@ -130,7 +134,7 @@ export class JAM_WINDOW {
 
     const data: IWindow = {
       windowId: windowId,
-      parentTaskId: parentTaskId,
+      parentTaskId: task.id,
       parentScreenId: parentScreenId,
       state: state,
       position: { x, y, z },
@@ -190,16 +194,15 @@ export class JAM_WINDOW {
 
   /****************************************************/
 
-  recreate = async (task = null, window: IWindow, windowId: string) => {
+  recreate = async (task: ITask, window: IWindow, windowId: string) => {
     const screenId = await this.getWindowParentScreen(null, windowId);
     if (screenId === undefined) return;
     const screenIndex = await jam_screen.findScreenIndex(null, screenId);
     const windowIndex = await this.findWindowIndex(null, screenId, windowId);
 
     const clone = await this.openWindow(
-      null,
+      task,
       window.windowId,
-      window.parentTaskId,
       window.parentScreenId,
       window.state,
       window.position.x,
@@ -232,7 +235,7 @@ export class JAM_WINDOW {
 
   /****************************************************/
 
-  toggleState = async (task = null, windowId: string) => {
+  toggleState = async (task: ITask, windowId: string) => {
     const window = await this.getWindow(null, windowId);
     if (!window) return;
     const screenIndex = await jam_screen.findScreenIndex(
@@ -266,7 +269,7 @@ export class JAM_WINDOW {
       window.width = width;
       window.height = height;
     }
-    this.recreate(null, window, window.windowId);
+    this.recreate(task, window, window.windowId);
   };
 
   /****************************************************/

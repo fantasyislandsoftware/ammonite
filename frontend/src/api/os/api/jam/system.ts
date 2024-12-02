@@ -1,4 +1,10 @@
 import { ITask, TaskArch, TaskState, useTaskStore } from 'stores/useTaskStore';
+
+declare global {
+  interface Window {
+    ENV: { [key: string]: string };
+  }
+}
 import { SYSTEM } from 'constants/globals/system';
 import { SOCKET } from 'constants/globals/socket';
 import { v4 as uuidv4 } from 'uuid';
@@ -153,6 +159,26 @@ export class JAM_SYSTEM {
       };
       return;
     };
+  };
+
+  /****************************************************/
+
+  setEnv = async (task: ITask, key: string, value: string) => {
+    if (!window.ENV) window.ENV = {};
+    window.ENV[key] = value;
+  };
+
+  /****************************************************/
+
+  getEnv = async (task: ITask, key: string, returnVar: string) => {
+    task.var[returnVar] = window.ENV[key];
+    return;
+  };
+
+  /****************************************************/
+
+  generateUUID = async (task: ITask, returnId: string) => {
+    task.var[returnId] = uuidv4();
   };
 
   /****************************************************/
