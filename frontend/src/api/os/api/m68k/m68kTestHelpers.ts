@@ -86,7 +86,7 @@ export const makeTestTask = (params: IMakeTestTaskParams) => {
         m: m ? m : initM,
       },
       pc: 0,
-      res: { screens: [] },
+      res: { screens: [], windows: [] },
       lib: {},
     };
   }

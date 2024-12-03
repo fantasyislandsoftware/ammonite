@@ -29,6 +29,7 @@ import { JAM_FONT } from './font';
 import { JAM_ICON } from './icon';
 import { JAM_SCREEN } from './screen';
 import { JAM_WINDOW } from './window';
+import { JAM_GRAPHICS } from './graphics';
 
 export class JAM_SYSTEM {
   public HELLO = 'hello2';
@@ -48,6 +49,7 @@ export class JAM_SYSTEM {
     const jam_window = new JAM_WINDOW();
     const jam_font = new JAM_FONT();
     const jam_icon = new JAM_ICON();
+    const jam_graphics = new JAM_GRAPHICS();
     [
       this,
       jam_logic,
@@ -56,6 +58,7 @@ export class JAM_SYSTEM {
       jam_window,
       jam_font,
       jam_icon,
+      jam_graphics,
     ].map((lib) => {
       Object.getOwnPropertyNames(lib).map((key) => {
         const upper = key.toUpperCase();
@@ -126,7 +129,7 @@ export class JAM_SYSTEM {
           m: mem as any,
         },
         pc: block.pos,
-        res: { screens: [] },
+        res: { screens: [], windows: [] },
         lib: {
           JAM_SYSTEM: this,
           JAM_FONT: new JAM_FONT(),
@@ -135,6 +138,7 @@ export class JAM_SYSTEM {
           JAM_SCREEN: new JAM_SCREEN(),
           JAM_WINDOW: new JAM_WINDOW(),
           JAM_DATETIME: new JAM_DATETIME(),
+          JAM_GRAPHICS: new JAM_GRAPHICS(),
         },
       };
       if (task.arch === TaskArch.JS) {

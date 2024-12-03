@@ -25,6 +25,8 @@ import { STATE } from 'constants/globals/state';
 const jam_screen = new JAM_SCREEN();
 
 export class JAM_WINDOW {
+  /****************************************************/
+
   public NEW_ID = null;
   public screens: IScreen[] = [];
   public DEFAULT = EWindowState.DEFAULT;
@@ -154,6 +156,13 @@ export class JAM_WINDOW {
     }
 
     this.screens[parentScreenIndex].selectedWindowId = windowId;
+
+    const exists = task.res.windows.includes(windowId);
+    if (!exists) task.res.windows.push(windowId);
+
+    if (returnId) {
+      task.var[returnId] = windowId;
+    }
 
     return data;
   };
@@ -388,6 +397,18 @@ export class JAM_WINDOW {
     this.screens[screenIndex].windows[windowIndex].position.x = x;
     this.screens[screenIndex].windows[windowIndex].position.y = y;
     this.setScreens(this.screens);
+  };
+
+  /****************************************************/
+
+  getScreenWindowPointers = async (
+    task = null,
+    screenId: string,
+    windowId: string
+  ) => {
+    const screenIndex = await jam_screen.findScreenIndex(null, screenId);
+    const windowIndex = await this.findWindowIndex(null, screenId, windowId);
+    return { screenIndex, windowIndex };
   };
 
   /****************************************************/
