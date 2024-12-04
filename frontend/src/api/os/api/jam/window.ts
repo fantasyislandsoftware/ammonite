@@ -282,7 +282,6 @@ export class JAM_WINDOW {
       window.height = height;
     }
     this.recreate(task, window, window.windowId);
-    jam_event.wait(null, 500);
   };
 
   /****************************************************/

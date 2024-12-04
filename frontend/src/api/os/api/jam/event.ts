@@ -4,10 +4,17 @@ import { STATE } from 'constants/globals/state';
 export class JAM_EVENT {
   /****************************************************/
 
-  wait = async (task = null, milliseconds: number) => {
+  private timeOut: any = null;
+
+  /****************************************************/
+
+  wait = async (task = null, milliseconds: number, callback: any) => {
     STATE.eventState = EEventState.STOPPED;
-    setTimeout(() => {
+    STATE.events = [];
+    this.timeOut = setTimeout(() => {
+      console.log('wait');
       STATE.eventState = EEventState.RUNNING;
+      this.timeOut = null;
     }, milliseconds);
   };
 

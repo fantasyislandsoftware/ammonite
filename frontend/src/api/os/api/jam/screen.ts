@@ -77,11 +77,15 @@ export class JAM_SCREEN {
       [
         {
           type: EnumButtonType.ORDER,
-          func: `jam_screen.reorderScreen(null,'${screenId}')`,
+          func: () => {
+            this.reorderScreen(null, screenId);
+          },
         },
         {
           type: EnumButtonType.MAXIMIZE,
-          func: `jam_screen.maximizeScreen(null,'${screenId}')`,
+          func: () => {
+            this.maximizeScreen(null, screenId);
+          },
         },
       ],
       buttonSize,
@@ -138,7 +142,6 @@ export class JAM_SCREEN {
       selectedWindowId: undefined,
     };
     screens.push(data);
-
     setScreens(screens);
     setTimeout(() => {
       setScreen(data);
