@@ -27,12 +27,14 @@ export class JAM_GRAPHICS {
     task: ITask | null,
     screenId: string,
     windowId: string,
+    x: number,
+    y: number,
     text: string
   ) => {
     const { screenIndex, windowIndex } =
       await this.jam_window.getScreenWindowPointers(null, screenId, windowId);
     const window = this.screens[screenIndex].windows[windowIndex];
-    textOut(window.client.pixels, 10, 10, text, 1, 0, 'Amiga Forever', 8);
+    textOut(window.client.pixels, x, y, text, 1, 2, 'Amiga Forever', 8);
   };
 
   /****************************************************/

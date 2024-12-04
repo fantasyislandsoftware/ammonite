@@ -50,4 +50,10 @@ export class JAM_LOGIC {
   };
 
   /****************************************************/
+
+  add = async (task: ITask, returnId: string, value: number) => {
+    task.var[returnId] = task.var[returnId] + value;
+  };
+
+  /****************************************************/
 }

@@ -1,6 +1,7 @@
 import {
   getPixelArrayDimensions,
   initPixelArray,
+  pixelMerge,
 } from 'functions/graphics/pixelArray';
 import { measureText } from 'functions/graphics/text';
 import { generateBarIcons } from 'Objects/UIButton/props/buttonFunc';
@@ -224,6 +225,14 @@ export class JAM_WINDOW {
       window.titleBar!.title
     );
     clone.position.z = window.position.z;
+
+    /*clone.client.pixels = pixelMerge(
+      window.client.pixels,
+      clone.client.pixels,
+      0,
+      0,
+      null
+    );*/
 
     this.screens[screenIndex].windows[windowIndex] = clone;
   };

@@ -27,14 +27,19 @@ export const screenContainerRender = (screen: IScreen): IScreen => {
   /* Render Screen */
   const imgData: ImageData = ctx.createImageData(screen.width, screen.height);
   let n = 0;
+
   for (let y = 0; y < screen.height; y++) {
     for (let x = 0; x < screen.width; x++) {
       const pixelIndex = screen.pixels[y][x];
       const color = screen.palette[pixelIndex];
       for (let i = 0; i < 4; i++) {
         const p = n * 4 + i;
-        if (imgData.data[p] !== color[i]) {
-          imgData.data[p] = color[i];
+        try {
+          if (imgData.data[p] !== color[i]) {
+            imgData.data[p] = color[i];
+          }
+        } catch (e) {
+          () => {};
         }
       }
       n++;

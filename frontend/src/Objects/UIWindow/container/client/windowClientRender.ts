@@ -6,5 +6,5 @@ export const windowClientRender = (window: IWindow) => {
   const { pixels: windowPixels, client } = window;
   const { x, y, pixels: clientPixels } = client;
 
-  pixelMerge(clientPixels, windowPixels, x, y, 0);
+  pixelMerge(clientPixels, windowPixels, x, y, null);
 };

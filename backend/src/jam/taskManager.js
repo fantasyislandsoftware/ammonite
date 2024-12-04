@@ -1,8 +1,10 @@
 /* @JAM */
 
-import { label, jp } from "JAM_LOGIC";
+import { label, jp, add } from "JAM_LOGIC";
 import { openWindow, DEFAULT } from "JAM_WINDOW";
 import { drawText } from "JAM_GRAPHICS";
+
+def("x", 10);
 
 /* Get global wb screen id */
 getEnv("WB_SCREEN_ID", "wbScreenId");
@@ -19,11 +21,11 @@ openWindow(
   "windowId"
 );
 
-//drawText($wbScreenId, $windowId, "Hello, World!");
+//drawText($wbScreenId, $windowId, $x, 0, "Hello, World!");
 
 def("newTime");
 def("oldTime");
-def("interval", 5);
+def("interval", 1);
 
 {
   label("MAIN_LOOP");
@@ -36,7 +38,8 @@ def("interval", 5);
   jp("MAIN_LOOP");
 
   label("UPDATE");
-  drawText($wbScreenId, $windowId, "Hello, World!");
+  drawText($wbScreenId, $windowId, 10, $x, "Hello, World!");
+  //add("x", 4);
 
   getUnixDateTime(SECONDS * $interval, "oldTime");
 
