@@ -1,7 +1,8 @@
-import { EnumScreenChangeMode, IState } from './interface';
+import { EEventState, EnumScreenChangeMode, IState } from './interface';
 
 export const STATE: IState = {
   events: [],
+  eventState: EEventState.RUNNING,
   clientMouse: { x: 0, y: 0 },
   dragScreen: undefined,
   prevDragScreen: undefined,

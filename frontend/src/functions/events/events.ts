@@ -17,7 +17,7 @@ import {
 } from 'functions/events/IEvents';
 import { windowClientProcessEvents } from 'Objects/UIWindow/container/client/eventHandlers/WindowClientProcessEvents';
 import { ENV } from 'constants/globals/env';
-import { EnumScreenChangeMode } from 'constants/globals/interface';
+import { EEventState, EnumScreenChangeMode } from 'constants/globals/interface';
 import { buttonContainerProcessEvents } from 'Objects/UIButton/container/eventHandlers/buttonContainerProcessEvents';
 import { IMouse } from 'functions/mouse/IMouse';
 import { useErrorStore } from 'stores/useErrorStore';
@@ -38,6 +38,10 @@ export const addEvent = (
     button?: IButton;
   }
 ) => {
+  if (STATE.eventState === EEventState.STOPPED) {
+    return;
+  }
+
   STATE.events.push({
     objectType: objectType,
     event,

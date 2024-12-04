@@ -21,7 +21,10 @@ import { JAM_SCREEN } from './screen';
 import { IScreen } from 'Objects/UIScreen/_props/screenInterface';
 import { get } from 'http';
 import { STATE } from 'constants/globals/state';
+import { EEventState } from 'constants/globals/interface';
+import { JAM_EVENT } from './event';
 
+const jam_event = new JAM_EVENT();
 const jam_screen = new JAM_SCREEN();
 
 export class JAM_WINDOW {
@@ -279,6 +282,7 @@ export class JAM_WINDOW {
       window.height = height;
     }
     this.recreate(task, window, window.windowId);
+    jam_event.wait(null, 500);
   };
 
   /****************************************************/

@@ -26,8 +26,13 @@ export interface IScreenClientDrag {
   };
 }
 
+export enum EEventState {
+  RUNNING = 'running',
+  STOPPED = 'stopped',
+}
 export interface IState {
   events: IEvent[];
+  eventState: EEventState;
   clientMouse: IClientMouse;
   dragScreen: IScreenDrag | undefined;
   prevDragScreen: string | undefined;

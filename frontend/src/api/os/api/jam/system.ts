@@ -30,6 +30,7 @@ import { JAM_ICON } from './icon';
 import { JAM_SCREEN } from './screen';
 import { JAM_WINDOW } from './window';
 import { JAM_GRAPHICS } from './graphics';
+import { JAM_EVENT } from './event';
 
 export class JAM_SYSTEM {
   public HELLO = 'hello2';
@@ -50,6 +51,7 @@ export class JAM_SYSTEM {
     const jam_font = new JAM_FONT();
     const jam_icon = new JAM_ICON();
     const jam_graphics = new JAM_GRAPHICS();
+    const jam_event = new JAM_EVENT();
     [
       this,
       jam_logic,
@@ -59,6 +61,7 @@ export class JAM_SYSTEM {
       jam_font,
       jam_icon,
       jam_graphics,
+      jam_event,
     ].map((lib) => {
       Object.getOwnPropertyNames(lib).map((key) => {
         const upper = key.toUpperCase();
@@ -139,6 +142,7 @@ export class JAM_SYSTEM {
           JAM_WINDOW: new JAM_WINDOW(),
           JAM_DATETIME: new JAM_DATETIME(),
           JAM_GRAPHICS: new JAM_GRAPHICS(),
+          JAM_EVENT: new JAM_EVENT(),
         },
       };
       if (task.arch === TaskArch.JS) {
