@@ -11,7 +11,6 @@ getEnv("WB_SCREEN_ID", "wbScreenId");
 
 openScreen($wbScreenId, 320, 256, LOW, "Workbench", null);
 openWindow(NEW_ID, $wbScreenId, DEFAULT, 10, 10, 100, 50, "Window 1");
-//openWindow(NEW_ID, $wbScreenId, DEFAULT, 50, 50, 100, 50, "Window 2");
 
 exec("src/jam/taskManager.js");
 
@@ -19,19 +18,21 @@ def("newTime");
 def("oldTime");
 def("interval", 5);
 
-label("MAIN_LOOP");
+{
+  label("MAIN_LOOP");
 
-getUnixDateTime(SECONDS * $interval, "newTime");
+  getUnixDateTime(SECONDS * $interval, "newTime");
 
-jpIfElse("MAIN", "UPDATE_BAR", $oldTime === $newTime);
+  jpIfElse("MAIN", "UPDATE_BAR", $oldTime === $newTime);
 
-label("MAIN");
-jp("MAIN_LOOP");
+  label("MAIN");
+  jp("MAIN_LOOP");
 
-label("UPDATE_BAR");
-getMem("mem");
-setTitle($wbScreenId, "Workbench " + $mem.freeStr + " free");
+  label("UPDATE_BAR");
+  getMem("mem");
+  setTitle($wbScreenId, "Workbench " + $mem.freeStr + " free");
 
-getUnixDateTime(SECONDS * $interval, "oldTime");
+  getUnixDateTime(SECONDS * $interval, "oldTime");
 
-jp("MAIN_LOOP");
+  jp("MAIN_LOOP");
+}

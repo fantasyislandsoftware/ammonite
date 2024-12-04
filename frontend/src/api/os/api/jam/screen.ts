@@ -25,6 +25,8 @@ import { STATE } from 'constants/globals/state';
 import { processScreenChange } from 'functions/events/events';
 
 export class JAM_SCREEN {
+  /****************************************************/
+
   public LOW: IScreenMode = low;
   public MED: IScreenMode = med;
   public HI: IScreenMode = hi;

@@ -108,8 +108,25 @@ const getAmigaHunks = (data: string, raw: any) => {
   return hunks;
 };
 
+const removeComments = (string: string) => {
+  return string.replace(/\/\*[\s\S]*?\*\/|(?<=[^:])\/\/.*|^\/\/.*/g, "").trim(); //Strip comments
+};
+
 const getJamHunks = (data: string) => {
-  const lines = data.split("\n");
+  let lines = removeComments(data).split("\n");
+  lines.forEach((line, index) => {
+    lines[index] = line.trimStart();
+    if (lines[index] === "{" || lines[index] === "}") {
+      lines[index] = "";
+    }
+  });
+  const joined = lines.join("\n");
+  lines = joined.replace(/[\n\r]/g, "").split(";");
+  lines.forEach((line, index) => {
+    if (line.trim() === "") {
+      lines.splice(index, 1);
+    }
+  });
   const hunkType = "HUNK_CODE";
   let hunkData: any = [];
   let hunks: any = [];

@@ -26,7 +26,6 @@ export const processJamHunks = (hunks: IHunk[]) => {
   let write = true;
   hunks.map((hunk) => {
     if (hunk.type === ENUM_HUNK_TYPE.HUNK_CODE) {
-      const imports: { name: string; file: string | undefined }[] = [];
       hunk.hunkData.map((data) => {
         data.command = data.command.replaceAll('$', 'self.var.');
 
@@ -61,18 +60,6 @@ export const processJamHunks = (hunks: IHunk[]) => {
         ) {
           code.push(data.command);
         }
-      });
-
-      /* Post Process */
-
-      /* Add Command Parents */
-      code.map((line, index) => {
-        imports.map((imp) => {
-          code[index] = code[index].replaceAll(
-            imp.name,
-            `${imp.file}.${imp.name}`
-          );
-        });
       });
 
       /* Remove Lines */
