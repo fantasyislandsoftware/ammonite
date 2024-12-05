@@ -2,7 +2,8 @@
 
 import { label, jp, add } from "JAM_LOGIC";
 import { openWindow, DEFAULT } from "JAM_WINDOW";
-import { drawText } from "JAM_GRAPHICS";
+import { textOut, drawImage } from "JAM_GRAPHICS";
+import { getIcon} from JAM_ICON;
 
 def("x", 10);
 
@@ -21,7 +22,9 @@ openWindow(
   "windowId"
 );
 
-//drawText($wbScreenId, $windowId, $x, 0, "Hello, World!");
+//textOut($wbScreenId, $windowId, 60, 50, "Hello, World!");
+//getIcon(0, "icon");
+//drawImage($wbScreenId, $windowId,$icon, 120, 0, );
 
 def("newTime");
 def("oldTime");
@@ -38,7 +41,7 @@ def("interval", 1);
   jp("MAIN_LOOP");
 
   label("UPDATE");
-  drawText($wbScreenId, $windowId, 10, $x, "Hello, World!");
+  //textOut($wbScreenId, $windowId, 10, $x, "Hello, World!");
   //add("x", 4);
 
   getUnixDateTime(SECONDS * $interval, "oldTime");

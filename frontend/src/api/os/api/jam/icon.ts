@@ -49,4 +49,11 @@ export class JAM_ICON {
   };
 
   /****************************************************/
+
+  getIcon = async (task: ITask, index: number, returnId: string) => {
+    const { icons } = useIconStore.getState();
+    task.var[returnId] = icons[index];
+  };
+
+  /****************************************************/
 }

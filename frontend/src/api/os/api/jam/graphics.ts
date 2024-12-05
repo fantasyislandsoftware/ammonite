@@ -5,6 +5,8 @@ import { IScreen } from 'Objects/UIScreen/_props/screenInterface';
 import { useScreenStore } from 'stores/useScreenStore';
 import { plot } from 'functions/graphics/draw';
 import { textOut } from 'functions/graphics/text';
+import { IPixelArray } from 'functions/graphics/IGraphics';
+import { getPixelArrayDimensions } from 'functions/graphics/pixelArray';
 
 export class JAM_GRAPHICS {
   /****************************************************/
@@ -23,7 +25,7 @@ export class JAM_GRAPHICS {
 
   /****************************************************/
 
-  drawText = async (
+  textOut = async (
     task: ITask | null,
     screenId: string,
     windowId: string,
@@ -35,6 +37,28 @@ export class JAM_GRAPHICS {
       await this.jam_window.getScreenWindowPointers(null, screenId, windowId);
     const window = this.screens[screenIndex].windows[windowIndex];
     textOut(window.client.pixels, x, y, text, 1, 2, 'Amiga Forever', 8);
+  };
+
+  /****************************************************/
+
+  drawImage = async (
+    task = null,
+    screenId: string,
+    windowId: string,
+    image: IPixelArray,
+    x: number,
+    y: number
+  ) => {
+    const { screenIndex, windowIndex } =
+      await this.jam_window.getScreenWindowPointers(null, screenId, windowId);
+    const window = this.screens[screenIndex].windows[windowIndex];
+    const { width, height } = getPixelArrayDimensions(image);
+    console.log('drawImage', width, height);
+    for (let py = 0; py < height; py++) {
+      for (let px = 0; px < width; px++) {
+        plot(window.client.pixels, x + px, y + py, image[py][px]);
+      }
+    }
   };
 
   /****************************************************/

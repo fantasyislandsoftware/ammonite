@@ -6,10 +6,8 @@ export const plot = (
   y: number,
   colorIndex: number
 ) => {
-  try {
+  if (y >= 0 && y < pixels.length && x >= 0 && x < pixels[0].length) {
     pixels[y][x] = colorIndex;
-  } catch (error) {
-    () => {};
   }
 };
 
