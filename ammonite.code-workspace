@@ -11,6 +11,9 @@
 		},
 		{
 			"path": "../../../../FS-UAE/Hard Drives/dev_system"
+		},
+		{
+			"path": "dream"
 		}
 	],
 	"settings": {

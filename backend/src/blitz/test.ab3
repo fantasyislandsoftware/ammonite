@@ -1,1 +1,7 @@
-NPrint "hello"
+NPrint "hello2"
+FindScreen 0
+Window 0,10,10,100,100,$1 | $2 | $1000,"Hello",1,2
+WindowOutput 0
+Print "helloiuh iuh iuh iuh iuh iu hiu h ih iu iu hiuh"
+While 1=1
+Wend
