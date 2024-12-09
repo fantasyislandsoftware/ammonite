@@ -27,14 +27,20 @@ export class JAM_GRAPHICS {
 
   textOut = async (
     task: ITask | null,
-    screenId: string,
-    windowId: string,
-    x: number,
-    y: number,
-    text: string
+    props: {
+      screenId: string;
+      windowId: string;
+      x: number;
+      y: number;
+      text: string;
+    }
   ) => {
+    const { screenId, windowId, x, y, text } = props;
     const { screenIndex, windowIndex } =
-      await this.jam_window.getScreenWindowPointers(null, screenId, windowId);
+      await this.jam_window.getScreenWindowPointers(null, {
+        screenId,
+        windowId,
+      });
     const window = this.screens[screenIndex].windows[windowIndex];
     textOut(window.client.pixels, x, y, text, 1, 2, 'Amiga Forever', 8);
   };
@@ -43,14 +49,20 @@ export class JAM_GRAPHICS {
 
   drawImage = async (
     task = null,
-    screenId: string,
-    windowId: string,
-    image: IPixelArray,
-    x: number,
-    y: number
+    props: {
+      screenId: string;
+      windowId: string;
+      image: IPixelArray;
+      x: number;
+      y: number;
+    }
   ) => {
+    const { screenId, windowId, image, x, y } = props;
     const { screenIndex, windowIndex } =
-      await this.jam_window.getScreenWindowPointers(null, screenId, windowId);
+      await this.jam_window.getScreenWindowPointers(null, {
+        screenId,
+        windowId,
+      });
     const window = this.screens[screenIndex].windows[windowIndex];
     const { width, height } = getPixelArrayDimensions(image);
     console.log('drawImage', width, height);

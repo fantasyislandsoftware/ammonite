@@ -8,7 +8,11 @@ export class JAM_EVENT {
 
   /****************************************************/
 
-  wait = async (task = null, milliseconds: number, callback: any) => {
+  wait = async (
+    task = null,
+    props: { milliseconds: number; callback: any }
+  ) => {
+    const { milliseconds, callback } = props;
     STATE.eventState = EEventState.STOPPED;
     STATE.events = [];
     this.timeOut = setTimeout(() => {

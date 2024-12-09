@@ -17,7 +17,8 @@ export class JAM_TASK {
 
   /****************************************************/
 
-  getTaskById = async (taskId: string | undefined) => {
+  getTaskById = async (_task = null, props: { taskId: string | undefined }) => {
+    const { taskId } = props;
     const task = this.tasks.find((task) => task.id === taskId);
     return task;
   };

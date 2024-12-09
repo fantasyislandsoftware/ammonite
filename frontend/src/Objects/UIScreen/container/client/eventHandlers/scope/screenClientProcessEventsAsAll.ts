@@ -18,12 +18,12 @@ export const screenClientProcessEventsAsAll = (event: IEvent) => {
       STATE.dragWindow &&
       event.objects.screen?.screenId === STATE.dragWindow.screenId
     ) {
-      jam_window.setPosition(
-        STATE.dragWindow.screenId,
-        STATE.dragWindow.windowId,
-        STATE.screenClientMouse.x - STATE.dragWindow.offset.x,
-        STATE.screenClientMouse.y - STATE.dragWindow.offset.y
-      );
+      jam_window.setPosition(null, {
+        screenId: STATE.dragWindow.screenId,
+        windowId: STATE.dragWindow.windowId,
+        x: STATE.screenClientMouse.x - STATE.dragWindow.offset.x,
+        y: STATE.screenClientMouse.y - STATE.dragWindow.offset.y,
+      });
     }
   };
 

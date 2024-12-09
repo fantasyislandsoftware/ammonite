@@ -1,10 +1,4 @@
 import { ITask, TaskArch, TaskState, useTaskStore } from 'stores/useTaskStore';
-
-declare global {
-  interface Window {
-    ENV: { [key: string]: string };
-  }
-}
 import { SYSTEM } from 'constants/globals/system';
 import { SOCKET } from 'constants/globals/socket';
 import { v4 as uuidv4 } from 'uuid';
@@ -32,56 +26,60 @@ import { JAM_WINDOW } from './window';
 import { JAM_GRAPHICS } from './graphics';
 import { JAM_EVENT } from './event';
 
-export class JAM_SYSTEM {
-  public HELLO = 'hello2';
+declare global {
+  interface Window {
+    ENV: { [key: string]: string };
+  }
+}
 
+export class JAM_SYSTEM {
   /****************************************************/
 
-  log = async (task = null, value: string) => {
+  log = async (task = null, props: { value: string }) => {
+    const { value } = props;
     console.log(value);
   };
 
   /****************************************************/
 
-  processImports = (self: ITask) => {
-    const jam_logic = new JAM_LOGIC();
-    const jam_datetime = new JAM_DATETIME();
-    const jam_screen = new JAM_SCREEN();
-    const jam_window = new JAM_WINDOW();
-    const jam_font = new JAM_FONT();
-    const jam_icon = new JAM_ICON();
-    const jam_graphics = new JAM_GRAPHICS();
-    const jam_event = new JAM_EVENT();
-    [
-      this,
-      jam_logic,
-      jam_datetime,
-      jam_screen,
-      jam_window,
-      jam_font,
-      jam_icon,
-      jam_graphics,
-      jam_event,
-    ].map((lib) => {
-      Object.getOwnPropertyNames(lib).map((key) => {
-        const upper = key.toUpperCase();
-        const isConstant = key === upper;
-        const r = `self.lib.${lib.constructor.name}.${key}`;
-        for (let n = 0; n < self.code.length; n++) {
-          if (isConstant) {
-            self.code[n] = self.code[n].replaceAll(`${key}`, `${r}`);
-          } else {
-            self.code[n] = self.code[n].replaceAll(`${key}(`, `${r}(self,`);
+  exec = async (task = null, props: { path: string; debug?: true }) => {
+    const { path, debug } = props;
+    const processImports = (self: ITask) => {
+      const jam_logic = new JAM_LOGIC();
+      const jam_datetime = new JAM_DATETIME();
+      const jam_screen = new JAM_SCREEN();
+      const jam_window = new JAM_WINDOW();
+      const jam_font = new JAM_FONT();
+      const jam_icon = new JAM_ICON();
+      const jam_graphics = new JAM_GRAPHICS();
+      const jam_event = new JAM_EVENT();
+      [
+        this,
+        jam_logic,
+        jam_datetime,
+        jam_screen,
+        jam_window,
+        jam_font,
+        jam_icon,
+        jam_graphics,
+        jam_event,
+      ].map((lib) => {
+        Object.getOwnPropertyNames(lib).map((key) => {
+          const upper = key.toUpperCase();
+          const isConstant = key === upper;
+          const r = `self.lib.${lib.constructor.name}.${key}`;
+          for (let n = 0; n < self.code.length; n++) {
+            if (isConstant) {
+              self.code[n] = self.code[n].replaceAll(`${key}`, `${r}`);
+            } else {
+              self.code[n] = self.code[n].replaceAll(`${key}(`, `${r}(self,`);
+            }
           }
-        }
+        });
       });
-    });
-    return self;
-  };
+      return self;
+    };
 
-  /****************************************************/
-
-  exec = async (task = null, path: string, debug?: true) => {
     const name = path.substring(path.lastIndexOf('/') + 1);
     const { tasks, setTasks } = useTaskStore.getState();
     const data = (await getExe(path)) as IHunks;
@@ -146,7 +144,7 @@ export class JAM_SYSTEM {
         },
       };
       if (task.arch === TaskArch.JS) {
-        task = this.processImports(task);
+        task = processImports(task);
       }
       tasks.push(task);
     }
@@ -156,11 +154,12 @@ export class JAM_SYSTEM {
 
   /****************************************************/
 
-  getMem = async (task: ITask, returnVar: string) => {
+  getMem = async (task: ITask, props: { ret: string }) => {
+    const { ret } = props;
     SOCKET.NODE.send('REQUEST_MEMORY');
     SOCKET.NODE.onmessage = (event) => {
       const data = JSON.parse(event.data);
-      task.var[returnVar] = {
+      task.var[ret] = {
         total: data.total,
         free: data.free,
         freeStr: numberWithCommas(data.free),
@@ -171,22 +170,25 @@ export class JAM_SYSTEM {
 
   /****************************************************/
 
-  setEnv = async (task: ITask, key: string, value: string) => {
+  setEnv = async (task: ITask, props: { key: string; value: string }) => {
+    const { key, value } = props;
     if (!window.ENV) window.ENV = {};
     window.ENV[key] = value;
   };
 
   /****************************************************/
 
-  getEnv = async (task: ITask, key: string, returnVar: string) => {
-    task.var[returnVar] = window.ENV[key];
+  getEnv = async (task: ITask, props: { key: string; ret: string }) => {
+    const { key, ret } = props;
+    task.var[ret] = window.ENV[key];
     return;
   };
 
   /****************************************************/
 
-  generateUUID = async (task: ITask, returnId: string) => {
-    task.var[returnId] = uuidv4();
+  generateUUID = async (task: ITask, props: { ret: string }) => {
+    const { ret } = props;
+    task.var[ret] = uuidv4();
   };
 
   /****************************************************/

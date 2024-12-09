@@ -24,8 +24,8 @@ const execJamInstruction = (self: ITask) => {
   if (self.pos !== self.promise.name) {
     self.promise = {
       name: self.pos,
-      state: makeQuerablePromise(eval(line), (e) => {
-        killTask(self.id, e);
+      state: makeQuerablePromise(eval(line), self.pos, (e, pos) => {
+        killTask(self.id, self.name, pos, e);
       }),
     };
   }
@@ -45,7 +45,7 @@ const execJamInstruction = (self: ITask) => {
   }
 
   if (self.pos >= self.code.length) {
-    killTask(self.id);
+    killTask(self.id, self.name, self.pos, null);
   }
 
   return self;
@@ -111,11 +111,11 @@ const execM68KInstruction = (self: ITask) => {
         break;
       case EnumM68KOP.RTS:
         console.log('rts');
-        killTask(self.id);
+        killTask(self.id, self.name, self.pos, null);
         break;
     }
   } else {
-    killTask(self.id, 'unknown instruction');
+    killTask(self.id, self.name, self.pos, 'unknown instruction');
   }
 
   self = state.task;
@@ -137,18 +137,22 @@ export const execInstruction = (task: ITask) => {
         return execM68KInstruction(task);
     }
   } catch (e) {
-    killTask(task.id, e);
+    killTask(task.id, task.name, task.pos, e);
   }
 };
 
-const killTask = (id: string, e?: any) => {
+const killTask = (id: string, name: string, pos: number, e: any) => {
+  if (e) {
+    console.log({ task: id, name: name, line: pos, error: e });
+  }
+
   /* Remove screens */
   const jam_screen = new JAM_SCREEN();
   const task = useTaskStore.getState().tasks.find((task) => task.id === id);
   if (task) {
     const { screens } = task.res;
     screens.map((id) => {
-      jam_screen.closeScreen(null, id);
+      jam_screen.closeScreen(null, { screenId: id });
     });
   }
 
@@ -159,8 +163,6 @@ const killTask = (id: string, e?: any) => {
       tasks.splice(index, 1);
     }
   });
-  if (e) {
-    console.log({ task: id, error: e });
-  }
+
   setTasks(tasks);
 };

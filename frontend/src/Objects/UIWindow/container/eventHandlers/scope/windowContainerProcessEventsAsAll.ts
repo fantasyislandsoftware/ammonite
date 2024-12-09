@@ -14,7 +14,7 @@ export const windowContainerProcessEventsAsAll = (event: IEvent) => {
     const screenId = event.objects.window?.parentScreenId;
     const windowId = event.objects.window?.windowId;
     if (screenId && windowId) {
-      jam_screen.setSelectedWindow(screenId, windowId);
+      jam_screen.setSelectedWindow(null, { screenId, windowId });
     }
   };
 

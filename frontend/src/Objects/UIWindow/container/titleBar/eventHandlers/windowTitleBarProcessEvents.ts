@@ -35,9 +35,11 @@ export const windowTitleBarProcessEvents = (event: IEvent) => {
   const mouseDbClick = async (event: IEvent) => {
     if (event.mouse?.button === EnumMouseButton.Left) {
       const taskId = event.objects.window?.parentTaskId;
-      const task = await jam_task.getTaskById(taskId);
+      const task = await jam_task.getTaskById(null, { taskId: taskId });
       task &&
-        jam_window.toggleState(task, event.objects.window?.windowId || '');
+        jam_window.toggleState(task, {
+          windowId: event.objects.window?.windowId || '',
+        });
     }
   };
 

@@ -47,14 +47,21 @@ export class JAM_SCREEN {
 
   openScreen = async (
     task: ITask,
-    id: string | null,
-    width: number,
-    height: number,
-    mode: IScreenMode,
-    title: string | null,
-    returnId: string
+    props: {
+      id: string | null;
+      x: number;
+      y: number;
+      width: number;
+      height: number;
+      depth: number;
+      mode: IScreenMode;
+      title: string | null;
+      ret: string;
+    }
   ) => {
     if (!task || !task.res) return;
+
+    const { id, x, y, width, height, depth, mode, title, ret } = props;
 
     const { screens, setScreens } = useScreenStore.getState();
 
@@ -78,13 +85,13 @@ export class JAM_SCREEN {
         {
           type: EnumButtonType.ORDER,
           func: () => {
-            this.reorderScreen(null, screenId);
+            this.reorderScreen(null, { screenId: screenId });
           },
         },
         {
           type: EnumButtonType.MAXIMIZE,
           func: () => {
-            this.maximizeScreen(null, screenId);
+            this.maximizeScreen(null, { screenId: screenId });
           },
         },
       ],
@@ -104,8 +111,8 @@ export class JAM_SCREEN {
       width: width,
       height: height,
       offset: {
-        x: 0,
-        y: 0,
+        x: x,
+        y: y,
       },
       titleBar: title
         ? {
@@ -149,31 +156,40 @@ export class JAM_SCREEN {
 
     STATE.currentScreenId = screenId;
 
-    task.var[returnId] = screenId;
+    task.var[ret] = screenId;
   };
 
   /****************************************************/
 
-  closeScreen = async (task = null, screenId: string) => {
-    const screenIndex = await this.findScreenIndex(null, screenId);
+  closeScreen = async (task = null, props: { screenId: string }) => {
+    const { screenId } = props;
+    const screenIndex = await this.findScreenIndex(null, {
+      screenId: screenId,
+    });
     this.screens.splice(screenIndex, 1);
     this.setScreens(this.screens);
   };
 
   /****************************************************/
 
-  maximizeScreen = async (task = null, screenId: string) => {
-    const screenIndex = await this.findScreenIndex(null, screenId);
+  maximizeScreen = async (task = null, props: { screenId: string }) => {
+    const { screenId } = props;
+    const screenIndex = await this.findScreenIndex(null, {
+      screenId: screenId,
+    });
     this.screens[screenIndex].position.y = 0;
     setScreen(this.screens[screenIndex]);
   };
 
   /****************************************************/
 
-  bringToFront = async (task = null, screenId: string) => {
-    const screenIndex = await this.findScreenIndex(null, screenId);
+  bringToFront = async (task = null, props: { screenId: string }) => {
+    const { screenId } = props;
+    const screenIndex = await this.findScreenIndex(null, {
+      screenId: screenId,
+    });
     let pos = 100;
-    if (await this.isTopScreen(null, screenId)) return;
+    if (await this.isTopScreen(null, { screenId: screenId })) return;
     this.screens.map((_screen) => {
       if (_screen.screenId !== screenId) {
         _screen.zIndex = pos;
@@ -187,8 +203,11 @@ export class JAM_SCREEN {
 
   /****************************************************/
 
-  sendToBack = async (task = null, screenId: string) => {
-    const screenIndex = await this.findScreenIndex(null, screenId);
+  sendToBack = async (task = null, props: { screenId: string }) => {
+    const { screenId } = props;
+    const screenIndex = await this.findScreenIndex(null, {
+      screenId: screenId,
+    });
     let pos = getHighestScreenZIndex();
     this.screens.map((_screen) => {
       if (_screen.screenId !== screenId) {
@@ -203,34 +222,47 @@ export class JAM_SCREEN {
 
   /****************************************************/
 
-  isTopScreen = async (task = null, screenId: string) => {
-    const screenIndex = await this.findScreenIndex(null, screenId);
+  isTopScreen = async (task = null, props: { screenId: string }) => {
+    const { screenId } = props;
+    const screenIndex = await this.findScreenIndex(null, {
+      screenId: screenId,
+    });
     const highestZIndex = await getHighestScreenZIndex();
     return this.screens[screenIndex].zIndex === highestZIndex;
   };
 
   /****************************************************/
 
-  reorderScreen = async (task = null, screenId: string) => {
+  reorderScreen = async (task = null, props: { screenId: string }) => {
+    const { screenId } = props;
     if (STATE.screenChangeMode === 'changing') return;
-    const screenIndex = await this.findScreenIndex(null, screenId);
+    const screenIndex = await this.findScreenIndex(null, {
+      screenId: screenId,
+    });
     const highestZIndex = await getHighestScreenZIndex();
     if (this.screens[screenIndex].zIndex === (await highestZIndex)) {
-      this.sendToBack(null, screenId);
+      this.sendToBack(null, { screenId: screenId });
     }
   };
 
   /****************************************************/
 
-  findScreenIndex = async (task = null, id: string) => {
+  findScreenIndex = async (task = null, props: { screenId: string }) => {
+    const { screenId } = props;
     const { screens } = useScreenStore.getState();
-    return screens.findIndex((s) => s.screenId === id);
+    return screens.findIndex((s) => s.screenId === screenId);
   };
 
   /****************************************************/
 
-  setTitle = async (task = null, screenId: string, title: string) => {
-    const screenIndex = await this.findScreenIndex(null, screenId);
+  setTitle = async (
+    task = null,
+    props: { screenId: string; title: string }
+  ) => {
+    const { screenId, title } = props;
+    const screenIndex = await this.findScreenIndex(null, {
+      screenId: screenId,
+    });
     this.screens[screenIndex].titleBar!.title = title;
     setScreen(this.screens[screenIndex]);
   };
@@ -238,10 +270,16 @@ export class JAM_SCREEN {
   /****************************************************/
 
   setSelectedWindow = async (
-    screenId: string,
-    windowId: string | undefined
+    task = null,
+    props: {
+      screenId: string;
+      windowId: string | undefined;
+    }
   ) => {
-    const screenIndex = await this.findScreenIndex(null, screenId);
+    const { screenId, windowId } = props;
+    const screenIndex = await this.findScreenIndex(null, {
+      screenId: screenId,
+    });
     this.screens[screenIndex].selectedWindowId = windowId;
     setScreen(this.screens[screenIndex]);
   };

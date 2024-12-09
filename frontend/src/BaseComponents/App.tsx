@@ -42,7 +42,7 @@ const App = () => {
   };
 
   async function boot() {
-    jam_system.exec(null, 'src/jam/boot.js');
+    jam_system.exec(null, { path: 'src/jam/boot.js' });
   }
 
   useEffect(() => {

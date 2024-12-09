@@ -13,7 +13,7 @@ export class JAM_ICON {
   loadIcons = async (task: ITask | null) => {
     task = null;
 
-    const { icons, setIcons } = useIconStore.getState();
+    const { setIcons } = useIconStore.getState();
     const p = getFile(
       `${ENV.baseDir}resource/icons.iff`,
       EnumDataFormat.ARRAY_BUFFER
@@ -50,9 +50,10 @@ export class JAM_ICON {
 
   /****************************************************/
 
-  getIcon = async (task: ITask, index: number, returnId: string) => {
+  getIcon = async (task: ITask, props: { index: number; ret: string }) => {
+    const { index, ret } = props;
     const { icons } = useIconStore.getState();
-    task.var[returnId] = icons[index];
+    task.var[ret] = icons[index];
   };
 
   /****************************************************/

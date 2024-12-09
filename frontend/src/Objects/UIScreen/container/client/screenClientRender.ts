@@ -17,7 +17,9 @@ export const screenClientRender = (
 
   const { width, height } = getPixelArrayDimensions(clientPixels);
 
-  const windows = jam_window.sortWindowsByZIndex(null, screen.windows);
+  const windows = jam_window.sortWindowsByZIndex(null, {
+    windows: screen.windows,
+  });
 
   drawFillRect(clientPixels, 0, 0, width, height, ScreenColour.CLIENT);
 

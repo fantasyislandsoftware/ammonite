@@ -4,6 +4,6 @@ import { openScreen, low } from "JAM_SCREEN";
 import { label, jp } from "JAM_LOGIC";
 
 {
-  label("MAIN_LOOP");
-  jp("MAIN_LOOP");
+  label({ name: "MAIN_LOOP" });
+  jp({ label: "MAIN_LOOP" });
 }

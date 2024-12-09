@@ -7,9 +7,10 @@ export class JAM_DATETIME {
 
   /****************************************************/
 
-  getUnixDateTime = async (task: ITask, ms: number, returnVar: string) => {
+  getUnixDateTime = async (task: ITask, props: { ms: number; ret: string }) => {
+    const { ms, ret } = props;
     const date = new Date();
-    task.var[returnVar] = Math.ceil(date.getTime() / ms) * ms;
+    task.var[ret] = Math.ceil(date.getTime() / ms) * ms;
   };
 
   /****************************************************/
