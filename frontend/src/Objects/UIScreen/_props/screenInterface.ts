@@ -51,6 +51,16 @@ export interface IScreenMode {
   bitDepth: 12 | 15 | 16 | 24 | 32;
   maxColors: 2 | 4 | 16 | 32 | 64 | 256 | 4096 | 65536 | 16777216;
 }
+export type IScreenColors =
+  | 2
+  | 4
+  | 16
+  | 32
+  | 64
+  | 256
+  | 4096
+  | 65536
+  | 16777216;
 
 export interface IScreenTitleBar {
   title: string;

@@ -23,15 +23,12 @@ export class JAM_LOGIC {
 
   /****************************************************/
 
-  jpc = async (
-    task: ITask,
-    props: { condition: any; goto: string; else: string }
-  ) => {
-    const { condition, goto, else: elseLabel } = props;
-    if (condition) {
-      task.pos = task.label[goto];
+  jpc = async (task: ITask, props: { if: any; then: string; else: string }) => {
+    const { if: _if, then: _then, else: _else } = props;
+    if (_if) {
+      task.pos = task.label[_then];
     } else {
-      task.pos = task.label[elseLabel];
+      task.pos = task.label[_else];
     }
   };
 

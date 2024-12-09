@@ -18,10 +18,22 @@ openScreen({
   depth: 16,
   mode: LOW,
   title: "Workbench",
+  dpen: 0,
+  bpen: 1,
   ret: null,
 });
 
-openWindow(NEW_ID, $wbScreenId, DEFAULT, 10, 10, 100, 50, "Window 1");
+openWindow({
+  id: null,
+  parentScreenId: $wbScreenId,
+  state: DEFAULT,
+  x: 10,
+  y: 10,
+  width: 100,
+  height: 50,
+  title: "Window 1",
+  ret: null,
+});
 
 exec({ path: "src/jam/taskManager.js" });
 

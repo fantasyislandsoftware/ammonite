@@ -65,10 +65,37 @@ export class JAM_GRAPHICS {
       });
     const window = this.screens[screenIndex].windows[windowIndex];
     const { width, height } = getPixelArrayDimensions(image);
-    console.log('drawImage', width, height);
     for (let py = 0; py < height; py++) {
       for (let px = 0; px < width; px++) {
         plot(window.client.pixels, x + px, y + py, image[py][px]);
+      }
+    }
+  };
+
+  /****************************************************/
+
+  drawRect = async (
+    task = null,
+    props: {
+      screenId: string;
+      windowId: string;
+      x: number;
+      y: number;
+      width: number;
+      height: number;
+      color: number;
+    }
+  ) => {
+    const { screenId, windowId, x, y, width, height, color } = props;
+    const { screenIndex, windowIndex } =
+      await this.jam_window.getScreenWindowPointers(null, {
+        screenId,
+        windowId,
+      });
+    const window = this.screens[screenIndex].windows[windowIndex];
+    for (let py = 0; py < height; py++) {
+      for (let px = 0; px < width; px++) {
+        plot(window.client.pixels, x + px, y + py, color);
       }
     }
   };

@@ -72,7 +72,7 @@ export const processJamHunks = (hunks: IHunk[]) => {
       code.map((line, index) => {
         if (line.startsWith(LABEL_CMD)) {
           const label = line
-            .replaceAll(`label({ name: "`, '')
+            .replaceAll(`${LABEL_CMD}({ name: "`, '')
             .replaceAll(`" })`, '');
           labels[label] = index;
         }

@@ -1,4 +1,8 @@
-import { IScreen, IScreenMode } from 'Objects/UIScreen/_props/screenInterface';
+import {
+  IScreen,
+  IScreenColors,
+  IScreenMode,
+} from 'Objects/UIScreen/_props/screenInterface';
 import { useScreenStore } from 'stores/useScreenStore';
 import { ITask } from 'stores/useTaskStore';
 import {
@@ -23,6 +27,8 @@ import { ScreenColour } from 'Objects/UIScreen/_props/screenColour';
 import { generateDefaultColorPalette } from 'Objects/UIScreen/_props/palettes';
 import { STATE } from 'constants/globals/state';
 import { processScreenChange } from 'functions/events/events';
+import { JAM_GRAPHICS } from './graphics';
+import { drawFillRect } from 'functions/graphics/draw';
 
 export class JAM_SCREEN {
   /****************************************************/
@@ -53,9 +59,11 @@ export class JAM_SCREEN {
       y: number;
       width: number;
       height: number;
-      depth: number;
+      depth: IScreenColors;
       mode: IScreenMode;
       title: string | null;
+      dpen: number;
+      bpen: number;
       ret: string;
     }
   ) => {
@@ -127,7 +135,7 @@ export class JAM_SCREEN {
             ),
           }
         : null,
-      numberOfColours: 16,
+      numberOfColours: depth,
       palette: generateDefaultColorPalette(16),
       ctx: null,
       pixels: initPixelArray(width, height, ScreenColour.BORDER),
@@ -155,6 +163,16 @@ export class JAM_SCREEN {
     });
 
     STATE.currentScreenId = screenId;
+
+    /*this.jam_graphics.drawRect(null, {
+      screenId: screenId,
+      windowId: null,
+      x: 0,
+      y: 0,
+      width: width,
+      height: height,
+      color: ScreenColour.BORDER,
+    });*/
 
     task.var[ret] = screenId;
   };

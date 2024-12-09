@@ -35,9 +35,9 @@ declare global {
 export class JAM_SYSTEM {
   /****************************************************/
 
-  log = async (task = null, props: { value: string }) => {
-    const { value } = props;
-    console.log(value);
+  log = async (task = null, props: { msg: any }) => {
+    const { msg } = props;
+    console.log(msg);
   };
 
   /****************************************************/

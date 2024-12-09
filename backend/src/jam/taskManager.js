@@ -10,17 +10,17 @@ def({ v: "x", value: 10 });
 /* Get global wb screen id */
 getEnv({ key: "WB_SCREEN_ID", ret: "wbScreenId" });
 
-openWindow(
-  NEW_ID,
-  $wbScreenId,
-  DEFAULT,
-  140,
-  40,
-  150,
-  150,
-  "Task Manager",
-  "windowId"
-);
+openWindow({
+  id: null,
+  parentScreenId: $wbScreenId,
+  state: DEFAULT,
+  x: 140,
+  y: 40,
+  width: 150,
+  height: 150,
+  title: "Task Manager",
+  ret: "windowId",
+});
 
 //textOut($wbScreenId, $windowId, 60, 50, "Hello, World!");
 //getIcon(0, "icon");
@@ -35,7 +35,6 @@ def({ v: "interval", value: 1 });
 
   getUnixDateTime({ ms: SECONDS * $interval, ret: "newTime" });
 
-  //jpIfElse("MAIN", "UPDATE", $oldTime === $newTime);
   jpc({ if: $oldTime === $newTime, then: "MAIN", else: "UPDATE" });
 
   label({ name: "MAIN" });
