@@ -6,6 +6,7 @@ import { pixelMerge } from 'functions/graphics/pixelArray';
 import { ScreenColour } from 'Objects/UIScreen/_props/screenColour';
 import { IPixelArray } from 'functions/graphics/IGraphics';
 import { EnumButtonType } from 'Objects/UIButton/props/buttonInterface';
+import { checkPaletteIndex } from 'functions/colour/colour';
 
 export const screenTitleBarRender = (pixels: IPixelArray, screen: IScreen) => {
   const { titleBar } = screen;
@@ -17,7 +18,7 @@ export const screenTitleBarRender = (pixels: IPixelArray, screen: IScreen) => {
     0,
     screen.width,
     titleBar.height,
-    ScreenColour.TITLEBAR_BACKGROUND
+    checkPaletteIndex(ScreenColour.TITLEBAR_BACKGROUND, screen.palette)
   );
 
   /* Title */
@@ -26,8 +27,8 @@ export const screenTitleBarRender = (pixels: IPixelArray, screen: IScreen) => {
     0,
     0,
     titleBar.title,
-    ScreenColour.TITLEBAR_TEXT,
-    ScreenColour.TITLEBAR_BACKGROUND,
+    checkPaletteIndex(ScreenColour.TITLEBAR_TEXT, screen.palette),
+    checkPaletteIndex(ScreenColour.TITLEBAR_BACKGROUND, screen.palette),
     titleBar.font.name,
     titleBar.font.size
   );
@@ -39,7 +40,13 @@ export const screenTitleBarRender = (pixels: IPixelArray, screen: IScreen) => {
     switch (button.type) {
       case EnumButtonType.ORDER:
         pixels = pixelMerge(
-          orderButton(w, h, ScreenColour.TITLEBAR_BACKGROUND, button.state),
+          orderButton(
+            screen.palette,
+            w,
+            h,
+            checkPaletteIndex(ScreenColour.TITLEBAR_BACKGROUND, screen.palette),
+            button.state
+          ),
           pixels,
           x,
           y,
@@ -48,7 +55,13 @@ export const screenTitleBarRender = (pixels: IPixelArray, screen: IScreen) => {
         break;
       case EnumButtonType.MAXIMIZE:
         pixels = pixelMerge(
-          maximizeButton(w, h, ScreenColour.TITLEBAR_BACKGROUND, button.state),
+          maximizeButton(
+            screen.palette,
+            w,
+            h,
+            checkPaletteIndex(ScreenColour.TITLEBAR_BACKGROUND, screen.palette),
+            button.state
+          ),
           pixels,
           x,
           y,
@@ -67,7 +80,10 @@ export const screenTitleBarRender = (pixels: IPixelArray, screen: IScreen) => {
     titleBar.height - 1,
     screen.width,
     titleBar.height - 1,
-    ScreenColour.TITLEBAR_BORDER
+    checkPaletteIndex(
+      checkPaletteIndex(ScreenColour.TITLEBAR_BORDER, screen.palette),
+      screen.palette
+    )
   );
 
   return pixels;

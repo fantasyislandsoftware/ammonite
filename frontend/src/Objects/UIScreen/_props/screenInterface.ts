@@ -16,8 +16,7 @@ export interface IScreen {
     y: number;
   };
   titleBar: IScreenTitleBar | null;
-  numberOfColours: number;
-  palette: IPixelArray;
+  palette: number[][];
   ctx: CanvasRenderingContext2D | null;
   pixels: IPixelArray;
   margin: number;

@@ -135,8 +135,7 @@ export class JAM_SCREEN {
             ),
           }
         : null,
-      numberOfColours: depth,
-      palette: generateDefaultColorPalette(16),
+      palette: generateDefaultColorPalette(depth),
       ctx: null,
       pixels: initPixelArray(width, height, ScreenColour.BORDER),
       margin: 0,

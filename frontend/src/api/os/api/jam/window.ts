@@ -21,6 +21,7 @@ import { ITask } from 'stores/useTaskStore';
 import { JAM_SCREEN } from './screen';
 import { IScreen } from 'Objects/UIScreen/_props/screenInterface';
 import { STATE } from 'constants/globals/state';
+import { checkPaletteIndex } from 'functions/colour/colour';
 
 const jam_screen = new JAM_SCREEN();
 
@@ -66,6 +67,8 @@ export class JAM_WINDOW {
     const parentScreenIndex = await jam_screen.findScreenIndex(null, {
       screenId: parentScreenId,
     });
+
+    const screen = this.screens[parentScreenIndex];
 
     const z =
       (await this.getHighestWindowZIndex(null, {
@@ -133,7 +136,7 @@ export class JAM_WINDOW {
       pixels: initPixelArray(
         width - windowDefault.border.thickness * 2,
         height - windowDefault.border.thickness * 3 - titleBarHeight,
-        WindowColour.CLIENT
+        checkPaletteIndex(WindowColour.CLIENT, screen.palette)
       ),
     };
 

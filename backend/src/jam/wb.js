@@ -28,7 +28,7 @@ openWindow({
   parentScreenId: $wbScreenId,
   state: DEFAULT,
   x: 10,
-  y: 10,
+  y: 15,
   width: 100,
   height: 50,
   title: "Window 1",
@@ -36,6 +36,7 @@ openWindow({
 });
 
 exec({ path: "src/jam/taskManager.js" });
+exec({ path: "src/jam/test.js" });
 
 def({ v: "newTime" });
 def({ v: "oldTime" });

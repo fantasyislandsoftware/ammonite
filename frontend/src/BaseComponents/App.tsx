@@ -36,8 +36,8 @@ const App = () => {
       baseContainerBuildEvents(e);
     });
     document.addEventListener('keydown', (e) => {
-      //console.log(screens);
-      console.log(tasks);
+      console.log(screens);
+      //console.log(tasks);
     });
   };
 

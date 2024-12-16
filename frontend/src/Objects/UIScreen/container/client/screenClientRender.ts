@@ -8,6 +8,7 @@ import {
 } from 'functions/graphics/pixelArray';
 import { JAM_WINDOW } from 'api/os/api/jam/window';
 import { IPixelArray } from 'functions/graphics/IGraphics';
+import { checkPaletteIndex } from 'functions/colour/colour';
 
 export const screenClientRender = (
   clientPixels: IPixelArray,
@@ -21,7 +22,20 @@ export const screenClientRender = (
     windows: screen.windows,
   });
 
-  drawFillRect(clientPixels, 0, 0, width, height, ScreenColour.CLIENT);
+  drawFillRect(
+    clientPixels,
+    0,
+    0,
+    width,
+    height,
+    checkPaletteIndex(ScreenColour.CLIENT, screen.palette)
+  );
+
+  screen.palette.map((color, index) => {
+    const s = 8;
+    const x = index * s;
+    drawFillRect(clientPixels, x + 1, 1, x + s, s, index);
+  });
 
   windows.map((window) => {
     const windowPixels = windowContainerRender(clientPixels, screen, window);

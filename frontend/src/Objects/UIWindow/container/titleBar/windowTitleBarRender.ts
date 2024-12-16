@@ -16,6 +16,7 @@ import {
 import { textOut } from 'functions/graphics/text';
 import { VectorShape, drawVector } from 'functions/graphics/vector';
 import { STATE } from 'constants/globals/state';
+import { checkPaletteIndex } from 'functions/colour/colour';
 
 export const windowTitleBarRender = (screen: IScreen, window: IWindow) => {
   if (!window.titleBar) return;
@@ -25,10 +26,19 @@ export const windowTitleBarRender = (screen: IScreen, window: IWindow) => {
 
   const { width, height } = getPixelArrayDimensions(titleBarPixels);
 
+  const titleBarBackgroundSelected = checkPaletteIndex(
+    WindowColour.TITLEBAR_BACKGROUND_SELECTED,
+    screen.palette
+  );
+  const titleBarBackgroundNotSelected = checkPaletteIndex(
+    WindowColour.TITLEBAR_BACKGROUND_NOT_SELECTED,
+    screen.palette
+  );
+
   const titleBarColour =
     window.windowId === screen.selectedWindowId
-      ? WindowColour.TITLEBAR_BACKGROUND_SELECTED
-      : WindowColour.TITLEBAR_BACKGROUND_NOT_SELECTED;
+      ? titleBarBackgroundSelected
+      : titleBarBackgroundNotSelected;
 
   /* Background */
   drawFillRect(titleBarPixels, 0, 0, width, height, titleBarColour);
@@ -50,16 +60,16 @@ export const windowTitleBarRender = (screen: IScreen, window: IWindow) => {
     let vectorData: VectorShape[] = [];
     switch (button.type) {
       case EnumButtonType.CLOSE:
-        vectorData = makeCloseButton(button.state);
+        vectorData = makeCloseButton(button.state, screen.palette);
         break;
       case EnumButtonType.ORDER:
-        vectorData = makeOrderButton(button.state);
+        vectorData = makeOrderButton(button.state, screen.palette);
         break;
       case EnumButtonType.MAXIMIZE:
         vectorData =
           window.state === EWindowState.DEFAULT
-            ? makeMaximizeButton(button.state)
-            : makeDefaultButton(button.state);
+            ? makeMaximizeButton(button.state, screen.palette)
+            : makeDefaultButton(button.state, screen.palette);
         break;
     }
     drawVector(
