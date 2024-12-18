@@ -1,5 +1,5 @@
 import { Express } from "express";
-import { readFileSync } from "fs";
+import { readFileSync, writeFileSync } from "fs";
 const { spawnSync } = require("node:child_process");
 
 const examineHeader = (data: Buffer) => {
@@ -88,15 +88,6 @@ const getAmigaHunks = (data: string, raw: any) => {
     }
 
     if (addr.length) {
-      /*if (offset > 1) {
-        const hexArray = hex.split(" ");
-        hexArray.map((val) => {
-          for (let n = 0; n < 2; n++) {
-            const x = val.slice(n * 2, n * 2 + 2);
-            hunkData.push(parseInt(x, 16));
-          }
-        });
-      }*/
       hunkData.push({ addr, hex, op, arg });
     }
 
@@ -138,6 +129,40 @@ const getJamHunks = (data: string) => {
   return hunks;
 };
 
+const convertLineToBB = (line: string) => {
+  const fi = line.indexOf("(");
+  const funcName = line.substring(0, fi);
+  const args = line.substring(fi + 2, line.length - 2).split(",");
+  console.log(funcName);
+  console.log(args);
+  
+  return line;
+};
+
+const exportBB = (path: string, data: string) => {
+  let lines = data.split("\n");
+  lines.forEach((line, index) => {
+    lines[index] = line.trimStart();
+    if (lines[index] === "{" || lines[index] === "}") {
+      lines[index] = "";
+    }
+  });
+  const j = lines.join("\n");
+  lines = removeComments(j).split(";");
+  const output: string[] = [];
+  lines.forEach((line, index) => {
+    lines[index] = line.trim();
+    lines[index] = lines[index].replace(/[\n\r]+/g, "");
+    let l = lines[index];
+    if (!l.startsWith("import") && l !== "") {
+      l = convertLineToBB(l);
+      output.push(l);
+    }
+  });
+  writeFileSync(path + ".bb", output.join("\n"));
+  console.log(output);
+};
+
 const packageData = async (path: string) => {
   const fileData = readFileSync(path as string);
   const fileType = examineHeader(fileData);
@@ -145,6 +170,7 @@ const packageData = async (path: string) => {
   switch (fileType) {
     case "jam":
       hunks = getJamHunks(fileData.toString());
+      exportBB(path, fileData.toString());
       break;
     case "amiga":
       hunks = getAmigaHunks(

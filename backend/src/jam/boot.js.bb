@@ -1,0 +1,5 @@
+generateUUID({ ret: "WB_SCREEN_ID" })
+setEnv({ key: "WB_SCREEN_ID", value: $WB_SCREEN_ID })
+loadFonts()
+loadIcons()
+exec({ path: "src/jam/test.js" })
