@@ -31,10 +31,19 @@ export const screenClientRender = (
     checkPaletteIndex(ScreenColour.CLIENT, screen.palette)
   );
 
+  let px = 0;
+  let py = 0;
+  let pi = 0;
+  const ps = 4;
   screen.palette.map((color, index) => {
-    const s = 8;
-    const x = index * s;
-    drawFillRect(clientPixels, x + 1, 1, x + s, s, index);
+    drawFillRect(clientPixels, px + 1, py + 1, px + ps, py + ps, index);
+    px += ps;
+    pi++;
+    if (pi > 15) {
+      pi = 0;
+      px = 0;
+      py += ps;
+    }
   });
 
   windows.map((window) => {

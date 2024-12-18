@@ -13,4 +13,5 @@ loadFonts();
 loadIcons();
 
 /* */
-exec({ path: "src/jam/wb.js" });
+//exec({ path: "src/jam/wb.js" });
+exec({ path: "src/jam/test.js" });

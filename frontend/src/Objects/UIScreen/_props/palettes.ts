@@ -1,4 +1,31 @@
 import { _12BitColour } from '../../../functions/colour/colour';
+import { IScreenColors } from './screenInterface';
+
+const greyRange = (col: 'grey' | 'red' | 'green' | 'blue', count: number) => {
+  let range = [];
+  for (let i = 0; i < 16; i = i + 16 / count) {
+    switch (col) {
+      case 'grey':
+        range.push(_12BitColour(i, i, i));
+        break;
+      case 'red':
+        range.push(_12BitColour(i, 0, 0));
+        break;
+      case 'green':
+        range.push(_12BitColour(0, i, 0));
+        break;
+      case 'blue':
+        range.push(_12BitColour(0, 0, i));
+        break;
+    }
+  }
+  return range;
+};
+
+const defaultBackground = _12BitColour(0, 0, 0);
+const defaultTitleBar = _12BitColour(15, 15, 15);
+const defaultGrey = _12BitColour(10, 10, 10);
+const defaultBlue = _12BitColour(6, 8, 11);
 
 const defaultBase16Colors = [
   _12BitColour(0, 0, 0), // 0
@@ -35,10 +62,78 @@ const defaultBase16Colors = [
   _12BitColour(15, 15, 15), // 31
 ];
 
-export const generateDefaultColorPalette = (numberOfColors: number) => {
-  const colors = [];
-  for (let i = 0; i < numberOfColors; i++) {
-    colors.push(defaultBase16Colors[i]);
+const extraHalfBrightColors = (colors: number[][]) => {
+  colors.map((color) => {
+    const r = color[0] / 17;
+    const g = color[1] / 17;
+    const b = color[2] / 17;
+    colors.push(_12BitColour(r / 2, g / 2, b / 2));
+  });
+  return colors;
+};
+
+export const generateDefaultColorPalette = (numberOfColors: IScreenColors) => {
+  let colors: number[][] = [];
+  switch (numberOfColors) {
+    case 2:
+      colors.push(defaultBackground);
+      colors.push(defaultTitleBar);
+      break;
+    case 4:
+      colors.push(defaultBackground);
+      colors.push(defaultTitleBar);
+      colors.push(defaultGrey);
+      colors.push(defaultBlue);
+      break;
+    case 8:
+      colors.push(defaultBackground);
+      colors.push(defaultTitleBar);
+      colors.push(defaultGrey);
+      colors.push(defaultBlue);
+      colors.push(_12BitColour(15, 0, 0));
+      colors.push(_12BitColour(0, 15, 0));
+      colors.push(_12BitColour(0, 0, 15));
+      colors.push(_12BitColour(0, 15, 15));
+      break;
+    case 16:
+      colors.push(defaultBackground);
+      colors.push(defaultTitleBar);
+      colors.push(defaultGrey);
+      colors.push(defaultBlue);
+      colors.push(...greyRange('red', 4));
+      colors.push(...greyRange('green', 4));
+      colors.push(...greyRange('blue', 4));
+      break;
+    case 32:
+      colors.push(...greyRange('grey', 8));
+      colors.push(...greyRange('red', 8));
+      colors.push(...greyRange('green', 8));
+      colors.push(...greyRange('blue', 8));
+      colors[0] = defaultBackground;
+      colors[1] = defaultTitleBar;
+      colors[2] = defaultGrey;
+      colors[3] = defaultBlue;
+      break;
+    case 64:
+      colors.push(...greyRange('grey', 8));
+      colors.push(...greyRange('red', 8));
+      colors.push(...greyRange('green', 8));
+      colors.push(...greyRange('blue', 8));
+      colors[0] = defaultBackground;
+      colors[1] = defaultTitleBar;
+      colors[2] = defaultGrey;
+      colors[3] = defaultBlue;
+      colors = extraHalfBrightColors(colors);
+      break;
+    case 256:
+      colors.push(...greyRange('grey', 64));
+      colors.push(...greyRange('red', 64));
+      colors.push(...greyRange('green', 64));
+      colors.push(...greyRange('blue', 64));
+      colors[0] = defaultBackground;
+      colors[1] = defaultTitleBar;
+      colors[2] = defaultGrey;
+      colors[3] = defaultBlue;
   }
   return colors;
 };

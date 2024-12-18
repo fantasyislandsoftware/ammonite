@@ -9,7 +9,7 @@ openScreen({
   y: 0,
   width: 320,
   height: 256,
-  depth: 4,
+  depth: 16,
   mode: LOW,
   title: "test",
   dpen: 0,
@@ -17,7 +17,7 @@ openScreen({
   ret: "testscreen",
 });
 
-openWindow({
+/*openWindow({
   id: null,
   parentScreenId: $testscreen,
   state: DEFAULT,
@@ -27,18 +27,6 @@ openWindow({
   height: 50,
   title: "Window 1",
   ret: null,
-});
-
-/*openWindow({
-  id: null,
-  parentScreenId: $wbScreenId,
-  state: DEFAULT,
-  x: 140,
-  y: 40,
-  width: 150,
-  height: 150,
-  title: "Task Manager",
-  ret: "windowId",
 });*/
 
 {
