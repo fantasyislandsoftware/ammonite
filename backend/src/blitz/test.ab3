@@ -4,9 +4,9 @@
 ;WindowOutput 0
 ;Print "helloiuh iuh iuh iuh iuh iu hiu h ih iu iu hiuh"
 
-Screen 0,0,0,320,240,2,0,"test",1,0
-ScreensBitMap 0,0
-BitMapOutput 0
-Print "helloiuh iuh iuh iuh iuh iu hiu h ih iu iu hiuh"
-While 1=1
-Wend
+Screen 1000,0,0,320,240,2,0,"test",1,0
+;ScreensBitMap 0,0
+;BitMapOutput 0
+;Print "helloiuh iuh iuh iuh iuh iu hiu h ih iu iu hiuh"
+.hello:
+Goto hello

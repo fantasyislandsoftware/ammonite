@@ -1,3 +1,3 @@
-openScreen({id: null,x: 0,y: 0,width: 320,height: 256,depth: 16,mode: LOW,title: "test",dpen: 0,bpen: 1,ret: "testscreen",})
-label({ name: "MAIN_LOOP" })
-jp({ label: "MAIN_LOOP" })
+Screen null, 0, 0, 320, 256, 16, LOW, "test", 0, 1, "testscreen"
+label "MAIN_LOOP"
+jp "MAIN_LOOP"

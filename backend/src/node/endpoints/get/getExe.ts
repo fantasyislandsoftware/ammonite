@@ -1,5 +1,7 @@
 import { Express } from "express";
-import { readFileSync, writeFileSync } from "fs";
+import { readFileSync } from "fs";
+import { exportBB } from "./bbHelpers";
+import { removeComments } from "./codeProcessing";
 const { spawnSync } = require("node:child_process");
 
 const examineHeader = (data: Buffer) => {
@@ -99,10 +101,6 @@ const getAmigaHunks = (data: string, raw: any) => {
   return hunks;
 };
 
-const removeComments = (string: string) => {
-  return string.replace(/\/\*[\s\S]*?\*\/|(?<=[^:])\/\/.*|^\/\/.*/g, "").trim(); //Strip comments
-};
-
 const getJamHunks = (data: string) => {
   let lines = removeComments(data).split("\n");
   lines.forEach((line, index) => {
@@ -127,40 +125,6 @@ const getJamHunks = (data: string) => {
   });
   hunks.push({ type: hunkType, hunkData: hunkData });
   return hunks;
-};
-
-const convertLineToBB = (line: string) => {
-  const fi = line.indexOf("(");
-  const funcName = line.substring(0, fi);
-  const args = line.substring(fi + 2, line.length - 2).split(",");
-  console.log(funcName);
-  console.log(args);
-  
-  return line;
-};
-
-const exportBB = (path: string, data: string) => {
-  let lines = data.split("\n");
-  lines.forEach((line, index) => {
-    lines[index] = line.trimStart();
-    if (lines[index] === "{" || lines[index] === "}") {
-      lines[index] = "";
-    }
-  });
-  const j = lines.join("\n");
-  lines = removeComments(j).split(";");
-  const output: string[] = [];
-  lines.forEach((line, index) => {
-    lines[index] = line.trim();
-    lines[index] = lines[index].replace(/[\n\r]+/g, "");
-    let l = lines[index];
-    if (!l.startsWith("import") && l !== "") {
-      l = convertLineToBB(l);
-      output.push(l);
-    }
-  });
-  writeFileSync(path + ".bb", output.join("\n"));
-  console.log(output);
 };
 
 const packageData = async (path: string) => {
