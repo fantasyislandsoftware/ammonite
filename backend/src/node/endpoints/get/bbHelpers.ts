@@ -15,15 +15,23 @@ export const convertLineToBB = (line: string) => {
   let argString = "";
   args.forEach((arg, index) => {
     const x = arg.split(":");
-    if (x.length > 1) {
+    if (x.length > 1 && x[0].trim() !== "ret") {
       const v = x[1].trim();
       argString += `${v}`;
-      if (index < args.length - 2) {
-        argString += ", ";
-      }
+      argString += ", ";
     }
   });
   line = `${funcName} ${argString}`;
+  if (line.endsWith(", ")) {
+    line = line.substring(0, line.length - 2);
+  }
+  if (funcName === "label") {
+    const x = line.split(" ");
+    line = `.${x[1]}`.replace(/\"/g, "");
+  }
+  if (funcName === "jp") {
+    line = line.replace(/\"/g, "");
+  }
   return line;
 };
 
@@ -47,5 +55,5 @@ export const exportBB = (path: string, data: string) => {
       output.push(l);
     }
   });
-  writeFileSync(path + ".bb", output.join("\n"));
+  writeFileSync(path + ".ab3", output.join("\n"));
 };

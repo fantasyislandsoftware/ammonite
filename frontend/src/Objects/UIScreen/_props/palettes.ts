@@ -2,7 +2,7 @@ import { _12BitColour } from '../../../functions/colour/colour';
 import { IScreenColors } from './screenInterface';
 
 const greyRange = (col: 'grey' | 'red' | 'green' | 'blue', count: number) => {
-  let range = [];
+  const range = [];
   for (let i = 0; i < 16; i = i + 16 / count) {
     switch (col) {
       case 'grey':

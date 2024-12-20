@@ -27,8 +27,6 @@ import { ScreenColour } from 'Objects/UIScreen/_props/screenColour';
 import { generateDefaultColorPalette } from 'Objects/UIScreen/_props/palettes';
 import { STATE } from 'constants/globals/state';
 import { processScreenChange } from 'functions/events/events';
-import { JAM_GRAPHICS } from './graphics';
-import { drawFillRect } from 'functions/graphics/draw';
 
 export class JAM_SCREEN {
   /****************************************************/
@@ -185,6 +183,12 @@ export class JAM_SCREEN {
     });
     this.screens.splice(screenIndex, 1);
     this.setScreens(this.screens);
+  };
+
+  /****************************************************/
+
+  newScreenId = async (task: ITask, ret: string) => {
+    task.var[ret] = uuidv4();
   };
 
   /****************************************************/

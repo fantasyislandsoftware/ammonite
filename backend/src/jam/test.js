@@ -1,10 +1,12 @@
 /* @JAM */
 
-import { openScreen, LOW } from "JAM_SCREEN";
+import { newScreenId, openScreen, LOW } from "JAM_SCREEN";
 import { label, jp } from "JAM_LOGIC";
 
+newScreenId("screenId");
+
 openScreen({
-  id: null,
+  id: $screenId,
   x: 0,
   y: 0,
   width: 320,
