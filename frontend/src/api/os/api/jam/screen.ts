@@ -187,12 +187,6 @@ export class JAM_SCREEN {
 
   /****************************************************/
 
-  newScreenId = async (task: ITask, ret: string) => {
-    task.var[ret] = uuidv4();
-  };
-
-  /****************************************************/
-
   maximizeScreen = async (task = null, props: { screenId: string }) => {
     const { screenId } = props;
     const screenIndex = await this.findScreenIndex(null, {

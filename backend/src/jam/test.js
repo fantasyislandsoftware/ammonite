@@ -1,9 +1,9 @@
 /* @JAM */
 
-import { newScreenId, openScreen, LOW } from "JAM_SCREEN";
+import { generateUUID, openScreen, LOW } from "JAM_SCREEN";
 import { label, jp } from "JAM_LOGIC";
 
-newScreenId("screenId");
+generateUUID({ ret: "screenId" });
 
 openScreen({
   id: $screenId,
@@ -16,7 +16,6 @@ openScreen({
   title: "test",
   dpen: 0,
   bpen: 1,
-  ret: "testscreen",
 });
 
 /*openWindow({

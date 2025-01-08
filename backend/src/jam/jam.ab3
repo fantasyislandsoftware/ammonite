@@ -1,0 +1,8 @@
+LOW = $0
+MED = $8000
+HI = $8004
+INTERLACED = $4
+
+Function generateUUID{}
+    Function Return 8
+End Function

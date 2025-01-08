@@ -1,4 +1,6 @@
-newScreenId 
-Screen $screenId, 0, 0, 320, 256, 16, LOW, "test", 0, 1
-.MAIN_LOOP
-jp MAIN_LOOP
+INCLUDE "jam.ab3"
+screenId = generateUUID{ }
+Screen screenId, 0, 0, 320, 256, 16, LOW, "test", 0, 1
+MAIN_LOOP
+Goto MAIN_LOOP
+End

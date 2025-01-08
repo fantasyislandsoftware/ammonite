@@ -1,5 +1,7 @@
-generateUUID 
-setEnv "WB_SCREEN_ID", $WB_SCREEN_ID
-loadFonts 
-loadIcons 
+INCLUDE "jam.ab3"
+WB_SCREEN_ID = generateUUID{ }
+setEnv "WB_SCREEN_ID", WB_SCREEN_ID
+loadFonts undefined
+loadIcons undefined
 exec "src/jam/test.js"
+End
