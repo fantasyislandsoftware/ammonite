@@ -5,13 +5,14 @@ export const convertJam2BBCommand = (jamCommand: string) => {
   const commands: { [key: string]: string } = {
     openScreen: "Screen",
     newScreenId: "newScreenId",
+    bitmap: "BitMap",
   };
   return commands[jamCommand as keyof typeof commands] || jamCommand;
 };
 
 export const convertLineToBB_ = (line: string) => {
   const fi = line.indexOf("(");
-  const funcName = convertJam2BBCommand(line.substring(0, fi));
+  const funcName = line.substring(0, fi);
   const args = line.substring(fi + 2, line.length - 2).split(",");
   let argString = "";
   let ret = "";
@@ -73,7 +74,7 @@ const convertLineToBB = (line: string) => {
     const key = argElements[0];
     let value = argElements[1];
     if (value !== undefined) {
-      value = value.replace("$","");
+      value = value.replace("$", "");
     }
     //if (value.startsWith('$')) {
     //value = value.substring(1);

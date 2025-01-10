@@ -25,6 +25,9 @@ import { JAM_SCREEN } from './screen';
 import { JAM_WINDOW } from './window';
 import { JAM_GRAPHICS } from './graphics';
 import { JAM_EVENT } from './event';
+import { BB_SCREEN } from '../blitz/screen';
+import { BB_BITMAP } from '../blitz/bitmap';
+import { BB_WINDOW } from '../blitz/window';
 
 declare global {
   interface Window {
@@ -45,24 +48,20 @@ export class JAM_SYSTEM {
   exec = async (task = null, props: { path: string; debug?: true }) => {
     const { path, debug } = props;
     const processImports = (self: ITask) => {
-      const jam_logic = new JAM_LOGIC();
-      const jam_datetime = new JAM_DATETIME();
-      const jam_screen = new JAM_SCREEN();
-      const jam_window = new JAM_WINDOW();
-      const jam_font = new JAM_FONT();
-      const jam_icon = new JAM_ICON();
-      const jam_graphics = new JAM_GRAPHICS();
-      const jam_event = new JAM_EVENT();
       [
         this,
-        jam_logic,
-        jam_datetime,
-        jam_screen,
-        jam_window,
-        jam_font,
-        jam_icon,
-        jam_graphics,
-        jam_event,
+        new JAM_LOGIC(),
+        new JAM_DATETIME(),
+        new JAM_SCREEN(),
+        new JAM_WINDOW(),
+        new JAM_FONT(),
+        new JAM_ICON(),
+        new JAM_GRAPHICS(),
+        new JAM_EVENT(),
+        //
+        new BB_SCREEN(),
+        new BB_BITMAP(),
+        new BB_WINDOW(),
       ].map((lib) => {
         Object.getOwnPropertyNames(lib).map((key) => {
           const upper = key.toUpperCase();
@@ -86,11 +85,12 @@ export class JAM_SYSTEM {
 
     let block: any = {};
 
-    const mem = new Buffer(data.raw);
+    let mem = new Uint8Array([]);
 
     switch (data.type) {
       case ENUM_HUNK_FILE_TYPE.JAM:
         block = processJamHunks(data.hunks);
+        mem = new Uint8Array(data.raw);
         break;
       case ENUM_HUNK_FILE_TYPE.AMIGA:
         block = processAmigaHunks(data.hunks);
@@ -141,6 +141,10 @@ export class JAM_SYSTEM {
           JAM_DATETIME: new JAM_DATETIME(),
           JAM_GRAPHICS: new JAM_GRAPHICS(),
           JAM_EVENT: new JAM_EVENT(),
+          //
+          BB_SCREEN: new BB_SCREEN(),
+          BB_BITMAP: new BB_BITMAP(),
+          BB_WINDOW: new BB_WINDOW(),
         },
       };
       if (task.arch === TaskArch.JS) {

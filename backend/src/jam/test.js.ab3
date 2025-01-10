@@ -1,6 +1,7 @@
 INCLUDE "jam.ab3"
-screenId = generateUUID{ }
-Screen screenId, 0, 0, 320, 256, 16, LOW, "test", 0, 1
+BitMap 0, 320, 256, 16
+Screen 0, 0, 0, 320, 256, 16, LOW, "test", 0, 1
+Window 0, 50, 50, 100, 100, 2, "test", 0, 1
 MAIN_LOOP
 Goto MAIN_LOOP
 End

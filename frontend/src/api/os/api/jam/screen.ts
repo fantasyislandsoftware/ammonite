@@ -161,16 +161,6 @@ export class JAM_SCREEN {
 
     STATE.currentScreenId = screenId;
 
-    /*this.jam_graphics.drawRect(null, {
-      screenId: screenId,
-      windowId: null,
-      x: 0,
-      y: 0,
-      width: width,
-      height: height,
-      color: ScreenColour.BORDER,
-    });*/
-
     task.var[ret] = screenId;
   };
 

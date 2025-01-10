@@ -1,34 +1,37 @@
 /* @JAM */
 
-import { generateUUID, openScreen, LOW } from "JAM_SCREEN";
+import { LOW } from "JAM_SCREEN";
 import { label, jp } from "JAM_LOGIC";
+import { Screen } from "BB_SCREEN";
+import { BitMap } from "BB_BITMAP";
+import { Window } from "BB_WINDOW";
 
-generateUUID({ ret: "screenId" });
+BitMap({ id: 0, width: 320, height: 256, depth: 16 });
 
-openScreen({
-  id: $screenId,
-  x: 0,
-  y: 0,
+Screen({
+  id: 0,
+  offsetX: 0,
+  offsetY: 0,
   width: 320,
   height: 256,
   depth: 16,
   mode: LOW,
   title: "test",
+  bpen: 0,
+  dpen: 1,
+});
+
+Window({
+  id: 0,
+  x: 50,
+  y: 50,
+  width: 100,
+  height: 100,
+  flags: 2,
+  title: "test",
   dpen: 0,
   bpen: 1,
 });
-
-/*openWindow({
-  id: null,
-  parentScreenId: $testscreen,
-  state: DEFAULT,
-  x: 10,
-  y: 15,
-  width: 100,
-  height: 50,
-  title: "Window 1",
-  ret: null,
-});*/
 
 {
   label({ name: "MAIN_LOOP" });
