@@ -1,3 +1,4 @@
+import { IPixelArray } from 'functions/graphics/IGraphics';
 import { create } from 'zustand';
 
 export enum TaskArch {
@@ -46,6 +47,10 @@ export interface ITask {
   pc: number;
   res: { screens: string[]; windows: string[] };
   lib: any;
+  bitmap: {
+    current: number | undefined;
+    data: { [key: number]: IPixelArray };
+  };
 }
 
 export interface TaskStore {

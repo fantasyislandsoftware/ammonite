@@ -33,6 +33,7 @@ export class BB_WINDOW {
       y: props.y,
       width: props.width,
       height: props.height,
+      flags: props.flags,
       title: props.title,
       ret: '',
     });

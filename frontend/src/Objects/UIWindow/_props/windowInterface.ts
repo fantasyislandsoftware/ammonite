@@ -21,6 +21,7 @@ export interface IWindow {
   };
   width: number;
   height: number;
+  flags: number;
   titleBar: IWindowTitleBar | undefined;
   border: IWindowBorder;
   pixels: IPixelArray;
@@ -31,6 +32,19 @@ export enum EWindowState {
   DEFAULT = 'DEFAULT',
   MAXIMIZED = 'MAXIMIZED',
   MINIMIZED = 'MINIMIZED',
+}
+
+export enum EWindowMode {
+  WINDOWSIZE = 1,
+  WINDOWDRAG = 2,
+  WINDOWDEPTH = 4,
+  WINDOWCLOSE = 8,
+  SIZEBRIGHT = 10,
+  SIZEBOTTOM = 20,
+  BACKDROP = 100,
+  GIMME000 = 400,
+  BORDERLESS = 800,
+  ACTIVATE = 1000,
 }
 
 export interface IWindowBorder {

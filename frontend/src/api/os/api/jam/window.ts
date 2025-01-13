@@ -10,6 +10,7 @@ import { screenContainerRender } from 'Objects/UIScreen/container/screenContaine
 import { WindowColour } from 'Objects/UIWindow/_props/windowColour';
 import { windowDefault } from 'Objects/UIWindow/_props/windowDefault';
 import {
+  EWindowMode,
   EWindowState,
   IWindow,
   IWindowClient,
@@ -55,6 +56,7 @@ export class JAM_WINDOW {
       y: number;
       width: number;
       height: number;
+      flags: number;
       title: string;
       ret: string | null;
     }
@@ -148,6 +150,7 @@ export class JAM_WINDOW {
       position: { x, y, z },
       width: width,
       height: height,
+      flags: EWindowMode.WINDOWSIZE,
       titleBar: titleBar,
       border: {
         thickness: windowDefault.border.thickness,
@@ -237,6 +240,7 @@ export class JAM_WINDOW {
       y: window.position.y,
       width: window.width,
       height: window.height,
+      flags: window.flags,
       title: window.titleBar!.title,
       ret: null,
     });

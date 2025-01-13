@@ -4,10 +4,10 @@ import {
   IScreenColors,
   IScreenMode,
 } from 'Objects/UIScreen/_props/screenInterface';
+import { initPixelArray } from 'functions/graphics/pixelArray';
 
 export class BB_BITMAP {
   /****************************************************/
-
 
   BitMap = async (
     task: ITask,
@@ -18,8 +18,12 @@ export class BB_BITMAP {
       depth: IScreenColors;
     }
   ) => {
-    task.var[`bitmap_${props.id}`] = 'test';
-    //console.log(task);
+    task.bitmap.current = props.id;
+    task.bitmap.data[props.id] = initPixelArray(
+      props.width,
+      props.height,
+      props.depth
+    );
   };
 
   /****************************************************/

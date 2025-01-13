@@ -146,6 +146,7 @@ export class JAM_SYSTEM {
           BB_BITMAP: new BB_BITMAP(),
           BB_WINDOW: new BB_WINDOW(),
         },
+        bitmap: { current: undefined, data: {} },
       };
       if (task.arch === TaskArch.JS) {
         task = processImports(task);
