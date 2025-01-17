@@ -1,6 +1,7 @@
 INCLUDE "jam.ab3"
-BitMap 0, 320, 256, 16
-Screen 0, 0, 0, 320, 256, 16, LOW, "test", 0, 1
+BitMap 0, 320, 256, 4
+Screen 0, 0, 0, 320, 256, 16, LOW, "test", 0, 1, 0
+Plot 30, 30, 3
 Window 0, 50, 50, 100, 100, 2, "test", 0, 1
 MAIN_LOOP
 Goto MAIN_LOOP

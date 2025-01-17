@@ -150,8 +150,8 @@ const killTask = (id: string, name: string, pos: number, e: any) => {
   const jam_screen = new JAM_SCREEN();
   const task = useTaskStore.getState().tasks.find((task) => task.id === id);
   if (task) {
-    const { screens } = task.res;
-    screens.map((id) => {
+    const { data: screens } = task.res.screens;
+    Object.keys(screens).map((id) => {
       jam_screen.closeScreen(null, { screenId: id });
     });
   }

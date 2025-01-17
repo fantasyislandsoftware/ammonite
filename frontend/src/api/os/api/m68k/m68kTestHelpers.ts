@@ -86,9 +86,15 @@ export const makeTestTask = (params: IMakeTestTaskParams) => {
         m: m ? m : initM,
       },
       pc: 0,
-      res: { screens: [], windows: [] },
+      res: {
+        screens: {
+          current: undefined,
+          data: {},
+        },
+        windows: { current: undefined, data: {} },
+        bitmaps: { current: undefined, data: {} },
+      },
       lib: {},
-      bitmap: { current: undefined, data: {} },
     };
   }
   const result = new FreshTask().task;

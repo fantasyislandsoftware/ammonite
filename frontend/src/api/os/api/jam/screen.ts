@@ -62,6 +62,7 @@ export class JAM_SCREEN {
       title: string | null;
       dpen: number;
       bpen: number;
+      bitmap?: number;
       ret: string;
     }
   ) => {
@@ -82,7 +83,6 @@ export class JAM_SCREEN {
     titleBarHeight += 1;
 
     const screenId = !id ? uuidv4() : id;
-    task.res.screens.push(screenId);
 
     /* Buttons */
     const buttonSize = Math.round(titleBarHeight / 2) * 2 - 2;
@@ -162,6 +162,7 @@ export class JAM_SCREEN {
     STATE.currentScreenId = screenId;
 
     task.var[ret] = screenId;
+    return data;
   };
 
   /****************************************************/

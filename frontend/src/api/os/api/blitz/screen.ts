@@ -23,9 +23,10 @@ export class BB_SCREEN {
       title: string;
       bpen: number;
       dpen: number;
+      bitmap: number;
     }
   ) => {
-    this.jam_screen.openScreen(task, {
+    const screen = await this.jam_screen.openScreen(task, {
       id: null,
       x: props.offsetX,
       y: props.offsetY,
@@ -36,10 +37,11 @@ export class BB_SCREEN {
       title: props.title,
       dpen: props.dpen,
       bpen: props.bpen,
-      ret: 'screen_' + props.id,
+      bitmap: props.bitmap,
+      ret: '',
     });
-    task.var['current_screen_index'] = `${props.id}`;
-    //console.log(task.var);
+    task.res.screens.current = props.id;
+    if (screen !== undefined) task.res.screens.data[props.id] = screen.screenId;
   };
 
   /****************************************************/

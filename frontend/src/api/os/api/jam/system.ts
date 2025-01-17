@@ -28,6 +28,7 @@ import { JAM_EVENT } from './event';
 import { BB_SCREEN } from '../blitz/screen';
 import { BB_BITMAP } from '../blitz/bitmap';
 import { BB_WINDOW } from '../blitz/window';
+import { BB_GRAPHICS } from '../blitz/graphics';
 
 declare global {
   interface Window {
@@ -62,6 +63,7 @@ export class JAM_SYSTEM {
         new BB_SCREEN(),
         new BB_BITMAP(),
         new BB_WINDOW(),
+        new BB_GRAPHICS(),
       ].map((lib) => {
         Object.getOwnPropertyNames(lib).map((key) => {
           const upper = key.toUpperCase();
@@ -130,7 +132,11 @@ export class JAM_SYSTEM {
           m: mem as any,
         },
         pc: block.pos,
-        res: { screens: [], windows: [] },
+        res: {
+          screens: { current: undefined, data: {} },
+          windows: { current: undefined, data: {} },
+          bitmaps: { current: undefined, data: {} },
+        },
         lib: {
           JAM_SYSTEM: this,
           JAM_FONT: new JAM_FONT(),
@@ -145,8 +151,8 @@ export class JAM_SYSTEM {
           BB_SCREEN: new BB_SCREEN(),
           BB_BITMAP: new BB_BITMAP(),
           BB_WINDOW: new BB_WINDOW(),
+          BB_GRAPHICS: new BB_GRAPHICS(),
         },
-        bitmap: { current: undefined, data: {} },
       };
       if (task.arch === TaskArch.JS) {
         task = processImports(task);

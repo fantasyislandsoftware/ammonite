@@ -20,12 +20,11 @@ export class BB_WINDOW {
       bpen: number;
     }
   ) => {
-    /*this.jam_window.openWindow(task, {
-    });*/
+    const currentScreenIndex = task.res.screens.current;
+    if (currentScreenIndex === undefined) return;
+    const parentScreenId = task.res.screens.data[currentScreenIndex];
 
-    const current_screen_index = task.var['current_screen_index'];
-    const parentScreenId = task.var[`screen_${current_screen_index}`];
-    this.jam_window.openWindow(task, {
+    const window = await this.jam_window.openWindow(task, {
       id: null,
       parentScreenId: parentScreenId,
       state: EWindowState.DEFAULT,
@@ -38,7 +37,8 @@ export class BB_WINDOW {
       ret: '',
     });
 
-    task.var[`window_${props.id}`] = 'test';
+    task.res.windows.current = props.id;
+    task.res.windows.data[props.id] = window.windowId;
     console.log(task);
   };
 

@@ -45,12 +45,21 @@ export interface ITask {
   pos: number;
   s: { [key: string]: number[] };
   pc: number;
-  res: { screens: string[]; windows: string[] };
-  lib: any;
-  bitmap: {
-    current: number | undefined;
-    data: { [key: number]: IPixelArray };
+  res: {
+    screens: {
+      current: number | undefined;
+      data: { [key: string]: string };
+    };
+    windows: {
+      current: number | undefined;
+      data: { [key: string]: string };
+    };
+    bitmaps: {
+      current: number | undefined;
+      data: { [key: number]: IPixelArray };
+    };
   };
+  lib: any;
 }
 
 export interface TaskStore {

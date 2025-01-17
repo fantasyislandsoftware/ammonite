@@ -166,8 +166,8 @@ export class JAM_WINDOW {
 
     this.screens[parentScreenIndex].selectedWindowId = windowId;
 
-    const exists = task.res.windows.includes(windowId);
-    if (!exists) task.res.windows.push(windowId);
+    //const exists = task.res.windows.includes(windowId);
+    //if (!exists) task.res.windows.push(windowId);
 
     if (ret) task.var[ret] = windowId;
 
